@@ -1296,8 +1296,8 @@ class TestHoneycombsLab(BugFablesTestBase):
 
 class TestLobby(BugFablesTestBase):
     # HoneyFactoryEntrance, the Lobby (the user, 2026-10-10): the bottom a drop from the upper area, Jump or Bee Fly
-    # back up; the processing door locked until the Factory Pass (a stand-in until it's an item, Next 67); the storage
-    # door open from the start (build step 77).
+    # back up; the processing door behind the Factory Pass lock, the game pushing the party past it from the other
+    # side (build step 79); the storage door open from the start (build step 77).
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_bottom_needs_jump_or_bee_fly_back_up(self) -> None:
@@ -1306,9 +1306,18 @@ class TestLobby(BugFablesTestBase):
         self.assertTrue(up.access_rule(self.state_with("Jump")))
         self.assertTrue(up.access_rule(self.state_with("Bee Fly")))
 
-    def test_processing_door_locked(self) -> None:
+    def test_processing_door_behind_the_pass(self) -> None:
+        # Arrived through it, a one-way out: the pass is its way back.
+        to = self.multiworld.get_entrance("HoneyFactoryEntrance to HoneyFactoryEntrance (Processing Door)",
+                                          self.player)
+        self.assertFalse(to.access_rule(self.state_with("Jump", "Bee Fly")))
+        self.assertTrue(to.access_rule(self.state_with("Factory Pass")))
+        back = self.multiworld.get_entrance("HoneyFactoryEntrance (Processing Door) to HoneyFactoryEntrance",
+                                            self.player)
+        self.assertFalse(back.access_rule(self.state_with("Jump", "Bee Fly")))
+        self.assertTrue(back.access_rule(self.state_with("Factory Pass")))
         door = self.multiworld.get_entrance("HoneyFactoryEntrance: loadzone processing", self.player)
-        self.assertFalse(door.access_rule(self.state_with("Jump", "Bee Fly")))
+        self.assertEqual(door.parent_region.name, "HoneyFactoryEntrance (Processing Door)")
 
     def test_storage_door_open(self) -> None:
         slot = self.world.fill_slot_data()
@@ -1343,6 +1352,15 @@ class TestWorkerRooms(BugFablesTestBase):
         self.assertFalse(desk.access_rule(self.state_with()))
         self.assertTrue(desk.access_rule(self.state_with("Jump")))
         self.assertTrue(desk.access_rule(self.state_with("Bee Fly")))
+
+    # The office's Factory Pass up high: Jump and the Beemerang Toss, or Bee Fly alone.
+    def test_pass_up_high(self) -> None:
+        card = self.multiworld.get_location("Honey Factory: Worker Rooms, On Top of the Bookshelf", self.player)
+        self.assertEqual(card.parent_region.name, "HoneyFactoryWorkerRooms")
+        self.assertFalse(card.access_rule(self.state_with("Jump")))
+        self.assertFalse(card.access_rule(self.state_with("Progressive Beemerang")))
+        self.assertTrue(card.access_rule(self.state_with("Jump", "Progressive Beemerang")))
+        self.assertTrue(card.access_rule(self.state_with("Bee Fly")))
 
 
 class TestFirstRoom(BugFablesTestBase):
@@ -1430,8 +1448,10 @@ class TestPumpRoom(BugFablesTestBase):
         self.assertTrue(right(self.state_with(*back, "Bee Fly")))
 
     def test_malbee_door_locked(self) -> None:
+        # The scanner takes the one pass three times, never using it up (build step 79).
         door = self.way("FactoryProcessingPump: loadzonemalbee")
         self.assertFalse(door(self.state_with("Jump", "Shield", "Bee Fly")))
+        self.assertTrue(door(self.state_with("Factory Pass")))
 
     # A respawning Shell Ointment behind boxes in the upper right's left part, across from its door: Shield or Bee Fly.
     def test_behind_the_boxes(self) -> None:
@@ -1444,22 +1464,38 @@ class TestPumpRoom(BugFablesTestBase):
 
 class TestPuzzle1(BugFablesTestBase):
     # FactoryProcessingPuzzle1, Gen and Eri's Room (the user, 2026-10-10): one region, its door free; its Factory Pass
-    # not a location yet.
-    def test_one_region_no_location(self) -> None:
+    # by the lever (Jump, Freeze, the Shield and a basic attack, past Gen and Eri's fight and the holler) held out.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_one_region(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player)
                  if r.name.startswith("FactoryProcessingPuzzle1")}
         self.assertEqual(parts, {"FactoryProcessingPuzzle1"})
-        self.assertFalse(self.multiworld.get_region("FactoryProcessingPuzzle1", self.player).locations)
+
+    def test_pass_by_the_lever_held_out(self) -> None:
+        # Out of every seed until the scene and the holler are seen to work after Malbee's fight (the quest sweep).
+        self.assertNotIn("Honey Factory: Gen and Eri's Room, By the Lever",
+                         {loc.name for loc in self.multiworld.get_locations(self.player)})
 
 
 class TestPuzzle2(BugFablesTestBase):
     # FactoryProcessingPuzzle2, the Training Grounds (the user, 2026-10-10): one region, its door free; its Factory
-    # Pass not a location yet.
-    def test_one_region_no_location(self) -> None:
+    # Pass behind the gate, Beemerang Halt, Jump, the Shield and a basic attack for a lever.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_one_region(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player)
                  if r.name.startswith("FactoryProcessingPuzzle2")}
         self.assertEqual(parts, {"FactoryProcessingPuzzle2"})
-        self.assertFalse(self.multiworld.get_region("FactoryProcessingPuzzle2", self.player).locations)
+
+    def test_pass_behind_the_gate(self) -> None:
+        spot = self.multiworld.get_location("Honey Factory: Training Grounds, Behind the Gate", self.player)
+        self.assertEqual(spot.parent_region.name, "FactoryProcessingPuzzle2")
+        self.assertFalse(spot.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Shield")))
+        self.assertFalse(spot.access_rule(self.state_with("Progressive Beemerang", "Jump", "Shield", "Horn Slash")))
+        self.assertFalse(spot.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump")))
+        self.assertTrue(spot.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump",
+                                                         "Shield")))
 
 
 class TestPressurePlateRoom(BugFablesTestBase):
@@ -1469,6 +1505,15 @@ class TestPressurePlateRoom(BugFablesTestBase):
 
     def test_berry_by_the_puzzle(self) -> None:
         spot = self.multiworld.get_location("Honey Factory: Pressure Plate Room, Behind the Pipe", self.player)
+        self.assertEqual(spot.parent_region.name, "FactoryProcessingPuzzle3")
+        for missing in ("Jump", "Progressive Freeze", "Horn Slash"):
+            have = [i for i in ("Jump", "Progressive Freeze", "Horn Slash") if i != missing]
+            self.assertFalse(spot.access_rule(self.state_with(*have)), missing)
+        self.assertTrue(spot.access_rule(self.state_with("Jump", "Progressive Freeze", "Horn Slash")))
+
+    # Its Factory Pass behind the gate the same puzzle opens.
+    def test_pass_behind_the_gate(self) -> None:
+        spot = self.multiworld.get_location("Honey Factory: Pressure Plate Room, Behind the Gate", self.player)
         self.assertEqual(spot.parent_region.name, "FactoryProcessingPuzzle3")
         for missing in ("Jump", "Progressive Freeze", "Horn Slash"):
             have = [i for i in ("Jump", "Progressive Freeze", "Horn Slash") if i != missing]
@@ -1518,7 +1563,7 @@ class TestStorageElevator(BugFablesTestBase):
 class TestStorageMaze(BugFablesTestBase):
     # FactoryStorageMaze, the Storage Maze (the user, 2026-10-10): up onto its box tops, Jump or Bee Fly, off them
     # free; the bottom left pocket and the medal's hole free from the box tops; the berry by a lever puzzle; the
-    # Overseer's door behind its pass lock.
+    # Overseer's door behind its pass lock, the game pushing the party past it from the other side (build step 79).
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
     HALT = ("Progressive Beemerang", "Progressive Beemerang")
 
@@ -1546,13 +1591,21 @@ class TestStorageMaze(BugFablesTestBase):
         self.assertFalse(berry.access_rule(self.state_with("Jump", "Horn Slash", "Bee Fly")))
         self.assertTrue(berry.access_rule(self.state_with("Jump", *self.HALT)))
 
-    def test_overseer_door_locked(self) -> None:
-        self.assertFalse(self.way("FactoryStorageMaze: loadzoneos")(self.state_with("Jump", "Horn Slash", "Bee Fly")))
+    def test_overseer_door_behind_the_pass(self) -> None:
+        # Arrived through it, a one-way out: the pass is its way back.
+        to = self.way("FactoryStorageMaze to FactoryStorageMaze (Overseer Door)")
+        self.assertFalse(to(self.state_with("Jump", "Horn Slash", "Bee Fly")))
+        self.assertTrue(to(self.state_with("Factory Pass")))
+        back = self.way("FactoryStorageMaze (Overseer Door) to FactoryStorageMaze")
+        self.assertFalse(back(self.state_with("Jump", "Horn Slash", "Bee Fly")))
+        self.assertTrue(back(self.state_with("Factory Pass")))
+        door = self.multiworld.get_entrance("FactoryStorageMaze: loadzoneos", self.player)
+        self.assertEqual(door.parent_region.name, "FactoryStorageMaze (Overseer Door)")
 
 
 class TestStorageMinibossRoom(BugFablesTestBase):
     # FactoryStorageMiniboss, the Storage Mini-boss Room (the user, 2026-10-10): one region; the respawning Magic Seed
-    # on top of the boxes, Jump or Bee Fly.
+    # on top of the boxes, Jump or Bee Fly; the Factory Pass the Ahoneynation fight gives, Jump and Beemerang Halt.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_seed_on_the_boxes(self) -> None:
@@ -1563,6 +1616,13 @@ class TestStorageMinibossRoom(BugFablesTestBase):
         self.assertFalse(seed.access_rule(self.state_with("Horn Slash")))
         self.assertTrue(seed.access_rule(self.state_with("Jump")))
         self.assertTrue(seed.access_rule(self.state_with("Bee Fly")))
+
+    def test_pass_after_the_fight(self) -> None:
+        fight = self.multiworld.get_location("Honey Factory: Storage Mini-boss Room, Mini-boss Fight", self.player)
+        self.assertEqual(fight.parent_region.name, "FactoryStorageMiniboss")
+        self.assertFalse(fight.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang")))
+        self.assertFalse(fight.access_rule(self.state_with("Progressive Beemerang", "Jump", "Bee Fly")))
+        self.assertTrue(fight.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump")))
 
 
 class TestOverseerRoom(BugFablesTestBase):

@@ -38,7 +38,8 @@ this file and that doc disagree, that doc is right.
   [20](#build-step-20-all-three-the-default-every-member-from-the-start-no-member-items); moves and abilities,
   [21](#build-step-21-shuffle-field-moves-the-three-starting-moves-as-items),
   [22](#build-step-22-shuffle-jump-jump-as-an-item) and
-  [23](#build-step-23-the-seven-learned-field-abilities-as-items-always-progressive).
+  [23](#build-step-23-the-seven-learned-field-abilities-as-items-always-progressive); a key item never used up, one in
+  the pool, the Factory Pass, [79](#build-step-79-the-factory-pass-never-used-up).
 - **What counts as a location:** [6](#build-step-6-sending-checks-read-from-the-games-own-flags),
   [10](#build-step-10-more-kinds-of-location-crystal-berries-quests-discoveries-pickups-boss-medals),
   [11](#build-step-11-shops-as-locations-medal-shops-item-shops-the-caravan),
@@ -150,6 +151,8 @@ this file and that doc disagree, that doc is right.
 76. [Build step 76: Beette's Flower Key at its price again](#build-step-76-beettes-flower-key-at-its-price-again)
 77. [Build step 77: the Honey Factory's storage door open](#build-step-77-the-honey-factorys-storage-door-open)
 78. [Build step 78: the Rubber Prison Pier's third floor bridge kept](#build-step-78-the-rubber-prison-piers-third-floor-bridge-kept)
+79. [Build step 79: the Factory Pass, never used up](#build-step-79-the-factory-pass-never-used-up)
+80. [Build step 80: the Rubber Prison Pier's third floor save crystal kept](#build-step-80-the-rubber-prison-piers-third-floor-save-crystal-kept)
 
 **How it works**
 
@@ -759,6 +762,12 @@ be wrong.
       flags before the game builds its entities. Left alone: bosses and mini-bosses (any that is a map enemy marked by
       hand in the enemy pass, `data/enemies.json` having no such mark), enemies with a `limit` or `requires` flag, the
       20 timer enemies, any regional index another entity of the area shares. Its own step in the mod guide.
+    - **Ordinary enemies always present** (the user, 2026-10-10, after flag 79 took the Rubber Prison Pier's four:
+      "enemies always have to be present no matter what logically. so you always have at least 1 enemy reachable to
+      farm berries from"): in a seed every ordinary map enemy the story removes (a `limit` flag; 21 go at 79) or makes
+      later (`requires`) is kept on its map whatever the flags, as Enemysanity keeps its own (`EnemyDrops.cs`), so a
+      `limit` or `requires` flag no longer leaves one out of the farm event or the respawn above. One kept where a
+      scene needs it gone is decided in the enemy pass, never left out silently.
     - **Where the rule goes:** a `Berries(price)` rule resolving to the event (serialized as its `Has`, as `ItemOnHand`
       is), on every location with a price (Merab's 22, the 33 item-shop slots, the Moth's Sale 40, the Banker 550, Whack
       Farms 10, Beette 150, the hive's clothing stall 40 and 50), in each way of `ItemOnHand`, and on the ant tunnels
@@ -809,10 +818,7 @@ be wrong.
     mini-boss room's fight (`Event101`, flag 221; found by a review, 2026-10-10). The Wooden Crank's way (Next 62): in a
     seed the mod leaves the pass in the bag at each lock, so the pool holds one Factory Pass, progression, and every
     lock needs only it; the other pass pickups become ordinary locations. Asked by the user: "similar to the cranks
-    where we made it into just 1 reusable instead of having 3-4". Built once the rooms holding passes and locks are
-    mapped; until then the Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters,
-    `logic/honey_factory.py`), and the Worker Rooms' pass (flag 178: Jump and the Beemerang Toss, or Bee Fly alone, the
-    user) stays the game's own pickup, since a location there could hold another item while the door still needs a pass.
+    where we made it into just 1 reusable instead of having 3-4". Built: build step 79.
 68. **Chapter-gated characters and scenes, fixed for good** (decided 2026-10-10, the user: "are there any other
     npc/flags that only excist at/after certain chapters ? ... that will become a real issue for the goal of having
     things be openworld/anythign doable in any order"; "a really important thing to take a look at and properly fix
@@ -830,7 +836,11 @@ be wrong.
     at each lock, so the pool holds one Prison Key, progression, and every lock needs only it; the other key spots
     become ordinary locations. Its spots: the Pier's Wasp Driller (`ShwKEY wasp`, flag 584; "Rubber Prison: Pier,
     Second Floor Fight", the user's name), and the rest as the prison's rooms are mapped. Built once those rooms are
-    mapped, on Next 67's mechanism; until then the keys stay the game's own pickups.
+    mapped, on Next 67's mechanism; until then the keys stay the game's own pickups. **Two traps** (a sweep, from the
+    code, 2026-10-10): the bridge's scene (`Event193`, flag 79) sets 584, 567, 551 and 545, so the Wasp Driller and the
+    key pickups in Cells 2 and the Gym go without being taken (each spot must be kept until its check: "nothing in a
+    seed ever goes away"), and it empties the bag of Prison Keys itself (`EventControl.cs:32140-32143`, not `Event59`),
+    which would take the kept key too.
 
 **Known issues:**
 
@@ -1057,7 +1067,9 @@ Archipelago's `custom_worlds` folder.
   the filler that may fill leftover locations in any number (a Crunchy Leaf). An item without it, like
   the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
-  spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
+  spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there. A key item the mod
+  never lets a lock use up (*kept* in `items.json`, the Factory Pass) goes in once however many spots hold it,
+  padding making up the count (2026-10-10, build step 79).
 - **Which class each item gets** (2026-09-24): **if an item can unlock even one location, at any point,
   even if only sometimes or not always, it is progression. No ifs or maybes.** The three, in the user's words
   (2026-10-08): "filler = useless; useful = want to guarantee the player can get it at some point; progression =
@@ -3108,7 +3120,9 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 6. **Tests** (`test_abilities.py`; `test_moves.py` and `test_party.py` updated): every learned ability in the pool;
    **exactly one location per ability**, by its flag (a guard against a second check for the same one);
    story order; the Horn Dash as the second copy. 395 tests pass; every option set of the scratch snapshot generates,
-   is beatable and gains exactly the seven locations; a room with APQuest generates.
+   is beatable and gains exactly the seven locations; a room with APQuest generates. The story-order test went on
+   2026-10-10, when the Shield's spot (the First Room's switch) was mapped and no unmapped spot was left for it (the
+   user's call); the stand-ins left for Beetle Dig, Bee Fly and the Icicle are untested until their rooms are mapped.
 
 **Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
 confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Seen (2026-10-04): a received ability working (Bee
@@ -3330,28 +3344,34 @@ story event that needs nothing, at their prices), 156 of 244; HB's Lab (one regi
 Explorer Permit from the start and shown it opens B.O.S.S., build step 75), 157 of 244; the Balcony (one region, its
 door free; Beette's sale, location 78, needing nothing in the room, at her price again, build step 76, its berries with
 Next 63), 158 of 244; Honeycomb's Lab (one region, its door free, no location), 159 of 244, the Bee Kingdom Hive done;
-the Honey Factory's Lobby (its bottom a drop, Jump or Bee Fly back up; the processing door's Factory Pass lock kept, a
-stand-in until Next 67; the storage door open, build step 77; its shop's five slots, locations 212-216), 160 of 244;
-the Worker Rooms (the office and the sleeping quarters cut off from each other; the desk's Shock Candy, location 229,
-Jump or Bee Fly; the Factory Pass the game's own pickup until Next 67), 161 of 244; the Core (one region, its door
-free, the gate to the boss arena the story's), 162 of 244; the First Room (its switch, the Shield's spot, a basic
+the Honey Factory's Lobby (its bottom a drop, Jump or Bee Fly back up; the processing door's Factory Pass lock kept,
+the pass never used up, build step 79; the storage door open, build step 77; its shop's five slots, locations
+212-216), 160 of 244; the Worker Rooms (the office and the sleeping quarters cut off from each other; the desk's Shock
+Candy, location 229, Jump or Bee Fly; the Factory Pass up high, location 235), 161 of 244; the Core (one region, its
+door free, the gate to the boss arena the story's), 162 of 244; the First Room (its switch, the Shield's spot, a basic
 attack, its story-order stand-in gone; across only on the platforms it starts, the Shield, since Bee Fly works only
 before the switch; the bottom a drop, up to the right only; the tram left to the story), 163 of 244;
 the Second Room (up to the pump door Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly;
 down a drop; no location), 164 of 244; the Pump Room (up on the cranks, Beemerang Halt, then the platform loop, Jump and
 the Shield; the Shell Ointment behind the boxes, location 230, the Shield or Bee Fly; Malbee's door behind the Factory
-Pass scanner, a stand-in until Next 67), 165 of 244; Gen and Eri's Room, the first puzzle room (one region, its door
-free; its Factory Pass the game's own until Next 67), 166 of 244; the Training Grounds, the second puzzle room (the
-same; its pass Beemerang Halt, Jump and the Shield), 167 of 244; the Pressure Plate Room, the third puzzle room (one
-region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #16, location 231, and its pass), 168 of
-244; Malbee's Room (her fight, three Abomihoneys, a story event that needs nothing and starts the tram, both ways
-between her platform, Jump or Bee Fly up, and the First Room's right side, counted now), 169 of 244; the Storage
+Pass scanner), 165 of 244; Gen and Eri's Room, the first puzzle room (one region, its door free; its Factory Pass by
+the lever, location 236), 166 of 244; the Training Grounds, the second puzzle room (the same; its pass, location 237,
+Beemerang Halt, Jump, the Shield and a basic attack for a lever), 167 of 244; the Pressure Plate Room, the third puzzle
+room (one region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #16, location 231, and its
+pass, location 238), 168 of 244; Malbee's Room (her fight, three Abomihoneys, a story event that needs nothing and
+starts the tram, both ways between her platform, Jump or Bee Fly up, and the First Room's right side, counted now),
+169 of 244; the Storage
 Elevator (its top and bottom doors joined by the elevator, a basic attack each way), 170 of 244; the Storage Maze (its
 box tops up with Jump or Bee Fly; the medal Shock Trooper in the boxes and crystal berry #17 by a lever
 puzzle, locations 232-233; the Overseer's door behind its pass lock), 171 of 244; the Storage Mini-boss Room (one
-region; the Magic Seed on top of the boxes, location 234, Jump or Bee Fly; its fight's pass the game's own until Next
-67), 172 of 244; the Storage Overseer Room (one region, its door free; the escort, flag 218, Jump, Beemerang Halt and
-Freeze or Bee Fly, for the quest pass), 173 of 244, the Honey Factory done; the rest of `room-checklist.md` to go.
+region; the Magic Seed on top of the boxes, location 234, Jump or Bee Fly; its fight's pass, location 239), 172 of
+244; the Storage Overseer Room (one region, its door free; the escort, flag 218, Jump, Beemerang Halt and
+Freeze or Bee Fly, for the quest pass), 173 of 244, the Honey Factory done; the Rubber Prison from 2026-10-10: the
+Pier (four floors of bridges, each dropped from onto any below, counted with Points of No Return until the rooms behind
+give a way back; the ground floor's gates jumped or flown round, its lower part and lift; the third floor bridge and
+save crystal kept, build steps 78 and 80; the Wasp Driller's Prison Key the game's own until Next 69; both doors to the
+Giant's Lair Bridge pushed-past one-ways for the Office and the bridge), 174 of 244; the rest of `room-checklist.md`
+to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6085,6 +6105,71 @@ after the crank was used: the bridge standing and the second floor's right door 
 
 *Code: `logic/rubber_prison.py` (`SCENERY_PRESENT`). The mod: `World/KeptOpen.cs`, unchanged.*
 
+## Build step 79: the Factory Pass, never used up
+
+**Found (2026-10-10, mapping the Honey Factory):** each of the factory's three Factory Pass locks (the shared lock
+routine, `Event59`, key index 4) takes a pass (key item 95) out of the bag: the Lobby's processing door one, the pump
+room's scanner three (it counts each pass shown and opens at the third), the Storage Maze's lock to the Overseer's room
+one. The game has five: four pickups (the Worker Rooms' office and the three puzzle rooms) and one given after the
+Storage Mini-boss Room's fight (`Event101`) (`MEASURED.md`, the lock routine). Until now the locks waited for the later
+chapters' stand-in, and the five passes stayed the game's own.
+
+**Asked and decided (the user, 2026-10-10):** Next 67, "similar to the cranks where we made it into just 1 reusable
+instead of having 3-4"; the five spots' names (two of them asked now: "On Top of the Bookshelf" and "Mini-boss
+Fight"); the two factory checks wait for the quest sweep ("lets save them until the quest sweep"), so Gen and Eri's
+Room's pass is held out until then. Defaults taken: the scanner keeps the game's own flow, the one pass shown three
+times (the mod writes nothing); a hook that fails to install logs an error, as every other hook does; the two locks the
+game pushes the party past from the far side join this step.
+
+**Built:**
+
+- **The pool:** "Factory Pass" (95, progression), marked *kept* in `items.json`, goes in once however many included
+  spots hold it (`items.py`); padding fills the other four.
+- **slot_data:** `kept_keys`, the kept key items' game ids, `[95]`. The mod (the mod guide, step 54) leaves a listed key
+  in the bag at every `Event59` lock; a seed without the key keeps the game's way, every lock taking its key.
+- **Five spots, four in seeds:** "Honey Factory: Worker Rooms, On Top of the Bookshelf" (235, flag 178: Jump and the
+  Beemerang Toss, or Bee Fly alone); "Honey Factory: Training Grounds, Behind the Gate" (237, flag 212: Beemerang Halt,
+  Jump, the Shield and a basic attack); "Honey Factory: Pressure Plate Room, Behind the Gate" (238, flag 215: Jump,
+  Freeze and the horn); and "Honey Factory: Storage Mini-boss Room, Mini-boss Fight" (239, `Event101`'s give, flag 221:
+  Jump and Beemerang Halt). The three pickups go out in `location_pickups`, the give in `location_gives`; the item swap
+  already handles both. "Honey Factory: Gen and Eri's Room, By the Lever" (236, flag 213: Jump, Freeze, the Shield, a
+  basic attack and Vi) is written but held out (`pending`), its pickup the game's own, a harmless second pass.
+- **The locks:** `FACTORY_PASS` is the pass itself. The Lobby's processing door and the Storage Maze's door to the
+  Overseer's room, where the game pushes the party past the lock from the far side (seen), are areas of their own,
+  "Processing Door" and "Overseer Door": the pass both ways, a one-way out without it (`room-logic.md`, a walk-in pushed
+  past), where a door rule gated only its own side. The pump room's door to Malbee's room keeps its door rule until
+  arriving from her room is seen.
+- **A side effect:** the Training Grounds' Enemysanity Bee-Boops (1093, 1094) take the room's name, "Honey Factory:
+  Training Grounds, Bee-Boop N"; their ids stay.
+
+**Why 236 is held out:** one pass now lets Malbee's fight (flag 211) come before Gen and Eri's Room, and Gen and Eri
+are switched off from 211 while their scene's trigger lasts until 216, so the scene, the holler and their switch may
+not work (Next 68). Seen in the quest sweep, then in seeds, or kept out with Next 68's fix.
+
+Tests `TestPool`, `TestSmallPool`, `TestFactoryPass`, `TestLobby`, `TestWorkerRooms`, `TestPumpRoom`, `TestPuzzle1`,
+`TestPuzzle2`, `TestPressurePlateRoom`, `TestStorageMaze`, `TestStorageMinibossRoom`.
+
+**Status:** built (2026-10-10): a seed generates with it; the tests written, to run before the push; not seen in game.
+
+*Code: `data/items.json`, `data_types.py` (`Item.kept`), `items.py`, `slot_data.py` (`kept_keys`),
+`logic/honey_factory.py`. The mod: `World/KeptKeys.cs`, `Core/SeedData.cs`.*
+
+## Build step 80: the Rubber Prison Pier's third floor save crystal kept
+
+**Found (2026-10-10, mapping the Rubber Prison's Pier):** the save crystal on the Pier's third floor right
+(`SavePoint  - Duplicate`) is there only until flag 41, the first boss's artifact flag, which in the game is always
+set by the prison: players never see it. In a seed 41 can still be off there (`MEASURED.md`, the Pier).
+
+**Asked and decided (the user, 2026-10-10):** "lets keep this one present all the time".
+
+**Built** (the apworld only: the mod's own list does it): `kept_present` gets the crystal, whose marker answers
+"exists" before the game reads its limit. Nothing in the logic changes.
+
+**Status:** built (2026-10-10); seen the same day in seed `AP_80216874502571128696` through the dev `liveslot`, with
+41 on: the crystal there (the user).
+
+*Code: `logic/rubber_prison.py` (`KEPT_PRESENT`). The mod: `World/KeptOpen.cs`, unchanged.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -6199,6 +6284,7 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `scenes_kept_away` (build step 62): maps' own start-up scenes never played, their flag set as the map is built;
 - `submarine_item`, `present_with_item` and `held_until_item`: the submarine is an item, and its docks are made, and
   who shows them off kept away, by its key item in the bag (build step 36);
+- `kept_keys`, the key items a lock leaves in the bag, never used up (build step 79: the Factory Pass, 95);
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);
 - `starting_member`: 0 Vi, 1 Kabbu, 2 Leif alone, 3 all three, -1 the story's party (build steps 18 and 20);
 - `ability_items`, always true: the game's ability checks answered from the items (build step 23);

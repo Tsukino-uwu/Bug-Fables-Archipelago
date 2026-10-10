@@ -172,6 +172,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # The submarine is an item (its key item, whichever item gives it): the mod answers the docks' story checks from
         # the bag.
         "submarine_item": True,
+        # Key items never used up (the Factory Pass): the mod leaves each in the bag at its locks (Event59), so the pool
+        # holds one.
+        "kept_keys": sorted(item.game_id for item in ITEMS if item.kept),
         # The ant tunnels' miners dig for free: each shortcut opens once its far end is reached (the user, 2026-10-04).
         "free_ant_tunnels": True,
         # The Termite gate opens from inside before it was ever opened from outside: the client marks it opened (flag

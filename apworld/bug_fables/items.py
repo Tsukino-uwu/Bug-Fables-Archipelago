@@ -45,9 +45,16 @@ def own_copies(world: BugFablesWorld, name: str) -> int:
 
 
 def create_all_items(world: BugFablesWorld) -> None:
-    # The included locations' vanilla items (duplicates kept), then padding; an item whose spot is off stays vanilla.
-    pool: list[Item] = [world.create_item(name) for name in
-                        (vanilla_item(loc) for loc in world.included_locations) if name is not None]
+    # The included locations' vanilla items (duplicates kept, a kept key only once), then padding; an item whose spot is
+    # off stays vanilla.
+    pool: list[Item] = []
+    kept: set[str] = set()
+    for name in (vanilla_item(loc) for loc in world.included_locations):
+        if name is None or name in kept:
+            continue
+        if ITEMS_BY_NAME[name].kept:
+            kept.add(name)
+        pool.append(world.create_item(name))
     # With a starting member, it is start inventory (the client gets it too) and the others are in the pool (none with
     # All Three).
     if world.starting_member >= 0:

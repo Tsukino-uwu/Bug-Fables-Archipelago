@@ -6,10 +6,11 @@ Key items, medals and other items are shuffled across the multiworld. Picking on
 in a shuffled shop or finishing a quest sends a check instead, and the item there shows what the seed put in its
 place. Every item, your own included, arrives from the server and is given to you through the game's own item system.
 
-This is an early version. It covers the start of the game: the Bugaria Outskirts, Snakemouth Den, the open parts of
-Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden
-Path, plus the seven scenes in later chapters where the game teaches a field ability and the one where the Termite King
-hands over the submarine (both new in 0.3.0). More chapters come later.
+This is an early version, its logic written room by room. It covers the Bugaria Outskirts, Snakemouth Den, Bugaria
+City, the Golden Path, the Golden Settlement, the Lost Sands, the Golden Hills, the Far Grasslands, the Wild Swamplands,
+the Forsaken Lands, Defiant Root, the Bee Kingdom and its Honey Factory, with their shops, plus the scenes in later
+chapters where the game teaches a field ability (all but Beetle Dig's, held out for now) and the one where the Termite
+King hands over the submarine. More areas come later.
 
 ## Options
 
@@ -54,8 +55,7 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
   pause menu's Warp is always there.
 - **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp gets you out of,
   a drop or a one-way door, so items can land in more places and you're expected to warp back. Off, it always leaves
-  you a way to walk back. So far one one-way counts: from Snakemouth Den's corridor past the Explorer Permit gate,
-  which the game walks you through. New in 0.3.0.
+  you a way to walk back. New in 0.3.0.
 - **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
   items in any order (see below). New in 0.3.0.
 - **Extra Roadblocks** (none): obstacles the game puts up later in the story, there from the start instead, each
@@ -100,12 +100,13 @@ Entrance Randomizer off or on Room Swap.
 
 ## Field abilities
 
-Every ability the story teaches is an item, in every seed, and the scene where the game teaches it is a check instead:
-the Beemerang Halt, Bee Fly, the Dash, the Horn Dash, Beetle Dig, the Icicle and the Shield. Three come as progressive
-items, in the game's own order: **Progressive Beemerang** (the Toss, then the Halt), **Progressive Dash** (the Dash,
-then the Horn Dash) and **Progressive Freeze** (the Freeze, then the Icicle). An ability works once its item arrives,
-wherever you are in the story, and its battle skill comes with it. The logic for chapters 2 to 7 is cautious for now:
-each teaching scene counts as reachable only once every ability taught before it is yours. New in 0.3.0.
+Every ability the story teaches is an item, in every seed, and the scene where the game teaches it is a check instead
+(Beetle Dig's, in the bandit hideout, is held out for now): the Beemerang Halt, Bee Fly, the Dash, the Horn Dash,
+Beetle Dig, the Icicle and the Shield. Three come as progressive items, in the game's own order: **Progressive
+Beemerang** (the Toss, then the Halt), **Progressive Dash** (the Dash, then the Horn Dash) and **Progressive Freeze**
+(the Freeze, then the Icicle). An ability works once its item arrives, wherever you are in the story, and its battle
+skill comes with it. Where a teaching scene's rooms aren't mapped yet, the logic is cautious: it counts as reachable
+only once every ability taught before it is yours. New in 0.3.0.
 
 With *Shuffle Field Moves* on, the Dash and the Horn Dash work without the Horn Slash, but only as themselves: the Dash
 moves you faster and the Horn Dash breaks boulders. Cutting grass, hitting switches and knocking things over wait for
@@ -130,6 +131,8 @@ where both copies are, since a hint can't tell the two apart.
   Received early, it does nothing until then.
 - **Save crystals** can be used with the confirm button when you stand next to one (a "?" shows over you, as when
   examining a statue), so you can save without a field attack, as with *Shuffle Field Moves*. Hitting one still works.
+- **The Factory Pass** is one item and never used up: every lock in the Honey Factory keeps it in your bag. The pump
+  room's scanner still asks for a pass three times; show it the same one each time.
 
 ## What is the goal?
 

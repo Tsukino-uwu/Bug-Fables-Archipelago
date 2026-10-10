@@ -28,21 +28,30 @@ class TestPool(BugFablesTestBase):
                     self.assertIsNotNone(vanilla_item(loc))
 
     def test_each_location_puts_its_item_in_the_pool(self) -> None:
-        # Every location's item is in the pool once per location holding it, except the copies the mod's own items
-        # (the Progressive Boat's two) take when the pool is full: one duplicated filler copy each (TestSmallPool: a
-        # last copy).
+        # Every location's item is in the pool once per location holding it (a kept key once), except the copies the
+        # mod's own items (the Progressive Boat's two) take when the pool is full: one duplicated filler copy each
+        # (TestSmallPool: a last copy).
         from ..data_tables import ITEMS, vanilla_item
-        from ..items import own_copies
+        from ..items import ITEMS_BY_NAME, own_copies
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         own = sum(own_copies(self.world, item.name) for item in ITEMS)
         short = 0
         included = self.world.included_locations
         for name in {vanilla_item(loc) for loc in included} - {None}:
-            expected = sum(1 for loc in included if vanilla_item(loc) == name)
+            expected = 1 if ITEMS_BY_NAME[name].kept else sum(1 for loc in included if vanilla_item(loc) == name)
             with self.subTest(item=name):
                 self.assertGreaterEqual(pool.count(name), 1)
                 short += max(0, expected - pool.count(name))
         self.assertLessEqual(short, own)
+
+    def test_a_kept_key_is_in_the_pool_once(self) -> None:
+        # The Factory Pass is never used up (slot_data kept_keys): one copy, whatever the spots holding one in vanilla,
+        # padding making up the count. Four spots: Gen and Eri's Room's is held out until it's seen in game.
+        from ..data_tables import vanilla_item
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        spots = [loc for loc in self.world.included_locations if vanilla_item(loc) == "Factory Pass"]
+        self.assertEqual(len(spots), 4)
+        self.assertEqual(pool.count("Factory Pass"), 1)
 
 
 class TestBerries(BugFablesTestBase):
@@ -77,6 +86,7 @@ class TestSmallPool(BugFablesTestBase):
         for name in {vanilla_item(loc) for loc in self.world.included_locations} - {None}:
             data = ITEMS_BY_NAME[name]
             if data.classification != "filler" or data.kind not in (ITEM_KIND, MONEY_KIND):
-                expected = sum(1 for loc in self.world.included_locations if vanilla_item(loc) == name)
+                expected = 1 if data.kept else sum(1 for loc in self.world.included_locations
+                                                   if vanilla_item(loc) == name)
                 with self.subTest(item=name):
                     self.assertEqual(pool.count(name), expected)

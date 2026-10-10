@@ -94,6 +94,31 @@ class TestPickups(BugFablesTestBase):
             self.assertEqual(data["location_flags"][location], pickup["flag"])
 
 
+class TestFactoryPass(BugFablesTestBase):
+    # One pass in the pool: without kept_keys the first lock would take it; a pass spot missing from the tables would
+    # hand out a vanilla pass instead of its check.
+    def test_the_pass_is_kept(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["kept_keys"], [95])
+
+    def test_pass_spots_are_locations(self) -> None:
+        data = self.world.fill_slot_data()
+        for name, room, flag in (("Honey Factory: Worker Rooms, On Top of the Bookshelf", "HoneyFactoryWorkerRooms",
+                                  178),
+                                 ("Honey Factory: Training Grounds, Behind the Gate", "FactoryProcessingPuzzle2", 212),
+                                 ("Honey Factory: Pressure Plate Room, Behind the Gate", "FactoryProcessingPuzzle3",
+                                  215)):
+            with self.subTest(location=name):
+                spot = str(self.world.location_name_to_id[name])
+                self.assertEqual(data["location_pickups"][spot], {"map": room, "flag": flag})
+                self.assertEqual(data["location_flags"][spot], flag)
+        fight = str(self.world.location_name_to_id["Honey Factory: Storage Mini-boss Room, Mini-boss Fight"])
+        self.assertEqual(data["location_gives"][fight], {"map": "FactoryStorageMiniboss", "type": 1, "item": 95})
+        self.assertEqual(data["location_flags"][fight], 221)
+        self.assertNotIn(int(fight), data["silent_locations"])
+        # Gen and Eri's Room's pass is held out: its pickup stays the game's own, a harmless second pass.
+        self.assertNotIn(213, data["location_flags"].values())
+
+
 class TestStoryPickup(BugFablesTestBase):
     # A story pickup has no flag: the client knows it by the event it starts.
     def test_story_pickup_known_by_its_event(self) -> None:

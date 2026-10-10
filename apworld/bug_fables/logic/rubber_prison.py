@@ -81,6 +81,10 @@ PRESENT_WITH_ITEM = (
 KEPT_OPEN = (
     EntityRef("RubberPrisonPier", "rock"),
 )
+KEPT_PRESENT = (
+    # The Pier's third floor save crystal on its right, gone from flag 41 in the game: kept (the user, 2026-10-10).
+    EntityRef("RubberPrisonPier", "SavePoint  - Duplicate"),
+)
 SCENERY_PRESENT = (
     # The Pier's third floor bridge, which the Office's crank breaks (Event193, flag 583, opening the second floor's
     # right door): kept, so the floor's two sides stay joined (the user, 2026-10-10: "i don't want the bridge to

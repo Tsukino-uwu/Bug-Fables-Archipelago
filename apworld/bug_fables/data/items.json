@@ -26,6 +26,7 @@
     {"name": "Weak Stomach", "game_id": 24, "kind": 2, "classification": "useful"},
     {"name": "Royal Calling", "game_id": 80, "kind": 2, "classification": "useful"},
     {"name": "Flower Key", "game_id": 54, "kind": 1, "classification": "progression"},
+    {"name": "Factory Pass", "game_id": 95, "kind": 1, "classification": "progression", "kept": true, "_comment": "Opens the Honey Factory's three pass locks (Event59 key list index 4): never used up in a seed (World/KeptKeys.cs), so the pool holds one, whatever the five spots that hold one in vanilla."},
     {"name": "Mushroom", "game_id": 13, "kind": 0, "classification": "filler"},
     {"name": "Honey Drop", "game_id": 1, "kind": 0, "classification": "filler"},
     {"name": "HP Plus", "game_id": 0, "kind": 2, "classification": "useful"},

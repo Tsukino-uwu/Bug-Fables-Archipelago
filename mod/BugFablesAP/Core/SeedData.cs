@@ -75,6 +75,8 @@ namespace BugFablesAP
         internal readonly bool JumpShuffled;
         internal readonly bool AbilityItems;
         internal readonly bool SubmarineItem;
+        // Key items a lock (Event59) leaves in the bag; null for a seed without kept_keys: every lock takes its key.
+        internal readonly HashSet<int> KeptKeys;
         // The ant tunnels' miners dig for free.
         internal readonly bool FreeAntTunnels;
         // The Termite gate opens from inside before it was ever opened from outside.
@@ -150,6 +152,8 @@ namespace BugFablesAP
             SilentLocations = silent != null ? new HashSet<long>(silent) : null;
             List<long> quiet = SlotData.List(data, "quiet_locations", e => e.Value<long>());
             QuietLocations = quiet != null ? new HashSet<long>(quiet) : null;
+            List<int> kept = SlotData.List(data, "kept_keys", e => e.Value<int>());
+            KeptKeys = kept != null ? new HashSet<int>(kept) : null;
             LocationShops = SlotData.ByLocation(data, "location_shops",
                 v => new[] { v.Value<int>("shop"), v.Value<int>("medal") });
             LocationItemShops = SlotData.ByLocation(data, "location_item_shops", v => new ApConnection.ItemShopSlot

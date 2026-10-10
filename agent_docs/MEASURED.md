@@ -72,6 +72,8 @@ read, a log or a probe.
   arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
 - [The goal flags](#the-goal-flags-2026-10-08-code-read-the-dumps-and-the-games-data-file-the-grass-seen-in-play)
 - [Kabbu's horn tags](#kabbus-horn-tags-2026-10-09-code-read-and-the-taps-il-nothing-seen-in-game)
+- [The lock routine,
+  Event59](#the-lock-routine-event59-2026-10-10-code-read-and-the-installed-dlls-il-nothing-seen-in-game)
 - [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-the-user-every-ability-in-hand)
 - [Still to measure](#still-to-measure)
 
@@ -1717,11 +1719,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`HoneyFactoryWorkerRooms`, the Worker Rooms (2026-10-10, the user; named by the user):** two parts with no way
   between them inside the room, each with one door to the Lobby's bottom floor. The office (`loadzoneoffice`): nothing
   needed in, out or to the portrait (`portrait`, line 7, discovery 15 and flag 223) or the PC (the user). A Shock Candy
-  (`Item - Shock`, item 75, flag 728) on the desk, Jump or Bee Fly; the Factory Pass (`card`, key item 95, flag 178) up
-  high, Jump and the Beemerang Toss, or Bee Fly alone (the user). The overseer from 299 until 324, then Malbee (324 to
-  330, her line 24 gives the medal Power Exchange, 49) and the overseer's second spot (from 324). The sleeping quarters
-  (`loadzonebeds`): three workers, nothing needed in or out (the user); one line (11) sells a Magic Seed (item 11) for
-  25 berries. No hazards, auto-start scenes or map enemies.
+  (`Item - Shock`, item 75, flag 728) on the desk, Jump or Bee Fly; the Factory Pass (`card`, key item 95, flag 178,
+  location 235) up high, Jump and the Beemerang Toss, or Bee Fly alone (the user). The overseer from 299 until 324,
+  then Malbee (324 to 330, her line 24 gives the medal Power Exchange, 49) and the overseer's second spot (from 324).
+  The sleeping quarters (`loadzonebeds`): three workers, nothing needed in or out (the user); one line (11) sells a
+  Magic Seed (item 11) for 25 berries. No hazards, auto-start scenes or map enemies.
   **`HoneyFactoryCore` (2026-10-10, the user):** one door (`loadzone`, to the Lobby), nothing needed in or out; the
   machine has nothing to interact with. A gate at the top (`Base/FrontWall/Gate`, until 299) shuts off the boss arena,
   empty but for the boss's and a bee-bot's parked models (seen, warped behind it). From 218 until 299 the overseer, HB
@@ -1766,14 +1768,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   switch and flag 216; after it the help key, with nobody in front, hollers to them to press the switch (the map's help
   line; the key needs Tattle, flag 10, and in the game Kabbu: mod step 52 lifts both in a seed; seen with Vi alone).
   Across the moving platforms to the Factory Pass (`keycard - Duplicate`, key item 95, flag 213) on the bottom left, by
-  the lever (its spot's name, once a location, "By the Lever", the user's): Jump, Freeze, the Shield and a basic attack
-  for a lever, which opens a shortcut back to the start (the user). Gen and Eri exist only until flag 211 (`Event98`,
-  the storage), the trigger until 216: with 211 set first, the scene would look for them (Next 68). Sticky honey; no
-  other pickups.
+  the lever ("By the Lever", the user's name, location 236, held out): Jump, Freeze, the Shield and a basic attack for
+  a lever, which opens a shortcut back to the start (the user). Gen and Eri exist only until flag 211 (`Event98`, the
+  storage), the trigger until 216: with 211 set first, the scene would look for them (Next 68). An entity past its limit is
+  switched off, not destroyed (`SetActive(false)`, `NPCControl.cs:438-441`), and `GetEntity` returns it all the same
+  (`MainManager.cs:18510-18594`), so the scene would find them; what it, their switch and the holler then do is not
+  seen. Sticky honey; no other pickups.
   **`FactoryProcessingPuzzle2`, the Training Grounds (2026-10-10, the user; named by the user after its sign):** a dead
   end with one door (`loadzone`, to the Pump Room), nothing needed in or out. The Factory Pass (`keycard`, key item 95,
-  flag 212) on a platform behind a gate, far upper right (its spot's name, once a location, "Behind the Gate", the
-  user's): Beemerang Halt (two cranks, `ScrewSwitch`), Jump, the Shield, and a basic attack for a lever, reached only
+  flag 212) on a platform behind a gate, far upper right ("Behind the Gate", the user's name, location 237): Beemerang
+  Halt (two cranks, `ScrewSwitch`), Jump, the Shield, and a basic attack for a lever, reached only
   with Halt anyway (the user). The drop right of the door is a one-way without Jump; a fall below puts the party back at
   `respawnerleft`. Two bee-bots below, a sign by the door, the broken Mender (325 to 328). No other pickups.
   **`FactoryProcessingPuzzle3`, the Pressure Plate Room (2026-10-10, the user; named by the user):** a dead end with one
@@ -1782,7 +1786,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`Dropplet`, frozen into blocks) and a honey platform (`PathPlatform`); done with Jump, Freeze and the horn, it opens
   a gate and takes the party up to both pickups: crystal berry #16 (`cberry`) behind a pipe by the door ("Behind the
   Pipe", location 231) and the Factory Pass (`keycard - Duplicate`, key item 95, flag 215) behind the gate ("Behind the
-  Gate" once a location) (the user). Map enemies: a Turret and a Denmuki.
+  Gate", location 238) (the user). Map enemies: a Turret and a Denmuki.
   **`FactoryProcessingMalbee`, Malbee's Room (2026-10-10, the user; named by the user):** the floor: one door
   (`loadzone`, to the Pump Room), nothing needed from it; walking a bit left starts `Event98` (`eventtrigger`, until
   211): Malbee (`Fixedmalbee`) and a mini-boss fight with three Abomihoneys (enemy 48, Ground, no escape), then flags
@@ -1809,7 +1813,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`loadzone`, to the Storage Maze) and a save crystal, nothing needed. A respawning Magic Seed (`seed`, item 11,
   regional flag 20) on top of the boxes by the door: Jump or Bee Fly. To the left side, Jump and Beemerang Halt: the
   trigger (`event`, until 221, up at y 4) plays `Event101`, a mini-boss fight with Ahoneynation (enemy 42, Ground; Zasp
-  and Mothiva in the scene), after which it gives a Factory Pass (`giveitem,1,95`) and sets 221 (the user; the code). A
+  and Mothiva in the scene), after which it gives a Factory Pass (`giveitem,1,95`; location 239) and sets 221 (the user;
+  the code). A
   switch, a diary to read (`notesDiary - Duplicate`), a bee-bot; sticky honey.
   **`FactoryStorageOverseer`, the Storage Overseer Room (2026-10-10, the user; named by the user):** three parts. The
   right: the door (`loadzone`, to the Storage Maze). The middle: across between the right and the left, Beemerang Halt
@@ -3196,7 +3201,20 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   behind two `PrisonDoor/SlideDoor`s until 567, set on the bridge's side (its `PrisonDoor`, a switch and a Prison Key
   lock). Arriving through either while shut pushes the party past it (seen, 2026-10-10). A seed keeps the bridge (the
   user: "i don't want the bridge to collapse"); the mod's `scenery_present` marker answers "exists" before the limit
-  is read (`KeptOpen.cs`).
+  is read (`KeptOpen.cs`). From flag 79 a bridge guard (`bridgeguard`, a talk NPC) stands on the third floor's
+  middle left; he doesn't block the way (seen, 2026-10-10). The third floor's right save crystal (`SavePoint  -
+  Duplicate`, two spaces) is there only until flag 41, the first boss's artifact flag, so in vanilla never by the
+  prison; a seed keeps it (seen with 41 on).
+- **Around the Pier, from a sweep of the code** (2026-10-10, not seen in game): flag 79 is written only by the Giant's
+  Lair Bridge's scene (`Event193`'s second branch, `EventControl.cs:32078`; its trigger the bridge's `event`, limit
+  79), which also sets 584, 567, 551 and 545 (`:32136-32139`) and removes every Prison Key (161) from the bag
+  (`:32140-32143`). 583 is written only by the Office's crank scene (`:31853`); 567 also by the bridge's `PrisonDoor`
+  through `Event89`'s `flags[call.activationflag] = true` (`:14903`). Loading `RubberPrisonGym` sets 535 off
+  (`MapControl.cs:686-687`), and a switch takes its state from its flag as a map loads (`NPCControl.cs:1031-1033`), so
+  after the Gym every gate lever and gate is back in the 535-off state. Any area-14 map load records discovery 47 when
+  it isn't yet (`MapControl.cs:607-612`, one of 17 such arrival discoveries in `AreaSpecific`), for the discovery sweep.
+  The first arrival by submarine plays `Event185`, which speaks a line from `GetEntity(-5)`, Kabbu (`:31151`), null
+  without him (`MainManager.cs:18594`): out of logic only, since the logic's submarine needs the whole party.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
@@ -3517,6 +3535,37 @@ Read for build step 63, with a review over every reader. Used by `FieldMoves.cs`
 - **So in vanilla** the plain Dash does what the slash does (its tag is the slash's), pushes rocks and knocks ice
   cubes, but breaks no boulder and dizzies no enemy; the Horn Dash breaks boulders, cuts grass and hits switches, but
   pushes no rock.
+
+## The lock routine, Event59 (2026-10-10, code read and the installed DLL's IL; nothing seen in game)
+
+Read for build step 79 (the Factory Pass). Used by `KeptKeys.cs`.
+
+- **One routine for every locked door.** Each `LockedDoor` runs `StartEvent(59)` (`NPCControl.cs:4354-4356`). It shows
+  the key items (`|pickitem,1,0,...|`), and the pick stores the item id, not a list index, in `flagvar[0]`
+  (`MainManager.cs:5754`, the list `items[1].ToArray()`). The lock's key is `{54, 60, 58, 92, 95, 111, 113, 114, 115,
+  119, 109, 116, 160, 157, 158, 159, 27, 161, -10}` at its `dialogues[0].y` (`EventControl.cs:9584-9588`); index 4 is
+  95, the Factory Pass.
+- **The removal.** The right key is taken with `items[1].Remove(flagvar[0])` for every index but 16 (27, the Explorer
+  Permit) (`:9600-9603`); then, with `dialogues[1].y` above -1, that event starts and the routine stops
+  (`:9604-9608`). In the installed DLL's IL (`<Event59>d__89.MoveNext`, ilspycmd) it is the coroutine's only call to
+  `List<int>.Remove`, followed directly by `pop`, with no label on it; its only other `List<int>` call is a `Contains`
+  in the wrong-key branch.
+- **The Factory Pass's three locks** (EntityDump): the Lobby's `keything` (limit 179, dialogues `-1:4:0 -1:-1:0`):
+  the sound `Slot3`, `Event89` (flag 179), the lock destroyed. The Pump Room's `key scanner` (limit 217):
+  `flagvar[24]` counted up and the sound `Slot` plus the count; at 3 or more `Event96` (flag 217) and the scanner
+  destroyed, below 3 the scanner stays (`:9633-9646`). The Storage Maze's `keycard` (limit 222, dialogues `-1:4:0
+  -1:96:0`): `Event96` (flag 222) straight after the removal. `flagvar[24]` is used nowhere else; `flagvar` is saved
+  (`MainManager.cs:7068-7075`), loaded (`:17296-17300`) and cleared on a new game (`:3604`), so the count survives
+  leaving the room and reloading. Each lock's limit is the flag its opening sets: an opened lock is never made again.
+- **The five passes:** four pickups, each data `1 -1 0 0` with animid 95, a plain flagged key-item pickup:
+  `HoneyFactoryWorkerRooms` `card` (flag 178), `FactoryProcessingPuzzle1` `keycard - Duplicate` (213),
+  `FactoryProcessingPuzzle2` `keycard` (212), `FactoryProcessingPuzzle3` `keycard - Duplicate` (215); and `Event101`'s
+  `|giveitem,1,95,7|` with no caller (`EventControl.cs:17337`), then flag 221 (`:17368`) and prize medal 11
+  (`:17369`). Nothing else in the decompiled game adds, checks or removes 95; `Event197`'s `Remove(spt)` is another
+  item (`spt` is 135, 136 or 137, `:32687-32689`).
+- **Not every key removal is `Event59`:** `Event193` empties the bag of Prison Keys in a loop, `while
+  (items[1].Contains(161)) items[1].Remove(161);` (`:32140-32143`), and `Event72`'s slot removes its picked item
+  (`:11383`).
 
 ## Rooms seen on screen (2026-10-05, the user, every ability in hand)
 

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**173 of 244 done.**
+**174 of 244 done.**
 
 ## Outskirts
 
@@ -276,12 +276,12 @@ as it is, a frozen record.
 ## Honey Factory
 
 - [x] HoneyFactoryEntrance (72) — the Lobby; the bottom a drop, Jump or Bee Fly back up; the processing door's Factory
-  Pass lock kept (a stand-in until Next 67); the storage door open (build step 77); the shop's five slots, locations
-  212-216, its berries with Next 63
+  Pass lock kept, the pass never used up, its door an area the game pushes the party past (build step 79); the storage
+  door open (build step 77); the shop's five slots, locations 212-216, its berries with Next 63
 - [x] HoneyFactoryWorkerRooms (74) — the Worker Rooms; the office and the sleeping quarters cut off from each other;
-  the desk's Shock Candy, location 229 (Jump or Bee Fly); the Factory Pass (flag 178, Jump and the Beemerang Toss or
-  Bee Fly) the game's own until Next 67; for the quest pass: Malbee's Power Exchange (324 to 330); for the discovery
-  sweep: the portrait (discovery 15); for the sellers' pass: the quarters' Magic Seed (25 berries, line 11)
+  the desk's Shock Candy, location 229 (Jump or Bee Fly); the Factory Pass, location 235 (flag 178, Jump and the
+  Beemerang Toss or Bee Fly); for the quest pass: Malbee's Power Exchange (324 to 330); for the discovery sweep: the
+  portrait (discovery 15); for the sellers' pass: the quarters' Magic Seed (25 berries, line 11)
 - [x] HoneyFactoryCore (75) — one region, its door free; for the quest and enemy passes: the chapter 3 finale
   (`Event99`, from 218, enemy 46, prize medal 6, sets 299), its gate open only then; to check again (the user,
   2026-10-10): the finale from the start, researched (Known issues, chapter 4's opening): left to the story, or open
@@ -294,34 +294,44 @@ as it is, a frozen record.
 - [x] FactoryProcessing2 (84) — the Second Room; up to the pump door: Jump or Bee Fly, a basic attack, the Shield, and
   Beemerang Halt or Bee Fly; down a drop; no location
 - [x] FactoryProcessingPump (85) — the Pump Room; up on the cranks (Beemerang Halt), then the platform loop (Jump and
-  the Shield); the Shell Ointment behind the boxes, location 230; Malbee's door behind the Factory Pass scanner (a
-  stand-in until Next 67); for the quest pass: the broken Mender (325 to 327)
-- [x] FactoryProcessingPuzzle1 (86) — Gen and Eri's Room; one region, its door free; its Factory Pass (213, "By the
-  Lever": Jump, Freeze, the Shield, a basic attack, Gen and Eri's fight with Vi, the holler) the game's own until Next
-  67; for Next 68: Gen and Eri's scene (`Event97`) needs them, gone from 211
-- [x] FactoryProcessingPuzzle2 (87) — the Training Grounds; one region, its door free; its Factory Pass (212, "Behind
-  the Gate": Beemerang Halt, Jump, the Shield) the game's own until Next 67; for the quest pass: the broken Mender (325
-  to 328)
+  the Shield); the Shell Ointment behind the boxes, location 230; Malbee's door behind the Factory Pass scanner (the
+  pass shown three times, build step 79; arriving from her room before 217 not seen yet); for the quest pass: the
+  broken Mender (325 to 327)
+- [x] FactoryProcessingPuzzle1 (86) — Gen and Eri's Room; one region, its door free; its Factory Pass, location 236
+  (213, "By the Lever": Jump, Freeze, the Shield, a basic attack, Gen and Eri's fight with Vi, the holler), held out;
+  for the quest pass and Next 68: Gen and Eri's scene (`Event97`) needs them, gone from 211 (with Malbee's fight
+  first, not seen); then 236 joins seeds
+- [x] FactoryProcessingPuzzle2 (87) — the Training Grounds; one region, its door free; its Factory Pass, location 237
+  (212, "Behind the Gate": Beemerang Halt, Jump, the Shield, a basic attack for a lever); for the quest pass: the
+  broken Mender (325 to 328)
 - [x] FactoryProcessingPuzzle3 (88) — the Pressure Plate Room; one region, its door free; its puzzle (Jump, Freeze,
-  the horn) to crystal berry #16, "Behind the Pipe", location 231, and its Factory Pass (215, "Behind the Gate"),
-  the game's own until Next 67
+  the horn) to crystal berry #16, "Behind the Pipe", location 231, and its Factory Pass, "Behind the Gate", location
+  238 (215)
 - [x] FactoryProcessingMalbee (89) — Malbee's Room; its fight (`Event98`, three Abomihoneys, flag 211) a story event
   that starts the tram, both ways to the First Room's right side; the platform Jump or Bee Fly up, a drop down; for
   the quest pass: the broken Mender (325 to 326)
 - [x] FactoryStorageMaze (90) — the Storage Maze; its box tops up with Jump or Bee Fly; the medal Shock
   Trooper, "Hole in the Boxes", location 232, and crystal berry #17, "Lever Puzzle", location 233 (a basic attack,
-  Jump, Beemerang Halt); the Overseer's door behind its pass lock (a stand-in until Next 67)
+  Jump, Beemerang Halt); the Overseer's door behind its pass lock, an area the game pushes the party past (build step
+  79)
 - [x] FactoryStorageElevator (91) — the Storage Elevator; the top and the bottom joined by the elevator, a basic attack
   each way; no location
 - [x] FactoryStorageMiniboss (92) — the Storage Mini-boss Room; one region; the Magic Seed on top of the boxes,
-  location 234 (Jump or Bee Fly); its fight's Factory Pass (Jump, Beemerang Halt) the game's own until Next 67; for
-  the enemy pass: Ahoneynation (`Event101`)
+  location 234 (Jump or Bee Fly); its fight's Factory Pass, location 239 (Jump, Beemerang Halt); for the enemy pass:
+  Ahoneynation (`Event101`)
 - [x] FactoryStorageOverseer (93) — the Storage Overseer Room; one region, its door free, no location; for the quest
   pass: the overseer's escort (`Event102`, flag 218: Jump, Beemerang Halt and Freeze, or Bee Fly)
 
 ## Rubber Prison
 
-- [ ] RubberPrisonPier (218)
+- [x] RubberPrisonPier (218) — the Pier; four floors of bridges, each dropped from onto any below, no way back up
+  inside the room (the drops count with Points of No Return until the rooms behind each floor give a way back); the
+  ground floor's upper left behind the gate levers' tutorial gates (Jump or Bee Fly round), its lower part (the gate
+  lever, the dock) below, the lift once its lever is hit; the third floor bridge (build step 78) and save crystal (80)
+  kept; no location yet: the Wasp Driller's Prison Key ("Second Floor Fight") the game's own until Next 69; for the
+  Office: the second floor's right door (583, the crank: the Wooden Crank and Beemerang Halt); for the Giant's Lair
+  Bridge: the ground floor's right door (567); for the enemy pass: its four enemies (gone from 79) and the Wasp Driller;
+  for the discovery sweep: discovery 47, recorded on arriving in any prison room
 - [ ] RubberPrisonCheckpointCorridor (219)
 - [ ] RubberPrisonSpikeRoom (220)
 - [ ] RubberPrisonCells1 (221)

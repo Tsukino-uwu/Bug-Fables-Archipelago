@@ -38,8 +38,9 @@ class Item:
     every seed, each copy taking a filler slot (the mod's own items, which no location holds in vanilla).
     progressive_boat: such an item only with the option Progressive Boat on (true) or off (false). member: a party
     member, in the pool only with Starting Party Member on (the ones not starting; none with All Three). move: a field ability's item, in the
-    pool as many times as abilities.py says. Every other item enters the pool once per included location that holds it
-    in vanilla.
+    pool as many times as abilities.py says. kept: a key item the mod leaves in the bag at its locks (slot_data
+    kept_keys): in the pool once, however many included spots hold it, padding making up the count. Every other item
+    enters the pool once per included location that holds it in vanilla.
     """
 
     name: str
@@ -51,6 +52,7 @@ class Item:
     progressive_boat: bool | None = None
     member: bool = False
     move: bool = False
+    kept: bool = False
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Item:

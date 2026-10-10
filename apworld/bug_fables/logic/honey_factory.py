@@ -4,19 +4,13 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has, True_
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemShop, Location, Pickup, Source,
+from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
+from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Give, ItemShop, Location, Pickup, Source,
                           StoryEvent, Transfer)
 
-# The Factory Pass (key item 95), found in the factory: not an item yet, so the later chapters' stand-in until its
-# rooms are mapped. In a seed it won't be used up (apimplementation.md, Next 67), so one opens every lock. The Worker
-# Rooms' pass (flag 178, up high in the office) stays the game's own pickup until then: Jump and the Beemerang Toss,
-# or Bee Fly alone (the user, 2026-10-10); so does the first puzzle room's (213): Jump, Freeze, the Shield and a basic
-# attack, past Gen and Eri's fight (two Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52); and
-# the second's (212): Beemerang Halt, Jump and the Shield, and a basic attack for a lever (Halt brings the Toss); the
-# third's (215): Jump, Freeze and the horn (its puzzle); and the storage mini-boss's (Event101 gives it after its
-# fight, flag 221): Jump and Beemerang Halt to the fight's side of the room.
-FACTORY_PASS = LATER_CHAPTERS
+# The Factory Pass (key item 95): in a seed the mod leaves it in the bag at each of its three locks (Event59, key index
+# 4; build step 79), so the pool holds one and every lock needs only it. The game's five passes are locations 235-239.
+FACTORY_PASS = Has("Factory Pass")
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
 _PLATFORMS_RUNNING = "First Room Platforms Running"
@@ -69,6 +63,31 @@ LOCATIONS = (
     # the boxes by its door: Jump or Bee Fly.
     Location("Honey Factory: Storage Mini-boss Room, On Top of the Boxes", 234, "FactoryStorageMiniboss",
              Source(regional=20, pickup=Pickup(map="FactoryStorageMiniboss", type=0, item=11)), rule=_UP, no_jump=True),
+    # The five Factory Passes (build step 79). The Worker Rooms' office, up high: Jump and the Beemerang Toss, or Bee
+    # Fly alone (the user, 2026-10-10).
+    Location("Honey Factory: Worker Rooms, On Top of the Bookshelf", 235, "HoneyFactoryWorkerRooms",
+             Source(flag=178, pickup=Pickup(map="HoneyFactoryWorkerRooms", type=1, item=95)),
+             rule=(CanUse("Jump") & CanUse("Beemerang Toss")) | CanUse("Bee Fly"), no_jump=True),
+    # Gen and Eri's Room's, by the lever: Jump, Freeze, the Shield and a basic attack, past Gen and Eri's fight (two
+    # Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52). Held out until it's seen whether the
+    # scene and the holler still work after Malbee's fight (211), which switches Gen and Eri off (the quest sweep).
+    Location("Honey Factory: Gen and Eri's Room, By the Lever", 236, "FactoryProcessingPuzzle1",
+             Source(flag=213, pickup=Pickup(map="FactoryProcessingPuzzle1", type=1, item=95)),
+             rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Shield") & ANY_ATTACK & Member("Vi"), no_jump=True,
+             pending=True),
+    # The Training Grounds', behind the gate: Beemerang Halt, Jump, the Shield, and a basic attack for a lever.
+    Location("Honey Factory: Training Grounds, Behind the Gate", 237, "FactoryProcessingPuzzle2",
+             Source(flag=212, pickup=Pickup(map="FactoryProcessingPuzzle2", type=1, item=95)),
+             rule=ANY_ATTACK & CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Shield"), no_jump=True),
+    # The Pressure Plate Room's, behind the gate its puzzle opens: Jump, Freeze and the horn.
+    Location("Honey Factory: Pressure Plate Room, Behind the Gate", 238, "FactoryProcessingPuzzle3",
+             Source(flag=215, pickup=Pickup(map="FactoryProcessingPuzzle3", type=1, item=95)),
+             rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash"), no_jump=True),
+    # The Storage Mini-boss Room's, given after the Ahoneynation fight (Event101, flag 221) on its left side: Jump and
+    # Beemerang Halt; the fight is on the ground, any member.
+    Location("Honey Factory: Storage Mini-boss Room, Mini-boss Fight", 239, "FactoryStorageMiniboss",
+             Source(event=101, flag=221, give=Give(map="FactoryStorageMiniboss", type=1, item=95)),
+             rule=CanUse("Jump") & CanUse("Beemerang Halt"), no_jump=True),
 )
 
 STORY_EVENTS = (
@@ -103,9 +122,14 @@ ACTIVATION_FLAGS = (
 )
 MAP_AREAS = (
     # The Lobby (HoneyFactoryEntrance; named by the user, 2026-10-10): the upper area (the save crystal, the doors to
-    # the outside, the core, processing and the storage) the map's own region; the bottom (the office's and the sleeping
-    # quarters' doors, the shop, opened by talking to the bee outside it) a drop down, Jump or Bee Fly back up.
+    # the outside, the core and the storage) the map's own region; the bottom (the office's and the sleeping quarters'
+    # doors, the shop, opened by talking to the bee outside it) a drop down, Jump or Bee Fly back up.
     Area("HoneyFactoryEntrance", "Bottom", ("loadzoneoffice", "loadzonesleep"), one_way(None, _UP), out=_UP),
+    # Its processing door, behind the pass lock (`keything`, Event59 key index 4, then Event89, flag 179; kept locked,
+    # the user, 2026-10-10): arriving from the first room, the game pushes the party past the lock (seen), a one-way
+    # without the pass.
+    Area("HoneyFactoryEntrance", "Processing Door", ("loadzone processing",), FACTORY_PASS,
+         out=one_way(None, FACTORY_PASS)),
     # The Worker Rooms (HoneyFactoryWorkerRooms; named by the user, 2026-10-10), two parts with no way between them
     # inside the room: the office (its door, the desk, the portrait, the PC) the map's own region, nothing needed to go
     # in, out or to the portrait; the sleeping quarters (the beds door and three workers), cut off.
@@ -130,14 +154,12 @@ MAP_AREAS = (
     Area("FactoryProcessingPump", "Upper Right", ("loadzonepuzzle2",), _PUMP_UP,
          out=one_way(CanUse("Bee Fly"), _PUMP_UP)),
     # Gen and Eri's Room (FactoryProcessingPuzzle1; named by the user, 2026-10-10): one region, its one door free; its
-    # only pickup, a Factory Pass, stays the game's own until Next 67 (FACTORY_PASS); its spot, once a location: "Honey
-    # Factory: Gen and Eri's Room, By the Lever" (the user's name).
+    # only pickup, a Factory Pass, location 236.
     # The Training Grounds (FactoryProcessingPuzzle2; named by the user, 2026-10-10, after its sign): the same; the drop
-    # right of its door a one-way without Jump, to the pass's side only. Its pass's spot, once a location: "Honey
-    # Factory: Training Grounds, Behind the Gate" (the user's name).
+    # right of its door a one-way without Jump, to the pass's side only. Its pass, location 237.
     # The Pressure Plate Room (FactoryProcessingPuzzle3; named by the user, 2026-10-10): one region, its one door free;
     # down to the puzzle a one-way without Jump or Bee Fly back up, which only the puzzle's spots need, Jump included.
-    # Its pass's spot, once a location: "Honey Factory: Pressure Plate Room, Behind the Gate" (the user's name).
+    # Its pass, location 238.
     # Malbee's Room: the floor (its door, her fight) the map's own region; the tram's platform above it, Jump or Bee Fly
     # up, a drop down, a one-way (the user).
     Area("FactoryProcessingMalbee", "Tram", (), _UP, out=one_way(None, _UP)),
@@ -146,14 +168,16 @@ MAP_AREAS = (
     # attack, both ways.
     Area("FactoryStorageElevator", "Bottom", ("loadzonebottom",), ANY_ATTACK),
     # The Storage Maze (FactoryStorageMaze; named by the user, 2026-10-10): its right side and floor (the elevator's
-    # door, the Overseer's door behind its pass lock, the save crystal) the map's own region; the box tops in its middle
-    # up with Jump or Bee Fly, off them free (a one-way); the bottom left pocket (the mini-boss room's door)
-    # a drop from the box tops with a green pad back up, free both ways.
+    # door, the save crystal) the map's own region; the box tops in its middle up with Jump or Bee Fly, off them free (a
+    # one-way); the bottom left pocket (the mini-boss room's door) a drop from the box tops with a green pad back up,
+    # free both ways.
     Area("FactoryStorageMaze", "Upper Middle", (), _MAZE_UP, out=one_way(None, _MAZE_UP)),
     Area("FactoryStorageMaze", "Bottom Left", ("loadzoneboss",), True_(), to="FactoryStorageMaze (Upper Middle)"),
+    # Its door to the Overseer's room, behind its pass lock (`keycard`, Event59 key index 4, then Event96, flag 222):
+    # arriving from her room, the game pushes the party past it (seen), a one-way without the pass.
+    Area("FactoryStorageMaze", "Overseer Door", ("loadzoneos",), FACTORY_PASS, out=one_way(None, FACTORY_PASS)),
     # The Storage Mini-boss Room (FactoryStorageMiniboss; named by the user, 2026-10-10): one region, its door and save
-    # crystal free; its left side, the Ahoneynation fight (Event101) and the Factory Pass it gives, Jump and Beemerang
-    # Halt, holds nothing the logic counts until Next 67.
+    # crystal free; its left side, the Ahoneynation fight (Event101) and the Factory Pass it gives, location 239.
     # The Storage Overseer Room (FactoryStorageOverseer; named by the user, 2026-10-10): one region, its one door free,
     # nothing to collect. Its overseer's escort (Event102, flag 218), back to the door past the bees: Jump, Beemerang
     # Halt and Freeze (the vanilla party has it, and without it is "pretty hard", the user), or Bee Fly alone; nothing
@@ -173,14 +197,8 @@ TRANSFERS = (
              way_back=_UP & _ON_THE_PLATFORMS, from_area="Left", to_area="Bottom"),
 )
 DOOR_RULES = (
-    # The Lobby's processing door, locked until the Factory Pass is used on it (keything, Event59 key index 4, then
-    # Event89, flag 179); kept locked (the user, 2026-10-10). Arriving from the first room, the game pushes the party
-    # past the lock (seen).
-    DoorRule("HoneyFactoryEntrance", "loadzone processing", FACTORY_PASS),
-    # The pump room's door to Malbee's room, behind the key scanner (Event59 key index 4; three passes, then Event96,
-    # flag 217); its closed model Base/DoorE until 217.
+    # The pump room's door to Malbee's room, behind the key scanner (Event59 key index 4; the pass shown three times,
+    # then Event96, flag 217); its closed model Base/DoorE until 217. Arriving from Malbee's room before 217 is not
+    # seen yet: an area like the Lobby's processing door's if the game pushes the party past.
     DoorRule("FactoryProcessingPump", "loadzonemalbee", FACTORY_PASS),
-    # The Storage Maze's door to the Overseer's room, behind its own pass lock (`keycard`, key index 4, then Event96,
-    # flag 222); arriving from her room, the game pushes the party past it (seen).
-    DoorRule("FactoryStorageMaze", "loadzoneos", FACTORY_PASS),
 )

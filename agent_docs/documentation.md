@@ -27,7 +27,8 @@ anyone curious about the process, or thinking of doing the same for another game
   [26](#26-field-abilities-as-items-in-the-game-ability-checks-read-the-bag),
   [29](#29-save-crystals-used-with-the-confirm-button-no-move-needed),
   [35](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped), the submarine,
-  [37](#37-the-submarines-docks-follow-its-key-item).
+  [37](#37-the-submarines-docks-follow-its-key-item), the Factory Pass,
+  [54](#54-the-factory-pass-never-used-up-at-its-locks).
 - **The party you have:** [11](#11-missing-party-members-stand-ins-in-scenes-and-followers),
   [36](#36-scripted-fights-cast-from-the-members-you-have).
 - **The entrance randomizer in the game:** [13](#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
@@ -105,6 +106,7 @@ anyone curious about the process, or thinking of doing the same for another game
 51. [B.O.S.S. with nobody met logs off instead of freezing](#51-boss-with-nobody-met-logs-off-instead-of-freezing)
 52. [Tattle from the start, with any party](#52-tattle-from-the-start-with-any-party)
 53. [Strategy and Relay in battle from the start](#53-strategy-and-relay-in-battle-from-the-start)
+54. [The Factory Pass never used up at its locks](#54-the-factory-pass-never-used-up-at-its-locks)
 
 ## Where it stands
 
@@ -188,13 +190,13 @@ A few decisions made first, because they shape everything after:
     gamepad button: typing needs a keyboard anyway. In the field this replaces the game's own use of Enter there
     (action 9, the "help": a party member talks about what's in front; `MEASURED.md`, Input); in the pause and start
     menus Enter keeps the game's uses. **Open, to decide when built** (found 2026-10-10 by the user, in the Honey
-    Factory's first puzzle room): action 9 is a mechanic too: in the factory's three puzzle rooms, with nobody in
-    front, it hollers to Gen and Eri to press the room's switch (the map's own help line), the only way through, so the
-    chat can't take Enter there (or must give action 9 another key) without leaving a seed stuck. A **Chat menu** in the
-    Archipelago panel holds the chat's on/off switch, the filters and its other options; with the chat off, Enter is the
-    game's everywhere, and with Archipelago off
-    nothing changes (vanilla stays vanilla). **While it's open, nothing reaches the game** (2026-09-29, the user): no
-    key or gamepad button acts in the game until you leave, by Enter on an empty line, Enter to send, or Esc (which
+    Factory's first puzzle room): action 9 is a mechanic too: in the factory's first puzzle room (Gen and Eri's Room),
+    with nobody in front, it hollers to Gen and Eri to press the room's switch (the map's own help line), the only way
+    through, so the chat can't take Enter there (or must give action 9 another key) without leaving a seed stuck. A
+    **Chat menu** in the Archipelago panel holds the chat's on/off switch, the filters and its other options; with the
+    chat off, Enter is the game's everywhere, and with Archipelago off nothing changes (vanilla stays vanilla). **While
+    it's open, nothing reaches the game** (2026-09-29, the user): no key or gamepad button acts in the game until you
+    leave, by Enter on an empty line, Enter to send, or Esc (which
     drops what was typed, and never opens the pause menu while the chat is open). In the field the dev console already
     holds the game this way (`player.lockkeys` and `minipause`, as an item-get does, so the world waits too); battles
     read their input their own way, to be read in the code before building. **The look** (2026-09-29, the user: "like
@@ -3362,8 +3364,8 @@ keyboard) is also how you holler to Gen and Eri to press the room's switch, and 
 answers only with flag 10 set, which the Tattle tutorial (`Event2`, Snakemouth's bridge room) sets, and with Kabbu in
 the party (`PlayerControl.GetInput`, `HasPlayer(1)`), whose character speaks the line (`GetEntity(-5)`). A seed may
 never play that tutorial (a random start, shuffled doors) or have Kabbu (Starting Party Member), so the factory's
-puzzles could be stuck. The user: "we should probly have it active from the start of a seed", and "can't we make tattle
-work without kabbu, any 1/random party member ? just always available/working no matter what".
+first puzzle room could be stuck. The user: "we should probly have it active from the start of a seed", and "can't we
+make tattle work without kabbu, any 1/random party member ? just always available/working no matter what".
 
 With Archipelago on, the places that read flag 10 for Tattle read it as set: a transpiler in `GetInput` turns its
 `flags[10]` into a call that answers yes in a seed, and so does one in `PauseMenu.CanDig`, behind the pause menu's dig
@@ -3401,3 +3403,28 @@ says `[relay] installed in BattleControl.SetMaxOptions`.
 user's later check (TO-CHECK).
 
 *Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*
+
+## 54. The Factory Pass never used up at its locks
+
+Found 2026-10-10, with the Honey Factory mapped: every locked door (`LockedDoor`) in the game runs one routine,
+`Event59`, which checks the key item picked from the bag against the lock's own and takes it out with one
+`List<int>.Remove` (the only one in its coroutine's IL, its result thrown away), for every lock but the Explorer
+Permit's. A few key slots take their key in their own scenes instead (the Golden Path's Sun and Moon Offering gates,
+`Event72`), so `kept_keys` covers `Event59`'s locks only. The Factory Pass (key item 95)
+has three locks, and the pump room's scanner counts each pass shown in a saved number slot and opens at the third
+(`MEASURED.md`, the lock routine). The Archipelago side puts one pass in the pool (`apimplementation.md`, build step
+79), so no lock may use it up.
+
+With Archipelago on, and only for the key items the seed's `kept_keys` lists, a transpiler in `Event59` turns that one
+removal into a call that leaves the key in the bag. Any other key, a seed without the list, or Archipelago off: taken,
+as in the game. The mod writes nothing; the lock's flag, its scene and sound and the scanner's count stay the game's,
+so the one pass is shown to the scanner three times. Only `Event59` is patched: under a patch on every `Remove`, a
+scene that empties the bag of a key in a loop (the Prison Key sweep, `Event193`) would never end. If the game's code
+no longer has exactly one removal there, the hook leaves `Event59` as it is and logs an error, as every hook does: the
+first lock would then take the seed's one pass. The log says `[keys] installed in EventControl.Event59 (instruction
+N)`, and at each lock which key was kept or taken, and why (Archipelago off, no seed, no `kept_keys`, not a kept key).
+
+**Status:** built (2026-10-10); not yet seen in game: the hook installed, the pass still in the bag after the Lobby's
+and the Storage Maze's locks, the scanner opening on its third show.
+
+*Code: `World/KeptKeys.cs`, `Core/SeedData.cs` (`KeptKeys`), `Core/Plugin.cs`; `Dev/SeedDump.cs`.*

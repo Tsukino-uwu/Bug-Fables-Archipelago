@@ -300,6 +300,13 @@ logic for all rooms, we need to check all the unused or not randomized entrances
 shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
 shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2).
 
+**Nothing in a seed ever goes away** (the user, 2026-10-10, after flag 79 took the Rubber Prison Pier's enemies: "we
+can never intentionally or by accident remove anything, that is a location/check. everything has to permanently stay
+reachable once its in a seed/logically required"). Every entity a room's flags make or remove is checked against it:
+a location's own entity (a pickup, an enemy with Enemysanity, a seller, a quest's character), or anything on the way
+to one, is kept for good whatever the story's flags (`kept_present`, `scenery_present`, `kept_open`, Enemysanity's
+keep), or the location stays out of the seed until it can be.
+
 **One room at a time** (the user, 2026-10-09, Outside the Beehive, after I traced which scenes in other rooms
 set its doors' flags and where its factory scene leads: "we should assume and work room per room, not
 different/neightbouring rooms. I want to map out 'THIS' specific room, and then do the other rooms afterwards"; "we

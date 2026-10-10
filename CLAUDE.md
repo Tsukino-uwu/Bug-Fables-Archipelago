@@ -47,11 +47,11 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   the game's own save code. No raw writes into save files, and no new save format.
 - **The received-item count lives in the save**: a fresh save starts at 0 and the server replays all (lost saves).
 - **A goal flag is set only by its own events, ever** (the user, 2026-10-08): new goals join the guard (build step 60).
-- **"In a seed" and "connected" are different states.** A dropped socket keeps randomizer rules in force:
-  checks queue, and no pickup falls back to its vanilla item.
+- **"In a seed" and "connected" differ:** a dropped socket keeps randomizer rules (checks queue, no vanilla pickups).
 - **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal needs (key
   items, party members, abilities) is a rule in the logic, never handed out by the mod to patch a gap, random start too.
   **The world is open, never done for you:** each quest available from the start, none of it begun (build step 44).
+  **Nothing in a seed ever goes away** (the user, 2026-10-10; `room-logic.md`): a check, or its way, stays for good.
 - **A generated seed is NEVER impossible** (the user, 2026-09-24): every item is reachable in logic, and the game never
   makes it harder than the logic. Two halves. **(1) The logic tells the truth:** Archipelago proves a seed only by the
   logic, so every gate the game has (a story flag, an ability check) goes into the apworld; the logic may be more

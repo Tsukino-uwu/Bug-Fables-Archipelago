@@ -145,6 +145,7 @@ namespace BugFablesAP
             AutoSave.Enable(Log, Config, settingsOn);
             Abilities.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             Submarine.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            KeptKeys.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);

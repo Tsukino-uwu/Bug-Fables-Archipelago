@@ -111,6 +111,7 @@ namespace BugFablesAP
             Add("shuffle_jump", "", FieldMoves.JumpShuffled.ToString());
             Add("ability_items", "", Abilities.AbilityItems.ToString());
             Add("submarine_item", "", (c.Seed?.SubmarineItem ?? false).ToString());
+            Add("kept_keys", "", Ints(c.Seed?.KeptKeys?.OrderBy(v => v)));
             Add("points_of_no_return", "", (c.Seed?.PointsOfNoReturn ?? false).ToString());
             rows.Sort(StringComparer.Ordinal);
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-seed.tsv");
