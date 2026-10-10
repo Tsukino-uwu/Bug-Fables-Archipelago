@@ -188,8 +188,9 @@ A few decisions made first, because they shape everything after:
     menus Enter keeps the game's uses. **Open, to decide when built** (found 2026-10-10 by the user, in the Honey
     Factory's first puzzle room): action 9 is a mechanic too: in the factory's three puzzle rooms, with nobody in
     front, it hollers to Gen and Eri to press the room's switch (the map's own help line), the only way through, so the
-    chat can't take Enter there (or must give action 9 another key) without leaving a seed stuck. A **Chat menu** in the Archipelago panel holds the chat's on/off switch, the
-    filters and its other options; with the chat off, Enter is the game's everywhere, and with Archipelago off
+    chat can't take Enter there (or must give action 9 another key) without leaving a seed stuck. A **Chat menu** in the
+    Archipelago panel holds the chat's on/off switch, the filters and its other options; with the chat off, Enter is the
+    game's everywhere, and with Archipelago off
     nothing changes (vanilla stays vanilla). **While it's open, nothing reaches the game** (2026-09-29, the user): no
     key or gamepad button acts in the game until you leave, by Enter on an empty line, Enter to send, or Esc (which
     drops what was typed, and never opens the pause menu while the chat is open). In the field the dev console already
