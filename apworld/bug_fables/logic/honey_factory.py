@@ -78,7 +78,8 @@ MAP_AREAS = (
     # FactoryProcessing2 (the user, 2026-10-10): the bottom right (the door back to the first room) the map's own region;
     # up to the top left (the door to the pump room) Jump or Bee Fly, a basic attack for a switch, the Shield, and
     # Beemerang Halt or Bee Fly; back down a drop, a one-way.
-    Area("FactoryProcessing2", "Top Left", ("loadzone pump",), _PROCESSING2_UP, out=one_way(None, _PROCESSING2_UP)),
+    Area("FactoryProcessing2", "Top Left", ("loadzone pump",), _PROCESSING2_UP,
+         out=one_way(None, _PROCESSING2_UP)),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
