@@ -3445,7 +3445,8 @@ a drop; "Middle Right Cell", the Prison Key, and "Bottom Right Cell", a Poison C
 Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's invisible walls hidden, build step
 83; its History Book and Book Puzzle spots with Next 62), 179 of 244; the Cafeteria (its left a drop down, Jump or
 Bee Fly back up; its History Book, "Behind the Cannons", with Next 62), 180 of 244; the Gym (up to the top left by its
-crank puzzle, Beemerang Halt, a drop back down; "Crank Puzzle", its Prison Key, build step 82), 181 of 244; the rest of `room-checklist.md` to go.
+crank puzzle, Beemerang Halt, a drop back down; "Crank Puzzle", its Prison Key, build step 82), 181 of 244; the rest
+of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
