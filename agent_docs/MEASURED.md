@@ -3294,8 +3294,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   right, the Wasp Queen waiting, a plain walk. `Event194` (the right's trigger `eventgl`, until 568): its first visit
   a talk from entity 11 (Vanessa, from 79) setting 346; its next the walk off right, a chapter title (`ChapterName(5)`,
   shown as chapter 7, the user), `LoadMap(232)`, then 568 (the bridge's right door). Played in order: no freeze (seen).
-  Arriving through the Giant's Lair's door before 79: pushed past the sealed wall (scenery), and the trigger froze the
-  game (Known issues).
+  Arriving through the Giant's Lair's door before 79: pushed past the sealed wall (`Base/Gate`, no collider; the Wasp
+  King standing there), and the trigger froze the game. With build step 85 (the trigger held, the door kept, the wall
+  off, through `liveslot`): no freeze, the door both ways, and the fight started from the right played the same, the
+  King swinging where the wall was (seen).
 - **Bounce pads** (2026-10-10, code read, `NPCControl.cs` JumpSpring): `data[0]` 0 is a plain bounce; 1 an aimed jump
   to `vectordata[1]` (`JumpTo`), the swamp's red pads (animid 398). Animid 35 is the `BounceShroom` model. Used by
   `logic/rubber_prison.py`.

@@ -865,6 +865,18 @@ class TestGiantLairBridge(_PrisonRoom):
                 self.assertFalse(self.way(name)(self.state_with("Vi", "Jump")))
                 self.assertTrue(self.way(name)(self.state_with("Giant's Lair Bridge Fight Won")))
         self.assertTrue(self.way(f"{self.MAP} (Middle) to {self.MAP} (Right)")(self.state_with()))
+        self.assertTrue(self.way(f"{self.MAP} (Right) to {self.MAP} (Middle)")(self.state_with()))
+        from_right = self.spot("Rubber Prison: Giant's Lair Bridge, Bridge Fight from the Right")
+        self.assertEqual(from_right.parent_region.name, f"{self.MAP} (Middle)")
+        self.assertFalse(from_right.access_rule(self.state_with("Leif")))
+        self.assertTrue(from_right.access_rule(self.state_with("Vi")))
+
+    def test_right_side_out_of_order(self) -> None:
+        # Build step 85: the right door kept, the chapter scene held until the fight, the sealed wall hidden.
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": self.MAP, "entity": "loadzonegl"}, slot["kept_present"])
+        self.assertIn({"map": self.MAP, "entity": "eventgl", "flag": 79}, slot["held_until"])
+        self.assertIn({"map": self.MAP, "entity": "Base/Gate"}, slot["scenery_off"])
 
     def test_the_shortcut(self) -> None:
         lock = self.spot("Rubber Prison: Giant's Lair Bridge, Shortcut Opened")

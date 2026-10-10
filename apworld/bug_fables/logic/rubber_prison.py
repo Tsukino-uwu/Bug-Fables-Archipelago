@@ -5,8 +5,8 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WOODEN_CRANK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Area, EntityMove, EntityRef, FlagSwap, ItemEntity, Location, Pickup, Source,
-                          StoryEvent, Transfer)
+from ..data_types import (ALWAYS_SET, Area, EntityMove, EntityRef, FlagEntity, FlagSwap, ItemEntity, Location, Pickup,
+                          Source, StoryEvent, Transfer)
 
 # The one Prison Key, never used up at the prison's four locks in a seed (build step 82).
 PRISON_KEY = Has("Prison Key")
@@ -83,6 +83,10 @@ STORY_EVENTS = (
     # fought, seen). Its scene opens the shortcut lock too, and spares the kept Prison Key (build step 82, seen).
     StoryEvent("Rubber Prison: Giant's Lair Bridge, Bridge Fight", _BRIDGE_FIGHT, "RubberPrisonGiantLairBridge",
                Source(flag=79), rule=Member("Vi"), no_jump=True),
+    # The same fight started from the middle, walking left from the right side (seen: its scene plays the same, the
+    # King swinging where the hidden wall was).
+    StoryEvent("Rubber Prison: Giant's Lair Bridge, Bridge Fight from the Right", _BRIDGE_FIGHT,
+               "RubberPrisonGiantLairBridge", Source(flag=79), rule=Member("Vi"), no_jump=True, area="Middle"),
     StoryEvent("Rubber Prison: Giant's Lair Bridge, Shortcut Opened", _BRIDGE_SHORTCUT, "RubberPrisonGiantLairBridge",
                Source(flag=567), rule=PRISON_KEY | Has(_BRIDGE_FIGHT), no_jump=True),
 )
@@ -189,10 +193,11 @@ MAP_AREAS = (
          one_way(ANY_ATTACK & _UP, CanUse("Shield")), out=False_(), to="RubberPrisonThirdFloor (Middle Left)"),
     # The Giant's Lair Bridge (RubberPrisonGiantLairBridge): its left (the door to the Pier's second floor, the save
     # crystal, the Venus flower) the map's own region; the top left door behind the shortcut lock, the party pushed
-    # past it on arrival (seen); the middle (the ant tunnel, from 79) past the fight; the right (the Giant's Lair door,
-    # from 568) a walk on. Walking right after the fight plays chapter 5's opening (Event194: a talk setting 346, then
-    # the walk into the Giant's Lair, setting 568); reached first by the right door, before 79, its talk freezes
-    # (Known issues).
+    # past it on arrival (seen); the fight between it and the middle (the ant tunnel, from 79), started from either
+    # side; the right (the Giant's Lair door) a walk from the middle. Walking right after the fight plays the chapter
+    # scene (Event194: a talk setting 346, then the walk into the Giant's Lair, setting 568). In a seed (build step
+    # 85): the right door kept, the scene held until 79, the sealed wall hidden, so an arrival from the right before
+    # the fight neither freezes nor is stuck (seen).
     Area("RubberPrisonGiantLairBridge", "Top Left Door", ("loadzoneshortcut",), Has(_BRIDGE_SHORTCUT),
          out=one_way(None, Has(_BRIDGE_SHORTCUT))),
     Area("RubberPrisonGiantLairBridge", "Middle", (), Has(_BRIDGE_FIGHT)),
@@ -241,6 +246,14 @@ KEPT_PRESENT = (
     # right one (its name shared with the middle lever, always there) and the Guard Floor's upper one.
     EntityRef("RubberPrisonCheckpointCorridor", "switch - Duplicate - Duplicate"),
     EntityRef("RubberPrisonThirdFloor", "globalswitch - Duplicate - Duplicate"),
+    # The Giant's Lair Bridge's right door, made only from 568 (the chapter scene's walk into the Giant's Lair): there
+    # from the start, so an arrival from the Giant's Lair can always go back (the user, 2026-10-10).
+    EntityRef("RubberPrisonGiantLairBridge", "loadzonegl"),
+)
+# The bridge's chapter scene (Event194, its trigger until 568) waits for the fight (79): its first visit talks to the
+# Wasp Queen, made only from 79, and froze an arrival from the right before it (Known issues; the user, 2026-10-10).
+HELD_UNTIL = (
+    FlagEntity("RubberPrisonGiantLairBridge", "eventgl", 79),
 )
 SCENERY_PRESENT = (
     # The Pier's third floor bridge, which the Warden's Office's crank breaks (Event193, flag 583, opening the second
@@ -254,6 +267,10 @@ SCENERY_OFF = (
     # left for "On Top of the Bookshelf"'s Jump and Beemerang Toss (the user, 2026-10-10).
     EntityRef("RubberPrisonLibrary", "Base/fence/fence (2)"),
     EntityRef("RubberPrisonLibrary", "Base/fence/fence (3)"),
+    # The bridge's sealed wall to the Giant's Lair (no collider: walked through), which the Wasp King breaks as the
+    # fight starts: gone from the start, so the open way looks open, as the Ancient Castle boss room's wall (build step
+    # 68; the user, 2026-10-10).
+    EntityRef("RubberPrisonGiantLairBridge", "Base/Gate"),
 )
 
 # The cells' hidden lift switch, hit while flag 41 (the first boss) is set: always on, as in vanilla, and it can never

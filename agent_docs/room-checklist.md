@@ -376,9 +376,9 @@ as it is, a frozen record.
   save crystal, the Venus flower) free; the top left door behind the shortcut lock (567: the Prison Key, or the
   fight), pushed past on arrival; the fight between the left and the middle (the ULTIMAX Tank, Vi for its flying
   summon; flag 79), the only gate; the middle's ant tunnel (from 79) and the right's Giant's Lair door a walk on; the
-  ant tunnel's way in (`bugaria_city.py`) now the fight; to decide (the user, leaning to the first): the right side out
-  of order, the chapter scene held until 79 and the right door kept present, or the hold alone (Known issues); for
-  the enemy pass: the fight, and the troopers and tank there until 79
+  ant tunnel's way in (`bugaria_city.py`) now the fight; the fight from either side; the right side out of order
+  fixed (build step 85: the chapter scene held until 79, the right door kept, the sealed wall hidden; seen); for the
+  enemy pass: the fight, and the troopers and tank there until 79
 
 ## Giant's Lair
 

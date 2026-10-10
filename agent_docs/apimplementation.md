@@ -157,6 +157,7 @@ this file and that doc disagree, that doc is right.
 82. [Build step 82: the Prison Key, never used up](#build-step-82-the-prison-key-never-used-up)
 83. [Build step 83: the Library rail's invisible walls hidden](#build-step-83-the-library-rails-invisible-walls-hidden)
 84. [Build step 84: the Guard Floor pocket's bounce pad](#build-step-84-the-guard-floor-pockets-bounce-pad)
+85. [Build step 85: the Giant's Lair Bridge's right side out of order](#build-step-85-the-giants-lair-bridges-right-side-out-of-order)
 
 **How it works**
 
@@ -927,20 +928,12 @@ be wrong.
   a progressive item received meanwhile gets the wrong level (`KeyFor` on an emptied bag). The Warp still leaves. The
   hideout's spots are held out meanwhile (build step 67); the fix is Next 64's first part.
 
-- **Story scenes reached out of order freeze** (seen 2026-10-04, decoupled doors, a new file): the trigger `eventgl`
-  on `RubberPrisonGiantLairBridge` (until flag 568) starts Event194, whose first branch talks to `vanessa` (entity 11,
-  made only from flag 79): absent, the scene froze (freed with the dev `unstick`; it froze again on the next step there).
-  Played with a stand-in, it would set 346 and on the next visit play chapter 5's title and load the Giant's Lair
-  (`LoadMap(232)`). Options (the user, later): hold the trigger until its actor exists, or a stand-in where a scene
-  changes nothing beyond itself; first a sweep for every scene trigger naming an entity absent on a new file. Build
-  step 12. **Reproduced 2026-10-10** (the bridge mapped, 79, 346, 568 and 567 reset, arriving through the Giant's
-  Lair's door): the Wasp King standing there and the wall shut and locked to look at, the party pushed past it
-  (scenery only, the user); a step back right restarted `Event194`,
-  which froze again at once on the trigger (`unstick`, then a `nudge` off it, freed it). In story order it played
-  through (seen): the Wasp King breaks that wall when the fight starts, the Wasp Queen waits there after it, and the
-  scene's two visits lead into the Giant's Lair. Two fixes asked (the user leaning to the first, still thinking): the
-  scene held until 79 (`held_until`) and the bridge's right door (`loadzonegl`, from 568) kept present, so an arrival
-  there can always go back; or the hold alone, its only way on then left through the fight (Vi).
+- **Story scenes reached out of order freeze** (seen 2026-10-04, decoupled doors, a new file): a scene trigger whose
+  scene names an entity absent on that file stops the game. The first found, the Giant's Lair Bridge's `eventgl`
+  (`Event194` talking to the Wasp Queen, made only from 79), is fixed: held until 79, its room's right door kept and
+  its sealed wall hidden (build step 85, reproduced and seen fixed 2026-10-10). Still to do: a sweep for every other
+  scene trigger naming an entity absent on a new file, each held until its actor exists or given a stand-in (the
+  user's options). Build step 12.
 - **Maki with the swamp bridge kept up** (built: build step 61). Still to see: the small bridge's flag 337 also loads
   `ChomperCave1`'s bridge down, whose own switch sets 689 (when that room is mapped). **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
@@ -6382,6 +6375,31 @@ copied it the same way).
 
 *Code: `data_types.py` (`EntityMove.copy`), `logic/rubber_prison.py` (`ENTITIES_MOVED`). The mod: `World/DayNight.cs`
 (`AddCopies`), `Core/SeedData.cs`.*
+
+## Build step 85: the Giant's Lair Bridge's right side out of order
+
+**Found:** Known issues (2026-10-04, reproduced 2026-10-10 mapping the bridge): arriving through the Giant's Lair's
+door before the bridge's fight (79), the chapter scene's trigger (`eventgl`, `Event194`) starts a talk with the Wasp
+Queen, who exists only from 79, and the game freezes, again on every step on the trigger; and the bridge's right door
+(`loadzonegl`) exists only from 568, which that scene sets, so the arrival can't go back the way it came. The sealed
+wall there has no collider (the party walked through it) but looks shut, the Wasp King standing by it.
+
+**Asked and decided (the user, 2026-10-10):** "should we just open/remove it similar to how we did for the desert
+zombie roach boss?" (the Ancient Castle boss room's wall, build step 68); then "lets try a couple things, and then test
+coming the right a few more times". The King and his troopers stay: the fight's scene moves them (`GetEntities` 4-8),
+so hidden they would freeze it too. The ant tunnel stays the fight's ("Leave it to the fight": the boss its price, like
+the miners' digging for the others).
+
+**Built** (the apworld only, the mod's own lists): `held_until` holds `eventgl` until 79; `kept_present` keeps
+`loadzonegl`; `scenery_off` hides `Base/Gate`, the sealed wall the King breaks (the scene spins its pieces away, which
+works with it switched off). The logic: the bridge's right a walk from its middle; the fight from either side (a second
+event from the middle). Tests `TestGiantLairBridge`.
+
+**Status:** built (2026-10-10); seen the same day through the dev `liveslot`, arriving from the right with 79, 346 and
+568 off: no freeze, the wall gone, the right door both ways, then the fight started from the right, its scene the same
+with the King swinging where the wall was (the user).
+
+*Code: `logic/rubber_prison.py` (`HELD_UNTIL`, `KEPT_PRESENT`, `SCENERY_OFF`). The mod: unchanged.*
 
 # How it works
 
