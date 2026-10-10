@@ -3234,7 +3234,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   good: the bottom right gate (`rightgate`) down, and the rock's copy at its knocked spot (`rock - Duplicate`,
   requires 540; seen after re-entering), so the way up then needs only Jump or Bee Fly. The top door arrives inside its
   barrier, whose lever (`ROTshortcutswitch`, 541) lowers it for good. Both bottom doors push the party past their lock
-  (539) or gate (540). Its sign: "⇦ Cafeteria ⇨ Giant's Lair Bridge".
+  (539) or gate (540). Its sign (its dialogue line 2, read with the console's `line`, not seen): "⇦ Cafeteria ⇨
+  Giant's Lair Bridge".
 - **Electric Cells** (`RubberPrisonCells2`, 2026-10-10, the user on screen and drawings): three rows of cells; an
   electric floor between the two bottom doors (the Shield or Bee Fly across, Bee Fly over the thorns between the bottom
   cells); two electric moving platforms from the bottom to the top, ridden with the Shield only; from the top or the
@@ -3242,7 +3243,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   cell dug into, the top one free) swap the bottom right cell (the Poison Cake, item 74, 631) and the middle cells' 535
   gates. The middle left cell's wood lever (400, cleared on every map load, `MainManager.cs:9615`) opens the key cell
   (545); the key cell's own lever only lets you out. A cell whose gate is down can be dropped into from above. The top
-  door pushes the party past its lock (542). Its sign: "⇦ Cafeteria, Cells / ⇧ Gym, Security / ⇨ Giant's Lair Bridge".
+  door pushes the party past its lock (542). Its sign (the user's screenshot, and its line 4): "⇦ Cafeteria, Cells / ⇧
+  Gym, Security / ⇨ Giant's Lair Bridge".
 - **The Library** (`RubberPrisonLibrary`, 2026-10-10, the user on screen): up the stairs, Jump or Bee Fly. The
   bookshelf (`Event191`, until 554) takes the four History Books (163 blue, 164 green, 165 yellow, 166 red) one by one
   in a list and wants them in that order: a wrong order hands them back at the scene's end (`EventControl.cs:31506`),
@@ -3252,7 +3254,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   jumped over onto the shelves. Nothing else in the game reads 163-166 (only `Event191`).
 - **The Cafeteria** (`RubberPrisonCafeteria`, 2026-10-10, the user on screen): its door on the right, raised; the left
   a drop down, back up with Jump or Bee Fly; the blue History Book there (548), past the cannons, needs nothing. The
-  cannons (the game's word: "Those cannons are used to keep order around here!", its line 2) fire rolling rocks
+  cannons (the game's word, in its line 2, read with the console's `textsearch`, not seen: "Those cannons are used to
+  keep order around here!") fire rolling rocks
   (`RollingRock`); their lever (`cannonswitch`, 549) turns them off and on, each hit, and stays as left after
   re-entering (549 seen on): it only makes the way back up easier, never needed.
 - **The Gym** (`RubberPrisonGym`, 2026-10-10, the user on screen): its door free; the top left (the Prison Key, 551, and
@@ -3263,12 +3266,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   the bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, Jump or Bee Fly back up. The PC
   (`Event190`): the crank (Beemerang Halt) starts it with no caller, setting 552 (backup power); powered, a hit sets 553;
   then talking flips 550, which raises the Cafeteria's tables against its cannons' rocks (seen), never needed there.
-  The guards' lines only hint at the crank and the hit.
-- **The Office** (`RubberPrisonOffice`, 2026-10-10, the user on screen; its line 0: "even a prison needs a normal
-  office"): one area. Its crank slot (`crankcheck`, `Event59` key index 2, the Wooden Crank, until 565) then its crank
-  (Beemerang Halt) play `Event193`'s first branch, 583: the Pier's second floor right door opens (and its third floor
-  bridge breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf up the top left:
-  Freeze, the horn, Jump and Bee Fly (the room's geyser and droplet on the way).
+  The guards' lines (read with the console's `line`, not seen) only hint at the crank and the hit.
+- **The Office** (`RubberPrisonOffice`, 2026-10-10, the user's account; EntityDump and code read): one area. Its crank
+  slot (`crankcheck`, `Event59` key index 2, the Wooden Crank, until 565) then its crank, Beemerang Halt (the user),
+  play `Event193`'s first branch, 583 (code read): the Pier's second floor right door opens (and its third floor bridge
+  breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf up the top left: Freeze, the
+  horn, Jump and Bee Fly (the user). The room's geyser and droplet are probably on that way (INFERRED from the dump).
+  Its only dialogue line, "even a prison needs a normal office" (line 0, read with the console's `line`, not seen),
+  gave its name.
 - **The Prison Key's sources and locks** (2026-10-10, EntityDump and code read): four `PrisonDoor` locks (`Event59` key
   index 17: 537, 539, 542, 567) and four keys: the Pier's `ShwKEY wasp`, whose death drops a key-item pickup of
   `vectordata[0].x` (161) when `vectordata[0].y` is -2, its flag the enemy's `limit[0]` (584,
