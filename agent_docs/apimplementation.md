@@ -164,6 +164,7 @@ this file and that doc disagree, that doc is right.
 10. [Silent failures: things that go wrong quietly](#10-silent-failures-things-that-go-wrong-quietly)
 11. [The logic explained: regions, exits, rules, and this world's layout](#11-the-logic-explained-regions-exits-rules-and-this-worlds-layout)
 12. [Universal Tracker: how it's implemented](#12-universal-tracker-how-its-implemented)
+13. [Changing the game's state: writing a flag, or changing its readers](#13-changing-the-games-state-writing-a-flag-or-changing-its-readers)
 
 ## Where it stands
 
@@ -6450,3 +6451,29 @@ No yaml is needed: everything that shapes the world is in slot_data.
     with its own code and compares every sphere with the real generation (`development.md`, "Fuzzing the apworld").
 - **Not built yet:** the map tab, which loads the PopTracker pack's maps (build step 41); the mod's keys it would
   follow are written since build step 57.
+
+## 13. Changing the game's state: writing a flag, or changing its readers
+
+Written 2026-10-10 at the user's asking ("its a important comparison for how/what it does"), after the first Tattle
+build froze the horn tutorial (the mod guide, step 52).
+
+The game keeps its story in flags (`MainManager.instance.flags`), and many things read each one: entities' `requires`
+and `limit` (an NPC there from a flag or gone at one), flag-switched scenery, dialogue lines picked by flag, scenes, and
+code. A seed changes the story two ways, and they do different things:
+
+- **Writing the flag** is saying the story step happened. Every reader sees it, in every map, and it stays in the save.
+  It's right when the whole effect is wanted: the scan setting 160 with 159 (build step 74), for Leif's skill, HB moving
+  and Outside's main door; the opening's skip setting 15. Its risk is the readers nobody looked for: flag 10, set early
+  for Tattle, also hid the Wood Boring near Snakemouth (its `limit`), and the horn tutorial waited for him for good.
+- **Changing the readers** leaves the flag and the save alone and changes only the places chosen; everything else stays
+  vanilla, and with Archipelago off nothing changes. It's right when one behaviour should come early or always,
+  without the story step: Tattle and the battle menu's Strategy and Relay (the mod guide, steps 52-53). Its cost is a
+  change per reader, and a reader missed only behaves as vanilla. For data the project already has the lists:
+  `kept_present` and `kept_open` (one entity there or away whatever its flags), `limit_flags` and `activation_flags`
+  (one entity's flag repointed), `dialogue_flags` (one line repointed), `present_from` (there from a flag, still gone at
+  its own `limit`); for code, a transpiler on the read.
+
+**The rule:** write a flag only when the story step itself should count as done, and only after listing every reader
+(the entity dump's `requires`, `limit` and dialogue columns, the scenery dump, a grep of the code; the flag
+cross-reference `room-logic.md` plans would list them at once). For one thing early or always, change its readers.
+Opening chapter-gated pieces (Next 64, Next 68) is the second kind.

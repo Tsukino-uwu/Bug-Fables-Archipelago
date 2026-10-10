@@ -189,7 +189,8 @@ step (the user, 2026-09-30: "check every cutscene chain & quest chain, to accoun
   remove the need for good so the room works on its own: always on in a seed, never part of *Skip cutscenes*, since
   the logic counts on it (2026-09-28).
 - **C3. What does it set, and what does each flag change in every other room:** a door shown or hidden, a blocker, an
-  NPC, scenery, a dialogue line, a location? An area closed "until chapter N" is closed by several things at once
+  NPC, scenery, a dialogue line, a location? Writing a flag versus changing its readers: `apimplementation.md`, How it
+  works §13. An area closed "until chapter N" is closed by several things at once
   (blockers, doors, scenery): list every entity and scenery piece on that flag before opening it (learned in build
   step 9).
 - **C4. Can it be reached out of order** (a random start, a shuffled door, the open world)? Where the game expects the
