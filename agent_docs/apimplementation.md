@@ -149,6 +149,7 @@ this file and that doc disagree, that doc is right.
 75. [Build step 75: HB asks for the Explorer Permit from the start](#build-step-75-hb-asks-for-the-explorer-permit-from-the-start)
 76. [Build step 76: Beette's Flower Key at its price again](#build-step-76-beettes-flower-key-at-its-price-again)
 77. [Build step 77: the Honey Factory's storage door open](#build-step-77-the-honey-factorys-storage-door-open)
+78. [Build step 78: the Rubber Prison Pier's third floor bridge kept](#build-step-78-the-rubber-prison-piers-third-floor-bridge-kept)
 
 **How it works**
 
@@ -822,6 +823,14 @@ be wrong.
     on one or moves one; then each fixed so it works in any order (the character there whenever its scene or service
     needs it, as build step 9 opens blockers), a hold (`held_until`) only where nothing else works and the user agrees.
     With Next 64 (the key chains opened), the same direction. After the room mapping, or when the user says.
+69. **The Prison Key, never used up** (decided 2026-10-10, the user, mapping the Rubber Prison's Pier; its own step).
+    In the game each Prison Key lock (`Event59`, key index 17) takes a key (key item 161) away: the `PrisonDoor`s on
+    `RubberPrisonSpikeRoom` (flag 537), `RubberPrisonCells1` (539), `RubberPrisonCells2` (542) and
+    `RubberPrisonGiantLairBridge` (567). The Factory Pass's way (Next 67): in a seed the mod leaves the key in the bag
+    at each lock, so the pool holds one Prison Key, progression, and every lock needs only it; the other key spots
+    become ordinary locations. Its spots: the Pier's Wasp Driller (`ShwKEY wasp`, flag 584; "Rubber Prison: Pier,
+    Second Floor Fight", the user's name), and the rest as the prison's rooms are mapped. Built once those rooms are
+    mapped, on Next 67's mechanism; until then the keys stay the game's own pickups.
 
 **Known issues:**
 
@@ -6057,6 +6066,24 @@ model. The door needs nothing in the logic, as before, now true. Test `TestLobby
 door made present, its model gone, the user through it into the Storage Elevator (the log).
 
 *Code: `logic/honey_factory.py` (`KEPT_PRESENT`, `SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs`, unchanged.*
+
+## Build step 78: the Rubber Prison Pier's third floor bridge kept
+
+**Found (2026-10-10, mapping the Rubber Prison's Pier, `RubberPrisonPier`):** the Office's crank opens the Pier's
+second floor right door, and its scene (`Event193`, flag 583) also drops the third floor's bridge
+(`Base/BrokenBridge`, hidden from 583), cutting the floor's two sides apart for good (`MEASURED.md`, the Pier).
+
+**Asked and decided (the user, 2026-10-10):** "i don't want the bridge to collapse. just so access between the left &
+right on the 3rd floor stays possible"; the crank still opens the door.
+
+**Built** (the apworld only: the mod's own list does it): `scenery_present` gets the bridge, whose marker answers
+"exists" before the game reads its limit, so it stands again on every later visit. The crank's scene still plays its
+fall. The third floor is one area in the logic. Test `TestPier`.
+
+**Status:** built (2026-10-10); seen the same day in seed `AP_80216874502571128696` through the dev `liveslot`, laid
+after the crank was used: the bridge standing and the second floor's right door open (the user).
+
+*Code: `logic/rubber_prison.py` (`SCENERY_PRESENT`). The mod: `World/KeptOpen.cs`, unchanged.*
 
 # How it works
 

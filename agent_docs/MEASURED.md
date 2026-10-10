@@ -3169,6 +3169,34 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `PrisonDoor` (entity 6, until flag 538) by the way to the spike room opens with the Explorer Permit (the user,
   2026-10-04). A switch takes the Beemerang, a hit tagged `BeetleHorn`/`BeetleDash`, or ice (`Icefall`/`Icecle`)
   (`NPCControl.cs`, Switch).
+- **The Rubber Prison's gate levers flip every gate in the prison** (2026-10-10, EntityDump; the user's account of
+  play: "this is the main mechanic of the rubber prison"). One flag, 535, toggled by every gate lever (a `Switch` with
+  `data[1]` 1, back and forth on each hit): the Pier's `actualswitch`, the checkpoint corridor's three, and a
+  `globalswitch` in Cells 1, Cells 2 (two), Security and the Third Floor (made from 79). Each up/down gate (`ANDBlock`)
+  is down on one side of the flag (activation flag 535 or -535, or linked to its room's lever, as the Pier's two by
+  `data[1]` 7), so each hit raises some gates and lowers others in every room, and the next hit reverses them all (the
+  Pier's lever moves the checkpoint corridor's gates next door, the user); in vanilla the player goes back and forth
+  between rooms to set them. The Pier's two gates are the levers' tutorial and
+  the only ones that can be jumped or flown round while up (the user).
+- **The Pier** (`RubberPrisonPier`, 2026-10-10, the user's account on screen; EntityDump): bridges stacked above each
+  other. The top floor: the door to Security on the left, the Library's on the right, two swinging platforms between
+  crossed with nothing. The third floor: the Third Floor's door left, the Office's right. The second floor: Cells 2's
+  door left, the Giant's Lair Bridge's right, and on the right the Wasp Driller holding a Prison Key (`ShwKEY wasp`,
+  flag 584). The ground floor's upper part: the checkpoint corridor's door on the left behind the two gates; the save
+  crystal, the lift lever (`switch`, 566: one hit runs the lift `platform` for good) and the Giant's Lair shortcut door
+  on the right. Its lower part: the gate lever and the foot of the stairs on the left, the dock and the submarine on
+  the right. From any floor a drop onto any floor below, either side, with no way back up inside the room; the upper
+  part down to the lower a drop too. Without Jump or Bee Fly: from the left door nothing past the gates (flag 535 off);
+  from the dock nothing past it; at the stairs' foot the lever at most. With either: across the lower part's
+  platforms, up from the stairs to the upper left, round the gates to the upper right, onto the lift from the dock.
+  Its two doors to the Giant's Lair Bridge start shut: the second floor's right one behind `Base/Gate` until 583,
+  set by the Office's crank (`crankcheck`, Event59 key index 2, then the ScrewSwitch: the Wooden Crank and Beemerang
+  Halt, as every crank, the user), whose scene (Event193, `EventControl.cs:31716`) plays on the Pier, breaking the
+  gate and dropping the third floor's bridge (`Base/BrokenBridge`, hidden from 583); the ground floor's right one
+  behind two `PrisonDoor/SlideDoor`s until 567, set on the bridge's side (its `PrisonDoor`, a switch and a Prison Key
+  lock). Arriving through either while shut pushes the party past it (seen, 2026-10-10). A seed keeps the bridge (the
+  user: "i don't want the bridge to collapse"); the mod's `scenery_present` marker answers "exists" before the limit
+  is read (`KeptOpen.cs`).
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

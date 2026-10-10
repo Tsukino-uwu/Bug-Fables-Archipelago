@@ -1581,6 +1581,83 @@ class TestCore(BugFablesTestBase):
         self.assertEqual(parts, {"HoneyFactoryCore"})
 
 
+class TestPier(BugFablesTestBase):
+    # RubberPrisonPier, the Pier (the user, 2026-10-10): bridges above each other, each dropped from onto any below with
+    # no way back up inside the room; on the ground floor, Jump or Bee Fly round the gates, up from the stairs, across
+    # the lower part's platforms and onto the lift, which runs once its lever is hit.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+    FLOORS = ("Top Floor", "Third Floor", "Second Floor")
+
+    def way(self, name: str):
+        return self.multiworld.get_entrance(name, self.player).access_rule
+
+    def test_ground_floor_ways(self) -> None:
+        for name in ("RubberPrisonPier to RubberPrisonPier (Ground Upper Left)",
+                     "RubberPrisonPier (Ground Upper Left) to RubberPrisonPier",
+                     "RubberPrisonPier (Ground Lower Left) to RubberPrisonPier (Ground Upper Left)",
+                     "RubberPrisonPier (Ground Lower Left) to RubberPrisonPier (Ground Lower Right) (platforms)",
+                     "RubberPrisonPier (Ground Lower Right) to RubberPrisonPier (Ground Lower Left) (platforms)"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Horn Slash", "Freeze")))
+                self.assertTrue(self.way(name)(self.state_with("Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Bee Fly")))
+
+    def test_drops_to_the_lower_part(self) -> None:
+        for name in ("RubberPrisonPier (Ground Upper Left) to RubberPrisonPier (Ground Lower Left)",
+                     "RubberPrisonPier to RubberPrisonPier (Ground Lower Right)"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Horn Slash")))
+                self.assertTrue(self.way(name)(self.state_with("Jump")))
+
+    def test_the_lift(self) -> None:
+        lift = self.way("RubberPrisonPier (Ground Lower Right) to RubberPrisonPier")
+        self.assertFalse(lift(self.state_with("Jump")))
+        self.assertTrue(lift(self.state_with("Jump", "Pier Lift Running")))
+        lever = self.multiworld.get_location("Rubber Prison: Pier, Lift Lever Hit", self.player)
+        self.assertEqual(lever.parent_region.name, "RubberPrisonPier")
+        self.assertFalse(lever.access_rule(self.state_with("Jump")))
+        self.assertTrue(lever.access_rule(self.state_with("Horn Slash")))
+
+    def test_the_submarine_docks_below(self) -> None:
+        self.assertTrue(self.way("MetalLake to RubberPrisonPier (Ground Lower Right) (submarine)")(self.state_with()))
+
+    def test_right_doors_shut(self) -> None:
+        everything = self.state_with("Jump", "Bee Fly", "Horn Slash", "Freeze", "Pier Lift Running")
+        for joined, door in (("RubberPrisonPier (Second Floor)", "Second Floor Right Door"),
+                             ("RubberPrisonPier", "Shortcut Door")):
+            with self.subTest(door=door):
+                self.assertFalse(self.way(f"{joined} to RubberPrisonPier ({door})")(everything))
+                self.assertFalse(self.way(f"RubberPrisonPier ({door}) to {joined}")(everything))
+
+    def test_floors_only_drop(self) -> None:
+        everything = self.state_with("Jump", "Bee Fly", "Horn Slash", "Freeze", "Pier Lift Running")
+        for i, floor in enumerate(self.FLOORS):
+            with self.subTest(floor=floor):
+                self.assertFalse(self.way(f"RubberPrisonPier to RubberPrisonPier ({floor})")(everything))
+                for below in (*self.FLOORS[i + 1:], "Ground Upper Left", "Ground Lower Left"):
+                    drop = self.way(f"RubberPrisonPier ({floor}) to RubberPrisonPier ({below}) (drop)")
+                    self.assertFalse(drop(everything))
+                for above in self.FLOORS[:i]:
+                    with self.assertRaises(KeyError):
+                        self.multiworld.get_entrance(
+                            f"RubberPrisonPier ({floor}) to RubberPrisonPier ({above}) (drop)", self.player)
+
+
+class TestPierPointsOfNoReturn(BugFablesTestBase):
+    # With Points of No Return on, the Pier's drops and its pushed-past doors count with nothing.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "points_of_no_return": True}
+
+    def test_drops_count(self) -> None:
+        for name in ("RubberPrisonPier (Top Floor) to RubberPrisonPier (Second Floor) (drop)",
+                     "RubberPrisonPier (Third Floor) to RubberPrisonPier (Ground Lower Right) (drop)",
+                     "RubberPrisonPier (Second Floor) to RubberPrisonPier (drop)",
+                     "RubberPrisonPier (Second Floor Right Door) to RubberPrisonPier (Second Floor)",
+                     "RubberPrisonPier (Shortcut Door) to RubberPrisonPier"):
+            with self.subTest(way=name):
+                rule = self.multiworld.get_entrance(name, self.player).access_rule
+                self.assertTrue(rule(self.state_with()))
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).
