@@ -5,6 +5,15 @@ TICKET = "Boat Ticket"
 SUBMARINE = "Subaquatic Maritime Neotransport"
 THRONE_ROOM = "Termite Capitol: Termite King's Reward"
 ICICLE = "Upper Snakemouth: Entrance"
+# collect_all_but takes every placed item, story events too; this one opens the ant tunnel's door to the bridge, which in
+# play needs the bridge reached first, so it stays out.
+BRIDGE_FIGHT = "Giant's Lair Bridge Fight Won"
+
+
+def _win_the_bridge_fight(test: BugFablesTestBase) -> None:
+    # Once the submarine reaches the bridge, its fight can be won, which opens the way on to the Giant's Lair.
+    test.assertTrue(test.can_reach_location("Rubber Prison: Giant's Lair Bridge, Bridge Fight"))
+    test.collect(test.get_item_by_name(BRIDGE_FIGHT))
 DOCKS = {("TermitePier", "Fixedsub"), ("BugariaPier", "Fixedsub - Duplicate"), ("MetalIsland1", "Fixedsub - Duplicate"),
          ("FishingVillage", "Fixedsub - Duplicate - Duplicate"),
          ("RubberPrisonPier", "Fixedsub - Duplicate - Duplicate"), ("MysteryIsland", "Fixedsub")}
@@ -13,7 +22,7 @@ DOCKS = {("TermitePier", "Fixedsub"), ("BugariaPier", "Fixedsub - Duplicate"), (
 class TestProgressiveBoat(BugFablesTestBase):
     # Progressive Boat on (the default): one item found twice, the Boat Ticket, then the submarine.
     def _first_copy_only(self) -> None:
-        self.collect_all_but([BOAT])
+        self.collect_all_but([BOAT, BRIDGE_FIGHT])
         self.collect(self.get_items_by_name(BOAT)[0])
 
     def test_in_the_pool_twice(self) -> None:
@@ -45,6 +54,7 @@ class TestProgressiveBoat(BugFablesTestBase):
             with self.subTest(region=region):
                 self.assertFalse(self.can_reach_region(region))
         self.collect(self.get_items_by_name(BOAT)[1])
+        _win_the_bridge_fight(self)
         for region in regions:
             with self.subTest(region=region):
                 self.assertTrue(self.can_reach_region(region))
@@ -112,11 +122,12 @@ class TestSplitBoat(BugFablesTestBase):
 
     def test_the_lake_the_prison_and_the_giants_lair_need_the_submarine(self) -> None:
         regions = ("MetalLake", "RubberPrisonPier", "RubberPrisonGiantLairBridge", "GiantLairEntrance")
-        self.collect_all_but([SUBMARINE])
+        self.collect_all_but([SUBMARINE, BRIDGE_FIGHT])
         for region in regions:
             with self.subTest(region=region):
                 self.assertFalse(self.can_reach_region(region))
         self.collect_by_name([SUBMARINE])
+        _win_the_bridge_fight(self)
         for region in regions:
             with self.subTest(region=region):
                 self.assertTrue(self.can_reach_region(region))

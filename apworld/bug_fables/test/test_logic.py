@@ -976,13 +976,13 @@ class TestCraneCrossing(_PrisonRoom):
 
     def test_the_coins(self) -> None:
         up = self.way(f"{self.MAP} to {self.MAP} (Silver Coins)")
-        self.assertFalse(up(self.state_with("Freeze", "Horn Slash", "Jump")))
-        self.assertFalse(up(self.state_with("Freeze", "Bee Fly")))
-        self.assertTrue(up(self.state_with("Freeze", "Horn Slash", "Bee Fly")))
+        self.assertFalse(up(self.state_with("Progressive Freeze", "Horn Slash", "Jump")))
+        self.assertFalse(up(self.state_with("Progressive Freeze", "Bee Fly")))
+        self.assertTrue(up(self.state_with("Progressive Freeze", "Horn Slash", "Bee Fly")))
         # Each drop needs its way back (Points of No Return off).
         down = self.way(f"{self.MAP} (Silver Coins) to {self.MAP}")
         self.assertFalse(down(self.state_with("Jump")))
-        self.assertTrue(down(self.state_with("Freeze", "Horn Slash", "Bee Fly")))
+        self.assertTrue(down(self.state_with("Progressive Freeze", "Horn Slash", "Bee Fly")))
 
     def test_the_middle_right(self) -> None:
         for name in (f"{self.MAP} (Silver Coins) to {self.MAP} (Middle Right)",
