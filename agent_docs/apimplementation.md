@@ -879,6 +879,14 @@ be wrong.
   ends until the Office, the bridge and the rooms behind are mapped); Decoupled never fails. Decided (the user): after
   every room is mapped, the doors that cause it are gone through one at a time, each opened, made two-way or whatever
   it needs, "judged on a per door/entrance case by case" (Next 2's door pass). Until then the fuzzer may show it.
+  **What others do** (a research workflow, 2026-10-10): Archipelago never retries ("Unlike fill, there is no attempt
+  made to save a failed randomization", `docs/entrance randomization.md:423-424`; a comment leaves room for retries,
+  `entrance_rando.py:472-473`), and the error ends the whole room's generation. Pokémon Crystal, on the same generic
+  shuffler, restores every door and reruns up to 10 times, then pins the stuck doors to vanilla, 65 runs at most
+  (`worlds/pokemon_crystal/entrance_rando.py`); OoT and Pokémon Red/Blue retry their own shufflers 10 times; TUNIC
+  resets in rare layouts ("shouldn't be covering up for an actual solution"); Messenger doesn't retry; ALttP reserves
+  doors by counting. A retry would need Archipelago's `EntranceRandomizationError` in the preflight's import allowlist
+  (the user's call) and must retry only the ran-out case, since setup errors raise the same class.
 - **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
   The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
   the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The
