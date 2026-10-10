@@ -815,7 +815,8 @@ be wrong.
     npc/flags that only excist at/after certain chapters ? ... that will become a real issue for the goal of having
     things be openworld/anythign doable in any order"; "a really important thing to take a look at and properly fix
     instead of just pausing/delaying the npc/scenes"). Found with the Core's finale: chapter 4's opening walks Neolith,
-    made only after chapter 2's end (Known issues). First a census, from the entity dump and the scenes' code: every
+    made only after chapter 2's end (Known issues); and the factory's first puzzle room's scene (`Event97`, until 216)
+    needs Gen and Eri, gone from 211 (`MEASURED.md`). First a census, from the entity dump and the scenes' code: every
     character, door and object the game makes only from a chapter flag (or removes at one), and every scene that waits
     on one or moves one; then each fixed so it works in any order (the character there whenever its scene or service
     needs it, as build step 9 opens blockers), a hold (`held_until`) only where nothing else works and the user agrees.
@@ -3325,7 +3326,8 @@ before the switch; the bottom a drop, up to the right only; the tram left to the
 the Second Room (up to the pump door Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly;
 down a drop; no location), 164 of 244; the Pump Room (up on the cranks, Beemerang Halt, then the platform loop,
 Jump and the Shield; the Shell Ointment behind the boxes, location 230, the Shield or Bee Fly; Malbee's door behind
-the Factory Pass scanner, a stand-in until Next 67), 165 of 244; the rest of `room-checklist.md` to go.
+the Factory Pass scanner, a stand-in until Next 67), 165 of 244; the first puzzle room (one region, its door free; its
+Factory Pass the game's own until Next 67), 166 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

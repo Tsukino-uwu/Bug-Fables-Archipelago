@@ -3372,7 +3372,9 @@ line in the swamp. A transpiler in `GetInput` asks for anyone in the party inste
 Kabbu is missing; the line's own commands naming a missing member get the scene stand-ins (step 11), as a talk counts
 as a scene there. The log says `[tattle] installed in PlayerControl.GetInput` and `[tattle] flag 10 set on <map>`.
 
-**Status:** built (2026-10-10), installed (the log); not yet seen in game.
+**Status:** built (2026-10-10); seen the same day with Vi alone (Kabbu and Leif taken out by the dev console's
+`removemember`): Vi tattled ("How could you tell, Vi?"), and in the first puzzle room the holler had Gen and Eri press
+the switch.
 
 *Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*
 
@@ -3390,6 +3392,7 @@ taunted), and choosing it acts only with more than one member. With one member S
 (the game greys them only while someone is down and more than one is alive): what they do alone is to see. The log
 says `[relay] installed in BattleControl.SetMaxOptions`.
 
-**Status:** built (2026-10-10), installed (the log); not yet seen in game.
+**Status:** built (2026-10-10), installed (the log); not yet seen in game: a battle with one member waits for the
+user's later check (TO-CHECK).
 
 *Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*

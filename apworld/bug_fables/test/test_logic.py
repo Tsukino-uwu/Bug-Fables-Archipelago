@@ -1442,6 +1442,15 @@ class TestPumpRoom(BugFablesTestBase):
         self.assertTrue(spot.access_rule(self.state_with("Bee Fly")))
 
 
+class TestPuzzle1(BugFablesTestBase):
+    # FactoryProcessingPuzzle1 (the user, 2026-10-10): one region, its door free; its Factory Pass not a location yet.
+    def test_one_region_no_location(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player)
+                 if r.name.startswith("FactoryProcessingPuzzle1")}
+        self.assertEqual(parts, {"FactoryProcessingPuzzle1"})
+        self.assertFalse(self.multiworld.get_region("FactoryProcessingPuzzle1", self.player).locations)
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

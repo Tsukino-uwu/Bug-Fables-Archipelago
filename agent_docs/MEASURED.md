@@ -1759,6 +1759,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a drop, free from the upper left, Bee Fly from either part of the upper right (the user). A robot (talks; line 3 from
   211), a Venus healer (from 130 until 299), the broken Mender (325 to 327); sticky honey; map enemies (a Denmuki on the
   floor, a bee-bot and a Turret up top). No auto-start scenes.
+  **`FactoryProcessingPuzzle1` (2026-10-10, the user):** a dead end with one door (`loadzone`, to the Pump Room). From
+  it, up to the top right with Freeze (the geysers, `Geizer`) and Jump; there Gen and Eri's scene (`eventtrigger`,
+  `Event97`, until 216) fights two Bee-Boops (enemy 43, position Random), then their switch and flag 216; after it the
+  help key, with nobody in front, hollers to them to press the switch (the map's help line; the key needs Tattle, flag
+  10, and in the game Kabbu: mod step 52 lifts both in a seed; seen with Vi alone). Across the moving platforms to the
+  Factory Pass (`keycard - Duplicate`, key item 95, flag 213) on the bottom left: Jump, Freeze, the Shield and a basic
+  attack for a lever, which opens a shortcut back to the start (the user). Gen and Eri exist only until flag 211
+  (`Event98`, the storage), the trigger until 216: with 211 set first, the scene would look for them (Next 68). Sticky
+  honey; no other pickups.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
