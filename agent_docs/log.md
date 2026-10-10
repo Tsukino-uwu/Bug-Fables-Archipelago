@@ -92,6 +92,7 @@ either one wrong).
 - [2026-10-10: the castle finished, the Bee Kingdom begun; the Scanner Room kept between; load times measured](#2026-10-10-the-castle-finished-the-bee-kingdom-begun-the-scanner-room-kept-between-load-times-measured)
 - [2026-10-10: the Bee Kingdom finished, the Honey Factory mapped; Tattle and Relay from the start](#2026-10-10-the-bee-kingdom-finished-the-honey-factory-mapped-tattle-and-relay-from-the-start)
 - [2026-10-10: the Pier mapped, the Factory Pass never used up, an accidental goal and its fix](#2026-10-10-the-pier-mapped-the-factory-pass-never-used-up-an-accidental-goal-and-its-fix)
+- [2026-10-11: the Rubber Prison finished, the artifacts as items, the Giant's Lair begun](#2026-10-11-the-rubber-prison-finished-the-artifacts-as-items-the-giants-lair-begun)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4083,3 +4084,56 @@ either one wrong).
   (run 38063364414): the build, the tests on Python 3.11 to 3.13, the suite and the Logic Test (90 of 90) passed; red
   only from the known Coupled deadlock, 4 fuzzer seeds in 10000 and 3 tracker seeds that failed to generate. Left red
   on that until the door pass, the user's call; Preflight green.
+
+## 2026-10-11: the Rubber Prison finished, the artifacts as items, the Giant's Lair begun
+
+- **Setup:** a new seed, `AP_91955646846145333010`, from session d6b50c25's `players/BugTester.yaml` (this session's
+  scratchpad, `out/`), hosted on 38281; the user's test file re-tied with `AdoptSeed`. The console's command file is
+  still session bed6439d's `cmds.txt`. The log said `[keys] installed in EventControl.Event59`.
+- **The Factory Pass, seen:** kept at the Lobby's door ("the pass is still in my key inventory slot"). The pump room's
+  scanner wanted three shows (the user: "if a player does this they might just assume its broken"); now one opens it
+  (mod guide 54; seen: "yee opened the first show").
+- **The Rubber Prison finished** (rooms 219-231, each described area by area, every name the user's): the Checkpoint
+  Corridor, the Spike Room, the Cell Block Crossroads, Electric Cells, the Library, the Cafeteria, the Gym, the
+  Security Room, the Guard Floor, the Warden's Office and the Giant's Lair Bridge; locations 240-246. Built on the
+  way, each seen: the late gate levers present from the start (build step 81), the Prison Key never used up, the
+  bridge scene included (82, mod 55), the Library rail's invisible walls hidden (83), a copied bounce pad in the Guard
+  Floor's pocket (84, mod 56), the bridge's right side out of order, which froze arriving from the right (85).
+- **The artifacts as items** (build step 86, mod 57; the user: "eventually i want all 7 artifacts as locations ... or
+  they can be shuffled to be anywhere in your world or another apworld"): *Artifact Shuffle* (Vanilla, This World,
+  Anywhere), the Snakemouth Treasure and the Flame Brooch, their scenes "Treasure Pedestal" and "Queen's Gift", the
+  goal from the items received. The preflight's import list took `HasFromListUnique` (the user's yes, its own
+  commit). Asked "we are following how Archipelago, and other official apworlds do things like this right?": checked
+  in 0.6.8's source (rule_builder's rule; A Link to the Past's `local_items` in `generate_early`; Pokémon Red and
+  Blue's locked vanilla badges). Not yet seen in game: it needs a new seed.
+- **A review workflow of that change** (three read-only lenses, each lens's findings checked by a second reader; six
+  agents): 26 confirmed, 2 refuted, all fixed (`159dd2c`): four tests that would have failed; the mod's count of the
+  artifacts a file has, reworked to survive a dropped connection and a dev re-tie; a dozen stale docs; the hand in two
+  lair rooms an enemy too. Found by me before it: `artifact_shuffle` missing from slot_data's options (`b206082`).
+- **The Giant's Lair begun** (rooms 232-235, the user's names): the Giant's Lair Entrance; the Giant's Hand (Crystal
+  Berry 49, "Dig Spot"); Crane Crossing (the Mystery Berry "By the Spear", the Status Mirror "Ledge by the Crossing";
+  Bee Fly alone across its right left out of the base logic, Next 71, the user: "shouldn't be included in our current
+  base logic"); Outside the Fridge (the explorers' fight, Vi; Roy's quest's last step waits for its quest's pass).
+  The Venus bud's scene and the fridge fight's scene fast-forwarded with *Skip cutscenes* (both seen).
+- **Slips:** Python imports of the apworld to check it loads, four or five times during dev, against the user's
+  tests-at-push-time rule ("no quick checks of the apworld at all"); two edits by Python script where Edit is the
+  rule; Greek letters in a code comment (the preflight refused it); room tests that took a drop as free (with Points
+  of No Return off it needs its way back; the review caught it); the item named "Freeze" for Progressive Freeze (the
+  run caught it). Before the mid-session summary: a `MEASURED.md` line credited to the user that I had read with the
+  console (fixed, `afd4804`); flag 346 turned off from the console; a duplicate hook for what `scenery_off` already did.
+- **Before the push:** the suite's first run, 7 failures: Crane Crossing's item name, and the submarine tests, whose
+  "everything but the submarine" collected the bridge fight's event, now the ant tunnel's door to the bridge (in play
+  that fight needs the bridge reached first); both fixed (`8ee1810`), and the whole suite run again: 1348 passed, none
+  failed. The Logic Test 90 of 90. The fuzzer 3 of 10000, all the known Coupled deadlock ("None of the available
+  entrances are valid targets"); Universal Tracker's hook 0 of 10000 (those 3 ignored).
+- **The PopTracker pack:** its exporter still added the old artifact events, which would have exported each artifact
+  twice; fixed in its repo (the user: "Fix it now"; its `25bba3e`, not pushed). Its `tools/test.ps1` on the current
+  apworld: the export, parity on 200 seeds and pack-checker all passed. The run regenerated the pack's output from the
+  development apworld (the Lua logic, item and map images); put back, so the pack stays the 0.3.0 export until the
+  next release's. The user's own uncommitted `README.md` change there left as it was.
+- **Handoff (the user: "lets stop here for now and stop/close things"):** the game closed by the user; the server
+  already gone (its log ends "connection closed" at 01:40; no process, nothing on the port), the user's pick being to
+  close it. The final plugin copied in (`00BA0DDDCE55`). Next room `GiantLairFridgeInside` (236), its data draft
+  given (Crystal Berry 48 partway up, the lift at the top, an ice and geyser climb). A new seed is needed (the
+  artifacts, locations 247-249). Still to ask: the Peculiar Gem, the Core's finale A or B, the Next 68 census, Next 70,
+  and whether enemy scaling's *Artifacts* follows the items received or the scenes played (and its in-game text).

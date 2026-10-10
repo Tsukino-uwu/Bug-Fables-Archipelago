@@ -6442,7 +6442,9 @@ are used), and the pool tests (`test_pool.py`, `test_party.py`) skip the locatio
 
 *Code: `options.py` (`ArtifactShuffle`), `items.py`, `rules.py`, `world.py` (the groups, `local_items`),
 `data_tables.py` (`ARTIFACT_KIND`, `ARTIFACTS`, `vanilla_item`), `data_types.py` (`Source.artifact`),
-`data/items.json`, `logic/snakemouth_den.py`, `logic/rubber_prison.py`. The mod: the mod guide, step 57.*
+`data/items.json`, `logic/snakemouth_den.py`, `logic/rubber_prison.py`. The mod: the mod guide, step 57. The
+PopTracker pack: its exporter no longer adds the artifacts as events, now ordinary locations (its `tools/export.py`;
+its tests passed on the current apworld, the regenerated output left for the next release's export).*
 
 # How it works
 
