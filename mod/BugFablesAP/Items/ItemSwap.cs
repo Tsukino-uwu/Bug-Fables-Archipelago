@@ -453,10 +453,11 @@ namespace BugFablesAP
         {
             if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind
                 || KindOf(info) == ItemIds.CrystalKind || KindOf(info) == ItemIds.TokenKind
-                || KindOf(info) == ItemIds.MemberKind || KindOf(info) == ItemIds.MoveKind)
+                || KindOf(info) == ItemIds.MemberKind || KindOf(info) == ItemIds.MoveKind
+                || KindOf(info) == ItemIds.ArtifactKind)
             {
-                return; // berries have no description box, as in the game's own money giveitem; a member or move has
-                // no item row
+                return; // berries have no description box, as in the game's own money giveitem; a member, move or
+                // artifact has no item row
             }
             int kind = KindOf(info);
             bool medal = kind == ItemIds.MedalKind;

@@ -28,6 +28,8 @@
     {"name": "Flower Key", "game_id": 54, "kind": 1, "classification": "progression"},
     {"name": "Factory Pass", "game_id": 95, "kind": 1, "classification": "progression", "kept": true, "_comment": "Opens the Honey Factory's three pass locks (Event59 key list index 4): never used up in a seed (World/KeptKeys.cs), so the pool holds one, whatever the five spots that hold one in vanilla."},
     {"name": "Prison Key", "game_id": 161, "kind": 1, "classification": "progression", "kept": true, "_comment": "Opens the Rubber Prison's four Prison Key locks (Event59 key list index 17): never used up in a seed (World/KeptKeys.cs, the bridge scene's sweep included), so the pool holds one, whatever the four spots that hold one in vanilla."},
+    {"name": "Snakemouth Treasure", "game_id": 1, "kind": 8, "classification": "progression", "_comment": "Chapter 1's artifact (the first boss's treasure; the game names none): a goal item, never in the bag. Hinted as Artifact 1."},
+    {"name": "Flame Brooch", "game_id": 6, "kind": 8, "classification": "progression", "_comment": "Chapter 6's artifact, the Wasp Queen's gift on the Giant's Lair Bridge: a goal item, never in the bag. Hinted as Artifact 6."},
     {"name": "Poison Cake", "game_id": 74, "kind": 0, "classification": "filler"},
     {"name": "Mushroom", "game_id": 13, "kind": 0, "classification": "filler"},
     {"name": "Honey Drop", "game_id": 1, "kind": 0, "classification": "filler"},

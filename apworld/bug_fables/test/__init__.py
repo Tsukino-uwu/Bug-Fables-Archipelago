@@ -8,7 +8,7 @@ from test.general import setup_multiworld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import exclusion_rules
 
-from ..data_tables import ARTIFACTS, DOOR_RULES, LOCATIONS, STORY_EVENTS, TRANSFERS
+from ..data_tables import DOOR_RULES, LOCATIONS, STORY_EVENTS, TRANSFERS
 from ..items import BugFablesItem
 from ..world import BugFablesWorld
 
@@ -53,7 +53,7 @@ def logic_rules() -> Iterable[tuple[str, Rule | None]]:
         yield f"{transfer.from_map} to {transfer.to_map} ({transfer.name}, way back)", transfer.way_back
     for spot in (*LOCATIONS, *STORY_EVENTS):
         yield spot.name, spot.rule
-    for spot in (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS):
+    for spot in (*LOCATIONS, *STORY_EVENTS):
         yield f"{spot.name} (reach)", spot.reach
 
 

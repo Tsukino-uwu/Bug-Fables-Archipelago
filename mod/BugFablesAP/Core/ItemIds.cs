@@ -23,13 +23,16 @@ namespace BugFablesAP
         internal const int TokenOffset = 6_000;
         internal const int TokenKind = 7;
         internal const int GameTokens = 110;
+        // The goal's artifacts: game id the chapter, 1-7.
+        internal const int ArtifactOffset = 7_000;
+        internal const int ArtifactKind = 8;
 
         internal static int GameId(long itemId, int kind)
         {
             int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset
                 : kind == CrystalKind ? CrystalOffset
                 : kind == MemberKind ? MemberOffset : kind == MoveKind ? MoveOffset
-                : kind == TokenKind ? TokenOffset : 0;
+                : kind == TokenKind ? TokenOffset : kind == ArtifactKind ? ArtifactOffset : 0;
             return (int)(itemId - Base - offset);
         }
 

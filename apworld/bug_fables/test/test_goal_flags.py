@@ -3,10 +3,11 @@ from ..data_tables import ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DIALOGU
 
 
 class TestGoalFlags(BugFablesTestBase):
-    # The client counts only the goal's flags, and keeps one on only when one of its own events set it (build step 60):
-    # a seed's goal can't be reached by an artifact the logic doesn't hold, nor by anything borrowing its flag.
+    # The client keeps an artifact's flag on only when one of its own events set it (build step 60): its location can't
+    # be checked by anything borrowing its flag.
     def test_goal_flags_are_the_artifacts_with_their_events(self) -> None:
-        self.assertEqual(self.world.fill_slot_data()["goal_flags"], [{"flag": 41, "events": [26]}])
+        self.assertEqual(self.world.fill_slot_data()["goal_flags"],
+                         [{"flag": 41, "events": [26]}, {"flag": 346, "events": [194]}])
 
     def test_each_artifact_set_by_its_own_event(self) -> None:
         for artifact in ARTIFACTS:

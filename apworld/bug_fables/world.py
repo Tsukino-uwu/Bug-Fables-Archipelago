@@ -9,10 +9,11 @@ from worlds.AutoWorld import World
 
 from . import (entrances, items, locations, music, regions, rules, shop_inventories, slot_data, universal_tracker,
                web_world)
-from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ONE_WAYS,
-                          ROOM_STARTS, STORY_EVENTS, TRACKER_ORDER)
+from .data_tables import (ARTIFACT_KIND, ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID,
+                          LOCATIONS, ONE_WAYS, ROOM_STARTS, STORY_EVENTS, TRACKER_ORDER, vanilla_item)
 from .enemies import shuffle_encounters
-from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
+from .options import (ArtifactShuffle, BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation,
+                      StartingPartyMember)
 
 
 class BugFablesWorld(World):
@@ -30,6 +31,9 @@ class BugFablesWorld(World):
     item_name_groups = {
         "Submarine": {"Progressive Boat", "Subaquatic Maritime Neotransport"},
         "Boat": {"Progressive Boat", "Boat Ticket"},
+        # The goal's artifacts: "!hint Artifacts" any of them, "!hint Artifact 6" the Flame Brooch by its chapter.
+        "Artifacts": {item.name for item in ITEMS if item.kind == ARTIFACT_KIND},
+        **{f"Artifact {item.game_id}": {item.name} for item in ITEMS if item.kind == ARTIFACT_KIND},
     }
     origin_region_name = regions.MENU
     options_dataclass = BugFablesOptions
@@ -77,6 +81,9 @@ class BugFablesWorld(World):
                 self.player, self.player_name, wanted, available, available,
             )
         self.artifacts_required = min(wanted, available)
+        if self.options.artifact_shuffle == ArtifactShuffle.option_this_world:
+            # Artifact Shuffle's This World: Archipelago's own local_items keeps them in this player's game.
+            self.options.local_items.value |= {vanilla_item(loc) for loc in ARTIFACTS}
         choice = self.options.starting_party_member
         # The seed's own rolls, with Universal Tracker: the party here, before the locations and rules depend on it.
         if self.passthrough is not None:

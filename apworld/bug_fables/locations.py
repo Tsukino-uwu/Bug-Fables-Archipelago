@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Location
 
-from .data_tables import ARTIFACTS, LOCATION_NAME_TO_ID
+from .data_tables import LOCATION_NAME_TO_ID
 from .items import GAME, BugFablesItem
 from .options import CATEGORY_OPTIONS
 
@@ -37,8 +37,3 @@ def create_all_locations(world: BugFablesWorld) -> None:
             event.name, event.item, location_type=BugFablesLocation, item_type=BugFablesItem
         )
 
-    # The game counts artifacts from flags, so these events hold no real item: they let fill prove the goal.
-    for artifact in ARTIFACTS:
-        world.get_region(artifact.region).add_event(
-            artifact.name, "Artifact", location_type=BugFablesLocation, item_type=BugFablesItem
-        )

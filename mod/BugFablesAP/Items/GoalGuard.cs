@@ -6,8 +6,9 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // A goal flag stays on only when one of its own events sets it (slot_data's goal_flags). Set any other way (a borrowed
-    // flag, a path nobody found), it is turned back off before the goal is counted, a map is built or a file is saved.
+    // A goal flag (an artifact's scene, its location's check) stays on only when one of its own events sets it (slot_data's
+    // goal_flags). Set any other way (a borrowed flag, a path nobody found), it is turned back off before its check is
+    // sent, a map is built or a file is saved.
     internal static class GoalGuard
     {
         private static ManualLogSource log;

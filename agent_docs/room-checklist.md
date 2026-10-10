@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**185 of 244 done.**
+**186 of 244 done.**
 
 ## Outskirts
 
@@ -377,12 +377,16 @@ as it is, a frozen record.
   fight), pushed past on arrival; the fight between the left and the middle (the ULTIMAX Tank, Vi for its flying
   summon; flag 79), the only gate; the middle's ant tunnel (from 79) and the right's Giant's Lair door a walk on; the
   ant tunnel's way in (`bugaria_city.py`) now the fight; the fight from either side; the right side out of order
-  fixed (build step 85: the chapter scene held until 79, the right door kept, the sealed wall hidden; seen); for the
-  enemy pass: the fight, and the troopers and tank there until 79
+  fixed (build step 85: the chapter scene held until 79, the right door kept, the sealed wall hidden; seen); the Wasp
+  Queen's talk after the fight hands over the sixth artifact (346), a location since build step 86, "Queen's Gift";
+  for the enemy pass: the fight, and the troopers and tank there until 79
 
 ## Giant's Lair
 
-- [ ] GiantLairEntrance (232)
+- [x] GiantLairEntrance (232) — the Giant's Lair Entrance (named by the user); one region: its left door on a ledge,
+  back up by a bounce pad and the rock beside it (seen); the Venus bud's scene in the middle (Event194, 569; then a
+  healing bud), fast-forwarded with *Skip cutscenes* (seen); the right door and a save crystal; a scene to the Roach
+  Village from 586 (Event201); no location
 - [ ] GiantLairDeadLands1 (233)
 - [ ] GiantLairDeadLands2 (234)
 - [ ] GiantLairFridgeOutside (235)

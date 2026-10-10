@@ -15,6 +15,8 @@ King hands over the submarine. More areas come later.
 ## Options
 
 - **Artifacts Required** (1 to 7): the goal, see below.
+- **Artifact Shuffle** (Vanilla): where the artifacts may be. Vanilla: each at its own story scene. This World: anywhere
+  in your game. Anywhere: anywhere in the multiworld, another player's game included.
 - **Shuffle Quests** (on): quest rewards are locations.
 - **Shuffle Crystal Berries** (on): crystal berry spots are locations and crystal berries are items.
 - **Shuffle Discoveries** (off): recording a journal discovery sends a check.
@@ -138,6 +140,9 @@ where both copies are, since a hint can't tell the two apart.
 
 ## What is the goal?
 
-Collect a number of artifacts (the option *Artifacts Required*). The game has 7, one per chapter milestone. This
-version includes only the first, so the goal is capped at 1. Once you have that many, the mod tells the server,
+Collect a number of artifacts (the option *Artifacts Required*). The game has 7, one per chapter milestone, and
+each is an item: the scene that hands it over in the story is a location, and *Artifact Shuffle* decides where the
+item goes. This version includes two, the Snakemouth Treasure (chapter 1) and the Flame Brooch (chapter 6), so the
+goal is capped at 2. Hint one by its name or by its chapter (`!hint Artifact 6`), or all of them with `!hint
+Artifacts`. The pause menu shows the artifacts you have received. Once you have that many, the mod tells the server,
 which marks your game finished.

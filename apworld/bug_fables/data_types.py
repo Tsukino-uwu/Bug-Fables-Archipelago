@@ -447,7 +447,8 @@ class Source:
     (a medal shop's badgeshops index and the medal; one location per copy it ever stocks), enemy (a map enemy,
     "map:entity", whose won fight drops the check: Enemysanity; location_enemies). tokens: the give hands out this many
     Termacade tokens (its Game Tokens item adds them), so the vanilla item is that many tokens. prize: the Termacade
-    prize stand's row (Data/Termacade, Event121; location_prizes), its first purchase the check.
+    prize stand's row (Data/Termacade, Event121; location_prizes), its first purchase the check. artifact: a chapter's
+    artifact (1 to 7), handed out by the scene that sets its artifact flag: the vanilla item is that artifact item.
     """
 
     flag: int | None = None
@@ -467,6 +468,7 @@ class Source:
     enemy: str | None = None
     tokens: int | None = None
     prize: int | None = None
+    artifact: int | None = None
 
     def present(self) -> set[str]:
         """The fields this source has."""
@@ -573,15 +575,3 @@ class StoryEvent:
     no_jump: bool = False
     reach: Rule | None = None
     area: str | None = None
-
-
-@dataclass(frozen=True, slots=True)
-class Artifact:
-    """An artifact, an event (no id): the game counts 7 artifact flags, and the goal is having enough of them. region
-    and reach as for a Location."""
-
-    number: int
-    name: str
-    region: str
-    source: Source
-    reach: Rule | None = None

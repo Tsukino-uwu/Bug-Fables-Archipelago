@@ -8,6 +8,7 @@ from BaseClasses import Item, ItemClassification
 from .abilities import item_copies
 from .data_tables import ITEM_KIND, ITEM_NAME_TO_ID, ITEMS, MONEY_KIND, vanilla_item
 from .data_types import GAME
+from .options import ArtifactShuffle
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -49,8 +50,13 @@ def create_all_items(world: BugFablesWorld) -> None:
     # off stays vanilla.
     pool: list[Item] = []
     kept: set[str] = set()
-    for name in (vanilla_item(loc) for loc in world.included_locations):
+    for loc in world.included_locations:
+        name = vanilla_item(loc)
         if name is None or name in kept:
+            continue
+        if loc.source.artifact is not None and world.options.artifact_shuffle == ArtifactShuffle.option_vanilla:
+            # Artifact Shuffle's Vanilla: each artifact at its own scene, out of the pool.
+            world.get_location(loc.name).place_locked_item(world.create_item(name))
             continue
         if ITEMS_BY_NAME[name].kept:
             kept.add(name)

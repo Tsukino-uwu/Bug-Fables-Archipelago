@@ -10,7 +10,7 @@ from rule_builder.rules import False_
 
 from .data_types import Area, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
-from .logic import (ACTIVATION_FLAGS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS, DOOR_RULES, ENTITIES_MOVED,
+from .logic import (ACTIVATION_FLAGS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS, DOOR_RULES, ENTITIES_MOVED,
                     FLAGS_WITH, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT, LIMIT_FLAGS, LOCATIONS,
                     MAP_AREAS, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN,
                     SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, SCENES_KEPT_AWAY, STORY_EVENTS, TIME_SWITCHES,
@@ -149,11 +149,17 @@ MOVE_ID_OFFSET = 5_000
 # Termacade tokens: game_id is the amount.
 TOKEN_KIND = 7
 TOKEN_ID_OFFSET = 6_000
+# The goal's artifacts, Archipelago's own items, never in the bag: game_id is the chapter's artifact, 1 to 7.
+ARTIFACT_KIND = 8
+ARTIFACT_ID_OFFSET = 7_000
+# The artifact locations, each a chapter's artifact scene (Source.artifact): the goal is any N of their items.
+ARTIFACTS: tuple[Location, ...] = tuple(loc for loc in LOCATIONS if loc.source.artifact is not None)
 
 
 def item_id(item: Item) -> int:
     offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET,
-              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET, TOKEN_KIND: TOKEN_ID_OFFSET}.get(item.kind, 0)
+              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET, TOKEN_KIND: TOKEN_ID_OFFSET,
+              ARTIFACT_KIND: ARTIFACT_ID_OFFSET}.get(item.kind, 0)
     return ITEM_ID_BASE + offset + item.game_id
 
 
@@ -175,6 +181,8 @@ def vanilla_item(location: Location) -> str | None:
     """The name of the item the game hands out at a location, or None."""
     source = location.source
     handed = source.give or source.pickup or source.added
+    if source.artifact is not None:
+        return next(item.name for item in ITEMS if item.kind == ARTIFACT_KIND and item.game_id == source.artifact)
     if source.tokens is not None:
         return next(item.name for item in ITEMS if item.kind == TOKEN_KIND and item.game_id == source.tokens)
     if handed is not None:

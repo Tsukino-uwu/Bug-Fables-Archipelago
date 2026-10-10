@@ -139,7 +139,7 @@ seconds (it tidies its memory on a timer).
     Artis, a missed one at the caravan.
 - **Enemy scaling** (default Party level):
   - **Party level**: scales every enemy to your level.
-  - **Artifacts**: to the artifacts found.
+  - **Artifacts**: to how many chapters' artifact scenes you have played, whatever items they held.
   - **Off**: each enemy keeps its own stats.
   - Difficulty applies on top.
 - **Attack boost** (default Off): +1 makes each hit your party lands do 1 more damage.

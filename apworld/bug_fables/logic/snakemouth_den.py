@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, Member, one_way
-from ..data_types import Area, Artifact, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
+from ..data_types import Area, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
 from .outskirts import PAST_GATE
 
 # Grass in the second corridor and outside the cave, then the door room's horn puzzle down the trapdoor.
@@ -81,6 +81,10 @@ LOCATIONS = (
     # Where the mod has Leif join (the spider scene over, flag 27), whoever starts.
     Location("Snakemouth Den: Fall Room, After the Spider", 67, "SnakemouthFallRoom",
              Source(event=6, flag=27), category="party_member", no_jump=True),
+    # Chapter 1's artifact, "Snakemouth Treasure" (the game names none: "we got the treasure"), on its pedestal once the
+    # Spider's fight is won (Event26, flag 41): a location, its artifact an item (build step 86; the user's names).
+    Location("Snakemouth Den: Treasure Room, Treasure Pedestal", 245, "SnakemouthTreasureRoom",
+             Source(event=26, flag=41, artifact=1), rule=Member("Vi")),
 )
 STORY_EVENTS = (
     # The bridge's rope, hit from either bank (up a ledge, Jump): only the Beemerang reaches it from the right, any
@@ -111,10 +115,6 @@ STORY_EVENTS = (
     # The Spider fight, walking into the treasure room: Vi's attack hits it in the air. Bosses aren't shuffled yet.
     StoryEvent("First Boss Beaten", "Snakemouth Den Cleared", "SnakemouthTreasureRoom",
                Source(event=26, flag=41), rule=Member("Vi")),
-)
-ARTIFACTS = (
-    Artifact(1, "Artifact 1", "SnakemouthTreasureRoom",
-             Source(event=26, flag=41), reach=Member("Vi")),
 )
 MAP_AREAS = (
     # The bridge room's left bank, with the door room's door: across the river on the lowered bridge (Jump), both ways.

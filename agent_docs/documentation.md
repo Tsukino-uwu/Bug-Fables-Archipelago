@@ -109,6 +109,7 @@ anyone curious about the process, or thinking of doing the same for another game
 54. [The Factory Pass never used up at its locks](#54-the-factory-pass-never-used-up-at-its-locks)
 55. [The Prison Key never used up, the bridge scene included](#55-the-prison-key-never-used-up-the-bridge-scene-included)
 56. [An entity copied into a map: the Guard Floor's pocket pad](#56-an-entity-copied-into-a-map-the-guard-floors-pocket-pad)
+57. [The goal's artifacts as items: received, drawn and counted](#57-the-goals-artifacts-as-items-received-drawn-and-counted)
 
 ## Where it stands
 
@@ -1071,6 +1072,12 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    cutscene panel"): `first visit auto dialogue trigger` (until 170), seen playing from two of its doors; line 52 is a
    party talk that sets 170 and gives nothing (read with the console's `line`). The game also sets 170 on entering
    `DesertDRSouthEntrance` (`MapControl`); nothing else reads it. A second `TalkScenes` row.
+   **The Giant's Lair Entrance's Venus bud** (2026-10-11, mapping the room: "can we add this one to the speedup qol
+   skip/speed cutscene?"): its trigger (`venusevent`, until 569) plays `Event194`'s first branch: a bud parked below
+   ground (`Fixedbud`) grows, talks, shrinks and is moved up, then 569 and 278 are set, and the healing bud (`bud`,
+   from 569) takes its spot. A skip by its flags would leave the room as it stood until the map is built again, so it
+   is fast-forwarded (a `Scenes` row, `Flags = null`). **Seen (2026-10-11):** "the speedup cutscene
+   worked" (the user), the log's `[qol] scene over: normal speed`.
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
@@ -3279,9 +3286,10 @@ shows each artifact you have; the file select keeps the game's count, since a sa
 
 With Archipelago on, `BuildWindow`'s read of `StartMenu.psprite` returns the same seven icons with the set flags'
 first, so the game's loop draws the icons of the artifacts held; and the quests page's count becomes the chapter's own
-flag (all seven if set, none if not). With Archipelago off, both read the game's own values. Next 28's *Artifact
-Shuffle* will draw the Artifacts received instead (`apimplementation.md`). The log says `[artifacts] installed in
-PauseMenu.BuildWindow` and `in PauseMenu.UpdateText`, or what it didn't find. The file select's icons: Next 65.
+flag (all seven if set, none if not). With Archipelago off, both read the game's own values. Since step 57, a
+chapter the seed holds as an item shows its artifact item received instead, and the row's count is the mod's. The log
+says `[artifacts] installed in PauseMenu.BuildWindow` and `in PauseMenu.UpdateText`, or what it didn't find. The file
+select's icons: Next 65.
 
 **Status:** built (2026-10-09); the row seen the same day with only flag 345 set: the castle's own icon. The quests
 page not yet seen.
@@ -3484,3 +3492,30 @@ earlier that day was removed. The dev console's `hide` takes a path too, to try 
 the pocket's gate, then the copied pad there, up to the middle left (the user).
 
 *Code: `World/DayNight.cs` (`AddCopies`), `Core/SeedData.cs` (`EntitiesMoved`), `Dev/DevConsole.cs` (`hide`).*
+
+## 57. The goal's artifacts as items: received, drawn and counted
+
+The goal's artifacts became items (the Archipelago guide, build step 86): a new item kind, 8 (id offset 7000, the
+chapter as its game id). Before, the mod counted the artifact flags; now an artifact's flag is only its location's
+check, and the item can arrive from anywhere, so the mod gives it, draws it and counts it itself.
+
+- **Receiving one** puts nothing in the bag and never sets the story's artifact flag (that flag drives the story).
+  The receiver keeps the chapters received for the file in play, rebuilt each frame from the server's list up to the
+  save's received count, as party members are (`ArtifactIcons.SetReceived`). A file not yet matched to the seed counts
+  none.
+- **Its look** (the hold-up, or a pickup that holds one): the world's name for it from Archipelago's data package
+  (`GetItemName`), the pause menu's icon for its chapter (`StartMenu.psprite`, copied to an item's size as the party
+  icons are), the key item colour, the article "the". It has no description box, as a member or a move.
+- **The goal** is sent once *Artifacts Required* artifact items have arrived, counted per chapter, from the received
+  list (`LocationChecks.CheckGoal`); the log says `[goal] 1 of 2 artifacts received`. The guard on the artifact flags
+  (`GoalGuard`, the Archipelago guide's build step 60) stays: a flag set outside its own scene would send that
+  location's check.
+- **The pause menu** (step 48): for a chapter the seed holds as an item (`item_kinds` has its kind-8 id), the icon
+  shows once its item is received; for the others, still its flag. The row's count is now the mod's too: the one
+  `SaveProgressIcons` call in `BuildWindow` asks the mod, which counts the chapters shown. The log says `[artifacts]
+  installed in PauseMenu.BuildWindow (instructions N, M)`. The file select keeps the game's own count (Next 65).
+
+**Status:** built (2026-10-11); not yet seen in game, which needs a new seed.
+
+*Code: `Core/ItemIds.cs` (`ArtifactKind`), `Items/ItemReceiver.cs`, `Ui/ArtifactIcons.cs`, `Items/ItemSwap.Looks.cs`,
+`Items/ItemSwap.cs`, `Items/LocationChecks.cs` (`CheckGoal`), `Items/GoalGuard.cs`, `Core/Plugin.cs`.*

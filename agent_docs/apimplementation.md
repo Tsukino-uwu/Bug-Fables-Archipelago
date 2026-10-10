@@ -158,6 +158,7 @@ this file and that doc disagree, that doc is right.
 83. [Build step 83: the Library rail's invisible walls hidden](#build-step-83-the-library-rails-invisible-walls-hidden)
 84. [Build step 84: the Guard Floor pocket's bounce pad](#build-step-84-the-guard-floor-pockets-bounce-pad)
 85. [Build step 85: the Giant's Lair Bridge's right side out of order](#build-step-85-the-giants-lair-bridges-right-side-out-of-order)
+86. [Build step 86: the artifacts as items, Artifact Shuffle](#build-step-86-the-artifacts-as-items-artifact-shuffle)
 
 **How it works**
 
@@ -399,25 +400,14 @@ be wrong.
     enemy in `BattleControl.DoAction` (its own animation numbers, shape, positions, summons), so another enemy's attack
     would miss animations or wait forever on one and soft-lock the battle. At most, later, swaps between enemies built
     alike, tested one by one.
-28. **Artifacts shuffled, an idea for later** (2026-09-27): the goal's artifacts found anywhere, not only at
-    the chapter ends. Each chapter end (its artifact flag) becomes an ordinary location, and an Archipelago-only
-    *Artifact* item goes into the pool; the goal counts Artifacts received. The item never sets the game's artifact
-    flags: they drive the story (flag 41 is the logic's "Snakemouth Den Cleared"). **Decided (2026-09-27):**
-    the pause menu's icons show Artifacts received (drawn only; the save's own count, which the file select shows, stays
-    the game's). **Any order:** seven distinct items, *Artifact 1* to *7*, each drawn with its own icon, so
-    Artifact 4 can come before 1; the goal is any N of them. The game draws the first N of `StartMenu.psprite` from a
-    flag count (`PauseMenu.cs:2397-2402`), so the mod draws the received ones itself. Each item is tied to its chapter:
-    its chapter's icon, and the game's own name for that chapter's artifact if it has one (`textsearch`);
-    the chapter-end locations keep place names. **Icons:** the received ones only; all 7 with the missing
-    ones faded is worth a look on screen when it's built, kept only if it looks good. The pool: always 7, *Artifacts
-    Required* 1-7, so the game's 7 icons can show it (agreed); a bigger pool breaks nothing in Archipelago but needs a
-    filler slot per Artifact and a display past 7 icons, so later if asked. A yaml
-    option, so its own build step. **The option (the user, 2026-10-09):** *Artifact Shuffle*, two choices: off, each
-    artifact where vanilla gives it (today's), or on, the seven anywhere in the multiworld; no mode shuffling them only
-    among the chapter ends (Pokémon Crystal's `randomize_badges` has one, read 2026-10-09, `licensing.md`). Until it's
-    built, the pause menu draws each set artifact flag's own icon (the mod guide, step 48). **Names so far** (each the
-    user's yes): chapter 4's, in the castle's treasure room on the central pedestal of a shrine between three statues,
-    "Ancient Castle: Treasure Room, Shrine" (2026-10-09).
+28. **The other five artifacts as items** (built for chapters 1 and 6 in build step 86, 2026-10-11): each joins
+    when its chapter is mapped, its scene a location named after its place and its item the game's own name, each the
+    user's yes (`textsearch`). **Names so far:** chapter 4's location, in the castle's treasure room on the central
+    pedestal of a shrine between three statues, "Ancient Castle: Treasure Room, Shrine" (2026-10-09). The pool stays at
+    one per chapter, *Artifacts Required* 1-7 capped at what the world holds; a bigger pool breaks nothing in
+    Archipelago but needs a display past 7 icons, so later if asked. **Icons:** the received ones only (the mod guide,
+    step 57); all 7 with the missing ones faded is worth a look on screen, kept only if it looks good. No mode shuffling
+    them only among the chapter ends (Pokémon Crystal's `randomize_badges` has one, read 2026-10-09, `licensing.md`).
 29. **A bosses goal, an idea for later** (2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
     Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. **Decided
     (2026-09-27): story bosses only**; the bounties maybe a side setting later, once *Shuffle Bounties* gives
@@ -6400,6 +6390,42 @@ event from the middle). Tests `TestGiantLairBridge`.
 with the King swinging where the wall was (the user).
 
 *Code: `logic/rubber_prison.py` (`HELD_UNTIL`, `KEPT_PRESENT`, `SCENERY_OFF`). The mod: unchanged.*
+
+## Build step 86: the artifacts as items, Artifact Shuffle
+
+**Asked and decided (the user, 2026-10-10)**, after the bridge's Wasp Queen handed over the sixth artifact: "lets make
+this artifact into a location? eventually i want all 7 artifacts as locations anyway". Each artifact is a goal item and
+its scene a location: "so you get them in their intended location/s, or they can be shuffled to be anywhere in your
+world or another apworld". Built now for the two the world holds (chapters 1 and 6); the other five join as their
+chapters are mapped. The plan was Next 28; what changed from it, each the user's pick: three choices, not two; the
+items named as the game names them, each with an *Artifact N* hint group; *Artifacts Required* stays capped at what the
+world holds (2 today).
+
+**Built:**
+- **The items:** kind 8 (id offset 7000, game id the chapter), progression, one per chapter: *Snakemouth Treasure*
+  (chapter 1) and *Flame Brooch* (6), the names the user picked. `item_name_groups`: *Artifacts* (all) and *Artifact
+  1* to *7* (each its own), so `!hint Artifact 6` finds the Flame Brooch.
+- **The locations:** each artifact's scene is an ordinary location, named after its place (the user's yes):
+  *Snakemouth Den: Treasure Room, Treasure Pedestal* (`Event26`, flag 41) and *Rubber Prison: Giant's Lair Bridge,
+  Queen's Gift* (`Event194`, flag 346). A location's `Source` names its artifact (`artifact=`); `vanilla_item` gives
+  that chapter's item; the old `Artifact` events are gone.
+- **The option, *Artifact Shuffle*:** Vanilla (the default) places each artifact item on its own scene as a locked
+  item, out of the pool (`place_locked_item`). This World adds the artifacts to Archipelago's own `local_items`, so the
+  fill keeps them in this game. Anywhere: any game in the multiworld. All three go through Archipelago's own fill, so a
+  plando can still place them.
+- **The goal:** `HasFromListUnique` of the artifact items, *Artifacts Required* of them, wherever they were placed.
+  The client sends the goal once that many artifact items have arrived (the mod guide, step 57), never from the flags:
+  a flag is now its location's check, still guarded to its own events (`goal_flags`, build step 60).
+
+**Tests:** `TestArtifactShuffleVanilla` (each locked at its scene, none in the pool, the hint groups),
+`TestArtifactShuffleThisWorld` (in the pool and in `local_items`), `TestArtifactShuffleAnywhere` (in the pool, not
+local), `TestArtifactsCapped` (the goal capped at 2 and needing both), `TestGoalFlags` (41 and 346 with their events).
+
+**Status:** built (2026-10-11); not yet seen in game, which needs a new seed.
+
+*Code: `options.py` (`ArtifactShuffle`), `items.py`, `rules.py`, `world.py` (the groups, `local_items`),
+`data_tables.py` (`ARTIFACT_KIND`, `ARTIFACTS`, `vanilla_item`), `data_types.py` (`Source.artifact`),
+`data/items.json`, `logic/snakemouth_den.py`, `logic/rubber_prison.py`. The mod: the mod guide, step 57.*
 
 # How it works
 

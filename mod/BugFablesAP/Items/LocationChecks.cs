@@ -196,27 +196,24 @@ namespace BugFablesAP
             CheckGoal(session);
         }
 
-        // Sent once per login while reached: the server keeps it, and a send lost with the connection goes again. Only the
-        // seed's goal flags count (an artifact the logic doesn't hold never does), as GoalGuard leaves them.
+        // Sent once per login while reached: the server keeps it, and a send lost with the connection goes again. The
+        // artifact items given to this file count (ItemReceiver), never the story's artifact flags.
         private void CheckGoal(ArchipelagoSession session)
         {
             int required = connection.ArtifactsRequired;
-            List<ApConnection.GoalFlag> goals = connection.GoalFlags;
-            bool[] flags = MainManager.instance?.flags;
-            int have = goals == null || flags == null ? 0
-                : goals.Count(g => g.Flag >= 0 && g.Flag < flags.Length && flags[g.Flag]);
+            int have = ArtifactIcons.ReceivedCount;
             string state = required <= 0 ? "slot_data's options have no artifacts_required: never sent"
-                : goals == null ? "slot_data has no goal_flags (a seed from an older apworld): never sent"
-                : have < required ? $"{have} of {required} artifacts" : $"reached, {have} of {required} artifacts";
+                : have < required ? $"{have} of {required} artifacts received"
+                : $"reached, {have} of {required} artifacts received";
             if (state != lastGoalState)
             {
                 log.LogInfo("[goal] " + state);
                 lastGoalState = state;
             }
-            if (required > 0 && goals != null && have >= required && !ReferenceEquals(goalSentFor, session))
+            if (required > 0 && have >= required && !ReferenceEquals(goalSentFor, session))
             {
                 goalSentFor = session;
-                connection.SendGoal(session, $"{have} of {required} artifacts on {Where()}");
+                connection.SendGoal(session, $"{have} of {required} artifacts received on {Where()}");
             }
         }
 

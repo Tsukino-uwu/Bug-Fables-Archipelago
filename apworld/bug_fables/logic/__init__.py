@@ -8,7 +8,7 @@ origin, is in regions.py.
 """
 from __future__ import annotations
 
-from ..data_types import (Area, Artifact, DayNight, DialogueFlag, DoorRow, DoorRule, EntityMove, EntityRef, FlagEntity,
+from ..data_types import (Area, DayNight, DialogueFlag, DoorRow, DoorRule, EntityMove, EntityRef, FlagEntity,
                           FlagSwap, FlagWith, ItemEntity, Location, MapScene, Roadblock, SceneCamera, SceneryMove,
                           StoryEvent, TimeSwitch, Transfer)
 from . import (ancient_castle, bandit_hideout, bee_kingdom_hive, bugaria_city, chomper_caves, defiant_root,
@@ -37,8 +37,6 @@ LOCATIONS: tuple[Location, ...] = tuple(sorted(
 TRACKER_ORDER: dict[str, int] = {loc.name: rank for rank, loc in enumerate(
     loc for area in AREAS for loc in sorted(getattr(area, "LOCATIONS", ()), key=lambda loc: loc.name))}
 STORY_EVENTS: tuple[StoryEvent, ...] = tuple(e for area in AREAS for e in getattr(area, "STORY_EVENTS", ()))
-ARTIFACTS: tuple[Artifact, ...] = tuple(sorted(
-    (a for area in AREAS for a in getattr(area, "ARTIFACTS", ())), key=lambda artifact: artifact.number))
 KEPT_OPEN: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "KEPT_OPEN", ()))
 KEPT_PRESENT: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "KEPT_PRESENT", ()))
 SCENERY_HIDDEN: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_HIDDEN", ()))

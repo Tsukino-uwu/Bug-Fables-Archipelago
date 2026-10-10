@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
 from rule_builder.options import OptionFilter
-from rule_builder.rules import Has, Rule
+from rule_builder.rules import Has, HasFromListUnique, Rule
 from worlds.generic.Rules import add_item_rule
 
-from .data_tables import ARTIFACTS
-from .data_types import Artifact, Location, StoryEvent
+from .data_tables import ARTIFACTS, vanilla_item
+from .data_types import Location, StoryEvent
 from .options import ShopContents, ShuffleJump
 
 if TYPE_CHECKING:
@@ -55,18 +55,18 @@ def set_all_rules(world: BugFablesWorld) -> None:
             location.progress_type = LocationProgressType.EXCLUDED
         elif world.options.shop_contents == ShopContents.option_no_progression:
             location.item_rule = _no_progression
-    for spot in (*world.included_locations, *world.included_events, *ARTIFACTS):
+    for spot in (*world.included_locations, *world.included_events):
         rule = spot_rule(spot)
         if rule is not None:
             world.set_rule(world.get_location(spot.name), rule)
-    world.set_completion_rule(Has("Artifact", count=world.artifacts_required))
+    # The goal: that many of the artifact items, wherever Artifact Shuffle put them.
+    world.set_completion_rule(HasFromListUnique(*(vanilla_item(loc) for loc in ARTIFACTS),
+                                                count=world.artifacts_required))
 
 
-def spot_rule(spot: Location | StoryEvent | Artifact) -> Rule | None:
+def spot_rule(spot: Location | StoryEvent) -> Rule | None:
     """A spot's whole rule, the same in every seed (the options resolve it), so the PopTracker pack exports this one:
-    its reach, its own rule, and JUMP. An artifact has no rule of its own and always waits for Jump."""
-    if isinstance(spot, Artifact):
-        return _joined(spot.reach, JUMP)
+    its reach, its own rule, and JUMP."""
     return _joined(spot.reach, spot.rule, None if spot.no_jump else JUMP)
 
 

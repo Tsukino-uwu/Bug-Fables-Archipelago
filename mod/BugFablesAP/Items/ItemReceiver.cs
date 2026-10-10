@@ -97,6 +97,7 @@ namespace BugFablesAP
             if (matches == true && given >= 0 && given <= received.Count)
             {
                 PartyMembers.SetReceived(MembersGiven(received, given));
+                ArtifactIcons.SetReceived(KindGiven(received, given, ItemIds.ArtifactKind));
             }
             if (blocked != null || given == received.Count)
             {
@@ -256,6 +257,11 @@ namespace BugFablesAP
                     mm.items[1].Add(key);
                 }
                 return $"{Abilities.KeyName(key)} added to key items ({key}): it can be used now";
+            }
+            if (kind == ItemIds.ArtifactKind)
+            {
+                // Nothing in the bag and never the story's artifact flag: the goal and the pause menu count it.
+                return $"artifact {gameId} received ({ArtifactIcons.Receive(gameId)} of the goal's now)";
             }
             if (kind != 0)
             {

@@ -182,6 +182,7 @@ namespace BugFablesAP
                         ? (MainManager.menutext?.Length > 112 ? MainManager.menutext[112] + "." : null)
                     : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
                     : kind == ItemIds.MoveKind ? MoveDescription(gameId)
+                    : kind == ItemIds.ArtifactKind ? "One of the artifacts the goal counts."
                     : TableCell(MainManager.itemdata, 0, gameId, 2);
                 description = text ?? description;
                 if (info.Player.Slot != connection.OwnSlot)
@@ -215,6 +216,14 @@ namespace BugFablesAP
                     int member = Abilities.Member(gameId);
                     sprite = member >= 0 ? MemberSprite(member) : ApIcon.Get();
                     color = member >= 0 ? MainManager.instance.charcolor[member] : (Color?)null;
+                    return;
+                }
+                if (kind == ItemIds.ArtifactKind)
+                {
+                    // The world's name for it (Archipelago's data package) and its chapter's pause-menu icon.
+                    name = connection?.Session?.Items.GetItemName(itemId) ?? "Artifact " + gameId;
+                    sprite = ArtifactIcons.Sprite(gameId);
+                    color = GameKey;
                     return;
                 }
                 bool medal = kind == ItemIds.MedalKind;
@@ -251,16 +260,21 @@ namespace BugFablesAP
             }
             if (memberSprites[id] == null)
             {
-                Vector3 item = MainManager.itemsprites[0, 0].bounds.size;
-                Vector3 own = icon.bounds.size;
-                float scale = Mathf.Max(own.x, own.y) / Mathf.Max(item.x, item.y);
-                Rect rect = icon.packed ? icon.textureRect : icon.rect;
-                memberSprites[id] = Sprite.Create(icon.texture, rect,
-                    new Vector2(icon.pivot.x / icon.rect.width, icon.pivot.y / icon.rect.height),
-                    icon.pixelsPerUnit * scale);
-                log.LogInfo($"[swap] {PartyMembers.Name(id)}'s icon ({own.x:0.00} x {own.y:0.00}) scaled by 1/{scale:0.00} to an item's size");
+                memberSprites[id] = ScaledToItem(icon);
+                log.LogInfo($"[swap] {PartyMembers.Name(id)}'s icon scaled to an item's size");
             }
             return memberSprites[id];
+        }
+
+        // A copy of a menu icon at an item sprite's size.
+        internal static Sprite ScaledToItem(Sprite icon)
+        {
+            Vector3 item = MainManager.itemsprites[0, 0].bounds.size;
+            Vector3 own = icon.bounds.size;
+            float scale = Mathf.Max(own.x, own.y) / Mathf.Max(item.x, item.y);
+            Rect rect = icon.packed ? icon.textureRect : icon.rect;
+            return Sprite.Create(icon.texture, rect,
+                new Vector2(icon.pivot.x / icon.rect.width, icon.pivot.y / icon.rect.height), icon.pixelsPerUnit * scale);
         }
 
         // A hold-up without a pickup runs Giveitem on a key item stand-in (key items have no bag limit), and the
@@ -276,6 +290,7 @@ namespace BugFablesAP
             // Never the vanilla give's own: Game Tokens' article is their count, which stayed before a swapped-in item.
             return kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 6)
                 : kind == ItemIds.MemberKind || kind == ItemIds.MoveKind ? ""
+                : kind == ItemIds.ArtifactKind ? "the"
                 : kind == ItemIds.MoneyKind || kind == ItemIds.TokenKind ? ""
                 : kind == ItemIds.CrystalKind ? MainManager.menutext?[DefaultArticle]
                 : TableCell(MainManager.itemdata, 0, gameId, 3);

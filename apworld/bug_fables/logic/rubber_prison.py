@@ -61,6 +61,11 @@ LOCATIONS = (
     Location("Rubber Prison: Gym, Crank Puzzle", 244, "RubberPrisonGym",
              Source(flag=551, pickup=Pickup(map="RubberPrisonGym", type=1, item=161)),
              rule=CanUse("Beemerang Halt"), no_jump=True, area="Top Left"),
+    # The Giant's Lair Bridge's right side: after the fight, the Wasp Queen hands over the Flame Brooch, chapter 6's
+    # artifact (Event194's first visit, flag 346), its scene held until the fight (79): a location, its artifact an item
+    # (build step 86; the user's name).
+    Location("Rubber Prison: Giant's Lair Bridge, Queen's Gift", 246, "RubberPrisonGiantLairBridge",
+             Source(event=194, flag=346, artifact=6), rule=Has(_BRIDGE_FIGHT), no_jump=True, area="Right"),
 )
 STORY_EVENTS = (
     # The lift lever on the ground floor's upper right, any attack: the lift between the dock and it runs for good.

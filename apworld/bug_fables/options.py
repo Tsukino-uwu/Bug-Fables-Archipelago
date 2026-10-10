@@ -21,6 +21,21 @@ class ArtifactsRequired(Range):
     default = 1
 
 
+class ArtifactShuffle(Choice):
+    """
+    Where the artifacts, the goal's items, may be placed. Each chapter's artifact scene is a location.
+
+    Vanilla: each artifact at its own scene. This World: anywhere in your game. Anywhere: anywhere in the multiworld,
+    another player's game included.
+    """
+
+    display_name = "Artifact Shuffle"
+    option_vanilla = 0
+    option_this_world = 1
+    option_anywhere = 2
+    default = 0
+
+
 class ShuffleQuests(DefaultOnToggle):
     """
     Quest rewards are locations: quests from the quest board, and side quests such as helping a lost kid.
@@ -366,6 +381,7 @@ class DoorPlando(PlandoConnections):
 @dataclass
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
+    artifact_shuffle: ArtifactShuffle
     shuffle_quests: ShuffleQuests
     shuffle_crystal_berries: ShuffleCrystalBerries
     shuffle_discoveries: ShuffleDiscoveries

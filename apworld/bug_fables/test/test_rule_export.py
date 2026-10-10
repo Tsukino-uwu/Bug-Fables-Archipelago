@@ -7,7 +7,7 @@ from rule_builder.rules import Has, Rule
 
 from . import BugFablesTestBase, logic_rules
 from ..custom_rules import one_way
-from ..data_tables import ARTIFACTS, LOCATIONS, STORY_EVENTS
+from ..data_tables import LOCATIONS, STORY_EVENTS
 from ..regions import logic_entrances
 from ..rules import spot_rule
 from ..world import BugFablesWorld
@@ -25,7 +25,7 @@ class TestRuleExport(TestCase):
                 self.assert_round_trip(where, rule)
 
     def test_every_spot_rule(self) -> None:
-        for spot in (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS):
+        for spot in (*LOCATIONS, *STORY_EVENTS):
             rule = spot_rule(spot)
             if rule is not None:
                 self.assert_round_trip(spot.name, rule)

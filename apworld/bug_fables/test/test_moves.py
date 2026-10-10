@@ -110,9 +110,9 @@ class TestJump(BugFablesTestBase):
 
     def test_the_goal_needs_jump(self) -> None:
         self.collect_by_name("Explorer Permit")
-        self.assertFalse(self.can_reach_location("Artifact 1"))
+        self.assertFalse(self.can_reach_location("Snakemouth Den: Treasure Room, Treasure Pedestal"))
         self.collect_by_name("Jump")
-        self.assertTrue(self.can_reach_location("Artifact 1"))
+        self.assertTrue(self.can_reach_location("Snakemouth Den: Treasure Room, Treasure Pedestal"))
 
 
 class TestMovesAndJumpTogether(BugFablesTestBase):

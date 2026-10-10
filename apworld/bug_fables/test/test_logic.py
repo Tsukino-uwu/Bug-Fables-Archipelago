@@ -1,7 +1,7 @@
 from BaseClasses import CollectionState
 
 from . import BugFablesTestBase
-from ..data_tables import ARTIFACTS, STORY_EVENTS
+from ..data_tables import ARTIFACTS, STORY_EVENTS, vanilla_item
 
 
 class TestPermitGate(BugFablesTestBase):
@@ -9,9 +9,9 @@ class TestPermitGate(BugFablesTestBase):
 
     def test_first_artifact_needs_the_permit(self) -> None:
         # With no items the permit's gate must hold, or fill could put the permit behind it.
-        self.assertFalse(self.can_reach_location("Artifact 1"))
+        self.assertFalse(self.can_reach_location("Snakemouth Den: Treasure Room, Treasure Pedestal"))
         self.collect_by_name("Explorer Permit")
-        self.assertTrue(self.can_reach_location("Artifact 1"))
+        self.assertTrue(self.can_reach_location("Snakemouth Den: Treasure Room, Treasure Pedestal"))
 
     def test_goal_needs_the_permit(self) -> None:
         self.assertBeatable(False)
@@ -57,22 +57,64 @@ class TestPermitGate(BugFablesTestBase):
         self.assertIn("Explorer Permit", pool)
 
     def test_pool_matches_locations(self) -> None:
+        # The artifacts Artifact Shuffle's Vanilla placed at their scenes are out of both.
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
-        locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+        locations = [loc for loc in self.multiworld.get_locations(self.player)
+                     if loc.address is not None and loc.item is None]
         self.assertEqual(len(pool), len(locations))
 
 
 class TestArtifactsCapped(BugFablesTestBase):
-    # Asking for more artifacts than the world includes must lower the goal, not make the seed unwinnable.
-    options = {"artifacts_required": 7}
+    # Asking for more artifacts than the world includes must lower the goal, not make the seed unwinnable. Anywhere puts
+    # them in the pool, where collect_by_name finds them.
+    options = {"artifacts_required": 7, "artifact_shuffle": "anywhere"}
 
     def test_goal_lowered_to_what_exists(self) -> None:
-        self.assertEqual(self.world.artifacts_required, 1)
-        self.assertEqual(self.world.fill_slot_data()["options"]["artifacts_required"], 1)
+        self.assertEqual(self.world.artifacts_required, len(ARTIFACTS))
+        self.assertEqual(self.world.fill_slot_data()["options"]["artifacts_required"], len(ARTIFACTS))
 
-    def test_still_beatable(self) -> None:
-        self.collect_by_name("Explorer Permit")
+    def test_needs_every_artifact(self) -> None:
+        self.collect_by_name("Snakemouth Treasure")
+        self.assertBeatable(False)
+        self.collect_by_name("Flame Brooch")
         self.assertBeatable(True)
+
+
+class TestArtifactShuffleVanilla(BugFablesTestBase):
+    # The default: each artifact item locked at its own scene, out of the pool.
+    def test_each_at_its_scene(self) -> None:
+        for loc in ARTIFACTS:
+            with self.subTest(location=loc.name):
+                self.assertEqual(self.world.get_location(loc.name).item.name, vanilla_item(loc))
+        pool = {item.name for item in self.multiworld.itempool if item.player == self.player}
+        self.assertFalse(pool & self.world.item_name_groups["Artifacts"])
+
+    def test_hint_groups(self) -> None:
+        self.assertEqual(self.world.item_name_groups["Artifacts"], {"Snakemouth Treasure", "Flame Brooch"})
+        self.assertEqual(self.world.item_name_groups["Artifact 1"], {"Snakemouth Treasure"})
+        self.assertEqual(self.world.item_name_groups["Artifact 6"], {"Flame Brooch"})
+
+
+class TestArtifactShuffleThisWorld(BugFablesTestBase):
+    options = {"artifact_shuffle": "this_world"}
+
+    def test_in_the_pool_and_local(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        for name in ("Snakemouth Treasure", "Flame Brooch"):
+            with self.subTest(item=name):
+                self.assertEqual(pool.count(name), 1)
+                self.assertIn(name, self.world.options.local_items.value)
+
+
+class TestArtifactShuffleAnywhere(BugFablesTestBase):
+    options = {"artifact_shuffle": "anywhere"}
+
+    def test_in_the_pool_not_local(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        for name in ("Snakemouth Treasure", "Flame Brooch"):
+            with self.subTest(item=name):
+                self.assertEqual(pool.count(name), 1)
+                self.assertNotIn(name, self.world.options.local_items.value)
 
 
 class TestLeif(BugFablesTestBase):
@@ -86,7 +128,7 @@ class TestLeif(BugFablesTestBase):
         self.assertTrue(location.can_reach(state))
 
     def test_first_artifact_needs_leif(self) -> None:
-        artifact = self.world.get_location("Artifact 1")
+        artifact = self.world.get_location("Snakemouth Den: Treasure Room, Treasure Pedestal")
         state = self._every_story_step_but_leif()
         self.assertFalse(artifact.can_reach(state))
         self.add(state, "Leif")
@@ -206,7 +248,7 @@ class TestClassifications(BugFablesTestBase):
             if hasattr(spot.access_rule, "item_dependencies"):
                 used.update(spot.access_rule.item_dependencies())
         # Leif is both: the story's event with Starting Party Member off, an item with it on.
-        event_items = {event.item for event in STORY_EVENTS} - {item.name for item in ITEMS} | {"Artifact"}
+        event_items = {event.item for event in STORY_EVENTS} - {item.name for item in ITEMS}
         real_items_used = used - event_items
         for item in ITEMS:
             if item.always and not own_copies(self.world, item.name):
@@ -894,6 +936,31 @@ class TestGiantLairBridge(_PrisonRoom):
         self.assertEqual(len(tunnels), 1)
         self.assertFalse(tunnels[0].access_rule(self.state_with("Vi")))
         self.assertTrue(tunnels[0].access_rule(self.state_with("Giant's Lair Bridge Fight Won")))
+
+
+class TestGiantsHand(_PrisonRoom):
+    # GiantLairDeadLands1, the Giant's Hand (the user, 2026-10-11): its left and lower right across platforms with Bee
+    # Fly; up to the right door's ledge only by the hand's rock (Jump and Horn Slash), a free drop down.
+    MAP = "GiantLairDeadLands1"
+
+    def test_across_the_platforms(self) -> None:
+        for name in (f"{self.MAP} to {self.MAP} (Right)", f"{self.MAP} (Right) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Jump", "Horn Slash")))
+                self.assertTrue(self.way(name)(self.state_with("Bee Fly")))
+
+    def test_the_hands_rock(self) -> None:
+        up = self.way(f"{self.MAP} (Right) to {self.MAP} (Right Door)")
+        self.assertFalse(up(self.state_with("Bee Fly", "Jump")))
+        self.assertFalse(up(self.state_with("Bee Fly", "Horn Slash")))
+        self.assertTrue(up(self.state_with("Jump", "Horn Slash")))
+        self.assertTrue(self.way(f"{self.MAP} (Right Door) to {self.MAP} (Right)")(self.state_with()))
+
+    def test_the_dig_spot(self) -> None:
+        dig = self.spot("Giant's Lair: Giant's Hand, Dig Spot")
+        self.assertEqual(dig.parent_region.name, self.MAP)
+        self.assertFalse(dig.access_rule(self.state_with("Bee Fly", "Jump", "Horn Slash")))
+        self.assertTrue(dig.access_rule(self.state_with("Beetle Dig")))
 
 
 class TestPrisonKey(BugFablesTestBase):

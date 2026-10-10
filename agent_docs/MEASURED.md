@@ -3313,6 +3313,23 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **The bridge scene's IL** (2026-10-10, the installed DLL, ilspycmd, `<Event193>d__240.MoveNext`): the four flag
   writes in a row, each `ldsfld instance; ldfld flags; ldc.i4 N; ldc.i4.1; stelem.i1` (584, 567, 551, 545), then the
   sweep loop, its one `Remove(161)` and the method's only `Contains` (on 161). Used by `KeptKeys.cs`.
+- **The Giant's Lair Entrance** (`GiantLairEntrance`, 2026-10-11, the user on screen; EntityDump, code read): the
+  left door (to the bridge) on a ledge, back up by the bounce pad (`jumpspring`) and the rock beside it, nothing else
+  needed (the user); the Venus bud's scene in the middle (`venusevent`, until 569) needs nothing; the right door (to
+  the Giant's Hand, `loadzonedl`) and a save crystal, nothing needed. `Event194`'s first branch (on this map): entity 3
+  (`Fixedbud`, until 569, parked at y -5) grows, talks (line 1, then 2 or 3 by flag 278), shrinks and is moved 5 up
+  from its start, then 569 and 278 are set; the healing bud (`bud`, from 569) stands on the same spot. A scene
+  trigger to the Roach Village (`loadzoneroachvillage`, from 586, `Event201`); 586 is set by `Event199` and
+  `Event203`. The game's name for the next rooms: "the Dead Lands" (`GiantLairRoachVillage` line 45, `textsearch`).
+- **The Giant's Hand** (`GiantLairDeadLands1`, 2026-10-11, the user on screen, named by the user; EntityDump, code
+  read): the left (the door to the Entrance, a dig spot) free; the dig spot (`digspot`, data `1 49 0`: `data[0]` 1
+  buries crystal berry `data[1]`, gone once `crystalbflags[49]` is set, `NPCControl.cs` DigSpot) needs Beetle Dig, its
+  only item. The middle's platforms need Bee Fly to cross to the lower right. From there to the right door's ledge
+  (`loadzoneforward`, to `GiantLairDeadLands2`): a bounce pad (`jumpspringbox`) up to a rock (`rock`, a `PushRock`),
+  Jump, the rock knocked with the horn into the hand (`handenemy`), then the next bounce pad (`jumpspringbook`). The
+  hand lets go whenever the room is left, so the rock is needed every time; the ledge's drop to the lower right is
+  free, a dead end without Bee Fly or Jump and Horn Slash (the user). Three Dead Landers (`DeadLanderA`, `DeadLanderB`,
+  a copy). The game has no name for the hand; the party calls them "those giant eyes" (`GiantLairDeadLands2` line 0).
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
