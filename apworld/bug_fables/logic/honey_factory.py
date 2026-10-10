@@ -13,7 +13,8 @@ from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemS
 # Rooms' pass (flag 178, up high in the office) stays the game's own pickup until then: Jump and the Beemerang Toss,
 # or Bee Fly alone (the user, 2026-10-10); so does the first puzzle room's (213): Jump, Freeze, the Shield and a basic
 # attack, past Gen and Eri's fight (two Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52); and
-# the second's (212): Beemerang Halt, Jump and the Shield, and a basic attack for a lever (Halt brings the Toss).
+# the second's (212): Beemerang Halt, Jump and the Shield, and a basic attack for a lever (Halt brings the Toss); the
+# third's (215): Jump, Freeze and the horn (its puzzle).
 FACTORY_PASS = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
@@ -44,6 +45,11 @@ LOCATIONS = (
     Location("Honey Factory: Pump Room, Behind the Boxes", 230, "FactoryProcessingPump",
              Source(regional=4, pickup=Pickup(map="FactoryProcessingPump", type=0, item=97)),
              rule=CanUse("Shield") | CanUse("Bee Fly"), no_jump=True, area="Upper Right"),
+    # The Pressure Plate Room's (named by the user, 2026-10-10) crystal berry #16, behind a pipe up by its door, reached
+    # by its puzzle: Jump, Freeze and the horn.
+    Location("Honey Factory: Pressure Plate Room, Behind the Pipe", 231, "FactoryProcessingPuzzle3",
+             Source(berry=16, pickup=Pickup(map="FactoryProcessingPuzzle3", type=3, item=0)),
+             rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash"), category="crystal_berry", no_jump=True),
 )
 
 STORY_EVENTS = (
@@ -105,6 +111,9 @@ MAP_AREAS = (
     # The Training Grounds (FactoryProcessingPuzzle2; named by the user, 2026-10-10, after its sign): the same; the drop
     # right of its door a one-way without Jump, to the pass's side only. Its pass's spot, once a location: "Honey
     # Factory: Training Grounds, Behind the Gate" (the user's name).
+    # The Pressure Plate Room (FactoryProcessingPuzzle3; named by the user, 2026-10-10): one region, its one door free;
+    # down to the puzzle a one-way without Jump or Bee Fly back up, which only the puzzle's spots need, Jump included.
+    # Its pass's spot, once a location: "Honey Factory: Pressure Plate Room, Behind the Gate" (the user's name).
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )

@@ -1462,6 +1462,20 @@ class TestPuzzle2(BugFablesTestBase):
         self.assertFalse(self.multiworld.get_region("FactoryProcessingPuzzle2", self.player).locations)
 
 
+class TestPressurePlateRoom(BugFablesTestBase):
+    # FactoryProcessingPuzzle3, the Pressure Plate Room (the user, 2026-10-10): its crystal berry behind the pipe, by
+    # its puzzle, Jump, Freeze and the horn.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_berry_by_the_puzzle(self) -> None:
+        spot = self.multiworld.get_location("Honey Factory: Pressure Plate Room, Behind the Pipe", self.player)
+        self.assertEqual(spot.parent_region.name, "FactoryProcessingPuzzle3")
+        for missing in ("Jump", "Progressive Freeze", "Horn Slash"):
+            have = [i for i in ("Jump", "Progressive Freeze", "Horn Slash") if i != missing]
+            self.assertFalse(spot.access_rule(self.state_with(*have)), missing)
+        self.assertTrue(spot.access_rule(self.state_with("Jump", "Progressive Freeze", "Horn Slash")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

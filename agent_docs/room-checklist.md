@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**167 of 244 done.**
+**168 of 244 done.**
 
 ## Outskirts
 
@@ -302,7 +302,9 @@ as it is, a frozen record.
 - [x] FactoryProcessingPuzzle2 (87) — the Training Grounds; one region, its door free; its Factory Pass (212, "Behind
   the Gate": Beemerang Halt, Jump, the Shield) the game's own until Next 67; for the quest pass: the broken Mender (325
   to 328)
-- [ ] FactoryProcessingPuzzle3 (88)
+- [x] FactoryProcessingPuzzle3 (88) — the Pressure Plate Room; one region, its door free; its puzzle (Jump, Freeze,
+  the horn) to crystal berry #16, "Behind the Pipe", location 231, and its Factory Pass (215, "Behind the Gate"),
+  the game's own until Next 67
 - [ ] FactoryProcessingMalbee (89)
 - [ ] FactoryStorageMaze (90)
 - [ ] FactoryStorageElevator (91)

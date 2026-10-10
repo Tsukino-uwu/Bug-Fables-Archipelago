@@ -1775,6 +1775,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   user's): Beemerang Halt (two cranks, `ScrewSwitch`), Jump, the Shield, and a basic attack for a lever, reached only
   with Halt anyway (the user). The drop right of the door is a one-way without Jump; a fall below puts the party back at
   `respawnerleft`. Two bee-bots below, a sign by the door, the broken Mender (325 to 328). No other pickups.
+  **`FactoryProcessingPuzzle3`, the Pressure Plate Room (2026-10-10, the user; named by the user):** a dead end with one
+  door (`loadzone`, to the Pump Room), nothing needed in or out; down the stairs to the puzzle floor a one-way without
+  Jump or Bee Fly back up. The puzzle: two pressure plates (`PressurePlate`, through an `ANDGate`), two droplets up high
+  (`Dropplet`, frozen into blocks) and a honey platform (`PathPlatform`); done with Jump, Freeze and the horn, it opens
+  a gate and takes the party up to both pickups: crystal berry #16 (`cberry`) behind a pipe by the door ("Behind the
+  Pipe", location 231) and the Factory Pass (`keycard - Duplicate`, key item 95, flag 215) behind the gate ("Behind the
+  Gate" once a location) (the user). Map enemies: a Turret and a Denmuki.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
