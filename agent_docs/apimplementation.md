@@ -742,7 +742,8 @@ be wrong.
     with this step they become progression and their spots locations, held out until then (their pickups the game's
     own): "Rubber Prison: Cafeteria, Behind the Cannons" (548: nothing, its left a drop down), the Office's (563),
     "Rubber Prison: Library, On Top of the Bookshelf" (564: Jump and the Beemerang Toss, or Bee Fly) and "Rubber
-    Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a 535 gate), the named ones the user's. A wrong order hands the books back at the scene's end (`:31506`).
+    Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a 535 gate), the named ones the user's. A
+    wrong order hands the books back at the scene's end (`:31506`).
 63. **Berries in the logic** (decided 2026-10-08, the user; to build after the rooms, with the enemy pass, its own
     steps then). Today no berry price is a rule: ordinary berries were taken as renewable from battles (build step 11).
     The banker's Platinum Card ("Bugaria City: Residential District, Banker", 550 berries in all) raised it. The user:
