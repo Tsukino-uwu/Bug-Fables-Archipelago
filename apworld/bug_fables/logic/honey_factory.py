@@ -17,6 +17,7 @@ _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
 _PLATFORMS_RUNNING = "First Room Platforms Running"
 _ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
+_PROCESSING2_UP = _UP & ANY_ATTACK & CanUse("Shield") & (CanUse("Beemerang Halt") | CanUse("Bee Fly"))
 
 LOCATIONS = (
     # The First Room's switch (FactoryProcessingFirstRoom; the user, 2026-10-10), on its right side, hit with a basic
@@ -74,6 +75,10 @@ MAP_AREAS = (
     # (room-logic.md, rule 3). The bottom below: a drop from either side, Jump or Bee Fly up to the right only.
     Area("FactoryProcessingFirstRoom", "Left", ("loadzoneforward",), _ON_THE_PLATFORMS),
     Area("FactoryProcessingFirstRoom", "Bottom", (), one_way(None, _UP), out=_UP),
+    # FactoryProcessing2 (the user, 2026-10-10): the bottom right (the door back to the first room) the map's own region;
+    # up to the top left (the door to the pump room) Jump or Bee Fly, a basic attack for a switch, the Shield, and
+    # Beemerang Halt or Bee Fly; back down a drop, a one-way.
+    Area("FactoryProcessing2", "Top Left", ("loadzone pump",), _PROCESSING2_UP, out=one_way(None, _PROCESSING2_UP)),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )

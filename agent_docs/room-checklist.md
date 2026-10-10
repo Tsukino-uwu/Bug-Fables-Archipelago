@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**163 of 244 done.**
+**164 of 244 done.**
 
 ## Outskirts
 
@@ -291,7 +291,8 @@ as it is, a frozen record.
 - [x] FactoryProcessingFirstRoom (83) — the First Room; its switch (location 70, the Shield's) a basic attack, the
   platforms it starts the only way across (the Shield); the bottom a drop, up to the right only; for the quest pass:
   the tram to Malbee's room (from 211, `Event68`; left to the story, the user)
-- [ ] FactoryProcessing2 (84)
+- [x] FactoryProcessing2 (84) — up to the pump door: Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt
+  or Bee Fly; down a drop; no location
 - [ ] FactoryProcessingPump (85)
 - [ ] FactoryProcessingPuzzle1 (86)
 - [ ] FactoryProcessingPuzzle2 (87)

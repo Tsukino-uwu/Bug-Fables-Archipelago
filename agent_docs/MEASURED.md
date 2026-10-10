@@ -1740,6 +1740,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   user). The tram bot (`trambot`) rides to `FactoryProcessingMalbee` only from flag 211 (line 9, then line 10 runs
   `Event68`, the elevator scene's factory part); `Base/Tram` stands until 211. Map enemies: a Turret by the left door,
   a Denmuki and a bee-bot on the bottom. No pickups or auto-start scenes.
+  **`FactoryProcessing2` (2026-10-10, the user):** two areas. The bottom right: the door back to the first room
+  (`loadzoneback`). The top left, a level up (y 7): the door to the pump room (`loadzone pump`). Up from the bottom
+  right: Jump or Bee Fly, a basic attack for a switch (`switch1`), the Shield, and Beemerang Halt or Bee Fly (two
+  cranks, `ScrewSwitch`, and two moving platforms on the way); down from the top left a drop, a one-way (the user).
+  Map enemies: a bee-bot below, a Denmuki and a Turret up top; a hole. No pickups, flag-switched scenery or auto-start
+  scenes.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

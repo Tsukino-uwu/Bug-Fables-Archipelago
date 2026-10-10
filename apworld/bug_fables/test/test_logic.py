@@ -1376,6 +1376,25 @@ class TestFirstRoom(BugFablesTestBase):
         self.assertTrue(drop.access_rule(self.state_with("Jump", "Shield", "First Room Platforms Running")))
 
 
+class TestProcessing2(BugFablesTestBase):
+    # FactoryProcessing2 (the user, 2026-10-10): up from the bottom right to the top left, Jump or Bee Fly, a basic
+    # attack, the Shield, and Beemerang Halt or Bee Fly; down a drop, a one-way.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_up_to_the_pump_door(self) -> None:
+        up = self.multiworld.get_entrance("FactoryProcessing2 to FactoryProcessing2 (Top Left)", self.player)
+        self.assertFalse(up.access_rule(self.state_with("Jump", "Horn Slash", "Shield")))
+        self.assertFalse(up.access_rule(self.state_with("Bee Fly", "Horn Slash")))
+        self.assertTrue(up.access_rule(self.state_with("Bee Fly", "Horn Slash", "Shield")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Horn Slash", "Shield", "Progressive Beemerang",
+                                                       "Progressive Beemerang")))
+
+    def test_down_is_a_one_way(self) -> None:
+        down = self.multiworld.get_entrance("FactoryProcessing2 (Top Left) to FactoryProcessing2", self.player)
+        self.assertFalse(down.access_rule(self.state_with()))
+        self.assertTrue(down.access_rule(self.state_with("Bee Fly", "Horn Slash", "Shield")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:
