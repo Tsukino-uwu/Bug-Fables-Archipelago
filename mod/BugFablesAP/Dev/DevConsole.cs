@@ -441,6 +441,21 @@ namespace BugFablesAP
                             MainManager.instance.flagvar[GameVars.Tokens] = int.Parse(parts[1]);
                         }
                         return $"tokens: {MainManager.instance.flagvar[GameVars.Tokens]}";
+                    case "flagvar":
+                    {
+                        // flagvar <n> [value]: show or set one of the game's saved counters (24, the pump room's
+                        // scanner).
+                        if (parts.Length < 2)
+                        {
+                            return "flagvar <n> [value]";
+                        }
+                        int slot = int.Parse(parts[1]);
+                        if (parts.Length > 2)
+                        {
+                            MainManager.instance.flagvar[slot] = int.Parse(parts[2]);
+                        }
+                        return $"flagvar[{slot}]: {MainManager.instance.flagvar[slot]}";
+                    }
                     case "killall":
                     {
                         // killall [hp]: every enemy above that HP (0 by default) brought down to it. At 0 only HP is

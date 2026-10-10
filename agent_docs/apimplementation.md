@@ -6181,7 +6181,9 @@ chapters' stand-in, and the five passes stayed the game's own.
 instead of having 3-4"; the five spots' names (two of them asked now: "On Top of the Bookshelf" and "Mini-boss
 Fight"); the two factory checks wait for the quest sweep ("lets save them until the quest sweep"), so Gen and Eri's
 Room's pass is held out until then. Defaults taken: the scanner keeps the game's own flow, the one pass shown three
-times (the mod writes nothing); a hook that fails to install logs an error, as every other hook does; the two locks the
+times (the mod writes nothing), **overturned once seen** (the user, 2026-10-10: a player "might just assume its
+broken/not working if it does not open the first time"): one show opens it, the game's own count filled to its third
+slot (the mod guide, step 54); a hook that fails to install logs an error, as every other hook does; the two locks the
 game pushes the party past from the far side join this step.
 
 **Built:**
@@ -6212,7 +6214,10 @@ not work (Next 68). Seen in the quest sweep, then in seeds, or kept out with Nex
 Tests `TestPool`, `TestSmallPool`, `TestFactoryPass`, `TestLobby`, `TestWorkerRooms`, `TestPumpRoom`, `TestPuzzle1`,
 `TestPuzzle2`, `TestPressurePlateRoom`, `TestStorageMaze`, `TestStorageMinibossRoom`.
 
-**Status:** built (2026-10-10): a seed generates with it; the tests written, to run before the push; not seen in game.
+**Status:** seen (2026-10-10, the user, a new file on a new seed): the pass from the server opening the Lobby's
+processing door, the Storage Maze's lock and the pump room's scanner, on one show each, and still in the bag; the tests
+pass (the suite before the 2026-10-10 push). Not seen: Gen and Eri's Room after Malbee's fight, and the pump room
+reached from Malbee's room before the scanner opens.
 
 *Code: `data/items.json`, `data_types.py` (`Item.kept`), `items.py`, `slot_data.py` (`kept_keys`),
 `logic/honey_factory.py`. The mod: `World/KeptKeys.cs`, `Core/SeedData.cs`.*

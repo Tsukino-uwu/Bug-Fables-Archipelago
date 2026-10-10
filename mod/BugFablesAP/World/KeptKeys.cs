@@ -9,10 +9,13 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // Key items never used up (slot_data kept_keys: the Factory Pass): the lock routine (Event59) leaves the shown key
-    // in the bag instead of its one removal. All after it stays the game's: the lock's flag and scene, the pump room's
-    // scanner counting each show. Only in Event59: a global Remove patch would never end Event193's Prison Key sweep.
+    // in the bag instead of its one removal, and fills the pump room's three-slot scanner at once. All after it stays
+    // the game's: the lock's flag and scene. Only in Event59: a global Remove patch would never end Event193's Prison
+    // Key sweep.
     internal static class KeptKeys
     {
+        // flagvar slot of the pump room's scanner: the keys shown so far, opening at 3.
+        private const int ScannerCount = 24;
         private static ManualLogSource log;
         private static Func<SeedData> seed;
         private static Func<bool> randomizerOn;
@@ -60,6 +63,16 @@ namespace BugFablesAP
                 bool held = bag.Contains(item);
                 log?.LogInfo($"[keys] {map}: key item {item} kept in the bag (this seed's kept_keys); "
                     + $"in the bag: {held}");
+                // The pump room's scanner counts a key per slot and opens at the third: one kept key fills all three,
+                // the count set to two before the game's own increment.
+                if (MainManager.map != null && MainManager.map.mapid == MainManager.Maps.FactoryProcessingPump)
+                {
+                    int[] vars = MainManager.instance.flagvar;
+                    int before = vars[ScannerCount];
+                    vars[ScannerCount] = Math.Max(before, 2);
+                    log?.LogInfo($"[keys] {map}: the scanner's count {before} raised to {vars[ScannerCount]}, the "
+                        + "game's own increment makes the third slot");
+                }
                 return held;
             }
             string why = !on ? "Archipelago off" : data == null ? "no seed"

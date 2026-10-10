@@ -3417,14 +3417,20 @@ has three locks, and the pump room's scanner counts each pass shown in a saved n
 
 With Archipelago on, and only for the key items the seed's `kept_keys` lists, a transpiler in `Event59` turns that one
 removal into a call that leaves the key in the bag. Any other key, a seed without the list, or Archipelago off: taken,
-as in the game. The mod writes nothing; the lock's flag, its scene and sound and the scanner's count stay the game's,
-so the one pass is shown to the scanner three times. Only `Event59` is patched: under a patch on every `Remove`, a
-scene that empties the bag of a key in a loop (the Prison Key sweep, `Event193`) would never end. If the game's code
-no longer has exactly one removal there, the hook leaves `Event59` as it is and logs an error, as every hook does: the
-first lock would then take the seed's one pass. The log says `[keys] installed in EventControl.Event59 (instruction
-N)`, and at each lock which key was kept or taken, and why (Archipelago off, no seed, no `kept_keys`, not a kept key).
+as in the game. The lock's flag, its scene and its sound stay the game's. **The scanner opens on one show** (the user,
+2026-10-10, after showing the one pass three times: a player "might just assume its broken" when the first show
+doesn't open it): at the pump room, the same call raises the scanner's count (`flagvar[24]`, the game's own saved
+counter, used nowhere else) to 2 when it's lower, and the game's own increment then makes 3: its `Slot3` sound, its
+opening scene (`Event96`, flag 217). The count is never taken past where three passes would leave it. The console's
+`flagvar 24 0` with `flag 217 off` resets the scanner for a retry. Only `Event59` is patched: under a patch on every
+`Remove`, a scene that empties the bag of a key in a loop (the Prison Key sweep, `Event193`) would never end. If the
+game's code no longer has exactly one removal there, the hook leaves `Event59` as it is and logs an error, as every
+hook does: the first lock would then take the seed's one pass. The log says `[keys] installed in EventControl.Event59 (instruction
+N)`, and at each lock which key was kept or taken, and why (Archipelago off, no seed, no `kept_keys`, not a kept key);
+at the scanner, the count it raised from and to.
 
-**Status:** built (2026-10-10); not yet seen in game: the hook installed, the pass still in the bag after the Lobby's
-and the Storage Maze's locks, the scanner opening on its third show.
+**Status:** seen (2026-10-10, the user, a new file on a new seed, the pass from the server): the hook installed, the
+pass still in the bag after the Lobby's and the Storage Maze's locks, each opening; the scanner opening on its third
+show (the first build), then on its first (reset with the console).
 
 *Code: `World/KeptKeys.cs`, `Core/SeedData.cs` (`KeptKeys`), `Core/Plugin.cs`; `Dev/SeedDump.cs`.*

@@ -370,6 +370,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   (lost with a reload, the log has them). To test an empty list (2026-10-10). Test files only.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
 - `tokens [n]`: show or set the Termacade's token count (`flagvar[27]`). Test files only.
+- `flagvar <n> [value]`: show or set one of the game's saved counters; `flagvar 24 0` with `flag 217 off` resets the
+  pump room's scanner for a retry (the mod guide, step 54). Test files only.
 - `killall [hp]`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a
   boss a test party can't hit, such as the spider in the air). With a number, every enemy above it brought down to it
   (2026-10-08, the user: to test a scripted HP end, such as the swamp boss's at 10). Test files only.

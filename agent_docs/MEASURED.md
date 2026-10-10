@@ -73,7 +73,7 @@ read, a log or a probe.
 - [The goal flags](#the-goal-flags-2026-10-08-code-read-the-dumps-and-the-games-data-file-the-grass-seen-in-play)
 - [Kabbu's horn tags](#kabbus-horn-tags-2026-10-09-code-read-and-the-taps-il-nothing-seen-in-game)
 - [The lock routine,
-  Event59](#the-lock-routine-event59-2026-10-10-code-read-and-the-installed-dlls-il-nothing-seen-in-game)
+  Event59](#the-lock-routine-event59-2026-10-10-code-read-and-the-installed-dlls-il-seen-2026-10-10)
 - [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-the-user-every-ability-in-hand)
 - [Still to measure](#still-to-measure)
 
@@ -3536,7 +3536,7 @@ Read for build step 63, with a review over every reader. Used by `FieldMoves.cs`
   cubes, but breaks no boulder and dizzies no enemy; the Horn Dash breaks boulders, cuts grass and hits switches, but
   pushes no rock.
 
-## The lock routine, Event59 (2026-10-10, code read and the installed DLL's IL; nothing seen in game)
+## The lock routine, Event59 (2026-10-10, code read and the installed DLL's IL; seen 2026-10-10)
 
 Read for build step 79 (the Factory Pass). Used by `KeptKeys.cs`.
 
@@ -3563,6 +3563,9 @@ Read for build step 79 (the Factory Pass). Used by `KeptKeys.cs`.
   `|giveitem,1,95,7|` with no caller (`EventControl.cs:17337`), then flag 221 (`:17368`) and prize medal 11
   (`:17369`). Nothing else in the decompiled game adds, checks or removes 95; `Event197`'s `Remove(spt)` is another
   item (`spt` is 135, 136 or 137, `:32687-32689`).
+- **Seen (2026-10-10, the user, a new file, the one kept pass):** the Lobby's lock and the Storage Maze's lock each
+  opened on one show; the pump room's scanner opened on the third show of the same pass (the game's count), then, reset
+  (`flag 217 off`, `flagvar[24]` 0) with the count filled by the mod, on the first. The pass stayed in the bag each time.
 - **Not every key removal is `Event59`:** `Event193` empties the bag of Prison Keys in a loop, `while
   (items[1].Contains(161)) items[1].Remove(161);` (`:32140-32143`), and `Event72`'s slot removes its picked item
   (`:11383`).
