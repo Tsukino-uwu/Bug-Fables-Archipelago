@@ -760,6 +760,27 @@ class TestCafeteria(_PrisonRoom):
         self.assertTrue(up(self.state_with("Bee Fly")))
 
 
+class TestGym(_PrisonRoom):
+    # RubberPrisonGym, the Gym (the user, 2026-10-10): up to the top left by its crank puzzle, Beemerang Halt (no Jump),
+    # its Prison Key there; back down a drop.
+    MAP = "RubberPrisonGym"
+    HALT = ("Progressive Beemerang", "Progressive Beemerang")
+
+    def test_up_and_down(self) -> None:
+        up = self.way(f"{self.MAP} to {self.MAP} (Top Left)")
+        self.assertFalse(up(self.state_with("Jump", "Bee Fly", "Progressive Beemerang")))
+        self.assertTrue(up(self.state_with(*self.HALT)))
+        down = self.way(f"{self.MAP} (Top Left) to {self.MAP}")
+        self.assertFalse(down(self.state_with("Bee Fly")))
+        self.assertTrue(down(self.state_with(*self.HALT)))
+
+    def test_the_key(self) -> None:
+        key = self.spot("Rubber Prison: Gym, Crank Puzzle")
+        self.assertEqual(key.parent_region.name, f"{self.MAP} (Top Left)")
+        self.assertFalse(key.access_rule(self.state_with("Jump", "Progressive Beemerang")))
+        self.assertTrue(key.access_rule(self.state_with(*self.HALT)))
+
+
 class TestPrisonKey(BugFablesTestBase):
     # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The Pier's
     # comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.
@@ -769,7 +790,7 @@ class TestPrisonKey(BugFablesTestBase):
         from ..data_tables import vanilla_item
         names = {loc.name for loc in self.world.included_locations if vanilla_item(loc) == "Prison Key"}
         self.assertEqual(names, {"Rubber Prison: Pier, Second Floor Fight", "Rubber Prison: Spike Room, In the Cage",
-                                 "Rubber Prison: Electric Cells, Middle Right Cell"})
+                                 "Rubber Prison: Electric Cells, Middle Right Cell", "Rubber Prison: Gym, Crank Puzzle"})
 
     def test_the_fight_needs_kabbu(self) -> None:
         fight = self.multiworld.get_location("Rubber Prison: Pier, Second Floor Fight", self.player)

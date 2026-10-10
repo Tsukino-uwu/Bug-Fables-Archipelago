@@ -49,6 +49,10 @@ LOCATIONS = (
              rule=ANY_ATTACK & (CanUse("Beetle Dig")
                                 | CanReachRegion("RubberPrisonCells2 (Upper)") & one_way(None, CanUse("Shield"))),
              no_jump=True),
+    # The Gym's Prison Key, on its top left, up the room's crank puzzle: Beemerang Halt, no Jump needed (the user).
+    Location("Rubber Prison: Gym, Crank Puzzle", 244, "RubberPrisonGym",
+             Source(flag=551, pickup=Pickup(map="RubberPrisonGym", type=1, item=161)),
+             rule=CanUse("Beemerang Halt"), no_jump=True, area="Top Left"),
 )
 STORY_EVENTS = (
     # The lift lever on the ground floor's upper right, any attack: the lift between the dock and it runs for good.
@@ -136,6 +140,9 @@ MAP_AREAS = (
     # Wooden Crank (Next 62): "Behind the Cannons" (the blue History Book on the left, 548, the user's name), nothing
     # needed.
     Area("RubberPrisonCafeteria", "Left", (), one_way(None, _UP), out=_UP),
+    # The Gym (RubberPrisonGym): its door free, the map's own region; up to the top left by the room's crank puzzle,
+    # Beemerang Halt (no Jump); back down a drop (the user, 2026-10-10). Loading it sets the prison's gate flag 535 off.
+    Area("RubberPrisonGym", "Top Left", (), CanUse("Beemerang Halt"), out=one_way(None, CanUse("Beemerang Halt"))),
 )
 
 TRANSFERS = (

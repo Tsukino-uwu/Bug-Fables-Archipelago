@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**180 of 244 done.**
+**181 of 244 done.**
 
 ## Outskirts
 
@@ -355,7 +355,9 @@ as it is, a frozen record.
 - [x] RubberPrisonCafeteria (224) — the Cafeteria; its left a drop down, back up with Jump or Bee Fly; its cannon
   lever (549) never needed; with Next 62: "Behind the Cannons" (the blue History Book, 548); for the enemy pass:
   a Wasp Bomber (gone from 79)
-- [ ] RubberPrisonGym (225)
+- [x] RubberPrisonGym (225) — the Gym; its door free; up to the top left by its crank puzzle, Beemerang Halt, a drop
+  back down; "Crank Puzzle" there, the Prison Key (build step 82); loading it sets 535 off; for the enemy pass: a Wasp
+  Driller (top left) and a trooper, gone from 79; from 79, six prisoners and a soldier
 - [ ] RubberPrisonSecurity (226)
 - [ ] RubberPrisonOffice (229)
 - [ ] RubberPrisonThirdFloor (230)

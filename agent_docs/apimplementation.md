@@ -3444,7 +3444,8 @@ the bottom doors across the electric floor, the Shield or Bee Fly; up on the ele
 a drop; "Middle Right Cell", the Prison Key, and "Bottom Right Cell", a Poison Cake; the top door behind the Prison
 Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's invisible walls hidden, build step
 83; its History Book and Book Puzzle spots with Next 62), 179 of 244; the Cafeteria (its left a drop down, Jump or
-Bee Fly back up; its History Book, "Behind the Cannons", with Next 62), 180 of 244; the rest of `room-checklist.md` to go.
+Bee Fly back up; its History Book, "Behind the Cannons", with Next 62), 180 of 244; the Gym (up to the top left by its
+crank puzzle, Beemerang Halt, a drop back down; "Crank Puzzle", its Prison Key, build step 82), 181 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6298,9 +6299,10 @@ Cage" (the Spike Room) and "Middle Right Cell" (Electric Cells), with "Second Fl
 - **The pool:** "Prison Key" (161, progression), *kept* in `items.json`, once however many spots; `kept_keys` becomes
   `[95, 161]` by itself. The mod (the mod guide, steps 54 and 55) keeps it at every `Event59` lock and through the
   bridge scene, whose three key spots stay until taken.
-- **Three spots in seeds:** "Rubber Prison: Pier, Second Floor Fight" (240, the dropped key's flag 584; the fight
-  brings a Wasp Bomber, so Kabbu), "Rubber Prison: Spike Room, In the Cage" (241, 536: Bee Fly and an attack) and
-  "Rubber Prison: Electric Cells, Middle Right Cell" (242, 545: an attack). The Gym's waits for its room.
+- **Four spots in seeds:** "Rubber Prison: Pier, Second Floor Fight" (240, the dropped key's flag 584; the fight
+  brings a Wasp Bomber, so Kabbu), "Rubber Prison: Spike Room, In the Cage" (241, 536: Bee Fly and an attack),
+  "Rubber Prison: Electric Cells, Middle Right Cell" (242, 545: an attack) and "Rubber Prison: Gym, Crank Puzzle"
+  (244, 551: Beemerang Halt; added with the Gym, the same day, the user's name).
 - **The locks:** `PRISON_KEY` on the Spike Room's top door, the Cell Block Crossroads' bottom left door and Electric
   Cells' top door, each a pushed-past area (seen); the Giant's Lair Bridge's with its room.
 - **With the same rooms:** "Rubber Prison: Electric Cells, Bottom Right Cell" (243, the Poison Cake, 631: an attack,
