@@ -101,8 +101,9 @@ MAP_AREAS = (
          out=one_way(CanUse("Bee Fly"), _PUMP_UP)),
     # FactoryProcessingPuzzle1 (the user, 2026-10-10): one region, its one door free; its only pickup, a Factory Pass,
     # stays the game's own until Next 67 (FACTORY_PASS).
-    # FactoryProcessingPuzzle2 (the user, 2026-10-10): the same; the drop right of its door a one-way without Jump, to
-    # the pass's side only.
+    # The Training Grounds (FactoryProcessingPuzzle2; named by the user, 2026-10-10, after its sign): the same; the drop
+    # right of its door a one-way without Jump, to the pass's side only. Its pass's spot, once a location: "Honey
+    # Factory: Training Grounds, Behind the Gate" (the user's name).
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )

@@ -299,8 +299,9 @@ as it is, a frozen record.
 - [x] FactoryProcessingPuzzle1 (86) — one region, its door free; its Factory Pass (213: Jump, Freeze, the Shield, a
   basic attack, Gen and Eri's fight with Vi, the holler) the game's own until Next 67; for Next 68: Gen and Eri's scene
   (`Event97`) needs them, gone from 211
-- [x] FactoryProcessingPuzzle2 (87) — one region, its door free; its Factory Pass (212: Beemerang Halt, Jump, the
-  Shield) the game's own until Next 67; for the quest pass: the broken Mender (325 to 328)
+- [x] FactoryProcessingPuzzle2 (87) — the Training Grounds; one region, its door free; its Factory Pass (212, "Behind
+  the Gate": Beemerang Halt, Jump, the Shield) the game's own until Next 67; for the quest pass: the broken Mender (325
+  to 328)
 - [ ] FactoryProcessingPuzzle3 (88)
 - [ ] FactoryProcessingMalbee (89)
 - [ ] FactoryStorageMaze (90)
