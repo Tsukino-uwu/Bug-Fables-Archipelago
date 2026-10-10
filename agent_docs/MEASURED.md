@@ -3292,7 +3292,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `canescape: false`, its summons enemies 28 and 25, `BattleControl.cs` ~22751-23124), then 79 (`:32078`) and the
   second part's 584, 567, 551, 545 and its key sweep (kept by the mod, seen). After it, the middle's ant tunnel and the
   right, the Wasp Queen waiting, a plain walk. `Event194` (the right's trigger `eventgl`, until 568): its first visit
-  a talk from entity 11 (Vanessa, from 79) setting 346; its next the walk off right, a chapter title (`ChapterName(5)`,
+  a talk from entity 11 (Vanessa, from 79) setting 346, one of the game's seven artifact flags (the goal flags,
+  below; its artifact shown in the pause menu after, the user's screenshot); its next the walk off right, a chapter title (`ChapterName(5)`,
   shown as chapter 7, the user), `LoadMap(232)`, then 568 (the bridge's right door). Played in order: no freeze (seen).
   Arriving through the Giant's Lair's door before 79: pushed past the sealed wall (`Base/Gate`, no collider; the Wasp
   King standing there), and the trigger froze the game. With build step 85 (the trigger held, the door kept, the wall
