@@ -1000,6 +1000,27 @@ class TestCraneCrossing(_PrisonRoom):
         self.assertTrue(self.way(f"{self.MAP} (Right) to {self.MAP} (Middle Right)")(self.state_with()))
 
 
+class TestOutsideTheFridge(_PrisonRoom):
+    # GiantLairFridgeOutside, Outside the Fridge (the user, 2026-10-11): the explorers' fight (a Dead Lander that never
+    # lands, so Vi) between its halves, started from either side.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "starting_party_member": "kabbu"}
+    MAP = "GiantLairFridgeOutside"
+
+    def test_the_fight(self) -> None:
+        for name, region in (("Giant's Lair: Outside the Fridge, Dead Lander Fight", self.MAP),
+                             ("Giant's Lair: Outside the Fridge, Dead Lander Fight from the Right",
+                              f"{self.MAP} (Right)")):
+            with self.subTest(fight=name):
+                fight = self.spot(name)
+                self.assertEqual(fight.parent_region.name, region)
+                self.assertFalse(fight.access_rule(self.state_with("Leif", "Bee Fly", "Horn Slash")))
+                self.assertTrue(fight.access_rule(self.state_with("Vi")))
+        for name in (f"{self.MAP} to {self.MAP} (Right)", f"{self.MAP} (Right) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Vi", "Bee Fly")))
+                self.assertTrue(self.way(name)(self.state_with("Outside the Fridge Fight Won")))
+
+
 class TestPrisonKey(BugFablesTestBase):
     # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The
     # Pier's comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.

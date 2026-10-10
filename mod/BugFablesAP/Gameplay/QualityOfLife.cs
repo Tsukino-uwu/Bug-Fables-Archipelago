@@ -97,6 +97,9 @@ namespace BugFablesAP
             new Scene { Map = "BeehiveScannerRoom", Event = 84, Flags = null },
             // The Venus bud at the Giant's Lair Entrance: it grows, talks, shrinks and is moved, so fast-forwarded.
             new Scene { Map = "GiantLairEntrance", Event = 194, Flags = null },
+            // The explorers' stand outside the giant's fridge: talk, a fight (at normal speed), talk, flag 593 and the
+            // map built again, so fast-forwarded.
+            new Scene { Map = "GiantLairFridgeOutside", Event = 198, Flags = null },
         };
 
         // A talk trigger that starts by itself on entering (a DialogueTrigger with data[2] 1) opens its line with no

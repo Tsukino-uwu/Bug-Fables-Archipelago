@@ -2,19 +2,20 @@
 doors, and what the seed changes there."""
 from __future__ import annotations
 
-from rule_builder.rules import Rule
+from rule_builder.rules import Has, Rule
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Pickup, Source, Transfer
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, Member, one_way
+from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
 
 # Up a bounce pad onto a rock, Jump, then the rock knocked with the horn into the hand, which opens the next pad; the
 # hand lets go whenever the room is left.
 _HAND_ROCK: Rule = CanUse("Jump") & CanUse("Horn Slash")
-# Dead Lands 2's coin stacks from its left: the droplet by the flower frozen, the ice knocked with the horn to climb the
-# gold coins, then Bee Fly over to the silver ones.
+# Crane Crossing's coin stacks from its left: the droplet by the flower frozen, the ice knocked with the horn to climb
+# the gold coins, then Bee Fly over to the silver ones.
 _COINS: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Bee Fly")
 # Its right: Bee Fly, and an attack on the switch that moves a platform across.
 _TO_THE_RIGHT: Rule = CanUse("Bee Fly") & ANY_ATTACK
+_FRIDGE_FIGHT = "Outside the Fridge Fight Won"
 
 LOCATIONS = (
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
@@ -29,6 +30,16 @@ LOCATIONS = (
     Location("Giant's Lair: Crane Crossing, Ledge by the Crossing", 249, "GiantLairDeadLands2",
              Source(flag=611, pickup=Pickup(map="GiantLairDeadLands2", type=2, item=75)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Middle Right"),
+)
+
+STORY_EVENTS = (
+    # Outside the Fridge (GiantLairFridgeOutside): walking towards the middle from either door starts Event198, a fight
+    # with DeadLanderA, B and G (enemies 87-89; B flies and never comes down, so Vi), which can't be fled; then 593
+    # (the user, 2026-10-11: from both sides, seen).
+    StoryEvent("Giant's Lair: Outside the Fridge, Dead Lander Fight", _FRIDGE_FIGHT, "GiantLairFridgeOutside",
+               Source(flag=593), rule=Member("Vi"), no_jump=True),
+    StoryEvent("Giant's Lair: Outside the Fridge, Dead Lander Fight from the Right", _FRIDGE_FIGHT,
+               "GiantLairFridgeOutside", Source(flag=593), rule=Member("Vi"), no_jump=True, area="Right"),
 )
 
 # The Giant's Lair Entrance (GiantLairEntrance; named by the user, 2026-10-11): one region, nothing needed between its
@@ -52,6 +63,9 @@ MAP_AREAS = (
          to="GiantLairDeadLands2 (Silver Coins)"),
     Area("GiantLairDeadLands2", "Right", ("loadzonenext",), _TO_THE_RIGHT, out=one_way(None, _TO_THE_RIGHT),
          to="GiantLairDeadLands2 (Middle Right)"),
+    # Outside the Fridge (GiantLairFridgeOutside; named by the user, 2026-10-11): its left (the door to Crane Crossing, a
+    # save crystal) the map's own region; its right (the fridge's door) past the fight, nothing else needed.
+    Area("GiantLairFridgeOutside", "Right", ("fridgeloadzone",), Has(_FRIDGE_FIGHT)),
 )
 
 TRANSFERS = (

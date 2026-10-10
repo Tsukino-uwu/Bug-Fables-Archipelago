@@ -3345,6 +3345,15 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   to the fridge outside, `loadzonenext`) also has a red save crystal (`redcrystal`) that heals but doesn't save, up
   with Freeze, the horn and Jump (the second droplet). The game's text names none of the coins, the book, the spear or
   the crane (`textsearch`). Three Dead Landers (copies of `DeadLanderA` and `DeadLanderB`).
+- **Outside the Fridge** (`GiantLairFridgeOutside`, 2026-10-11, the user on screen, named by the user; EntityDump,
+  code read): the left door (to Crane Crossing) and a save crystal; walking towards the middle from either door starts
+  `Event198` (`event`, until 593): talk, then a fight with Dead Landers α, β and γ (enemies 87-89, `canescape: false`;
+  β starts Flying and is `cantfall`, so only Vi's attacks reach it, the enemy table and "Who can hit what" above),
+  talk, 594 off, 593 on, `LoadMap()`. The explorers (Elizant, Maki, Kina, Yin, Mothiva, Zasp) stand by the fridge from
+  593 until 586. The right door (the fridge's, `fridgeloadzone`); nothing else needed either way (the user). Roy's
+  quest ends here: `royevent` (from 703 until 704) runs `Event223`, the same fight, then 704, a Bond Berry
+  (`giveitem,1,84`) and `CompleteQuest(62)`; quest 62 is "A New Hope", on the boards from 555 (`QuestDump`); from 704
+  Roy, a warden and two Krawlers stand there. No pickup.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

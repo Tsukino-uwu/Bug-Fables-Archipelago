@@ -1078,6 +1078,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    from 569) takes its spot. A skip by its flags would leave the room as it stood until the map is built again, so it
    is fast-forwarded (a `Scenes` row, `Flags = null`). **Seen (2026-10-11):** "the speedup cutscene
    worked" (the user), the log's `[qol] scene over: normal speed`.
+   **Outside the Fridge's fight** (2026-10-11, mapping the room: "can we speedup the cutscene before & after the
+   fight?"): `Event198` talks, starts a fight with three Dead Landers, talks again, sets 593 and builds the map again;
+   fast-forwarded (a `Scenes` row), the fight at the game's own speed as in every sped-up scene. **Seen (2026-10-11):**
+   from both doors, the log's `[qol] Event198: passing it by at speed`, then `scene over: normal speed`.
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

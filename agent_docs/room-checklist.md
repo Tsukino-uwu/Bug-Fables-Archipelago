@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**187 of 244 done.**
+**189 of 244 done.**
 
 ## Outskirts
 
@@ -391,8 +391,19 @@ as it is, a frozen record.
   Crystal Berry 49, Beetle Dig: "Giant's Lair: Giant's Hand, Dig Spot") the map's own region; the lower right across
   the platforms with Bee Fly, both ways; the right door's ledge up by the hand's rock only (Jump and Horn Slash, the hand
   letting go whenever the room is left), a free drop down; for the enemy pass: three Dead Landers
-- [ ] GiantLairDeadLands2 (234)
-- [ ] GiantLairFridgeOutside (235)
+- [x] GiantLairDeadLands2 (234) — Crane Crossing (named by the user); its left (the Giant's Hand's door on a ledge,
+  a bounce pad back up) the map's own region; up the coin stacks to the silver coins (Freeze, Horn Slash, Bee Fly), a
+  drop back; down to the middle right, back up with Jump; the middle right's Mystery Berry by the spear (respawning,
+  Jump or Bee Fly: "By the Spear") and the Status Mirror on a ledge by the crossing (Bee Fly: "Ledge by the
+  Crossing"); on to the right (the door to the fridge outside) with Bee Fly and the switch's crane platform, back by
+  a red bounce pad; Bee Fly alone across, harder, left out (Next 71); a red crystal that only heals; for the enemy
+  pass: three Dead Landers
+- [x] GiantLairFridgeOutside (235) — Outside the Fridge (named by the user); its left (Crane Crossing's door, a save
+  crystal) the map's own region; the right (the fridge's door) past the explorers' fight (Event198: Dead Landers α, β
+  and γ, β flying for good, so Vi; no fleeing; flag 593), started from either side (seen); nothing else needed; its
+  scene fast-forwarded with *Skip cutscenes*; Roy's quest's last step here (quest 62, Event223, from 703: the same
+  fight, then a Bond Berry), out of the seed until that quest is gone through (build step 44); no location; for the
+  enemy pass: the fight
 - [ ] GiantLairFridgeInside (236)
 - [ ] GiantLairRoachVillage (237)
 - [ ] GiantLairSaplingPlains (238)
