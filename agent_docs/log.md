@@ -91,6 +91,7 @@ either one wrong).
 - [2026-10-09: the Defiant Root done, the Ancient Castle mapped to its boss; the key chains held out](#2026-10-09-the-defiant-root-done-the-ancient-castle-mapped-to-its-boss-the-key-chains-held-out)
 - [2026-10-10: the castle finished, the Bee Kingdom begun; the Scanner Room kept between; load times measured](#2026-10-10-the-castle-finished-the-bee-kingdom-begun-the-scanner-room-kept-between-load-times-measured)
 - [2026-10-10: the Bee Kingdom finished, the Honey Factory mapped; Tattle and Relay from the start](#2026-10-10-the-bee-kingdom-finished-the-honey-factory-mapped-tattle-and-relay-from-the-start)
+- [2026-10-10: the Pier mapped, the Factory Pass never used up, an accidental goal and its fix](#2026-10-10-the-pier-mapped-the-factory-pass-never-used-up-an-accidental-goal-and-its-fix)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4019,3 +4020,48 @@ either one wrong).
   place. The test file as left: flag 218 off (the escort reset twice), flag 10 off, the whole party back. Next room
   `RubberPrisonPier` (218); still to ask: when to build the Peculiar Gem, the Core's finale A or B, the Next 68 census
   (about a million tokens, the user's OK).
+
+## 2026-10-10: the Pier mapped, the Factory Pass never used up, an accidental goal and its fix
+
+- **Setup:** a new seed, `AP_80216874502571128696` (the user's pick over the old one, for locations 211-234), from the
+  same player file, in session d6b50c25's scratchpad (`out/`, `players/`), hosted with Start-Process on 38281 (PID
+  16216); the user's test file moved over with `AdoptSeed` (still on in the game's config). The console's command file
+  is still session bed6439d's `cmds.txt`. Live slot_data written by hand from that scratchpad's `live.json` (plus the
+  save crystal: `live-pier2.json`) once the Factory Pass build was mid-change, so its tables never reached the seed.
+- **The Honey Factory review, run again:** six findings confirmed (the pass stand-in looser than the game, enough to
+  strand a seed with default options; two pushed-past locks written as door rules; four stale docs), one refuted; all
+  fixed through the Factory Pass build.
+- **Room 174 of 244, the Pier** (the user's name and description, area by area): four floors of bridges, every drop
+  written, counting with Points of No Return until the rooms behind give a way back up; the ground floor's gates (the
+  gate levers' tutorial, jumped or flown round), its lower part and lift; both doors to the Giant's Lair Bridge
+  pushed-past one-ways (seen). Kept in a seed: the third floor bridge the Office's crank drops (build step 78, seen
+  twice) and a save crystal vanilla never shows (build step 80, seen). The Wasp Driller's Prison Key, "Second Floor
+  Fight", waits for Next 69 (the Prison Key never used up, the user's pick). The gate levers flip one prison-wide flag
+  (535); a code sweep's facts in `MEASURED.md` (the bridge scene sets 79 with 584, 567, 551, 545 and empties the bag
+  of Prison Keys; the Gym resets 535; discovery 47 on arrival).
+- **The Factory Pass, never used up** (build step 79, mod guide step 54; the user: "Build Next 67 now"): a research
+  workflow, a build workflow, two reviews (both findings sets checked and fixed). Names from the user: "On Top of the
+  Bookshelf" (235, after warping in to look) and "Mini-boss Fight" (239). Gen and Eri's Room's pass (236) held out and
+  the two factory checks left for the quest sweep (the user: "lets save them until the quest sweep").
+- **Wrong turn, the worst of the session:** `flag 41 on`, typed to test the save crystal, set the first boss's
+  artifact flag; the goal guard kept it as the console's choice, the mod sent the goal, and the server released the
+  seed's world (the user: "accidently sending a goal, is just as bad as having a impossible/invalid seed generation").
+  Fixed in `12d76a8`: the console refuses a goal flag without the word `goal`. The seed is finished; the user kept
+  mapping on it. **Smaller ones:** a `liveslot` re-entered the Pier right as the crank's scene ended; a question named a
+  door by its far room ("the checkpoint corridor ?"), where the user wanted the floor and the side (for that room only,
+  the user: a memory saved for it was removed at their word); questions asked before the user had finished describing;
+  one multi-replace by a Python script where Edit was the rule.
+- **Rules from the user:** nothing in a seed ever goes away (`CLAUDE.md`, `room-logic.md`); ordinary enemies always
+  present, for the berry rule (Next 63). **Decided:** the later chapters' stand-in stays as it is, its comment made true
+  (the user: every room is mapped before the next release). **Asked, research running at the handoff:** a best-effort
+  option to place Jump, Bee Fly or both as late as possible, never failing a seed (the user, after Pokémon Emerald's
+  early Fly), and whether early and late can reach other worlds.
+- **Seen:** the Pier's ways, both right doors pushing past, the kept bridge, the kept crystal, the bridge guard not
+  blocking. **Not seen:** the Factory Pass hook (plugin `4237EF77A9E0` copied; the game closed before it reloaded),
+  locations 235-239, the console's refusal. **Tests written and unrun** (the suite and the fuzzer before the next push):
+  `TestPier`, `TestPierPointsOfNoReturn`, `TestFactoryPass`, `TestPool`'s kept key, and the factory room tests.
+  Nothing pushed.
+- **Handoff (the user: "I closed the game for now, you can close the server as well"):** both closed and checked gone.
+  Next room `RubberPrisonCheckpointCorridor` (219), its data draft given (name offered: "Checkpoint Corridor"); a new
+  seed is needed (this one is finished, and the Factory Pass needs one). Still to ask: the Peculiar Gem, the Core's
+  finale A or B, the Next 68 census.
