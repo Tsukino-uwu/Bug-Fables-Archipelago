@@ -1443,7 +1443,8 @@ class TestPumpRoom(BugFablesTestBase):
 
 
 class TestPuzzle1(BugFablesTestBase):
-    # FactoryProcessingPuzzle1 (the user, 2026-10-10): one region, its door free; its Factory Pass not a location yet.
+    # FactoryProcessingPuzzle1, Gen and Eri's Room (the user, 2026-10-10): one region, its door free; its Factory Pass
+    # not a location yet.
     def test_one_region_no_location(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player)
                  if r.name.startswith("FactoryProcessingPuzzle1")}

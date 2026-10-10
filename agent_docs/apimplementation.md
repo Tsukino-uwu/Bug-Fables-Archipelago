@@ -3324,11 +3324,11 @@ free, the gate to the boss arena the story's), 162 of 244; the First Room (its s
 attack, its story-order stand-in gone; across only on the platforms it starts, the Shield, since Bee Fly works only
 before the switch; the bottom a drop, up to the right only; the tram left to the story), 163 of 244;
 the Second Room (up to the pump door Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly;
-down a drop; no location), 164 of 244; the Pump Room (up on the cranks, Beemerang Halt, then the platform loop,
-Jump and the Shield; the Shell Ointment behind the boxes, location 230, the Shield or Bee Fly; Malbee's door behind
-the Factory Pass scanner, a stand-in until Next 67), 165 of 244; the first puzzle room (one region, its door free; its
-Factory Pass the game's own until Next 67), 166 of 244; the Training Grounds, the second puzzle room (the same; its
-pass Beemerang Halt, Jump and the Shield), 167 of 244; the rest of `room-checklist.md` to go.
+down a drop; no location), 164 of 244; the Pump Room (up on the cranks, Beemerang Halt, then the platform loop, Jump and
+the Shield; the Shell Ointment behind the boxes, location 230, the Shield or Bee Fly; Malbee's door behind the Factory
+Pass scanner, a stand-in until Next 67), 165 of 244; Gen and Eri's Room, the first puzzle room (one region, its door
+free; its Factory Pass the game's own until Next 67), 166 of 244; the Training Grounds, the second puzzle room (the
+same; its pass Beemerang Halt, Jump and the Shield), 167 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

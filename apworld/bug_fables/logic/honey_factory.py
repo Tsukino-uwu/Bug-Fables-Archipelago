@@ -99,8 +99,9 @@ MAP_AREAS = (
     Area("FactoryProcessingPump", "Upper Left", ("loadzonepuzzle3",), _PUMP_UP, out=one_way(None, _PUMP_UP)),
     Area("FactoryProcessingPump", "Upper Right", ("loadzonepuzzle2",), _PUMP_UP,
          out=one_way(CanUse("Bee Fly"), _PUMP_UP)),
-    # FactoryProcessingPuzzle1 (the user, 2026-10-10): one region, its one door free; its only pickup, a Factory Pass,
-    # stays the game's own until Next 67 (FACTORY_PASS).
+    # Gen and Eri's Room (FactoryProcessingPuzzle1; named by the user, 2026-10-10): one region, its one door free; its
+    # only pickup, a Factory Pass, stays the game's own until Next 67 (FACTORY_PASS); its spot, once a location: "Honey
+    # Factory: Gen and Eri's Room, By the Lever" (the user's name).
     # The Training Grounds (FactoryProcessingPuzzle2; named by the user, 2026-10-10, after its sign): the same; the drop
     # right of its door a one-way without Jump, to the pass's side only. Its pass's spot, once a location: "Honey
     # Factory: Training Grounds, Behind the Gate" (the user's name).

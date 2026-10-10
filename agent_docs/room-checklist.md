@@ -296,9 +296,9 @@ as it is, a frozen record.
 - [x] FactoryProcessingPump (85) — the Pump Room; up on the cranks (Beemerang Halt), then the platform loop (Jump and
   the Shield); the Shell Ointment behind the boxes, location 230; Malbee's door behind the Factory Pass scanner (a
   stand-in until Next 67); for the quest pass: the broken Mender (325 to 327)
-- [x] FactoryProcessingPuzzle1 (86) — one region, its door free; its Factory Pass (213: Jump, Freeze, the Shield, a
-  basic attack, Gen and Eri's fight with Vi, the holler) the game's own until Next 67; for Next 68: Gen and Eri's scene
-  (`Event97`) needs them, gone from 211
+- [x] FactoryProcessingPuzzle1 (86) — Gen and Eri's Room; one region, its door free; its Factory Pass (213, "By the
+  Lever": Jump, Freeze, the Shield, a basic attack, Gen and Eri's fight with Vi, the holler) the game's own until Next
+  67; for Next 68: Gen and Eri's scene (`Event97`) needs them, gone from 211
 - [x] FactoryProcessingPuzzle2 (87) — the Training Grounds; one region, its door free; its Factory Pass (212, "Behind
   the Gate": Beemerang Halt, Jump, the Shield) the game's own until Next 67; for the quest pass: the broken Mender (325
   to 328)
