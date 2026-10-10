@@ -748,7 +748,7 @@ class TestLibrary(_PrisonRoom):
 
 class TestCafeteria(_PrisonRoom):
     # RubberPrisonCafeteria, the Cafeteria (the user, 2026-10-10): its left a drop down, back up with Jump or Bee Fly;
-    # the switch there only stops the boulders.
+    # the cannon lever there only turns the cannons off.
     MAP = "RubberPrisonCafeteria"
 
     def test_the_drop(self) -> None:

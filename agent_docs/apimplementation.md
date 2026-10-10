@@ -740,9 +740,9 @@ be wrong.
     flag 561, behind the bookshelf the History Book puzzle slides away, `Event191`, flag 554; the user's name). The
     puzzle takes the four History Books (key items 163 blue, 164 green, 165 yellow, 166 red, placed in that order), so
     with this step they become progression and their spots locations, held out until then (their pickups the game's
-    own): the Cafeteria's (548), the Office's (563), "Rubber Prison: Library, On Top of the Bookshelf" (564: Jump and
-    the Beemerang Toss, or Bee Fly) and "Rubber Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a
-    535 gate), the last two the user's names. A wrong order hands the books back at the scene's end (`:31506`).
+    own): "Rubber Prison: Cafeteria, Behind the Cannons" (548: nothing, its left a drop down), the Office's (563),
+    "Rubber Prison: Library, On Top of the Bookshelf" (564: Jump and the Beemerang Toss, or Bee Fly) and "Rubber
+    Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a 535 gate), the named ones the user's. A wrong order hands the books back at the scene's end (`:31506`).
 63. **Berries in the logic** (decided 2026-10-08, the user; to build after the rooms, with the enemy pass, its own
     steps then). Today no berry price is a rule: ordinary berries were taken as renewable from battles (build step 11).
     The banker's Platinum Card ("Bugaria City: Residential District, Banker", 550 berries in all) raised it. The user:
@@ -3443,7 +3443,7 @@ the bottom doors across the electric floor, the Shield or Bee Fly; up on the ele
 a drop; "Middle Right Cell", the Prison Key, and "Bottom Right Cell", a Poison Cake; the top door behind the Prison
 Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's invisible walls hidden, build step
 83; its History Book and Book Puzzle spots with Next 62), 179 of 244; the Cafeteria (its left a drop down, Jump or
-Bee Fly back up; its History Book with Next 62), 180 of 244; the rest of `room-checklist.md` to go.
+Bee Fly back up; its History Book, "Behind the Cannons", with Next 62), 180 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

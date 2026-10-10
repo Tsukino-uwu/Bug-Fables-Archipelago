@@ -3251,9 +3251,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   renderer; `fence (1)` the rail's own), found with `solids`; with those two off (the console's `hide`), the rail was
   jumped over onto the shelves. Nothing else in the game reads 163-166 (only `Event191`).
 - **The Cafeteria** (`RubberPrisonCafeteria`, 2026-10-10, the user on screen): its door on the right, raised; the left
-  a drop down, back up with Jump or Bee Fly; the blue History Book there (548) needs nothing. Its lever (`cannonswitch`,
-  549) turns the rolling boulders off and on, each hit, and stays as left after re-entering (549 seen on): it only
-  makes the way back up easier, never needed.
+  a drop down, back up with Jump or Bee Fly; the blue History Book there (548), past the cannons, needs nothing. The
+  cannons (the game's word: "Those cannons are used to keep order around here!", its line 2) fire rolling rocks
+  (`RollingRock`); their lever (`cannonswitch`, 549) turns them off and on, each hit, and stays as left after
+  re-entering (549 seen on): it only makes the way back up easier, never needed.
 - **The Prison Key's sources and locks** (2026-10-10, EntityDump and code read): four `PrisonDoor` locks (`Event59` key
   index 17: 537, 539, 542, 567) and four keys: the Pier's `ShwKEY wasp`, whose death drops a key-item pickup of
   `vectordata[0].x` (161) when `vectordata[0].y` is -2, its flag the enemy's `limit[0]` (584,

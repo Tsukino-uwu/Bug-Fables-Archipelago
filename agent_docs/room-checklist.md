@@ -352,8 +352,8 @@ as it is, a frozen record.
 - [x] RubberPrisonLibrary (223) — the Library; up the stairs, Jump or Bee Fly; the rail's invisible walls hidden (build
   step 83); with Next 62: "On Top of the Bookshelf" (the yellow History Book) and "Book Puzzle" (the Wooden Crank
   behind the shelf the four History Books slide away); for the enemy pass: a wasp and a ruffian (gone from 79)
-- [x] RubberPrisonCafeteria (224) — the Cafeteria; its left a drop down, back up with Jump or Bee Fly; its boulder
-  lever (549) never needed; with Next 62: the blue History Book on the left (548), its name then; for the enemy pass:
+- [x] RubberPrisonCafeteria (224) — the Cafeteria; its left a drop down, back up with Jump or Bee Fly; its cannon
+  lever (549) never needed; with Next 62: "Behind the Cannons" (the blue History Book, 548); for the enemy pass:
   a Wasp Bomber (gone from 79)
 - [ ] RubberPrisonGym (225)
 - [ ] RubberPrisonSecurity (226)

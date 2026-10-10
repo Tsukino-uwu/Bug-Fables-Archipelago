@@ -132,8 +132,9 @@ MAP_AREAS = (
     # Puzzle" (the Wooden Crank behind the shelf, 561: the shelf moved, all four History Books placed in order, 554).
     Area("RubberPrisonLibrary", "Upper", (), _UP),
     # The Cafeteria (RubberPrisonCafeteria): its right (the door, raised) the map's own region; the left a drop down,
-    # back up with Jump or Bee Fly. Its switch (549) only stops the rolling boulders. Waiting for the Wooden Crank (Next
-    # 62): the blue History Book on the left (548), nothing needed.
+    # back up with Jump or Bee Fly. Its cannon lever (549) only turns the cannons' rolling rocks off. Waiting for the
+    # Wooden Crank (Next 62): "Behind the Cannons" (the blue History Book on the left, 548, the user's name), nothing
+    # needed.
     Area("RubberPrisonCafeteria", "Left", (), one_way(None, _UP), out=_UP),
 )
 
