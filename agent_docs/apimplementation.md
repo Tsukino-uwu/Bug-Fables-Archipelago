@@ -933,7 +933,14 @@ be wrong.
   Played with a stand-in, it would set 346 and on the next visit play chapter 5's title and load the Giant's Lair
   (`LoadMap(232)`). Options (the user, later): hold the trigger until its actor exists, or a stand-in where a scene
   changes nothing beyond itself; first a sweep for every scene trigger naming an entity absent on a new file. Build
-  step 12.
+  step 12. **Reproduced 2026-10-10** (the bridge mapped, 79, 346, 568 and 567 reset, arriving through the Giant's
+  Lair's door): the Wasp King standing there and the wall shut and locked to look at, the party pushed past it
+  (scenery only, the user); a step back right restarted `Event194`,
+  which froze again at once on the trigger (`unstick`, then a `nudge` off it, freed it). In story order it played
+  through (seen): the Wasp King breaks that wall when the fight starts, the Wasp Queen waits there after it, and the
+  scene's two visits lead into the Giant's Lair. Two fixes asked (the user leaning to the first, still thinking): the
+  scene held until 79 (`held_until`) and the bridge's right door (`loadzonegl`, from 568) kept present, so an arrival
+  there can always go back; or the hold alone, its only way on then left through the fight (Vi).
 - **Maki with the swamp bridge kept up** (built: build step 61). Still to see: the small bridge's flag 337 also loads
   `ChomperCave1`'s bridge down, whose own switch sets 689 (when that room is mapped). **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
@@ -3454,7 +3461,9 @@ Wooden Crank and Beemerang Halt, opens the Pier's second floor right door, writt
 62), 183 of 244; the Guard Floor (five gates on 535: the pocket across spikes, the Shield, up to the middle left on its
 own copied bounce pad, build step 84; the bottom left's stairs Jump or Bee Fly; the Gym door and the upper right's
 stairs behind gates the kept upper lever drops, the Gym door pushed past, the upper right a drop down with nothing back
-up; no location), 184 of 244; the rest of `room-checklist.md` to go.
+up; no location), 184 of 244; the Giant's Lair Bridge (its left free, the shortcut lock the Prison Key or the fight;
+the fight, the ULTIMAX Tank, Vi, the one gate to the middle's ant tunnel and the right; its right side out of order a
+Known issue to decide), 185 of 244, the Rubber Prison done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6320,8 +6329,10 @@ Cage" (the Spike Room) and "Middle Right Cell" (Electric Cells), with "Second Fl
 Tests `TestPool`, `TestFactoryPass` (`kept_keys`), `TestPrisonKey`, `TestSpikeRoom`, `TestCellBlockCrossroads`,
 `TestElectricCells`.
 
-**Status:** built (2026-10-10): the world generates with it (`live-slot-data.py`), both hooks install (the log); the
-tests written, to run before the push; the new spots need a new seed; not seen in game.
+**Status:** built (2026-10-10): the world generates with it (`live-slot-data.py`), both hooks install (the log); seen
+the same day through the dev `liveslot`: the bridge scene left 584 and 545 unset and the Prison Key in the bag (the
+log; the key in the key items, the user's screenshot); the tests written, to run before the push; the new spots need
+a new seed.
 
 *Code: `data/items.json`, `logic/rubber_prison.py` (`PRISON_KEY`, `LOCATIONS`). The mod: `World/KeptKeys.cs`.*
 

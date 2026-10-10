@@ -3285,6 +3285,17 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   past on arrival. A copied gate lever in the pocket (at -32.6, 0, 9.2) dropped its gate when hit; a copied green bounce
   pad (the Gym's `jumpspring`, at -35.8, 0, 7.5) sent the party up to the middle left, so the Shield alone reached the
   middle left from the right door.
+- **The Giant's Lair Bridge** (`RubberPrisonGiantLairBridge`, 2026-10-10, the user on screen; code read): its left
+  (the door to the Pier's second floor, the top left door behind its Prison Key lock, `PrisonDoor` 567, pushed past on
+  arrival, the save crystal, the Venus flower) free to walk; walking from it towards the middle starts `Event193`'s
+  bridge branch: the Wasp King breaks the sealed wall to the Giant's Lair and leaves, then the ULTIMAX Tank (enemy 95,
+  `canescape: false`, its summons enemies 28 and 25, `BattleControl.cs` ~22751-23124), then 79 (`:32078`) and the
+  second part's 584, 567, 551, 545 and its key sweep (kept by the mod, seen). After it, the middle's ant tunnel and the
+  right, the Wasp Queen waiting, a plain walk. `Event194` (the right's trigger `eventgl`, until 568): its first visit
+  a talk from entity 11 (Vanessa, from 79) setting 346; its next the walk off right, a chapter title (`ChapterName(5)`,
+  shown as chapter 7, the user), `LoadMap(232)`, then 568 (the bridge's right door). Played in order: no freeze (seen).
+  Arriving through the Giant's Lair's door before 79: pushed past the sealed wall (scenery), and the trigger froze the
+  game (Known issues).
 - **Bounce pads** (2026-10-10, code read, `NPCControl.cs` JumpSpring): `data[0]` 0 is a plain bounce; 1 an aimed jump
   to `vectordata[1]` (`JumpTo`), the swamp's red pads (animid 398). Animid 35 is the `BounceShroom` model. Used by
   `logic/rubber_prison.py`.

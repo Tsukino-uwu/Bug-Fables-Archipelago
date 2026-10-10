@@ -3456,8 +3456,9 @@ stay the game's. If the IL no longer has exactly one such `Contains` and three s
 as it is and logs an error. The log says `[keys] installed in EventControl.Event193 (...)` and, in the scene, what it
 spared.
 
-**Status:** built (2026-10-10): the hook installs (the log); the scene itself not seen yet (it needs the Office's
-crank and the bridge).
+**Status:** seen (2026-10-10, the user fought the bridge's fight through the dev `liveslot`): the log's "leaves flag 584
+as it is (False)", 545 the same, 551 already taken, and "the sweep leaves key item 161 in the bag"; the Prison Key
+still in the key items (the user's screenshot).
 
 *Code: `World/KeptKeys.cs` (`BridgeScene`, `StillToSweep`, `SetFlag`).*
 

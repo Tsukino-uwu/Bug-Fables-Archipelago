@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import LATER_CHAPTERS, SUBMARINE, CanUse
+from ..custom_rules import LATER_CHAPTERS, CanUse
 from ..data_types import (Area, DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
                           StoryEvent, Transfer)
 
@@ -16,8 +16,10 @@ TRANSFERS = (
     # Down to the underground bar by talking to someone in the commercial district (Event61), open from the start (the
     # line is repointed below), behind the grass; the way back up is a door.
     Transfer("way down", "BugariaCommercial", "UndergroundBar", two_way=False, from_area="Bar Corner"),
-    # The tunnel's prison door needs flag 79, set only inside the prison, which the sub alone reaches before it.
-    Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", LATER_CHAPTERS & SUBMARINE),
+    # The tunnel's prison door, and its end in the Giant's Lair Bridge's middle, exist from flag 79, the bridge's fight
+    # (rubber_prison.py, mapped 2026-10-10).
+    Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", Has("Giant's Lair Bridge Fight Won"),
+             to_area="Middle"),
     Transfer("ant tunnel", "AntTunnels", "MetalIsland2", LATER_CHAPTERS),
     # Each far end's miner opens its shortcut to the tunnel hub, for free in a seed (free_ant_tunnels); the hub's way
     # back out needs that end's flag, set by having been there (Defiant Root's 75 by chapter 3's finale too), so the

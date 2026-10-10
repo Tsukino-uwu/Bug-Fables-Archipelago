@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**184 of 244 done.**
+**185 of 244 done.**
 
 ## Outskirts
 
@@ -372,9 +372,13 @@ as it is, a frozen record.
   81), the Gym door behind a gate (pushed past on arrival), the upper right's stairs behind another (Jump or Bee Fly);
   the upper right (the Security Room's door) a drop to the bottom right, nothing back up its stairs; no location; for
   the enemy pass: a Wasp Bomber, a ruffian and a burglar (gone from 79)
-- [ ] RubberPrisonGiantLairBridge (231) — when mapped: the ant tunnel's way in (`bugaria_city.py`, now later chapters
-  and the submarine) needs flag 79, set only by this bridge's scene, reached before it only through the Pier's second
-  floor right door, so after the Warden's Office's crank (the Wooden Crank and Beemerang Halt)
+- [x] RubberPrisonGiantLairBridge (231) — the Giant's Lair Bridge; its left (the door to the Pier's second floor, the
+  save crystal, the Venus flower) free; the top left door behind the shortcut lock (567: the Prison Key, or the
+  fight), pushed past on arrival; the fight between the left and the middle (the ULTIMAX Tank, Vi for its flying
+  summon; flag 79), the only gate; the middle's ant tunnel (from 79) and the right's Giant's Lair door a walk on; the
+  ant tunnel's way in (`bugaria_city.py`) now the fight; to decide (the user, leaning to the first): the right side out
+  of order, the chapter scene held until 79 and the right door kept present, or the hold alone (Known issues); for
+  the enemy pass: the fight, and the troopers and tank there until 79
 
 ## Giant's Lair
 

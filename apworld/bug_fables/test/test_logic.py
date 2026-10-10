@@ -848,6 +848,42 @@ class TestThirdFloor(_PrisonRoom):
                       self.world.fill_slot_data()["entities_moved"])
 
 
+class TestGiantLairBridge(_PrisonRoom):
+    # RubberPrisonGiantLairBridge (the user, 2026-10-10): the fight between its left and middle (the ULTIMAX Tank and
+    # its flying summon, Vi) the only gate; its shortcut lock opened by the Prison Key or the fight; the ant tunnel's
+    # end in its middle.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "starting_party_member": "kabbu"}
+    MAP = "RubberPrisonGiantLairBridge"
+
+    def test_the_fight(self) -> None:
+        fight = self.spot("Rubber Prison: Giant's Lair Bridge, Bridge Fight")
+        self.assertEqual(fight.parent_region.name, self.MAP)
+        self.assertFalse(fight.access_rule(self.state_with("Leif")))
+        self.assertTrue(fight.access_rule(self.state_with("Vi")))
+        for name in (f"{self.MAP} to {self.MAP} (Middle)", f"{self.MAP} (Middle) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Vi", "Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Giant's Lair Bridge Fight Won")))
+        self.assertTrue(self.way(f"{self.MAP} (Middle) to {self.MAP} (Right)")(self.state_with()))
+
+    def test_the_shortcut(self) -> None:
+        lock = self.spot("Rubber Prison: Giant's Lair Bridge, Shortcut Opened")
+        self.assertFalse(lock.access_rule(self.state_with("Vi")))
+        self.assertTrue(lock.access_rule(self.state_with("Prison Key")))
+        self.assertTrue(lock.access_rule(self.state_with("Giant's Lair Bridge Fight Won")))
+        for name in (f"{self.MAP} to {self.MAP} (Top Left Door)", f"{self.MAP} (Top Left Door) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Prison Key")))
+                self.assertTrue(self.way(name)(self.state_with("Giant's Lair Bridge Shortcut Open")))
+
+    def test_the_ant_tunnel(self) -> None:
+        tunnels = [e for e in self.multiworld.get_entrances(self.player)
+                   if e.name.endswith("(ant tunnel)") and e.connected_region.name == f"{self.MAP} (Middle)"]
+        self.assertEqual(len(tunnels), 1)
+        self.assertFalse(tunnels[0].access_rule(self.state_with("Vi")))
+        self.assertTrue(tunnels[0].access_rule(self.state_with("Giant's Lair Bridge Fight Won")))
+
+
 class TestPrisonKey(BugFablesTestBase):
     # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The
     # Pier's comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.
@@ -1967,17 +2003,15 @@ class TestPier(BugFablesTestBase):
         return {e.name for e in self.multiworld.get_entrances(self.player)}
 
     def test_right_doors(self) -> None:
-        # The second floor's opens with the Warden's Office's crank (that room mapped, 2026-10-10), a pushed-past
-        # one-way back; the ground floor's doesn't count yet, and Archipelago makes no entrance whose rule can never
-        # pass.
-        names = self.names()
-        self.assertNotIn("RubberPrisonPier to RubberPrisonPier (Shortcut Door)", names)
-        self.assertNotIn("RubberPrisonPier (Shortcut Door) to RubberPrisonPier", names)
-        for name in ("RubberPrisonPier (Second Floor) to RubberPrisonPier (Second Floor Right Door)",
-                     "RubberPrisonPier (Second Floor Right Door) to RubberPrisonPier (Second Floor)"):
-            with self.subTest(way=name):
-                self.assertFalse(self.way(name)(self.state_with("Jump", "Bee Fly")))
-                self.assertTrue(self.way(name)(self.state_with("Warden's Office Crank Turned")))
+        # The second floor's opens with the Warden's Office's crank, the ground floor's with the bridge's shortcut lock
+        # (both rooms mapped, 2026-10-10); each a pushed-past one-way back.
+        for joined, door, opened in (("RubberPrisonPier (Second Floor)", "Second Floor Right Door",
+                                      "Warden's Office Crank Turned"),
+                                     ("RubberPrisonPier", "Shortcut Door", "Giant's Lair Bridge Shortcut Open")):
+            for name in (f"{joined} to RubberPrisonPier ({door})", f"RubberPrisonPier ({door}) to {joined}"):
+                with self.subTest(way=name):
+                    self.assertFalse(self.way(name)(self.state_with("Jump", "Bee Fly")))
+                    self.assertTrue(self.way(name)(self.state_with(opened)))
 
     def test_office_crank(self) -> None:
         crank = self.multiworld.get_location("Rubber Prison: Warden's Office, Crank Turned", self.player)

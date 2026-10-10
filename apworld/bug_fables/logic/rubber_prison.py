@@ -19,6 +19,11 @@ _CROSSROADS_RIGHT_GATE = "Crossroads Right Gate Open"
 # The Warden's Office's crank turned (Event193's first branch, flag 583): the Pier's second floor right door open for
 # good.
 _OFFICE_CRANK = "Warden's Office Crank Turned"
+# The Giant's Lair Bridge's fight won (Event193's bridge branch, the ULTIMAX Tank, flag 79). The ant tunnel's way in
+# (bugaria_city.py) names it too.
+_BRIDGE_FIGHT = "Giant's Lair Bridge Fight Won"
+# The bridge's shortcut lock open (567): with the Prison Key, or by the fight's scene.
+_BRIDGE_SHORTCUT = "Giant's Lair Bridge Shortcut Open"
 # The Cell Block Crossroads' barrier lever hit from inside the top door's area (flag 541): the barrier down for good.
 _CROSSROADS_BARRIER = "Crossroads Barrier Lowered"
 # Up from the Cell Block Crossroads' bottom: the bottom lever (Beetle Dig to its cell, an attack) opens the left cell,
@@ -73,6 +78,13 @@ STORY_EVENTS = (
     # (Next 62): "Empty Bookshelf" (the green History Book on top of it, 563: Freeze, the horn, Jump and Bee Fly).
     StoryEvent("Rubber Prison: Warden's Office, Crank Turned", _OFFICE_CRANK, "RubberPrisonOffice", Source(flag=583),
                rule=WOODEN_CRANK & CanUse("Beemerang Halt"), no_jump=True),
+    # The Giant's Lair Bridge (RubberPrisonGiantLairBridge): walking from its left towards the middle starts the fight,
+    # the ULTIMAX Tank, which summons a Wasp Healer (flying, so Vi) or enemy 25; it can't be fled (the user, 2026-10-10:
+    # fought, seen). Its scene opens the shortcut lock too, and spares the kept Prison Key (build step 82, seen).
+    StoryEvent("Rubber Prison: Giant's Lair Bridge, Bridge Fight", _BRIDGE_FIGHT, "RubberPrisonGiantLairBridge",
+               Source(flag=79), rule=Member("Vi"), no_jump=True),
+    StoryEvent("Rubber Prison: Giant's Lair Bridge, Shortcut Opened", _BRIDGE_SHORTCUT, "RubberPrisonGiantLairBridge",
+               Source(flag=567), rule=PRISON_KEY | Has(_BRIDGE_FIGHT), no_jump=True),
 )
 _FLOORS = ("Top Floor", "Third Floor", "Second Floor")
 _GROUND = ("Ground Upper Left", None, "Ground Lower Left", "Ground Lower Right")
@@ -98,12 +110,13 @@ MAP_AREAS = (
     Area("RubberPrisonPier", "Second Floor", ("loadzonecell2",), False_()),
     # Two doors to the Giant's Lair Bridge, each shut until another room opens it, the party pushed past it when
     # arriving (seen): the second floor's right one by the Warden's Office's crank (Event193, flag 583: the Wooden Crank
-    # and Beemerang Halt, the user), the ground floor's right one from the bridge's side (flag 567, its room not mapped,
-    # so not counted yet).
+    # and Beemerang Halt, the user), the ground floor's right one by the bridge's shortcut lock (567: the Prison Key
+    # there, or the bridge's fight).
     Area("RubberPrisonPier", "Second Floor Right Door", ("loadzoneboss",), Has(_OFFICE_CRANK),
          out=one_way(None, Has(_OFFICE_CRANK)),
          to="RubberPrisonPier (Second Floor)"),
-    Area("RubberPrisonPier", "Shortcut Door", ("bossshortcut",), False_(), out=one_way(None, False_())),
+    Area("RubberPrisonPier", "Shortcut Door", ("bossshortcut",), Has(_BRIDGE_SHORTCUT),
+         out=one_way(None, Has(_BRIDGE_SHORTCUT))),
     # The Checkpoint Corridor (RubberPrisonCheckpointCorridor; named by the user, 2026-10-10): two gates that follow
     # flag 535 opposite ways, one always up, with a lever on each side of each (the right one kept present), so the
     # left (the map's own region) and the right (the door to the Pier) are an attack apart, both ways (the user).
@@ -174,6 +187,16 @@ MAP_AREAS = (
          to="RubberPrisonThirdFloor (Middle Left)"),
     Area("RubberPrisonThirdFloor", "Upper Right", ("loadzonesecurity",),
          one_way(ANY_ATTACK & _UP, CanUse("Shield")), out=False_(), to="RubberPrisonThirdFloor (Middle Left)"),
+    # The Giant's Lair Bridge (RubberPrisonGiantLairBridge): its left (the door to the Pier's second floor, the save
+    # crystal, the Venus flower) the map's own region; the top left door behind the shortcut lock, the party pushed
+    # past it on arrival (seen); the middle (the ant tunnel, from 79) past the fight; the right (the Giant's Lair door,
+    # from 568) a walk on. Walking right after the fight plays chapter 5's opening (Event194: a talk setting 346, then
+    # the walk into the Giant's Lair, setting 568); reached first by the right door, before 79, its talk freezes
+    # (Known issues).
+    Area("RubberPrisonGiantLairBridge", "Top Left Door", ("loadzoneshortcut",), Has(_BRIDGE_SHORTCUT),
+         out=one_way(None, Has(_BRIDGE_SHORTCUT))),
+    Area("RubberPrisonGiantLairBridge", "Middle", (), Has(_BRIDGE_FIGHT)),
+    Area("RubberPrisonGiantLairBridge", "Right", ("loadzonegl",), True_(), to="RubberPrisonGiantLairBridge (Middle)"),
 )
 
 TRANSFERS = (
