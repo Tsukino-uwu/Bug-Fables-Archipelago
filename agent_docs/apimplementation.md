@@ -863,6 +863,10 @@ be wrong.
       `pre_fill` (so plando still wins); best effort means falling back to a normal placement where it can't. C,
       area-based: never in areas the user names (feels later; only for abilities those areas don't need). Recommended:
       A now, B for Bee Fly and the later abilities, late Jump only once the start's no-Jump ground is bigger.
+    - **Late Jump, the user's point:** with a random start or the entrance randomizer, the first sphere is the seed's own
+      (the spawn's no-item ground, doors joining rooms apart in vanilla), so a best-effort late Jump would often have
+      room there, and fall back in a tight seed. The mapping widens it too: each mapped room marks the spots that need no
+      Jump, where the blanket Jump rule stood. Decided with real fuzzer numbers once every room is mapped.
     - **To ask:** which abilities, and which meaning of late (not sphere 1, or not in chosen areas).
 
 **Known issues:**
