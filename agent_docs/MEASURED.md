@@ -3263,18 +3263,18 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   Jump and Halt); back down a drop. Loading it sets 535 off (`MapControl.cs:686-687`).
 - **The Security Room** (`RubberPrisonSecurity`, 2026-10-10, the user on screen; code read): its right (the door to the
   Pier, the 535 lever, the PC `ITAHcomputer`) and left (the crank, three trapped guards until 79) joined by Beetle Dig;
-  the bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, Jump or Bee Fly back up. The PC
+  the bottom right (the save crystal, the door to the Guard Floor) a drop down a ledge, Jump or Bee Fly back up. The PC
   (`Event190`): the crank (Beemerang Halt) starts it with no caller, setting 552 (backup power); powered, a hit sets 553;
   then talking flips 550, which raises the Cafeteria's tables against its cannons' rocks (seen), never needed there.
   The guards' lines (read with the console's `line`, not seen) only hint at the crank and the hit.
-- **The Office** (`RubberPrisonOffice`, 2026-10-10, the user's account; EntityDump and code read): one area. Its crank
-  slot (`crankcheck`, `Event59` key index 2, the Wooden Crank, until 565) then its crank, Beemerang Halt (the user),
-  play `Event193`'s first branch, 583 (code read): the Pier's second floor right door opens (and its third floor bridge
-  breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf up the top left: Freeze, the
-  horn, Jump and Bee Fly (the user). The room's geyser and droplet are probably on that way (INFERRED from the dump).
-  Its only dialogue line, "even a prison needs a normal office" (line 0, read with the console's `line`, not seen),
-  gave its name.
-- **The Third Floor** (`RubberPrisonThirdFloor`, 2026-10-10, the user on screen and screenshots; EntityDump): the
+- **The Warden's Office** (`RubberPrisonOffice`, 2026-10-10, the user's account; EntityDump and code read): one area.
+  Its crank slot (`crankcheck`, `Event59` key index 2, the Wooden Crank, until 565) then its crank, Beemerang Halt
+  (the user), play `Event193`'s first branch, 583 (code read): the Pier's second floor right door opens (and its third
+  floor bridge breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf up the top left:
+  Freeze, the horn, Jump and Bee Fly (the user). The room's geyser and droplet are probably on that way (INFERRED from
+  the dump). Its only dialogue line: "even a prison needs a normal office" (line 0); its name from the Guard Floor's
+  sign, "⇨ Warden's Office" (its line 3); both read with the console's `line`, not seen.
+- **The Guard Floor** (`RubberPrisonThirdFloor`, 2026-10-10, the user on screen and screenshots; EntityDump): the
   bottom right (the doors to Electric Cells and the Pier) and its ground lever behind a 535 gate it can't reach; a
   pocket left of it across spikes (the Shield), its 535 gate to the bottom left; the bottom left (the door to the Cell
   Block Crossroads) and stairs up to the middle left, Jump or Bee Fly (corrected by the user; with the pocket's gate

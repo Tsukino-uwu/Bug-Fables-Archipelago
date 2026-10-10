@@ -16,8 +16,9 @@ _LIFT_RUNNING = "Pier Lift Running"
 # The Cell Block Crossroads' right wood lever hit (Event186, flag 540): its bottom right gate down for good, and its
 # rock kept in the knocked spot it climbs from.
 _CROSSROADS_RIGHT_GATE = "Crossroads Right Gate Open"
-# The Office's crank turned (Event193's first branch, flag 583): the Pier's second floor right door open for good.
-_OFFICE_CRANK = "Office Crank Turned"
+# The Warden's Office's crank turned (Event193's first branch, flag 583): the Pier's second floor right door open for
+# good.
+_OFFICE_CRANK = "Warden's Office Crank Turned"
 # The Cell Block Crossroads' barrier lever hit from inside the top door's area (flag 541): the barrier down for good.
 _CROSSROADS_BARRIER = "Crossroads Barrier Lowered"
 # Up from the Cell Block Crossroads' bottom: the bottom lever (Beetle Dig to its cell, an attack) opens the left cell,
@@ -67,10 +68,10 @@ STORY_EVENTS = (
                area="Upper"),
     StoryEvent("Rubber Prison: Cell Block Crossroads, Barrier Lever Hit", _CROSSROADS_BARRIER, "RubberPrisonCells1",
                Source(flag=541), rule=ANY_ATTACK, no_jump=True, area="Top Door"),
-    # The Office (RubberPrisonOffice; named by the user, 2026-10-10, the game's "a normal office"): one area. Its crank
-    # slot takes the Wooden Crank, then turned with Beemerang Halt (the user). Waiting for the Wooden Crank (Next 62):
-    # "Empty Bookshelf" (the green History Book on top of it, 563: Freeze, the horn, Jump and Bee Fly).
-    StoryEvent("Rubber Prison: Office, Crank Turned", _OFFICE_CRANK, "RubberPrisonOffice", Source(flag=583),
+    # The Warden's Office (RubberPrisonOffice; named by the user, 2026-10-10, after the Guard Floor's sign): one area.
+    # Its crank slot takes the Wooden Crank, then turned with Beemerang Halt (the user). Waiting for the Wooden Crank
+    # (Next 62): "Empty Bookshelf" (the green History Book on top of it, 563: Freeze, the horn, Jump and Bee Fly).
+    StoryEvent("Rubber Prison: Warden's Office, Crank Turned", _OFFICE_CRANK, "RubberPrisonOffice", Source(flag=583),
                rule=WOODEN_CRANK & CanUse("Beemerang Halt"), no_jump=True),
 )
 _FLOORS = ("Top Floor", "Third Floor", "Second Floor")
@@ -96,9 +97,9 @@ MAP_AREAS = (
     Area("RubberPrisonPier", "Third Floor", ("loadzone3rdfloor", "loadzoneoffice"), False_()),
     Area("RubberPrisonPier", "Second Floor", ("loadzonecell2",), False_()),
     # Two doors to the Giant's Lair Bridge, each shut until another room opens it, the party pushed past it when
-    # arriving (seen): the second floor's right one by the Office's crank (Event193, flag 583: the Wooden Crank and
-    # Beemerang Halt, the user), the ground floor's right one from the bridge's side (flag 567, its room not mapped, so
-    # not counted yet).
+    # arriving (seen): the second floor's right one by the Warden's Office's crank (Event193, flag 583: the Wooden Crank
+    # and Beemerang Halt, the user), the ground floor's right one from the bridge's side (flag 567, its room not mapped,
+    # so not counted yet).
     Area("RubberPrisonPier", "Second Floor Right Door", ("loadzoneboss",), Has(_OFFICE_CRANK),
          out=one_way(None, Has(_OFFICE_CRANK)),
          to="RubberPrisonPier (Second Floor)"),
@@ -153,18 +154,19 @@ MAP_AREAS = (
     Area("RubberPrisonGym", "Top Left", (), CanUse("Beemerang Halt"), out=one_way(None, CanUse("Beemerang Halt"))),
     # The Security Room (RubberPrisonSecurity; named by the user, 2026-10-10): its right (the door to the Pier, the 535
     # lever, the PC) the map's own region; the left (the crank, the trapped guards) Beetle Dig away, both ways; the
-    # bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, back up with Jump or Bee Fly.
+    # bottom right (the save crystal, the door to the Guard Floor) a drop down a ledge, back up with Jump or Bee Fly.
     # The crank (Beemerang Halt) powers the PC (552), which hit (553) toggles the Cafeteria's tables (550): never
     # needed.
     Area("RubberPrisonSecurity", "Left", (), CanUse("Beetle Dig")),
     Area("RubberPrisonSecurity", "Bottom Right", ("loadzone3rdfloor",), one_way(None, _UP), out=_UP),
-    # The Third Floor (RubberPrisonThirdFloor), five gates on 535. Its bottom right (the doors to Electric Cells and the
-    # Pier) the map's own region; its own lever behind a gate, never counted. The pocket left of it across a spiked
-    # floor (the Shield); up from it to the middle left on the mod's own bounce pad (ENTITIES_MOVED), down a drop, both
-    # free. The middle left: the kept upper lever; the stairs down to the bottom left (its door to the Cell Block
-    # Crossroads), Jump or Bee Fly; the Gym door behind a gate (pushed past on arrival, seen); the stairs to the upper
-    # right behind another, then Jump or Bee Fly. The upper right (the door to the Security Room) a drop down to the
-    # bottom right, its way back round by the pocket; nothing back the stairs from it (the user, 2026-10-10).
+    # The Guard Floor (RubberPrisonThirdFloor; named by the user, 2026-10-10), five gates on 535. Its bottom right (the
+    # doors to Electric Cells and the Pier) the map's own region; its own lever behind a gate, never counted. The
+    # pocket left of it across a spiked floor (the Shield); up from it to the middle left on the mod's own bounce pad
+    # (ENTITIES_MOVED), down a drop, both free. The middle left: the kept upper lever; the stairs down to the bottom
+    # left (its door to the Cell Block Crossroads), Jump or Bee Fly; the Gym door behind a gate (pushed past on
+    # arrival, seen); the stairs to the upper right behind another, then Jump or Bee Fly. The upper right (the door to
+    # the Security Room) a drop down to the bottom right, its way back round by the pocket; nothing back the stairs from
+    # it (the user, 2026-10-10).
     Area("RubberPrisonThirdFloor", "Pocket", (), CanUse("Shield")),
     Area("RubberPrisonThirdFloor", "Middle Left", (), True_(), to="RubberPrisonThirdFloor (Pocket)"),
     Area("RubberPrisonThirdFloor", "Bottom Left", ("loadzonecells1",), _UP, to="RubberPrisonThirdFloor (Middle Left)"),
@@ -187,12 +189,12 @@ TRANSFERS = (
     # Wooden Crank (Next 62) there: "Middle Center Cell" (the red History Book, 582, behind a 535 gate: an attack).
     Transfer("drop", "RubberPrisonCells2", "RubberPrisonCells2", two_way=False, way_back=CanUse("Shield"),
              from_area="Upper", to_area="Middle"),
-    # The Third Floor's upper right down to the bottom right, a drop; its way back the Shield to the pocket, its pad up
+    # The Guard Floor's upper right down to the bottom right, a drop; its way back the Shield to the pocket, its pad up
     # to the middle left, then that lever (an attack) and Jump or Bee Fly.
     Transfer("drop", "RubberPrisonThirdFloor", "RubberPrisonThirdFloor", two_way=False,
              way_back=CanUse("Shield") & ANY_ATTACK & _UP, from_area="Upper Right"),
 )
-# A green bounce pad of the mod's own in the Third Floor's pocket, a copy of the Gym's (a plain bounce, data[0] 0), up
+# A green bounce pad of the mod's own in the Guard Floor's pocket, a copy of the Gym's (a plain bounce, data[0] 0), up
 # to the middle left, so the pocket is never a trap (the user, 2026-10-10, standing on the spot; tried first as a copied
 # gate lever, which the pad made "a bit useless").
 ENTITIES_MOVED = (
@@ -213,14 +215,14 @@ KEPT_PRESENT = (
     EntityRef("RubberPrisonPier", "SavePoint  - Duplicate"),
     # The two gate levers the game adds only from flag 79 (the Giant's Lair Bridge's scene, Event193), shown from the
     # start so each area the gates cut off has a lever of its own (the user, 2026-10-10): the Checkpoint Corridor's
-    # right one (its name shared with the middle lever, always there) and the Third Floor's upper one.
+    # right one (its name shared with the middle lever, always there) and the Guard Floor's upper one.
     EntityRef("RubberPrisonCheckpointCorridor", "switch - Duplicate - Duplicate"),
     EntityRef("RubberPrisonThirdFloor", "globalswitch - Duplicate - Duplicate"),
 )
 SCENERY_PRESENT = (
-    # The Pier's third floor bridge, which the Office's crank breaks (Event193, flag 583, opening the second floor's
-    # right door): kept, so the floor's two sides stay joined (the user, 2026-10-10: "i don't want the bridge to
-    # collapse").
+    # The Pier's third floor bridge, which the Warden's Office's crank breaks (Event193, flag 583, opening the second
+    # floor's right door): kept, so the floor's two sides stay joined (the user, 2026-10-10: "i don't want the bridge
+    # to collapse").
     EntityRef("RubberPrisonPier", "Base/BrokenBridge"),
 )
 SCENERY_OFF = (

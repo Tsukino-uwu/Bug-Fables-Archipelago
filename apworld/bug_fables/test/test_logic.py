@@ -783,7 +783,7 @@ class TestGym(_PrisonRoom):
 
 class TestSecurityRoom(_PrisonRoom):
     # RubberPrisonSecurity, the Security Room (the user, 2026-10-10): its left Beetle Dig away; the bottom right (the
-    # save crystal, the door to the Third Floor) a drop down a ledge, back up with Jump or Bee Fly.
+    # save crystal, the door to the Guard Floor) a drop down a ledge, back up with Jump or Bee Fly.
     MAP = "RubberPrisonSecurity"
 
     def test_left_by_digging(self) -> None:
@@ -802,7 +802,7 @@ class TestSecurityRoom(_PrisonRoom):
 
 
 class TestThirdFloor(_PrisonRoom):
-    # RubberPrisonThirdFloor, the Third Floor (the user, 2026-10-10): the pocket across spikes (the Shield), up to the
+    # RubberPrisonThirdFloor, the Guard Floor (the user, 2026-10-10): the pocket across spikes (the Shield), up to the
     # middle left on its copied bounce pad and down a drop, both free; the stairs free; the Gym door and the upper
     # right's stairs behind gates the middle left's lever drops; the upper right a drop down, nothing back up its
     # stairs.
@@ -1967,8 +1967,9 @@ class TestPier(BugFablesTestBase):
         return {e.name for e in self.multiworld.get_entrances(self.player)}
 
     def test_right_doors(self) -> None:
-        # The second floor's opens with the Office's crank (the Office mapped, 2026-10-10), a pushed-past one-way back;
-        # the ground floor's doesn't count yet, and Archipelago makes no entrance whose rule can never pass.
+        # The second floor's opens with the Warden's Office's crank (that room mapped, 2026-10-10), a pushed-past
+        # one-way back; the ground floor's doesn't count yet, and Archipelago makes no entrance whose rule can never
+        # pass.
         names = self.names()
         self.assertNotIn("RubberPrisonPier to RubberPrisonPier (Shortcut Door)", names)
         self.assertNotIn("RubberPrisonPier (Shortcut Door) to RubberPrisonPier", names)
@@ -1976,10 +1977,10 @@ class TestPier(BugFablesTestBase):
                      "RubberPrisonPier (Second Floor Right Door) to RubberPrisonPier (Second Floor)"):
             with self.subTest(way=name):
                 self.assertFalse(self.way(name)(self.state_with("Jump", "Bee Fly")))
-                self.assertTrue(self.way(name)(self.state_with("Office Crank Turned")))
+                self.assertTrue(self.way(name)(self.state_with("Warden's Office Crank Turned")))
 
     def test_office_crank(self) -> None:
-        crank = self.multiworld.get_location("Rubber Prison: Office, Crank Turned", self.player)
+        crank = self.multiworld.get_location("Rubber Prison: Warden's Office, Crank Turned", self.player)
         self.assertEqual(crank.parent_region.name, "RubberPrisonOffice")
         self.assertFalse(crank.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang")))
 

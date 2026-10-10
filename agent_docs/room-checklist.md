@@ -329,7 +329,7 @@ as it is, a frozen record.
   ground floor's upper left behind the gate levers' tutorial gates (Jump or Bee Fly round), its lower part (the gate
   lever, the dock) below, the lift once its lever is hit; the third floor bridge (build step 78) and save crystal (80)
   kept; the Wasp Driller's Prison Key, "Second Floor Fight", a location since build step 82 (Kabbu); the second
-  floor's right door opened by the Office's crank (583), written with the Office; for the Giant's Lair Bridge: the
+  floor's right door opened by the Warden's Office's crank (583), written with it; for the Giant's Lair Bridge: the
   ground floor's right door (567); for the enemy pass: its four enemies (gone from 79) and the Wasp Driller; for the
   discovery sweep: discovery 47, recorded on arriving in any prison room
 - [x] RubberPrisonCheckpointCorridor (219) — the Checkpoint Corridor; the left and the right an attack apart, both
@@ -359,22 +359,22 @@ as it is, a frozen record.
   back down; "Crank Puzzle" there, the Prison Key (build step 82); loading it sets 535 off; for the enemy pass: a Wasp
   Driller (top left) and a trooper, gone from 79; from 79, six prisoners and a soldier
 - [x] RubberPrisonSecurity (226) — the Security Room; its left (the crank, the trapped guards) Beetle Dig away; the
-  bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, Jump or Bee Fly back up; the crank
+  bottom right (the save crystal, the door to the Guard Floor) a drop down a ledge, Jump or Bee Fly back up; the crank
   and PC (552, 553) only toggle the Cafeteria's tables (550); no location; for the quest pass: Tectec (from 555); for
   the enemy pass: a wasp trooper (gone from 79)
-- [x] RubberPrisonOffice (229) — the Office; one area; its crank slot (the Wooden Crank, Beemerang Halt to turn, 583)
-  opens the Pier's second floor right door, written now; with Next 62: "Empty Bookshelf" (the green History Book, 563:
-  Freeze, the horn, Jump and Bee Fly); for the enemy pass: a Wasp Driller (gone from 79)
-- [x] RubberPrisonThirdFloor (230) — the Third Floor; the bottom right (its doors to Electric Cells and the Pier, its own
-  lever behind a gate, not counted); the pocket across spikes (the Shield), up to the middle left on its copied bounce
-  pad (build step 84), a drop back down; the stairs between the middle left and the bottom left Jump or Bee Fly (the
-  bottom left's only way in when its gate to the pocket is up); in the middle
-  left the kept upper lever (build step 81), the Gym door behind a gate (pushed past on arrival), the upper right's
-  stairs behind another (Jump or Bee Fly); the upper right (the Security Room's door) a drop to the bottom right,
-  nothing back up its stairs; no location; for the enemy pass: a Wasp Bomber, a ruffian and a burglar (gone from 79)
+- [x] RubberPrisonOffice (229) — the Warden's Office (its sign's name); one area; its crank slot (the Wooden Crank,
+  Beemerang Halt to turn, 583) opens the Pier's second floor right door, written now; with Next 62: "Empty Bookshelf"
+  (the green History Book, 563: Freeze, the horn, Jump and Bee Fly); for the enemy pass: a Wasp Driller (gone from 79)
+- [x] RubberPrisonThirdFloor (230) — the Guard Floor; the bottom right (its doors to Electric Cells and the Pier, its
+  own lever behind a gate, not counted); the pocket across spikes (the Shield), up to the middle left on its copied
+  bounce pad (build step 84), a drop back down; the stairs between the middle left and the bottom left Jump or Bee Fly
+  (the bottom left's only way in when its gate to the pocket is up); in the middle left the kept upper lever (build step
+  81), the Gym door behind a gate (pushed past on arrival), the upper right's stairs behind another (Jump or Bee Fly);
+  the upper right (the Security Room's door) a drop to the bottom right, nothing back up its stairs; no location; for
+  the enemy pass: a Wasp Bomber, a ruffian and a burglar (gone from 79)
 - [ ] RubberPrisonGiantLairBridge (231) — when mapped: the ant tunnel's way in (`bugaria_city.py`, now later chapters
   and the submarine) needs flag 79, set only by this bridge's scene, reached before it only through the Pier's second
-  floor right door, so after the Office's crank (the Wooden Crank and Beemerang Halt)
+  floor right door, so after the Warden's Office's crank (the Wooden Crank and Beemerang Halt)
 
 ## Giant's Lair
 

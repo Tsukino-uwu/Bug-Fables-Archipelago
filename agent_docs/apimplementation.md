@@ -156,7 +156,7 @@ this file and that doc disagree, that doc is right.
 81. [Build step 81: the Rubber Prison's late gate levers from the start](#build-step-81-the-rubber-prisons-late-gate-levers-from-the-start)
 82. [Build step 82: the Prison Key, never used up](#build-step-82-the-prison-key-never-used-up)
 83. [Build step 83: the Library rail's invisible walls hidden](#build-step-83-the-library-rails-invisible-walls-hidden)
-84. [Build step 84: the Third Floor pocket's bounce pad](#build-step-84-the-third-floor-pockets-bounce-pad)
+84. [Build step 84: the Guard Floor pocket's bounce pad](#build-step-84-the-guard-floor-pockets-bounce-pad)
 
 **How it works**
 
@@ -741,8 +741,8 @@ be wrong.
     flag 561, behind the bookshelf the History Book puzzle slides away, `Event191`, flag 554; the user's name). The
     puzzle takes the four History Books (key items 163 blue, 164 green, 165 yellow, 166 red, placed in that order), so
     with this step they become progression and their spots locations, held out until then (their pickups the game's
-    own): "Rubber Prison: Cafeteria, Behind the Cannons" (548: nothing, its left a drop down), "Rubber Prison: Office,
-    Empty Bookshelf" (563: Freeze, the horn, Jump and Bee Fly),
+    own): "Rubber Prison: Cafeteria, Behind the Cannons" (548: nothing, its left a drop down), "Rubber Prison:
+    Warden's Office, Empty Bookshelf" (563: Freeze, the horn, Jump and Bee Fly),
     "Rubber Prison: Library, On Top of the Bookshelf" (564: Jump and the Beemerang Toss, or Bee Fly) and "Rubber
     Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a 535 gate), the named ones the user's. A
     wrong order hands the books back at the scene's end (`:31506`).
@@ -3449,12 +3449,12 @@ Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's
 Bee Fly back up; its History Book, "Behind the Cannons", with Next 62), 180 of 244; the Gym (up to the top left by its
 crank puzzle, Beemerang Halt, a drop back down; "Crank Puzzle", its Prison Key, build step 82), 181 of 244; the
 Security Room (its left Beetle Dig away; the bottom right a drop down a ledge, Jump or Bee Fly back up; its crank and
-PC only toggle the Cafeteria's tables; no location), 182 of 244; the Office (one area; its crank slot, the Wooden Crank
-and Beemerang Halt, opens the Pier's second floor right door, written with it; "Empty Bookshelf" with Next 62), 183 of
-244; the Third Floor (five gates on 535: the pocket across spikes, the Shield, up to the middle left on its own copied
-bounce pad, build step 84; the bottom left's stairs Jump or Bee Fly; the Gym door and the upper right's stairs behind
-gates the kept upper lever drops, the Gym door pushed past, the upper right a drop down with nothing back up; no
-location), 184 of 244; the rest of `room-checklist.md` to go.
+PC only toggle the Cafeteria's tables; no location), 182 of 244; the Warden's Office (one area; its crank slot, the
+Wooden Crank and Beemerang Halt, opens the Pier's second floor right door, written with it; "Empty Bookshelf" with Next
+62), 183 of 244; the Guard Floor (five gates on 535: the pocket across spikes, the Shield, up to the middle left on its
+own copied bounce pad, build step 84; the bottom left's stairs Jump or Bee Fly; the Gym door and the upper right's
+stairs behind gates the kept upper lever drops, the Gym door pushed past, the upper right a drop down with nothing back
+up; no location), 184 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6283,12 +6283,12 @@ up/down from anywhere within a room", like the Golden Settlement's copied day/ni
 itself active or only its two levers: the two levers. Flag 79 stays the story's.
 
 **Built** (the apworld only: the mod's own list does it): `kept_present` gets both levers, the corridor's
-`switch - Duplicate - Duplicate` (its name shared with the middle lever, which has no flag) and the Third Floor's
+`switch - Duplicate - Duplicate` (its name shared with the middle lever, which has no flag) and the Guard Floor's
 `globalswitch - Duplicate - Duplicate`. In the logic each gate with a lever on both sides is crossed with any attack,
 both ways (build step 24, the room-by-room list). Test `TestCheckpointCorridor`.
 
 **Status:** built (2026-10-10); the corridor's lever seen the same day in seed `AP_91955646846145333010` through the
-dev `liveslot`: there from the start, its hit swapping the gates (the user). The Third Floor's not seen yet.
+dev `liveslot`: there from the start, its hit swapping the gates (the user). The Guard Floor's not seen yet.
 
 *Code: `logic/rubber_prison.py` (`KEPT_PRESENT`, `MAP_AREAS`). The mod: `World/KeptOpen.cs`, unchanged.*
 
@@ -6346,11 +6346,11 @@ the seed's own switching off not seen yet.
 
 *Code: `logic/rubber_prison.py` (`SCENERY_OFF`). The mod: `World/DayNight.cs`, unchanged for it.*
 
-## Build step 84: the Third Floor pocket's bounce pad
+## Build step 84: the Guard Floor pocket's bounce pad
 
-**Found (2026-10-10, mapping the Third Floor):** a pocket of the room, between a spiked floor (the Shield) and a gate on
-535 to the bottom left, has no lever of its own. Dropped into from the middle left or the upper right with that gate up
-and without the Shield, the party is stuck, the Warp its only way out (the user).
+**Found (2026-10-10, mapping the Guard Floor, `RubberPrisonThirdFloor`):** a pocket of the room, between a spiked floor
+(the Shield) and a gate on 535 to the bottom left, has no lever of its own. Dropped into from the middle left or the
+upper right with that gate up and without the Shield, the party is stuck, the Warp its only way out (the user).
 
 **Asked and decided (the user, 2026-10-10):** first "i think we should put a custom lever where im currently standing
 (to prevent the softlock pocket)": built and seen (a copy of the room's ground lever, an attack out to the bottom

@@ -108,7 +108,7 @@ anyone curious about the process, or thinking of doing the same for another game
 53. [Strategy and Relay in battle from the start](#53-strategy-and-relay-in-battle-from-the-start)
 54. [The Factory Pass never used up at its locks](#54-the-factory-pass-never-used-up-at-its-locks)
 55. [The Prison Key never used up, the bridge scene included](#55-the-prison-key-never-used-up-the-bridge-scene-included)
-56. [An entity copied into a map: the Third Floor's pocket pad](#56-an-entity-copied-into-a-map-the-third-floors-pocket-pad)
+56. [An entity copied into a map: the Guard Floor's pocket pad](#56-an-entity-copied-into-a-map-the-guard-floors-pocket-pad)
 
 ## Where it stands
 
@@ -3461,11 +3461,11 @@ crank and the bridge).
 
 *Code: `World/KeptKeys.cs` (`BridgeScene`, `StillToSweep`, `SetFlag`).*
 
-## 56. An entity copied into a map: the Third Floor's pocket pad
+## 56. An entity copied into a map: the Guard Floor's pocket pad
 
-Found 2026-10-10, mapping the Rubber Prison's Third Floor: a pocket of the room, cut off by a gate on the prison-wide
-flag 535, has no lever of its own, so dropping into it with that gate up and without the Shield left only the Warp
-(`apimplementation.md`, build step 84).
+Found 2026-10-10, mapping the Rubber Prison's Guard Floor (`RubberPrisonThirdFloor`): a pocket of the room, cut off
+by a gate on the prison-wide flag 535, has no lever of its own, so dropping into it with that gate up and without the
+Shield left only the Warp (`apimplementation.md`, build step 84).
 
 The day/night switch's copy already did this for one list (step 52): `DayNight.AddCopies`, in
 `MapControl.CreateEntities`' two splits, adds another entity's data row and name to the map's, and the copy is then
