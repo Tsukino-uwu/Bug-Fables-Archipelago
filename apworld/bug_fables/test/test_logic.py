@@ -1377,8 +1377,8 @@ class TestFirstRoom(BugFablesTestBase):
 
 
 class TestProcessing2(BugFablesTestBase):
-    # FactoryProcessing2, the Second Room (the user, 2026-10-10): up from the bottom right to the top left, Jump or Bee Fly, a basic
-    # attack, the Shield, and Beemerang Halt or Bee Fly; down a drop, a one-way.
+    # FactoryProcessing2, the Second Room (the user, 2026-10-10): up from the bottom right to the top left, Jump or Bee
+    # Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly; down a drop, a one-way.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_up_to_the_pump_door(self) -> None:
