@@ -21,8 +21,8 @@ _UP = CanUse("Jump") | CanUse("Bee Fly")
 _PLATFORMS_RUNNING = "First Room Platforms Running"
 _ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
 _PROCESSING2_UP = _UP & ANY_ATTACK & CanUse("Shield") & (CanUse("Beemerang Halt") | CanUse("Bee Fly"))
-# Up onto the Storage Maze's box tops from its floor: levers (a basic attack) and Jump or Bee Fly.
-_MAZE_UP = ANY_ATTACK & _UP
+# Up onto the Storage Maze's box tops from its floor: Jump or Bee Fly (the user: its lever is only the berry's).
+_MAZE_UP = _UP
 # Malbee's fight in her room (Event98, flag 211), which starts the tram between the first room and hers.
 _MALBEE_FOUGHT = "Malbee's Fight Done"
 # The pump room's moving platforms, a loop round its upper part (always running: ACTIVATION_FLAGS), Jump and the Shield.
@@ -142,7 +142,7 @@ MAP_AREAS = (
     Area("FactoryStorageElevator", "Bottom", ("loadzonebottom",), ANY_ATTACK),
     # The Storage Maze (FactoryStorageMaze; named by the user, 2026-10-10): its right side and floor (the elevator's
     # door, the Overseer's door behind its pass lock, the save crystal) the map's own region; the box tops in its middle
-    # up with levers and Jump or Bee Fly, off them free (a one-way); the bottom left pocket (the mini-boss room's door)
+    # up with Jump or Bee Fly, off them free (a one-way); the bottom left pocket (the mini-boss room's door)
     # a drop from the box tops with a green pad back up, free both ways.
     Area("FactoryStorageMaze", "Upper Middle", (), _MAZE_UP, out=one_way(None, _MAZE_UP)),
     Area("FactoryStorageMaze", "Bottom Left", ("loadzoneboss",), True_(), to="FactoryStorageMaze (Upper Middle)"),

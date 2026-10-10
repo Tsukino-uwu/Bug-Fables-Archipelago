@@ -308,7 +308,7 @@ as it is, a frozen record.
 - [x] FactoryProcessingMalbee (89) — Malbee's Room; its fight (`Event98`, three Abomihoneys, flag 211) a story event
   that starts the tram, both ways to the First Room's right side; the platform Jump or Bee Fly up, a drop down; for
   the quest pass: the broken Mender (325 to 326)
-- [x] FactoryStorageMaze (90) — the Storage Maze; its box tops up with levers and Jump or Bee Fly; the medal Shock
+- [x] FactoryStorageMaze (90) — the Storage Maze; its box tops up with Jump or Bee Fly; the medal Shock
   Trooper, "Hole in the Boxes", location 232, and crystal berry #17, "Lever Puzzle", location 233 (a basic attack,
   Jump, Beemerang Halt); the Overseer's door behind its pass lock (a stand-in until Next 67)
 - [x] FactoryStorageElevator (91) — the Storage Elevator; the top and the bottom joined by the elevator, a basic attack

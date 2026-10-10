@@ -1799,12 +1799,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   the doors to the Storage Elevator (`loadzoneelevator`, nothing needed) and to the Overseer's room (`loadzoneos`, top
   right), a save crystal. The Overseer's door sits behind a Factory Pass lock (`keycard`, `Event59` key index 4, then
   `Event96`, flag 222; the closed model `Base/DoorE` until 222); arriving from her room the game pushes the party past
-  it (seen), a one-way without the pass. Up onto the box tops in the middle: levers (a basic attack) and Jump or Bee
-  Fly; off them, walking right or dropping anywhere, free, and back up costs that again. From the box tops two holes
-  with a green bounce pad back up each, free both ways: the bottom left pocket with the door to the mini-boss room
-  (`loadzoneboss`), and the medal Shock Trooper (`shocktrooperMedal`, medal 34, flag 220) among the boxes. Crystal berry
-  #17 (`crystal berry`) on top of a box, by a lever puzzle: a basic attack, Jump and Beemerang Halt (the user). Spikes;
-  a Venus healer (130 to 299); map enemies, a Denmuki and a Turret.
+  it (seen), a one-way without the pass. Up onto the box tops in the middle: Jump or Bee Fly (the user: the lever is
+  only the berry's); off them, walking right or dropping anywhere, free, and back up costs that again. From the box tops
+  two holes with a green bounce pad back up each, free both ways: the bottom left pocket with the door to the mini-boss
+  room (`loadzoneboss`), and the medal Shock Trooper (`shocktrooperMedal`, medal 34, flag 220) among the boxes. Crystal
+  berry #17 (`crystal berry`) on top of a box, by a lever puzzle: a basic attack, Jump and Beemerang Halt (the user).
+  Spikes; a Venus healer (130 to 299); map enemies, a Denmuki and a Turret.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

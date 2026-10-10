@@ -1516,8 +1516,8 @@ class TestStorageElevator(BugFablesTestBase):
 
 
 class TestStorageMaze(BugFablesTestBase):
-    # FactoryStorageMaze, the Storage Maze (the user, 2026-10-10): up onto its box tops, levers and Jump or Bee Fly, off
-    # them free; the bottom left pocket and the medal's hole free from the box tops; the berry by a lever puzzle; the
+    # FactoryStorageMaze, the Storage Maze (the user, 2026-10-10): up onto its box tops, Jump or Bee Fly, off them
+    # free; the bottom left pocket and the medal's hole free from the box tops; the berry by a lever puzzle; the
     # Overseer's door behind its pass lock.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
     HALT = ("Progressive Beemerang", "Progressive Beemerang")
@@ -1527,12 +1527,12 @@ class TestStorageMaze(BugFablesTestBase):
 
     def test_box_tops(self) -> None:
         up = self.way("FactoryStorageMaze to FactoryStorageMaze (Upper Middle)")
-        self.assertFalse(up(self.state_with("Jump")))
-        self.assertTrue(up(self.state_with("Jump", "Horn Slash")))
-        self.assertTrue(up(self.state_with("Bee Fly", "Progressive Freeze")))
+        self.assertFalse(up(self.state_with("Horn Slash")))
+        self.assertTrue(up(self.state_with("Jump")))
+        self.assertTrue(up(self.state_with("Bee Fly")))
         off = self.way("FactoryStorageMaze (Upper Middle) to FactoryStorageMaze")
         self.assertFalse(off(self.state_with()))
-        self.assertTrue(off(self.state_with("Jump", "Horn Slash")))
+        self.assertTrue(off(self.state_with("Jump")))
         for name in ("FactoryStorageMaze (Upper Middle) to FactoryStorageMaze (Bottom Left)",
                      "FactoryStorageMaze (Bottom Left) to FactoryStorageMaze (Upper Middle)"):
             self.assertTrue(self.way(name)(self.state_with()))
