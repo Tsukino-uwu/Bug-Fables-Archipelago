@@ -90,6 +90,7 @@ either one wrong).
 - [2026-10-09: the Dash without the Horn Slash; Ice Block Climb and Fenced Pond; the Defiant Root begun](#2026-10-09-the-dash-without-the-horn-slash-ice-block-climb-and-fenced-pond-the-defiant-root-begun)
 - [2026-10-09: the Defiant Root done, the Ancient Castle mapped to its boss; the key chains held out](#2026-10-09-the-defiant-root-done-the-ancient-castle-mapped-to-its-boss-the-key-chains-held-out)
 - [2026-10-10: the castle finished, the Bee Kingdom begun; the Scanner Room kept between; load times measured](#2026-10-10-the-castle-finished-the-bee-kingdom-begun-the-scanner-room-kept-between-load-times-measured)
+- [2026-10-10: the Bee Kingdom finished, the Honey Factory mapped; Tattle and Relay from the start](#2026-10-10-the-bee-kingdom-finished-the-honey-factory-mapped-tattle-and-relay-from-the-start)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3968,3 +3969,53 @@ either one wrong).
   logged off); mod 51 seen. The Watcher's met count put back with `bossmet restore`. The Scanner Room's doors
   and scan the user counts as seen (the room reset, walked both ways); the scan's check went out, but this seed
   predates location 208, so its item can only be seen in a seed generated with it (TO-CHECK).
+
+## 2026-10-10: the Bee Kingdom finished, the Honey Factory mapped; Tattle and Relay from the start
+
+- **Setup:** the same server (seed `AP_70580691250444408633`, PID 33408) and the user's open game, the console's command
+  file still session bed6439d's `cmds.txt`. The live slot_data came from this session's scratchpad as
+  `live-oldseed.json`: `live-slot-data.py`'s file with `free_sales` set to `[]`, since `liveslot` only lays keys over
+  the seed's and a dropped key would stay the seed's. Laid again after every plugin reload.
+- **Rooms 158 to 173 of 244:** the Balcony (build step 76: Beette's Flower Key back at 150, the user's call,
+  `free_sales` gone from slot_data) and Honeycomb's Lab, the Bee Kingdom Hive done; then every Honey Factory room: the
+  Lobby (build step 77, the storage door open; the processing door's Factory Pass lock kept; its shop five locations,
+  212-216), the Worker Rooms (229), the Core, the First Room (location 70's story-order stand-in replaced), the Second
+  Room, the Pump Room (230), Gen and Eri's Room, the Training Grounds, the Pressure Plate Room (231), Malbee's Room (her
+  fight a story event, and the tram between it and the First Room counted, the user's call), the Storage Elevator, the
+  Storage Maze (232-233), the Storage Mini-boss Room (234) and the Storage Overseer Room. Back in the mapped Defiant
+  Root Market, its three shops (217-228; the user: "we probly missed the shops"). Every room and location name is the
+  user's.
+- **Decided:** the Factory Pass one item never used up, the Wooden Crank's way (Next 67; five passes for five uses, the
+  fifth found by a review); the pass pickups stay the game's own until then, their needs and names written. Next 68,
+  chapter-gated characters and scenes fixed for good (the user: "properly fix instead of just pausing/delaying"), after
+  a research workflow on the Core's finale found chapter 4's opening waiting on Neolith (Known issues). The Core's
+  finale: left to the story or open from the start, the user's pick pending. One-item sellers wait for a sweep. Tattle
+  on from the start with any member, and Strategy and Relay in battle from the start, no items (mod guide steps 52-53).
+- **Found and fixed:** the first Tattle build set flag 10 as maps loaded, and a review found it hid the Wood Boring near
+  Snakemouth (its `limit`), freezing the horn tutorial (location 2) for good, before any seed was made with it; rebuilt
+  to read the flag as set where Tattle and `PauseMenu.CanDig` read it. From it, How it works §13 (writing a flag versus
+  changing its readers, the user: "its a important comparison"). The factory puzzles' holler is the game's help key, so
+  the chat's planned Enter is an open point in its design. The user's "is the base logic too hard": the escort's ground
+  way asks for Freeze too.
+- **Reviews** (workflows, each finding checked): the Balcony's commit (build step 24's list, a wording), the Lobby's
+  (TestItemOnHand's shop regions, a citation), Tattle and Relay (the softlock above, an unnamed reader, logging). The
+  Honey Factory's review was stopped at the handoff: run it again.
+- **Wrong turns:** two meaningless test assertions written and caught before their commits; several lines over 120
+  committed because the width check ran in the same command as the commit (fixed after; check first, then commit); a
+  rule on the First Room's side of the Lobby's locked door, written before that room was mapped (the user: "lets do and
+  worry about 1 room at a time"), taken out; a stand-in test moved to another unmapped spot (the user: "is it really
+  worth moving it constantly"), then dropped.
+- **Seen:** Beette's offer at 150; the Lobby's shop opening; the Market's slots naming Archipelago items; the locked
+  doors pushing the party past; Tattle and the holler with Vi alone, and with flag 10 off after the rebuild. **Not
+  seen:** a paid sale, any new location's check (the running seed predates 211-234: a new seed shows them), the
+  one-member battle menu (TO-CHECK), warping out mid-escort (TO-CHECK).
+- **Tests written and unrun** (the suite and the fuzzer before the next push): `TestFlowerKeySeller`, `TestBalcony`,
+  `TestHoneycombsLab`, `TestLobby`, `TestWorkerRooms`, `TestCore`, `TestFirstRoom`, `TestProcessing2`, `TestPumpRoom`,
+  `TestPuzzle1`, `TestPuzzle2`, `TestPressurePlateRoom`, `TestMalbeesRoom`, `TestStorageElevator`, `TestStorageMaze`,
+  `TestStorageMinibossRoom`, `TestOverseerRoom`, `TestMarketShops`, `TestItemOnHand`; `test_story_order` removed. Seeds
+  generate (`live-slot-data.py`, every run). Nothing pushed.
+- **Handoff (the user: "lets stop here for now, close/stop everything"):** the server stopped (its seed still in session
+  69b1ade9's scratchpad `out/`), the game closed, both checked gone; `[Debug] LoadTimer` off; plugin `2B392E21B68D` in
+  place. The test file as left: flag 218 off (the escort reset twice), flag 10 off, the whole party back. Next room
+  `RubberPrisonPier` (218); still to ask: when to build the Peculiar Gem, the Core's finale A or B, the Next 68 census
+  (about a million tokens, the user's OK).
