@@ -15,6 +15,7 @@ from worlds.generic.Rules import exclusion_rules
 
 from . import entrance_graph, generate_like_main
 from .test_doors import PLANDO
+from .test_shops import SHORT_OF_FILLER
 from ..data_tables import TRACKER_ORDER
 from ..world import BugFablesWorld
 
@@ -32,13 +33,11 @@ CASES: dict[str, dict[str, Any]] = {
     "coupled plando": {"entrance_randomizer": "coupled", "plando_connections": PLANDO},
     "decoupled plando": {"entrance_randomizer": "decoupled", "plando_connections": PLANDO},
     "room swap plando": {"entrance_randomizer": "room_swap", "plando_connections": PLANDO},
-    # Short of filler without crystal berries, and the default seed too since Crystal Berry and Hard Mode became useful
-    # (2026-10-08); discoveries and hidden items with the story's party hold.
-    "filler only, fallen back": {"shop_contents": "filler_only", "shuffle_crystal_berries": False},
+    "filler only, fallen back": SHORT_OF_FILLER,
+    # Discoveries and hidden items with the story's party hold (95 filler items for 70 excluded spots, 2026-10-10).
     "filler only, held": {"shop_contents": "filler_only", "shuffle_discoveries": True, "shuffle_hidden_items": True,
                           "starting_party_member": "off", "filler_starting_checks": False},
-    "fallback and exclusions": {"shop_contents": "filler_only", "shuffle_crystal_berries": False,
-                                "exclude_locations": [SHOP, OPENING, PIER]},
+    "fallback and exclusions": {**SHORT_OF_FILLER, "exclude_locations": [SHOP, OPENING, PIER]},
     "random member, moves, jump": {"starting_party_member": "random_member", "shuffle_field_moves": True,
                                    "shuffle_jump": True},
     "vi": {"starting_party_member": "vi"},
@@ -72,7 +71,8 @@ def regenerate(slot_data: Mapping[str, Any], seed: int) -> BugFablesWorld:
 
 
 def spots(world: BugFablesWorld) -> set[tuple[str, int | None, LocationProgressType]]:
-    """Every location and event, with how fill treats it (priority, which Universal Tracker never applies, as default)."""
+    """Every location and event, with how fill treats it (priority, which Universal Tracker never applies, as
+    default)."""
     return {(loc.name, loc.address, LocationProgressType.DEFAULT
              if loc.progress_type == LocationProgressType.PRIORITY else loc.progress_type)
             for loc in world.get_locations()}
@@ -158,7 +158,8 @@ class TestTrackerHooks(TestCase):
 
     def test_another_version_is_refused(self) -> None:
         slot_data = as_sent(generate_like_main({}, 1).fill_slot_data())
-        for changed in ({**slot_data, "world_version": "0.0.1"}, {k: v for k, v in slot_data.items() if k != "options"}):
+        for changed in ({**slot_data, "world_version": "0.0.1"},
+                        {k: v for k, v in slot_data.items() if k != "options"}):
             with self.subTest(keys=sorted(set(slot_data) ^ set(changed))), self.assertRaises(ValueError):
                 regenerate(changed, 3)
 

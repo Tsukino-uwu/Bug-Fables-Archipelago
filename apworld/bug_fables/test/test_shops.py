@@ -6,6 +6,11 @@ from worlds.generic.Rules import add_item_rule
 from . import BugFablesTestBase, generate_like_main
 from ..rules import fall_back_from_filler_only
 
+# Party members, field moves and Jump as items take filler's place: a solo seed is short of filler (68 filler items for
+# 73 excluded spots, 2026-10-10; a default seed holds, 74 for 73), so Filler Only falls back.
+SHORT_OF_FILLER = {"shop_contents": "filler_only", "starting_party_member": "random_member",
+                   "shuffle_field_moves": True, "shuffle_jump": True}
+
 
 class TestMedalShop(BugFablesTestBase):
     # Merab's full stock is 22 locations, one per copy (TP Plus and Ambusher twice).
@@ -108,9 +113,8 @@ class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
-    # A solo seed without crystal berries is short of filler, and since Crystal Berry and Hard Mode became useful
-    # (2026-10-08) the default seed is too: shops fall back to No Progression and still generate.
-    options = {"shop_contents": "filler_only", "shuffle_crystal_berries": False}
+    # A seed short of filler: shops fall back to No Progression and still generate.
+    options = SHORT_OF_FILLER
 
     def test_shops_fall_back_to_no_progression(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
@@ -129,15 +133,14 @@ class TestShopFallbackKeepsThePlayersRules(TestCase):
     # must leave both in place.
     def test_an_excluded_shop_stays_excluded(self) -> None:
         excluded = "Bugaria City: Commercial District, Medal Shop 2"
-        world = generate_like_main({"shop_contents": "filler_only", "shuffle_crystal_berries": False,
-                                    "exclude_locations": [excluded]}, seed=1)
+        world = generate_like_main({**SHORT_OF_FILLER, "exclude_locations": [excluded]}, seed=1)
         self.assertTrue(world.shops_fell_back)
         self.assertEqual(world.get_location(excluded).progress_type, LocationProgressType.EXCLUDED)
         other = world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(other.progress_type, LocationProgressType.DEFAULT)
 
     def test_an_item_rule_already_there_stays(self) -> None:
-        world = generate_like_main({"shop_contents": "filler_only", "shuffle_crystal_berries": False}, seed=1, steps=(
+        world = generate_like_main(SHORT_OF_FILLER, seed=1, steps=(
             "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic"))
         shop = world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         add_item_rule(shop, lambda item: item.name != "TP Plus")

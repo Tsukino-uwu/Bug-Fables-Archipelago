@@ -87,27 +87,27 @@ STORY_EVENTS = (
     # The Slide Puzzle's block (`icepillar`), knocked by the horn onto the plate on its bottom (Event113 sets 284 for
     # good): it fills the upper gap and opens the upper left door.
     StoryEvent("Ancient Castle: Slide Puzzle, Block Knocked into Place", _SLIDE_SOLVED, "SandCastleSlidePuzzle",
-               Source(flag=284), rule=CanUse("Horn Slash"), area="Bottom"),
+               Source(flag=284), rule=CanUse("Horn Slash"), no_jump=True, area="Bottom"),
     # The Main Room's (named by the user, 2026-10-09) two lift switches, any attack, each starting its lift for good:
     # the lower one's on the middle right (`switch1`, 290), the upper one's on the top right (`switch2`, 291).
     StoryEvent("Ancient Castle: Main Room, Lower Lift Switch Hit", _LOWER_LIFT, "SandCastleMainRoom", Source(flag=290),
-               rule=ANY_ATTACK, area="Middle Right"),
+               rule=ANY_ATTACK, no_jump=True, area="Middle Right"),
     StoryEvent("Ancient Castle: Main Room, Upper Lift Switch Hit", _UPPER_LIFT, "SandCastleMainRoom", Source(flag=291),
-               rule=ANY_ATTACK, area="Top Right"),
+               rule=ANY_ATTACK, no_jump=True, area="Top Right"),
     # The Pressure Puzzle's plates played for its door (the AND gate `eventcheck` runs Event113, which sets 296): the
     # door to the main room's top left open for good.
     StoryEvent("Ancient Castle: Pressure Puzzle, Door Puzzle Solved", _PRESSURE_SOLVED, "SandCastlePressurePuzzle",
-               Source(flag=296), rule=_PRESSURE),
+               Source(flag=296), rule=_PRESSURE, no_jump=True),
     # The Rock Room (named by the user, 2026-10-09): its bottom left's switch (`platformswitch - Duplicate`, any attack,
     # 283) starts the platform between its bottom's two sides; its boulder (`blocking rock`, 297), broken by Horn Dash
     # from the top left, or by the rolling rock the top right's crystals (the Toss) carry along on their platforms,
     # followed with Jump (seen by the user).
     StoryEvent("Ancient Castle: Rock Room, Platform Switch Hit", _ROCK_PLATFORM, "SandCastleRockRoom",
-               Source(flag=283), rule=ANY_ATTACK),
+               Source(flag=283), rule=ANY_ATTACK, no_jump=True),
     StoryEvent("Ancient Castle: Rock Room, Boulder Broken with Horn Dash", _ROCK_BOULDER, "SandCastleRockRoom",
-               Source(flag=297), rule=CanUse("Horn Dash"), area="Top Left"),
+               Source(flag=297), rule=CanUse("Horn Dash"), no_jump=True, area="Top Left"),
     StoryEvent("Ancient Castle: Rock Room, Boulder Crushed by the Rolling Rock", _ROCK_BOULDER, "SandCastleRockRoom",
-               Source(flag=297), rule=CanUse("Beemerang Toss") & CanUse("Jump"), area="Top Right"),
+               Source(flag=297), rule=CanUse("Beemerang Toss") & CanUse("Jump"), no_jump=True, area="Top Right"),
 )
 
 MAP_AREAS = (

@@ -41,7 +41,9 @@ class TestPermitGate(BugFablesTestBase):
                          # The Termacade and the theater, mapped 2026-10-06 in the commercial district's reach.
                          | {"Bugaria City: Termacade, Arcade Gift", "Bugaria City: Theater, Right Side Spinner",
                             "Bugaria City: Theater, Moth's Sale"}
-                         | {f"Bugaria City: Termacade, Prize {n}" for n in range(1, 14)})
+                         | {f"Bugaria City: Termacade, Prize {n}" for n in range(1, 14)}
+                         # The banker, mapped 2026-10-08; its berries wait for Next 63, as the shops' prices do.
+                         | {"Bugaria City: Residential District, Banker"})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
@@ -968,7 +970,8 @@ class TestDashScene(BugFablesTestBase):
         for offering in ("Sun Offering", "Moon Offering"):
             with self.subTest(missing=offering):
                 state = CollectionState(self.multiworld)
-                self.collect_all_but([offering], state)
+                # collect_all_but hands over placed events too: the offering's shrine is left out with it.
+                self.collect_all_but([offering, f"Upper Hall {offering.split()[0]} Shrine Fed"], state)
                 self.assertFalse(self.multiworld.get_location("Lost Sands: Entrance", self.player).can_reach(state))
         self.collect_all_but([])
         self.assertTrue(self.can_reach_location("Lost Sands: Entrance"))
@@ -1014,9 +1017,10 @@ class TestCastleMainRoom(BugFablesTestBase):
         self.assertTrue(up.access_rule(self.state_with("Jump", "Sand Castle Upper Lift Running")))
 
     def test_the_left_parts_are_cut_off_from_the_bottom(self) -> None:
-        everything = self.multiworld.get_all_state()
+        # Archipelago makes no entrance whose rule can never pass.
+        names = {e.name for e in self.multiworld.get_entrances(self.player)}
         for area in ("Middle Left", "Top Left"):
-            self.assertFalse(self._up(area).access_rule(everything), area)
+            self.assertNotIn(f"SandCastleMainRoom to SandCastleMainRoom ({area})", names)
 
     def test_switches_take_any_attack(self) -> None:
         for name, area in (("Lower", "Middle Right"), ("Upper", "Top Right")):
@@ -1039,9 +1043,8 @@ class TestCastleMainRoom(BugFablesTestBase):
         bottom = self.multiworld.get_region("SandCastleMainRoom", self.player)
         door = next(e for e in bottom.exits if "SandCastleStatueRoom" in e.connected_region.name)
         self.assertFalse(door.access_rule(self.state_with()))
-        state = CollectionState(self.multiworld)
-        self.collect_all_but(["Progressive Freeze"], state)
-        self.assertTrue(door.access_rule(state))
+        # Every item, events earned where reached: the other key lies past this lock, so a lock needing it stays shut.
+        self.assertTrue(door.can_reach(self.multiworld.get_all_state()))
 
 
 class TestPressurePuzzle(BugFablesTestBase):

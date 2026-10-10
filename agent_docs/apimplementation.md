@@ -3314,12 +3314,13 @@ the middle), 130 of 244; the swamp bridge, kept up (build step 61), 131 of 244; 
 door, Horn Dash, Beetle Dig too on the right; the middle by Jump and Freeze, or Bee Fly, back without Freeze one-way;
 the right side by the horn, Horn Dash and Jump, or Bee Fly), 132 of 244; the Junction (four doors; a crane's platform
 moved by levers between its left and right sides, Bee Fly or the long way round; a lift up to its top right; crystal
-berry #27 and a Clear Bomb on a vine, locations 183 and 184; its centipede scene kept away, build step 62), 133 of 244;
-Crank Pond (the middle's crank, Beemerang Halt and Jump, to the lower right, back by the lily pad, the horn; its right
-door up a lift, Horn Dash, the Halt and Jump; a Burly Berry and a Crunchy Leaf in grass, locations 185 and 186), 134 of
-244; Ice Block Climb (ice blocks frozen, knocked with the horn and jumped on, one from the droplet behind a boulder,
-Horn Dash, brought up to open the middle's ways up and across; Bee Fly for some; the medal Eternal Venom on a stump,
-location 187), 135 of 244; Fenced Pond (a double fence between its middle and its right side, taken down by a lever on
+berry #27 and a Clear Bomb on a vine, a new filler item, locations 183 and 184; its centipede scene kept away, build
+step 62), 133 of 244; Crank Pond (the middle's crank, Beemerang Halt and Jump, to the lower right, back by the lily pad,
+the horn; its right door up a lift, Horn Dash, the Halt and Jump; a Burly Berry and a Crunchy Leaf in grass, locations
+185 and 186), 134 of 244; Ice Block Climb (ice blocks frozen, knocked with the horn and jumped on, one from the droplet
+behind a boulder, Horn Dash, brought up to open the middle's ways up and across; Bee Fly for some; the medal Eternal
+Venom on a stump, a new useful item, location 187), 135 of 244; Fenced Pond (a double fence between its middle and its
+right side, taken down by a lever on
 a ledge, Horn Dash, the horn and Jump, or Jump and Bee Fly; a Magic Seed dug up on the right, location 188), 136 of 244,
 the swamp done; Defiant Root from 2026-10-09: the Square (the ground and its four doors free; the rooftops up with Jump,
 a drop down; six new locations there, 189 to 194: a Lore Book behind a box and Morty's Bed Bug on the ground, a Berry
@@ -3359,7 +3360,8 @@ berry #24 in an alcove off the top right, Shield, then Jump or Bee Fly, location
 room (one region, both doors free, the Watcher's fight on the way across needing nothing; its wall before the
 treasure room's door kept open, build step 68; no items), 150 of 244; the treasure room (one region, its door free;
 the castle's artifact on a platform, Jump or Bee Fly, held out of `ARTIFACTS` with the castle, build step 67), 151 of
-244, the Ancient Castle done; the Bee Kingdom Hive from 2026-10-09: Outside the Beehive (the bottom,
+244, the Ancient Castle done (its seven story events `no_jump` from 2026-10-10, as measured, where Shuffle Jump had
+held them for Jump); the Bee Kingdom Hive from 2026-10-09: Outside the Beehive (the bottom,
 the elevator bee down for nothing and the hive's main door, and the left, a bridge between the hive's side door and
 the factory's, cut off from each other; the factory door kept open, build step 69; no items), 152 of 244; the Throne
 Room (one region, its door free, kept open from the main area, build step 70; no items), 153 of 244; Jaune's Gallery
