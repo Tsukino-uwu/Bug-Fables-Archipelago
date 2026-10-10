@@ -20,7 +20,8 @@ TRANSFERS = (
     Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", LATER_CHAPTERS & SUBMARINE),
     Transfer("ant tunnel", "AntTunnels", "MetalIsland2", LATER_CHAPTERS),
     # Each far end's miner opens its shortcut to the tunnel hub, for free in a seed (free_ant_tunnels); the hub's way
-    # back out needs that end's flag, set only by having been there, so the way out adds nothing and isn't listed.
+    # back out needs that end's flag, set by having been there (Defiant Root's 75 by chapter 3's finale too), so the
+    # way out isn't listed: the logic counts less than the game.
     Transfer("ant tunnel", "GoldenSettlementEntrance", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "DefiantRoot2", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "BarrenLandsAntTunnel", "AntTunnels", two_way=False),
