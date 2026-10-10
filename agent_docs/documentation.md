@@ -3379,7 +3379,7 @@ another member tattling, the leader speaking).
 
 **Status:** built (2026-10-10); the first build (the flag set) seen the same day with Vi alone (Kabbu and Leif taken
 out by the dev console's `removemember`): Vi tattled ("How could you tell, Vi?"), and in the first puzzle room the
-holler had Gen and Eri press the switch. The rebuild (the flag read as set) installed; not yet seen.
+holler had Gen and Eri press the switch. The rebuild (the flag read as set) seen the same day: Tattle with flag 10 off.
 
 *Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*
 
