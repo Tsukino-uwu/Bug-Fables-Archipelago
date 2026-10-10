@@ -3223,6 +3223,42 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   1.07, 0, 2.1, made from 79) shown through `kept_present` (the dev `liveslot`) was there, and its hit swapped the gates.
   Only flag 79 makes or removes a gate lever: this one and the Third Floor's (entity 17); no other prison lever has a
   `requires` or `limit` (the dump). Used by `logic/rubber_prison.py`.
+- **The Spike Room** (`RubberPrisonSpikeRoom`, 2026-10-10, the user on screen): the bottom (the corridor's door) and the
+  top (the door to the cells, behind the `PrisonDoor` Prison Key lock, until 537) across a spiked floor, Bee Fly or the
+  Shield; nothing reached from either without one. Its Prison Key (`Fixedkey`, 536) sits in a cage of three gates its
+  own lever drops (no saved flag): Bee Fly and an attack. Arriving through the top door with the lock shut, the game
+  pushes the party past it.
+- **The Cell Block Crossroads** (`RubberPrisonCells1`, 2026-10-10, the user on screen): the bottom 535 lever is in a
+  cell dug into (Beetle Dig); it opens the bottom left cell, whose rock the horn knocks out as the step up (Jump or Bee
+  Fly). The two wood levers up top take Bee Fly, the left first, then the right, whose scene (`Event186`) sets 540 for
+  good: the bottom right gate (`rightgate`) down, and the rock's copy at its knocked spot (`rock - Duplicate`,
+  requires 540; seen after re-entering), so the way up then needs only Jump or Bee Fly. The top door arrives inside its
+  barrier, whose lever (`ROTshortcutswitch`, 541) lowers it for good. Both bottom doors push the party past their lock
+  (539) or gate (540). Its sign: "⇦ Cafeteria ⇨ Giant's Lair Bridge".
+- **Electric Cells** (`RubberPrisonCells2`, 2026-10-10, the user on screen and drawings): three rows of cells; an
+  electric floor between the two bottom doors (the Shield or Bee Fly across, Bee Fly over the thorns between the bottom
+  cells); two electric moving platforms from the bottom to the top, ridden with the Shield only; from the top or the
+  middle a drop down, stuck without the Shield (only the bottom cells in reach). Both 535 levers (the bottom one in a
+  cell dug into, the top one free) swap the bottom right cell (the Poison Cake, item 74, 631) and the middle cells' 535
+  gates. The middle left cell's wood lever (400, cleared on every map load, `MainManager.cs:9615`) opens the key cell
+  (545); the key cell's own lever only lets you out. A cell whose gate is down can be dropped into from above. The top
+  door pushes the party past its lock (542). Its sign: "⇦ Cafeteria, Cells / ⇧ Gym, Security / ⇨ Giant's Lair Bridge".
+- **The Library** (`RubberPrisonLibrary`, 2026-10-10, the user on screen): up the stairs, Jump or Bee Fly. The
+  bookshelf (`Event191`, until 554) takes the four History Books (163 blue, 164 green, 165 yellow, 166 red) one by one
+  in a list and wants them in that order: a wrong order hands them back at the scene's end (`EventControl.cs:31506`),
+  the right one keeps them, slides the shelf aside and sets 554, behind it the Wooden Crank (561). The right staircase's
+  rail (`Base/fence`) has two invisible collider copies above it (`fence (2)`, `fence (3)`: mesh and collider, no
+  renderer; `fence (1)` the rail's own), found with `solids`; with those two off (the console's `hide`), the rail was
+  jumped over onto the shelves. Nothing else in the game reads 163-166 (only `Event191`).
+- **The Prison Key's sources and locks** (2026-10-10, EntityDump and code read): four `PrisonDoor` locks (`Event59` key
+  index 17: 537, 539, 542, 567) and four keys: the Pier's `ShwKEY wasp`, whose death drops a key-item pickup of
+  `vectordata[0].x` (161) when `vectordata[0].y` is -2, its flag the enemy's `limit[0]` (584,
+  `EntityControl.cs:5419-5426`; `ShwKEY` only draws the held item, `:552`, `:2465`); and pickups in the Spike Room
+  (536), Electric Cells (545) and the Gym (551). Its battle: the Wasp Driller (27, Ground) and a Wasp Bomber (26,
+  Kabbu's flip), neither summoning.
+- **The bridge scene's IL** (2026-10-10, the installed DLL, ilspycmd, `<Event193>d__240.MoveNext`): the four flag
+  writes in a row, each `ldsfld instance; ldfld flags; ldc.i4 N; ldc.i4.1; stelem.i1` (584, 567, 551, 545), then the
+  sweep loop, its one `Remove(161)` and the method's only `Contains` (on 161). Used by `KeptKeys.cs`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

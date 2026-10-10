@@ -131,8 +131,10 @@ where both copies are, since a hint can't tell the two apart.
   Received early, it does nothing until then.
 - **Save crystals** can be used with the confirm button when you stand next to one (a "?" shows over you, as when
   examining a statue), so you can save without a field attack, as with *Shuffle Field Moves*. Hitting one still works.
-- **The Factory Pass** is one item and never used up: every lock in the Honey Factory keeps it in your bag. The pump
-  room's scanner still asks for a pass three times; show it the same one each time.
+- **The Factory Pass** is one item and never used up: every lock in the Honey Factory keeps it in your bag, and the
+  pump room's scanner opens on the first show.
+- **The Prison Key** is the same in the Rubber Prison: one item, kept at every lock. A later story scene there that
+  would take your Prison Keys leaves it, and the key spots it would clear stay until you take them.
 
 ## What is the goal?
 

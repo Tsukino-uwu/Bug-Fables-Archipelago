@@ -8,14 +8,17 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // Key items never used up (slot_data kept_keys: the Factory Pass): the lock routine (Event59) leaves the shown key
-    // in the bag instead of its one removal, and fills the pump room's three-slot scanner at once. All after it stays
-    // the game's: the lock's flag and scene. Only in Event59: a global Remove patch would never end Event193's Prison
-    // Key sweep.
+    // Key items never used up (slot_data kept_keys: the Factory Pass, the Prison Key): the lock routine (Event59) leaves
+    // the shown key in the bag instead of its one removal, and fills the pump room's three-slot scanner at once. All
+    // after it stays the game's: the lock's flag and scene. The bridge scene (Event193) empties the bag of Prison Keys
+    // in its own loop and marks three Prison Key spots taken: with the key kept, the loop spares it and the spots stay.
     internal static class KeptKeys
     {
         // flagvar slot of the pump room's scanner: the keys shown so far, opening at 3.
         private const int ScannerCount = 24;
+        private const int PrisonKey = 161;
+        // The Prison Key spots the bridge scene marks taken: the Pier's Wasp Driller, Electric Cells' and the Gym's.
+        private static readonly int[] PrisonKeySpots = { 584, 545, 551 };
         private static ManualLogSource log;
         private static Func<SeedData> seed;
         private static Func<bool> randomizerOn;
@@ -27,6 +30,76 @@ namespace BugFablesAP
             randomizerOn = on;
             Hooks.Install(typeof(KeptKeys), "keys",
                 "every lock takes its key: a seed's one Factory Pass is gone at the first lock");
+            Hooks.Install(typeof(BridgeScene), "keys",
+                "the bridge scene takes the seed's one Prison Key and marks three of its spots taken unchecked");
+        }
+
+        private static bool Kept(int item)
+        {
+            SeedData data = randomizerOn != null && randomizerOn() ? seed?.Invoke() : null;
+            return data?.KeptKeys != null && data.KeptKeys.Contains(item);
+        }
+
+        private static class BridgeScene
+        {
+            [HarmonyPatch(typeof(EventControl), "Event193", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, Edit, "keys");
+
+            // The sweep's `callvirt List<int>.Contains` on 161 becomes `call StillToSweep`, and the three key spots'
+            // `stelem.i1` become `call SetFlag`: the same stack in and out.
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
+            {
+                MethodInfo contains = AccessTools.Method(typeof(List<int>), nameof(List<int>.Contains));
+                int[] sweeps = Enumerable.Range(1, code.Count - 1)
+                    .Where(i => code[i].Calls(contains) && code[i - 1].LoadsConstant(PrisonKey)).ToArray();
+                int[] spots = Enumerable.Range(2, code.Count - 2)
+                    .Where(i => code[i].opcode == OpCodes.Stelem_I1 && code[i - 1].LoadsConstant(1)
+                        && PrisonKeySpots.Any(flag => code[i - 2].LoadsConstant(flag))).ToArray();
+                if (sweeps.Length != 1 || spots.Length != PrisonKeySpots.Length)
+                {
+                    throw new InvalidOperationException($"Event193 has {sweeps.Length} Prison Key sweeps and "
+                        + $"{spots.Length} key spot flags where 1 and {PrisonKeySpots.Length} were measured");
+                }
+                code[sweeps[0]].opcode = OpCodes.Call;
+                code[sweeps[0]].operand = AccessTools.Method(typeof(KeptKeys), nameof(StillToSweep));
+                foreach (int i in spots)
+                {
+                    code[i].opcode = OpCodes.Call;
+                    code[i].operand = AccessTools.Method(typeof(KeptKeys), nameof(SetFlag));
+                }
+                log.LogInfo($"[keys] installed in EventControl.Event193 (the sweep at {sweeps[0]}, the key spots at "
+                    + string.Join(", ", spots.Select(i => i.ToString()).ToArray()) + ")");
+                return code;
+            }
+        }
+
+        // The sweep's loop test: a kept key ends it at once, left in the bag.
+        public static bool StillToSweep(List<int> bag, int item)
+        {
+            if (!bag.Contains(item))
+            {
+                return false;
+            }
+            if (Kept(item))
+            {
+                log?.LogInfo($"[keys] the bridge scene's sweep leaves key item {item} in the bag (this seed's kept_keys)");
+                return false;
+            }
+            return true;
+        }
+
+        // The game's flags[index] = value, unless the Prison Key is kept: then its spots stay until taken.
+        public static void SetFlag(bool[] flags, int index, bool value)
+        {
+            if (Kept(PrisonKey))
+            {
+                log?.LogInfo($"[keys] the bridge scene leaves flag {index} as it is ({flags[index]}): a Prison Key "
+                    + "spot stays until taken");
+                return;
+            }
+            flags[index] = value;
         }
 
         [HarmonyPatch(typeof(EventControl), "Event59", MethodType.Enumerator)]

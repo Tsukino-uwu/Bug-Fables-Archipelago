@@ -107,6 +107,8 @@ anyone curious about the process, or thinking of doing the same for another game
 52. [Tattle from the start, with any party](#52-tattle-from-the-start-with-any-party)
 53. [Strategy and Relay in battle from the start](#53-strategy-and-relay-in-battle-from-the-start)
 54. [The Factory Pass never used up at its locks](#54-the-factory-pass-never-used-up-at-its-locks)
+55. [The Prison Key never used up, the bridge scene included](#55-the-prison-key-never-used-up-the-bridge-scene-included)
+56. [Plain map objects hidden by the seed](#56-plain-map-objects-hidden-by-the-seed)
 
 ## Where it stands
 
@@ -3434,3 +3436,45 @@ pass still in the bag after the Lobby's and the Storage Maze's locks, each openi
 show (the first build), then on its first (reset with the console).
 
 *Code: `World/KeptKeys.cs`, `Core/SeedData.cs` (`KeptKeys`), `Core/Plugin.cs`; `Dev/SeedDump.cs`.*
+
+## 55. The Prison Key never used up, the bridge scene included
+
+Found 2026-10-10, mapping the Rubber Prison: the Prison Key (key item 161) has four locks, all `Event59`'s (key list
+index 17), so step 54's hook already keeps it once `kept_keys` lists it. But the Giant's Lair Bridge's scene
+(`Event193`, which sets flag 79) does two things of its own (`MEASURED.md`, the bridge scene's IL):
+
+- It **empties the bag of Prison Keys** in its own loop, `while (items[1].Contains(161)) items[1].Remove(161);`,
+  which would take the seed's one key.
+- It **marks three Prison Key spots taken** (flags 584, 545, 551: the Pier's Wasp Driller, Electric Cells' cell, the
+  Gym's pickup) with 567, the bridge's door. The mod sends a location's check when its flag is set, so those spots
+  would have sent their checks unfound and vanished.
+
+With Archipelago on and 161 in `kept_keys`, a second transpiler in `Event193` turns the loop's one `Contains(161)`
+into a call that answers "no more" for a kept key, so the loop ends with the key in the bag, and turns the three spots'
+flag writes (each `ldc.i4 N; ldc.i4.1; stelem.i1`) into a call that leaves those flags as they are. 567 and everything else
+stay the game's. If the IL no longer has exactly one such `Contains` and three such writes, the hook leaves the scene
+as it is and logs an error. The log says `[keys] installed in EventControl.Event193 (...)` and, in the scene, what it
+spared.
+
+**Status:** built (2026-10-10): the hook installs (the log); the scene itself not seen yet (it needs the Office's
+crank and the bridge).
+
+*Code: `World/KeptKeys.cs` (`BridgeScene`, `StillToSweep`, `SetFlag`).*
+
+## 56. Plain map objects hidden by the seed
+
+Found 2026-10-10, mapping the Rubber Prison's Library: its right staircase rail has two invisible copies of its
+collider stacked above it (`Base/fence/fence (2)` and `(3)`: a mesh and a collider, no renderer), which stop a jump
+over the rail onto the shelves. Once the book puzzle slides its shelf away, that jump is the only way left to the book
+on top of the shelves with Jump and the Beemerang Toss. `scenery_hidden` worked only on scenery the game itself
+switches by flag (a `ConditionChecker`, whose own check the mod answers "hide").
+
+With Archipelago on, a postfix on `MapControl.CreateEntities` switches off every `scenery_hidden` object of that map
+that has no `ConditionChecker` (found by its path in the map), logging `[open] <map>: <path> switched off (the seed
+hides it)`, or a warning when the path isn't there. Flag-switched scenery keeps the old way. The dev console's `hide`
+takes a path too, to try one live (`development.md`).
+
+**Status:** built (2026-10-10); seen the same day through the console's `hide`: with `fence (2)` and `(3)` off, the
+rail jumped over onto the shelves (the user). The seed's own hiding not seen yet.
+
+*Code: `World/KeptOpen.cs` (`PlainScenery`), `Dev/DevConsole.cs` (`hide`).*

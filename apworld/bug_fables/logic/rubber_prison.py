@@ -2,24 +2,65 @@
 room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has
+from rule_builder.rules import CanReachRegion, False_, Has
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse, one_way
-from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, ItemEntity, Source, StoryEvent, Transfer
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse, Member, one_way
+from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagSwap, ItemEntity, Location, Pickup, Source, StoryEvent,
+                          Transfer)
 
+# The one Prison Key, never used up at the prison's four locks in a seed (build step 82).
+PRISON_KEY = Has("Prison Key")
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The Pier's lift lever hit (`switch`, flag 566): its lift runs for good.
 _LIFT_RUNNING = "Pier Lift Running"
+# The Cell Block Crossroads' right wood lever hit (Event186, flag 540): its bottom right gate down for good, and its
+# rock kept in the knocked spot it climbs from.
+_CROSSROADS_RIGHT_GATE = "Crossroads Right Gate Open"
+# The Cell Block Crossroads' barrier lever hit from inside the top door's area (flag 541): the barrier down for good.
+_CROSSROADS_BARRIER = "Crossroads Barrier Lowered"
+# Up from the Cell Block Crossroads' bottom: the bottom lever (Beetle Dig to its cell, an attack) opens the left cell,
+# whose rock the horn knocks out as a step, then Jump or Bee Fly; or, the right lever once hit, the rock kept there.
+_CROSSROADS_UP = (CanUse("Beetle Dig") & CanUse("Horn Slash") & ANY_ATTACK | Has(_CROSSROADS_RIGHT_GATE)) & _UP
+# Electric Cells' electric floor, between its bottom doors and the bottom row: the Shield or Bee Fly.
+_ACROSS_THE_FLOOR = CanUse("Shield") | CanUse("Bee Fly")
 
 # The Pier (RubberPrisonPier; named by the user, 2026-10-10): bridges stacked above each other, each a floor dropped
-# from onto any floor below, either side, with no way back up inside the room (the user). The Second Floor's Wasp
-# Driller (`ShwKEY wasp`) drops a Prison Key (flag 584), which stays the game's own pickup until the Prison Key is
-# never used up (apimplementation.md, Next 69); its spot, once a location: "Rubber Prison: Pier, Second Floor Fight"
-# (the user's name), on the floor itself, nothing needed.
+# from onto any floor below, either side, with no way back up inside the room (the user).
+LOCATIONS = (
+    # The Pier's Second Floor Wasp Driller (`ShwKEY wasp`) drops a Prison Key on defeat, its pickup flag the enemy's
+    # limit, 584 (EntityControl's Death). The fight: the Wasp Driller and a Wasp Bomber, which Kabbu flips.
+    Location("Rubber Prison: Pier, Second Floor Fight", 240, "RubberPrisonPier",
+             Source(flag=584, pickup=Pickup(map="RubberPrisonPier", type=1, item=161)), rule=Member("Kabbu"),
+             no_jump=True, area="Second Floor"),
+    # The Spike Room's Prison Key, in the cage of three gates its lever drops: Bee Fly and an attack (the user).
+    Location("Rubber Prison: Spike Room, In the Cage", 241, "RubberPrisonSpikeRoom",
+             Source(flag=536, pickup=Pickup(map="RubberPrisonSpikeRoom", type=1, item=161)),
+             rule=CanUse("Bee Fly") & ANY_ATTACK, no_jump=True),
+    # Electric Cells' middle right cell, the Prison Key's, opened by the middle left cell's wood lever (flag 400, reset
+    # on every load), that cell behind a 535 gate. Every way into the middle row comes from the top, dropped after its
+    # 535 lever, or has the Shield to ride up to it: an attack for each lever.
+    Location("Rubber Prison: Electric Cells, Middle Right Cell", 242, "RubberPrisonCells2",
+             Source(flag=545, pickup=Pickup(map="RubberPrisonCells2", type=1, item=161)), rule=ANY_ATTACK,
+             no_jump=True, area="Middle"),
+    # Its bottom right cell's Poison Cake, behind a 535 gate: the bottom lever (Beetle Dig to its cell, an attack), or
+    # the top lever hit before dropping down (the Shield to ride up, or the drop counted with Points of No Return).
+    Location("Rubber Prison: Electric Cells, Bottom Right Cell", 243, "RubberPrisonCells2",
+             Source(flag=631, pickup=Pickup(map="RubberPrisonCells2", type=0, item=74)),
+             rule=ANY_ATTACK & (CanUse("Beetle Dig")
+                                | CanReachRegion("RubberPrisonCells2 (Upper)") & one_way(None, CanUse("Shield"))),
+             no_jump=True),
+)
 STORY_EVENTS = (
     # The lift lever on the ground floor's upper right, any attack: the lift between the dock and it runs for good.
     StoryEvent("Rubber Prison: Pier, Lift Lever Hit", _LIFT_RUNNING, "RubberPrisonPier", Source(flag=566),
                rule=ANY_ATTACK, no_jump=True),
+    # The Cell Block Crossroads' wood levers, up on the left and right: the left one first, then the right, each Bee Fly
+    # and an attack (the user).
+    StoryEvent("Rubber Prison: Cell Block Crossroads, Right Wood Lever Hit", _CROSSROADS_RIGHT_GATE,
+               "RubberPrisonCells1", Source(flag=540), rule=CanUse("Bee Fly") & ANY_ATTACK, no_jump=True,
+               area="Upper"),
+    StoryEvent("Rubber Prison: Cell Block Crossroads, Barrier Lever Hit", _CROSSROADS_BARRIER, "RubberPrisonCells1",
+               Source(flag=541), rule=ANY_ATTACK, no_jump=True, area="Top Door"),
 )
 _FLOORS = ("Top Floor", "Third Floor", "Second Floor")
 _GROUND = ("Ground Upper Left", None, "Ground Lower Left", "Ground Lower Right")
@@ -58,6 +99,38 @@ MAP_AREAS = (
     # from the spike room, the game pushes the party past it (seen), a one-way without the permit.
     Area("RubberPrisonCheckpointCorridor", "Top Left Door", ("loadzoneforward",), Has("Explorer Permit"),
          out=one_way(None, Has("Explorer Permit"))),
+    # The Spike Room (RubberPrisonSpikeRoom; named by the user, 2026-10-10): its bottom (the door to the corridor, the
+    # cage) the map's own region; the top across the spiked floor, Bee Fly or the Shield, both ways; the top door behind
+    # a Prison Key lock (until 537), the party pushed past it on arrival (seen).
+    Area("RubberPrisonSpikeRoom", "Top", (), CanUse("Bee Fly") | CanUse("Shield")),
+    Area("RubberPrisonSpikeRoom", "Top Door", ("loadzonenorth",), PRISON_KEY, out=one_way(None, PRISON_KEY),
+         to="RubberPrisonSpikeRoom (Top)"),
+    # The Cell Block Crossroads (RubberPrisonCells1; named by the user, 2026-10-10): its bottom (the door to the spike
+    # room, the save crystal) the map's own region. The upper level (its two wood levers) a drop down, its way back the
+    # way up. The top door in its own barrier, whose lever inside lowers it for good (541). The bottom left door behind
+    # a Prison Key lock (until 539), the bottom right one behind the gate the right wood lever opens (540): the party
+    # pushed past either on arrival (seen).
+    Area("RubberPrisonCells1", "Upper", (), _CROSSROADS_UP, out=one_way(None, _CROSSROADS_UP)),
+    Area("RubberPrisonCells1", "Top Door", ("loadzone3rdfloor",), Has(_CROSSROADS_BARRIER), out=ANY_ATTACK,
+         to="RubberPrisonCells1 (Upper)"),
+    Area("RubberPrisonCells1", "Left Door", ("loadzoneleft",), PRISON_KEY, out=one_way(None, PRISON_KEY)),
+    Area("RubberPrisonCells1", "Right Door", ("loadzoneright",), Has(_CROSSROADS_RIGHT_GATE),
+         out=one_way(None, Has(_CROSSROADS_RIGHT_GATE))),
+    # Electric Cells (RubberPrisonCells2; named by the user, 2026-10-10): three rows of cells. The bottom row (the bottom
+    # lever's cell, the Poison Cake's) the map's own region, each bottom door across the electric floor; the electric
+    # moving platforms up to the middle row and the top, the Shield only; down from either, a drop. The top door
+    # behind a Prison Key lock (until 542), the party pushed past it on arrival (seen).
+    Area("RubberPrisonCells2", "Left Door", ("loadzoneleft",), _ACROSS_THE_FLOOR),
+    Area("RubberPrisonCells2", "Right Door", ("loadzoneright",), _ACROSS_THE_FLOOR),
+    Area("RubberPrisonCells2", "Middle", (), CanUse("Shield"), out=one_way(None, CanUse("Shield"))),
+    Area("RubberPrisonCells2", "Upper", (), CanUse("Shield"), out=one_way(None, CanUse("Shield"))),
+    Area("RubberPrisonCells2", "Top Door", ("loadzone3rdfloor",), PRISON_KEY, out=one_way(None, PRISON_KEY),
+         to="RubberPrisonCells2 (Upper)"),
+    # The Library (RubberPrisonLibrary; named by the user, 2026-10-10): its bottom (the door, the book puzzle's shelf)
+    # the map's own region; up the stairs, Jump or Bee Fly. Waiting for the Wooden Crank (Next 62): "On Top of the
+    # Bookshelf" (the yellow History Book, 564: Jump and the Beemerang Toss, or Bee Fly, from the upper level) and "Book
+    # Puzzle" (the Wooden Crank behind the shelf, 561: the shelf moved, all four History Books placed in order, 554).
+    Area("RubberPrisonLibrary", "Upper", (), _UP),
 )
 
 TRANSFERS = (
@@ -69,6 +142,10 @@ TRANSFERS = (
     *(Transfer("drop", "RubberPrisonPier", "RubberPrisonPier", two_way=False, way_back=False_(), from_area=floor,
                to_area=below)
       for i, floor in enumerate(_FLOORS) for below in (*_FLOORS[i + 1:], *_GROUND)),
+    # Electric Cells' top row down onto the middle row, a drop, its way back the Shield's platforms. Waiting for the
+    # Wooden Crank (Next 62) there: "Middle Center Cell" (the red History Book, 582, behind a 535 gate: an attack).
+    Transfer("drop", "RubberPrisonCells2", "RubberPrisonCells2", two_way=False, way_back=CanUse("Shield"),
+             from_area="Upper", to_area="Middle"),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (448).
 PRESENT_WITH_ITEM = (
@@ -93,6 +170,13 @@ SCENERY_PRESENT = (
     # right door): kept, so the floor's two sides stay joined (the user, 2026-10-10: "i don't want the bridge to
     # collapse").
     EntityRef("RubberPrisonPier", "Base/BrokenBridge"),
+)
+SCENERY_HIDDEN = (
+    # The Library's right staircase rail: two invisible copies of its collider stacked above it, hidden so the rail is
+    # jumped over onto the shelves (seen). Once the book puzzle slides its shelf away, that's the only landing left for
+    # "On Top of the Bookshelf"'s Jump and Beemerang Toss (the user, 2026-10-10).
+    EntityRef("RubberPrisonLibrary", "Base/fence/fence (2)"),
+    EntityRef("RubberPrisonLibrary", "Base/fence/fence (3)"),
 )
 
 # The cells' hidden lift switch, hit while flag 41 (the first boss) is set: always on, as in vanilla, and it can never

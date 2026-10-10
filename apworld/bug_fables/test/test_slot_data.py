@@ -98,7 +98,8 @@ class TestFactoryPass(BugFablesTestBase):
     # One pass in the pool: without kept_keys the first lock would take it; a pass spot missing from the tables would
     # hand out a vanilla pass instead of its check.
     def test_the_pass_is_kept(self) -> None:
-        self.assertEqual(self.world.fill_slot_data()["kept_keys"], [95])
+        # The Prison Key (161) with it, since build step 82.
+        self.assertEqual(self.world.fill_slot_data()["kept_keys"], [95, 161])
 
     def test_pass_spots_are_locations(self) -> None:
         data = self.world.fill_slot_data()

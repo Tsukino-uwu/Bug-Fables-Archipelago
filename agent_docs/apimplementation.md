@@ -154,6 +154,8 @@ this file and that doc disagree, that doc is right.
 79. [Build step 79: the Factory Pass, never used up](#build-step-79-the-factory-pass-never-used-up)
 80. [Build step 80: the Rubber Prison Pier's third floor save crystal kept](#build-step-80-the-rubber-prison-piers-third-floor-save-crystal-kept)
 81. [Build step 81: the Rubber Prison's late gate levers from the start](#build-step-81-the-rubber-prisons-late-gate-levers-from-the-start)
+82. [Build step 82: the Prison Key, never used up](#build-step-82-the-prison-key-never-used-up)
+83. [Build step 83: the Library rail's invisible walls hidden](#build-step-83-the-library-rails-invisible-walls-hidden)
 
 **How it works**
 
@@ -734,6 +736,13 @@ be wrong.
     worry, a crash between receiving the halves and the merge, wouldn't lose anything either way (received items are
     counted in the save and replayed), but the whole is simpler. The Big Crank (60) is made from two halves, so its
     halves are designed here too.
+    **The Rubber Prison's crank** (mapped 2026-10-10): "Rubber Prison: Library, Book Puzzle" (`RubberPrisonLibrary`,
+    flag 561, behind the bookshelf the History Book puzzle slides away, `Event191`, flag 554; the user's name). The
+    puzzle takes the four History Books (key items 163 blue, 164 green, 165 yellow, 166 red, placed in that order), so
+    with this step they become progression and their spots locations, held out until then (their pickups the game's
+    own): the Cafeteria's (548), the Office's (563), "Rubber Prison: Library, On Top of the Bookshelf" (564: Jump and
+    the Beemerang Toss, or Bee Fly) and "Rubber Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a
+    535 gate), the last two the user's names. A wrong order hands the books back at the scene's end (`:31506`).
 63. **Berries in the logic** (decided 2026-10-08, the user; to build after the rooms, with the enemy pass, its own
     steps then). Today no berry price is a rule: ordinary berries were taken as renewable from battles (build step 11).
     The banker's Platinum Card ("Bugaria City: Residential District, Banker", 550 berries in all) raised it. The user:
@@ -842,7 +851,8 @@ be wrong.
     code, 2026-10-10): the bridge's scene (`Event193`, flag 79) sets 584, 567, 551 and 545, so the Wasp Driller and the
     key pickups in Cells 2 and the Gym go without being taken (each spot must be kept until its check: "nothing in a
     seed ever goes away"), and it empties the bag of Prison Keys itself (`EventControl.cs:32140-32143`, not `Event59`),
-    which would take the kept key too.
+    which would take the kept key too. Built 2026-10-10, early (the user, mapping the Spike Room: "Build Next 69
+    now"): build step 82.
 70. **Late abilities** (asked 2026-10-10, the user; not decided): a way to keep a seed from giving out Jump, Bee Fly or
     both early, for a player who wants to go without them through much of a seed; "just something that tries to put
     it/them as far back/late as possible, not forcing it or breaking things". A research workflow (Archipelago
@@ -3424,7 +3434,15 @@ save crystal kept, build steps 78 and 80; the Wasp Driller's Prison Key the game
 Giant's Lair Bridge pushed-past one-ways for the Office and the bridge), 174 of 244; the Checkpoint Corridor (the
 left and the right, two gates between them that alternate on flag 535 with a lever between them and on each side, the
 right one kept present, build step 81, so an attack apart both ways; the top left door behind the Explorer Permit's
-lock, a pushed-past one-way; no location), 175 of 244; the rest of `room-checklist.md` to go.
+lock, a pushed-past one-way; no location), 175 of 244; the Spike Room (the spiked floor, Bee Fly or the Shield; "In the
+Cage", the Prison Key, Bee Fly and an attack; the top door behind the Prison Key's lock, build step 82), 176 of 244;
+the Cell Block Crossroads (up by the bottom lever's rock, Beetle Dig, the horn, Jump or Bee Fly, or by the rock kept
+once the right wood lever is hit, a drop down; the top door in its own barrier; the bottom doors behind the Prison
+Key's lock and the right lever's gate, all pushed-past; no location), 177 of 244; Electric Cells (three rows of cells:
+the bottom doors across the electric floor, the Shield or Bee Fly; up on the electric platforms, the Shield only, down
+a drop; "Middle Right Cell", the Prison Key, and "Bottom Right Cell", a Poison Cake; the top door behind the Prison
+Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's invisible walls hidden, build step
+83; its History Book and Book Puzzle spots with Next 62), 179 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6261,6 +6279,58 @@ both ways (build step 24, the room-by-room list). Test `TestCheckpointCorridor`.
 dev `liveslot`: there from the start, its hit swapping the gates (the user). The Third Floor's not seen yet.
 
 *Code: `logic/rubber_prison.py` (`KEPT_PRESENT`, `MAP_AREAS`). The mod: `World/KeptOpen.cs`, unchanged.*
+
+## Build step 82: the Prison Key, never used up
+
+**Found:** Next 69 (2026-10-10): each of the prison's four Prison Key locks (`Event59`, key index 17: the Spike Room,
+the Cell Block Crossroads, Electric Cells and the Giant's Lair Bridge) takes a key (161), and the game has four, one
+per lock: the Pier's Wasp Driller drops one on defeat (its pickup's flag the enemy's limit, 584,
+`EntityControl.cs:5419-5426`), and three lie as pickups (the Spike Room 536, Electric Cells 545, the Gym 551). The
+bridge scene (`Event193`) sweeps the bag of Prison Keys and marks 584, 545 and 551 taken (`MEASURED.md`).
+
+**Asked and decided (the user, 2026-10-10, mapping the Spike Room):** "Build Next 69 now"; the spots' names: "In the
+Cage" (the Spike Room) and "Middle Right Cell" (Electric Cells), with "Second Floor Fight" (the Pier) from before.
+
+**Built:**
+
+- **The pool:** "Prison Key" (161, progression), *kept* in `items.json`, once however many spots; `kept_keys` becomes
+  `[95, 161]` by itself. The mod (the mod guide, steps 54 and 55) keeps it at every `Event59` lock and through the
+  bridge scene, whose three key spots stay until taken.
+- **Three spots in seeds:** "Rubber Prison: Pier, Second Floor Fight" (240, the dropped key's flag 584; the fight
+  brings a Wasp Bomber, so Kabbu), "Rubber Prison: Spike Room, In the Cage" (241, 536: Bee Fly and an attack) and
+  "Rubber Prison: Electric Cells, Middle Right Cell" (242, 545: an attack). The Gym's waits for its room.
+- **The locks:** `PRISON_KEY` on the Spike Room's top door, the Cell Block Crossroads' bottom left door and Electric
+  Cells' top door, each a pushed-past area (seen); the Giant's Lair Bridge's with its room.
+- **With the same rooms:** "Rubber Prison: Electric Cells, Bottom Right Cell" (243, the Poison Cake, 631: an attack,
+  and Beetle Dig for the bottom lever or the top reached and dropped from).
+
+Tests `TestPool`, `TestFactoryPass` (`kept_keys`), `TestPrisonKey`, `TestSpikeRoom`, `TestCellBlockCrossroads`,
+`TestElectricCells`.
+
+**Status:** built (2026-10-10): the world generates with it (`live-slot-data.py`), both hooks install (the log); the
+tests written, to run before the push; the new spots need a new seed; not seen in game.
+
+*Code: `data/items.json`, `logic/rubber_prison.py` (`PRISON_KEY`, `LOCATIONS`). The mod: `World/KeptKeys.cs`.*
+
+## Build step 83: the Library rail's invisible walls hidden
+
+**Found (2026-10-10, mapping the Library):** the right staircase's rail has two invisible copies of its collider
+stacked above it (`Base/fence/fence (2)` and `(3)`), so it can't be jumped over onto the shelves. "On Top of the
+Bookshelf"'s Jump and Beemerang Toss way landed on the puzzle's own shelf, which slides away once the History Book
+puzzle is solved; in a seed the books can come before that spot is checked, and the way would be gone (the user:
+"once the puzzle is done, you wouldn't have had anything to drop down onto").
+
+**Asked and decided (the user, 2026-10-10):** "can we remove the invisible wall that is on the stairs?"; "idm the
+fence being visible, but i don't want a invisible wall stretching upwards blocking you from jumping over".
+
+**Built:** `scenery_hidden` gets both, the rail's own collider (`fence (1)`) kept; the mod hides plain objects too (the
+mod guide, step 56). The book's rule stays Jump and the Beemerang Toss, or Bee Fly, now true before and after the
+puzzle. Test `TestLibrary`.
+
+**Status:** built (2026-10-10); seen through the console's `hide` the same day (the rail jumped over onto the shelves);
+the seed's own hiding not seen yet.
+
+*Code: `logic/rubber_prison.py` (`SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs` (`PlainScenery`).*
 
 # How it works
 

@@ -613,6 +613,157 @@ class TestCheckpointCorridor(BugFablesTestBase):
         self.assertIn({"map": "RubberPrisonThirdFloor", "entity": "globalswitch - Duplicate - Duplicate"}, present)
 
 
+class _PrisonRoom(BugFablesTestBase):
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def way(self, name: str):
+        return self.multiworld.get_entrance(name, self.player).access_rule
+
+    def spot(self, name: str):
+        return self.multiworld.get_location(name, self.player)
+
+    def assert_key_lock(self, inside: str, door: str) -> None:
+        # A Prison Key lock both ways: the key opens it, and arriving through it pushes the party past.
+        for name in (f"{inside} to {door}", f"{door} to {inside}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Bee Fly", "Shield", "Horn Slash", "Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Prison Key")))
+
+
+class TestSpikeRoom(_PrisonRoom):
+    # RubberPrisonSpikeRoom, the Spike Room (the user, 2026-10-10): the spiked floor crossed with Bee Fly or the Shield;
+    # the key in the cage, Bee Fly and an attack; the top door behind a Prison Key lock.
+    MAP = "RubberPrisonSpikeRoom"
+
+    def test_across_the_spikes(self) -> None:
+        for name in (f"{self.MAP} to {self.MAP} (Top)", f"{self.MAP} (Top) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Jump", "Horn Slash")))
+                self.assertTrue(self.way(name)(self.state_with("Bee Fly")))
+                self.assertTrue(self.way(name)(self.state_with("Shield")))
+
+    def test_the_cage(self) -> None:
+        cage = self.spot("Rubber Prison: Spike Room, In the Cage")
+        self.assertEqual(cage.parent_region.name, self.MAP)
+        self.assertFalse(cage.access_rule(self.state_with("Bee Fly")))
+        self.assertTrue(cage.access_rule(self.state_with("Bee Fly", "Horn Slash")))
+
+    def test_top_door_locked(self) -> None:
+        self.assert_key_lock(f"{self.MAP} (Top)", f"{self.MAP} (Top Door)")
+
+
+class TestCellBlockCrossroads(_PrisonRoom):
+    # RubberPrisonCells1, the Cell Block Crossroads (the user, 2026-10-10): up by the rock the bottom lever's cell holds
+    # (Beetle Dig, the horn, Jump or Bee Fly) or, once the right wood lever is hit, by the rock kept in place; down a
+    # drop; the top door in its own barrier; the bottom left door behind a Prison Key lock, the right behind 540's gate.
+    MAP = "RubberPrisonCells1"
+
+    def test_way_up(self) -> None:
+        up = self.way(f"{self.MAP} to {self.MAP} (Upper)")
+        self.assertFalse(up(self.state_with("Beetle Dig", "Horn Slash")))
+        self.assertFalse(up(self.state_with("Beetle Dig", "Jump", "Bee Fly")))
+        self.assertTrue(up(self.state_with("Beetle Dig", "Horn Slash", "Jump")))
+        self.assertTrue(up(self.state_with("Jump", "Crossroads Right Gate Open")))
+
+    def test_the_drop_needs_the_way_back(self) -> None:
+        down = self.way(f"{self.MAP} (Upper) to {self.MAP}")
+        self.assertFalse(down(self.state_with("Bee Fly")))
+        self.assertTrue(down(self.state_with("Bee Fly", "Crossroads Right Gate Open")))
+
+    def test_wood_levers(self) -> None:
+        lever = self.spot("Rubber Prison: Cell Block Crossroads, Right Wood Lever Hit")
+        self.assertEqual(lever.parent_region.name, f"{self.MAP} (Upper)")
+        self.assertFalse(lever.access_rule(self.state_with("Horn Slash", "Jump")))
+        self.assertTrue(lever.access_rule(self.state_with("Bee Fly", "Horn Slash")))
+
+    def test_top_door_barrier(self) -> None:
+        self.assertTrue(self.way(f"{self.MAP} (Top Door) to {self.MAP} (Upper)")(self.state_with("Progressive Freeze")))
+        inside = self.way(f"{self.MAP} (Upper) to {self.MAP} (Top Door)")
+        self.assertFalse(inside(self.state_with("Progressive Freeze", "Bee Fly")))
+        self.assertTrue(inside(self.state_with("Crossroads Barrier Lowered")))
+
+    def test_bottom_doors(self) -> None:
+        self.assert_key_lock(self.MAP, f"{self.MAP} (Left Door)")
+        for name in (f"{self.MAP} to {self.MAP} (Right Door)", f"{self.MAP} (Right Door) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Prison Key", "Bee Fly")))
+                self.assertTrue(self.way(name)(self.state_with("Crossroads Right Gate Open")))
+
+
+class TestElectricCells(_PrisonRoom):
+    # RubberPrisonCells2, Electric Cells (the user, 2026-10-10): its doors across the electric floor (the Shield or
+    # Bee Fly); up on the electric platforms, the Shield only; down a drop; the middle cells after a 535 lever.
+    MAP = "RubberPrisonCells2"
+
+    def test_bottom_doors(self) -> None:
+        for door in ("Left Door", "Right Door"):
+            for name in (f"{self.MAP} to {self.MAP} ({door})", f"{self.MAP} ({door}) to {self.MAP}"):
+                with self.subTest(way=name):
+                    self.assertFalse(self.way(name)(self.state_with("Jump", "Horn Slash")))
+                    self.assertTrue(self.way(name)(self.state_with("Shield")))
+                    self.assertTrue(self.way(name)(self.state_with("Bee Fly")))
+
+    def test_up_needs_the_shield(self) -> None:
+        for row in ("Middle", "Upper"):
+            with self.subTest(row=row):
+                up = self.way(f"{self.MAP} to {self.MAP} ({row})")
+                self.assertFalse(up(self.state_with("Bee Fly", "Jump")))
+                self.assertTrue(up(self.state_with("Shield")))
+                self.assertFalse(self.way(f"{self.MAP} ({row}) to {self.MAP}")(self.state_with("Bee Fly")))
+        drop = self.way(f"{self.MAP} (Upper) to {self.MAP} (Middle) (drop)")
+        self.assertFalse(drop(self.state_with("Bee Fly")))
+        self.assertTrue(drop(self.state_with("Shield")))
+
+    def test_cells(self) -> None:
+        key = self.spot("Rubber Prison: Electric Cells, Middle Right Cell")
+        self.assertEqual(key.parent_region.name, f"{self.MAP} (Middle)")
+        self.assertFalse(key.access_rule(self.state_with("Shield")))
+        self.assertTrue(key.access_rule(self.state_with("Progressive Freeze")))
+        cake = self.spot("Rubber Prison: Electric Cells, Bottom Right Cell")
+        self.assertEqual(cake.parent_region.name, self.MAP)
+        self.assertFalse(cake.access_rule(self.state_with("Beetle Dig", "Bee Fly")))
+        self.assertTrue(cake.access_rule(self.state_with("Beetle Dig", "Horn Slash")))
+
+    def test_top_door_locked(self) -> None:
+        self.assert_key_lock(f"{self.MAP} (Upper)", f"{self.MAP} (Top Door)")
+
+
+class TestLibrary(_PrisonRoom):
+    # RubberPrisonLibrary, the Library (the user, 2026-10-10): up the stairs with Jump or Bee Fly; the right staircase
+    # rail's two invisible walls hidden, so it's jumped over onto the shelves after the book puzzle moves its own.
+    MAP = "RubberPrisonLibrary"
+
+    def test_stairs(self) -> None:
+        up = self.way(f"{self.MAP} to {self.MAP} (Upper)")
+        self.assertFalse(up(self.state_with("Shield", "Horn Slash")))
+        self.assertTrue(up(self.state_with("Jump")))
+        self.assertTrue(up(self.state_with("Bee Fly")))
+
+    def test_rail_walls_hidden(self) -> None:
+        hidden = self.world.fill_slot_data()["scenery_hidden"]
+        for wall in ("Base/fence/fence (2)", "Base/fence/fence (3)"):
+            self.assertIn({"map": self.MAP, "entity": wall}, hidden)
+        self.assertNotIn({"map": self.MAP, "entity": "Base/fence/fence (1)"}, hidden)
+
+
+class TestPrisonKey(BugFablesTestBase):
+    # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The Pier's
+    # comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.
+    options = {"starting_party_member": "vi"}
+
+    def test_spots_are_locations(self) -> None:
+        from ..data_tables import vanilla_item
+        names = {loc.name for loc in self.world.included_locations if vanilla_item(loc) == "Prison Key"}
+        self.assertEqual(names, {"Rubber Prison: Pier, Second Floor Fight", "Rubber Prison: Spike Room, In the Cage",
+                                 "Rubber Prison: Electric Cells, Middle Right Cell"})
+
+    def test_the_fight_needs_kabbu(self) -> None:
+        fight = self.multiworld.get_location("Rubber Prison: Pier, Second Floor Fight", self.player)
+        self.assertEqual(fight.parent_region.name, "RubberPrisonPier (Second Floor)")
+        self.assertFalse(fight.access_rule(self.state_with()))
+        self.assertTrue(fight.access_rule(self.state_with("Kabbu")))
+
+
 class TestWizardTower(BugFablesTestBase):
     # Open in a seed: the fall's scene and the basement's wizard kept away, the hole's door and the front door kept
     # present, the front door's model and lock hidden, and the front door free both ways.

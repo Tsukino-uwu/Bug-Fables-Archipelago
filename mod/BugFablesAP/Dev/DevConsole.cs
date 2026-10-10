@@ -958,19 +958,23 @@ namespace BugFablesAP
                     }
                     case "hide":
                     {
-                        // hide <entity name>: switch an entity on this map off until the map reloads (nothing saved).
+                        // hide <entity name | path in the map>: switch an entity, or any map object by its path ("Base/
+                        // fence/fence (1)"), off until the map reloads (nothing saved).
                         if (parts.Length < 2 || MainManager.map == null)
                         {
-                            return "hide <entity name>";
+                            return "hide <entity name | path in the map>";
                         }
-                        NPCControl found = MainManager.map.GetComponentsInChildren<NPCControl>(true)
-                            .FirstOrDefault(n => n.name == parts[1]);
-                        if (found == null)
+                        string target = string.Join(" ", parts.Skip(1).ToArray());
+                        GameObject hidden = target.Contains("/")
+                            ? MainManager.map.transform.Find(target)?.gameObject
+                            : MainManager.map.GetComponentsInChildren<NPCControl>(true)
+                                .FirstOrDefault(n => n.name == target)?.gameObject;
+                        if (hidden == null)
                         {
-                            return "hide: no " + parts[1] + " on this map";
+                            return "hide: no " + target + " on this map";
                         }
-                        found.gameObject.SetActive(false);
-                        return "hidden until the map reloads: " + parts[1];
+                        hidden.SetActive(false);
+                        return "hidden until the map reloads: " + target;
                     }
                     case "markclass":
                     {

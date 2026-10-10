@@ -440,7 +440,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   from the map's entity table. `prices <medal id...>`: log each medal's price columns (berries and crystal berries).
 - `markcolor <progression|useful|trap|filler> <hex>`: a class's starburst colour, live (a design test).
   `markclass <entity> <class>` draws one slot's backdrop as that class; `markclass off` puts them back.
-- `hide <entity>`: switch an entity on this map off until the map reloads (nothing saved).
+- `hide <entity | path>`: switch an entity, or any map object by its path inside the map (`Base/fence/fence (2)`,
+  as `solids` lists them), off until the map reloads (nothing saved).
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
   off. Settles what's really on screen when a visual fix doesn't take.

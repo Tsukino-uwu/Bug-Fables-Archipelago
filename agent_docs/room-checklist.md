@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**175 of 244 done.**
+**179 of 244 done.**
 
 ## Outskirts
 
@@ -337,10 +337,21 @@ as it is, a frozen record.
   the top left door behind the Explorer Permit's lock (until 538), the party pushed past it on arrival; no location;
   for the enemy pass: the Wasp Driller (gone from 79), coming at the party shortly after the pushed-past arrival; for
   the Giant's Lair Bridge: the guard on the right (from 79)
-- [ ] RubberPrisonSpikeRoom (220)
-- [ ] RubberPrisonCells1 (221)
-- [ ] RubberPrisonCells2 (222)
-- [ ] RubberPrisonLibrary (223)
+- [x] RubberPrisonSpikeRoom (220) — the Spike Room; the top across the spiked floor, Bee Fly or the Shield; "In the
+  Cage", the Prison Key, Bee Fly and an attack; the top door behind the Prison Key's lock (537), pushed past on
+  arrival (build step 82); for the enemy pass: a Wasp Bomber (gone from 79)
+- [x] RubberPrisonCells1 (221) — the Cell Block Crossroads; up by the bottom lever's rock (Beetle Dig, the horn, Jump
+  or Bee Fly) or the rock kept once the right wood lever is hit (540), a drop down; the top door in its own barrier
+  (541); the bottom doors behind the Prison Key's lock (539) and the right lever's gate (540), pushed past on arrival;
+  no location; for the enemy pass: a ruffian, a wasp scout and a wasp trooper (the last two gone from 79)
+- [x] RubberPrisonCells2 (222) — Electric Cells; the bottom doors across the electric floor (the Shield or Bee Fly);
+  up on the electric platforms, the Shield only, down a drop; "Middle Right Cell" (the Prison Key) and "Bottom Right
+  Cell" (a Poison Cake); the top door behind the Prison Key's lock (542); with Next 62: "Middle Center Cell" (the red
+  History Book); for the quest pass: Cenn and Pisci (from 498), the prisoner (until 680); for the enemy pass: a
+  ruffian (gone from 79)
+- [x] RubberPrisonLibrary (223) — the Library; up the stairs, Jump or Bee Fly; the rail's invisible walls hidden (build
+  step 83); with Next 62: "On Top of the Bookshelf" (the yellow History Book) and "Book Puzzle" (the Wooden Crank
+  behind the shelf the four History Books slide away); for the enemy pass: a wasp and a ruffian (gone from 79)
 - [ ] RubberPrisonCafeteria (224)
 - [ ] RubberPrisonGym (225)
 - [ ] RubberPrisonSecurity (226)

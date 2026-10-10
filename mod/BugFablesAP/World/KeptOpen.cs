@@ -35,6 +35,8 @@ namespace BugFablesAP
             Hooks.Install(typeof(ShopGoods), "open", "a kept-away shopkeeper's goods stay laid out");
             bool scenery = Hooks.Install(typeof(Scenery), "open",
                 "scenery the seed removes (the Outskirts rocks) will stay");
+            Hooks.Install(typeof(PlainScenery), "open",
+                "plain map objects the seed hides (the Library's invisible rail walls) will stay");
             log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery ? " and ConditionChecker.Start" : "")}");
         }
 
@@ -332,6 +334,36 @@ namespace BugFablesAP
                         presentMarkers.Add(marker);
                         __instance.requires = marker;
                         log.LogInfo($"[open] {map}: scenery {path} shown (the seed shows it from the start)");
+                    }
+                }
+            }
+        }
+
+        // scenery_hidden on a plain map object, which no flag of the game's shows or hides (no ConditionChecker): switched
+        // off once the map is built (the Library's invisible rail walls).
+        private static class PlainScenery
+        {
+            [HarmonyPatch(typeof(MapControl), "CreateEntities")]
+            [HarmonyPostfix]
+            private static void AfterCreate(MapControl __instance)
+            {
+                List<ApConnection.Blocker> hidden = connection?.SceneryHidden;
+                if (hidden == null || randomizerOn == null || !randomizerOn())
+                {
+                    return;
+                }
+                string map = __instance.mapid.ToString();
+                foreach (ApConnection.Blocker listed in hidden.Where(b => b.Map == map))
+                {
+                    UnityEngine.Transform found = __instance.transform.Find(listed.Entity);
+                    if (found == null)
+                    {
+                        log.LogWarning($"[open] {map}: no {listed.Entity} to hide");
+                    }
+                    else if (found.GetComponent<ConditionChecker>() == null && found.gameObject.activeSelf)
+                    {
+                        found.gameObject.SetActive(false);
+                        log.LogInfo($"[open] {map}: {listed.Entity} switched off (the seed hides it)");
                     }
                 }
             }

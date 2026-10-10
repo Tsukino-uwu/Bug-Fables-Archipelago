@@ -52,6 +52,10 @@ class TestPool(BugFablesTestBase):
         spots = [loc for loc in self.world.included_locations if vanilla_item(loc) == "Factory Pass"]
         self.assertEqual(len(spots), 4)
         self.assertEqual(pool.count("Factory Pass"), 1)
+        # The Prison Key the same way: three spots so far (the Gym's waits for its room).
+        keys = [loc for loc in self.world.included_locations if vanilla_item(loc) == "Prison Key"]
+        self.assertEqual(len(keys), 3)
+        self.assertEqual(pool.count("Prison Key"), 1)
 
 
 class TestBerries(BugFablesTestBase):
