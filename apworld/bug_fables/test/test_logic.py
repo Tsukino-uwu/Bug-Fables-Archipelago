@@ -746,6 +746,20 @@ class TestLibrary(_PrisonRoom):
         self.assertNotIn({"map": self.MAP, "entity": "Base/fence/fence (1)"}, hidden)
 
 
+class TestCafeteria(_PrisonRoom):
+    # RubberPrisonCafeteria, the Cafeteria (the user, 2026-10-10): its left a drop down, back up with Jump or Bee Fly;
+    # the switch there only stops the boulders.
+    MAP = "RubberPrisonCafeteria"
+
+    def test_the_drop(self) -> None:
+        down = self.way(f"{self.MAP} to {self.MAP} (Left)")
+        self.assertFalse(down(self.state_with("Horn Slash", "Shield")))
+        self.assertTrue(down(self.state_with("Jump")))
+        up = self.way(f"{self.MAP} (Left) to {self.MAP}")
+        self.assertFalse(up(self.state_with("Horn Slash", "Shield")))
+        self.assertTrue(up(self.state_with("Bee Fly")))
+
+
 class TestPrisonKey(BugFablesTestBase):
     # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The Pier's
     # comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.

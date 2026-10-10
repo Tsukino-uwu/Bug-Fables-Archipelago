@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**179 of 244 done.**
+**180 of 244 done.**
 
 ## Outskirts
 
@@ -352,7 +352,9 @@ as it is, a frozen record.
 - [x] RubberPrisonLibrary (223) — the Library; up the stairs, Jump or Bee Fly; the rail's invisible walls hidden (build
   step 83); with Next 62: "On Top of the Bookshelf" (the yellow History Book) and "Book Puzzle" (the Wooden Crank
   behind the shelf the four History Books slide away); for the enemy pass: a wasp and a ruffian (gone from 79)
-- [ ] RubberPrisonCafeteria (224)
+- [x] RubberPrisonCafeteria (224) — the Cafeteria; its left a drop down, back up with Jump or Bee Fly; its boulder
+  lever (549) never needed; with Next 62: the blue History Book on the left (548), its name then; for the enemy pass:
+  a Wasp Bomber (gone from 79)
 - [ ] RubberPrisonGym (225)
 - [ ] RubberPrisonSecurity (226)
 - [ ] RubberPrisonOffice (229)

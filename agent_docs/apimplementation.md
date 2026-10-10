@@ -3442,7 +3442,8 @@ Key's lock and the right lever's gate, all pushed-past; no location), 177 of 244
 the bottom doors across the electric floor, the Shield or Bee Fly; up on the electric platforms, the Shield only, down
 a drop; "Middle Right Cell", the Prison Key, and "Bottom Right Cell", a Poison Cake; the top door behind the Prison
 Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's invisible walls hidden, build step
-83; its History Book and Book Puzzle spots with Next 62), 179 of 244; the rest of `room-checklist.md` to go.
+83; its History Book and Book Puzzle spots with Next 62), 179 of 244; the Cafeteria (its left a drop down, Jump or
+Bee Fly back up; its History Book with Next 62), 180 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
