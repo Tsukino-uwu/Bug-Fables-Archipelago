@@ -5663,9 +5663,10 @@ without it). Otherwise each artifact flag is set only by its own events. Two mor
    world's artifacts and the game's own list, `ARTIFACT_WRITERS`). Today that is flag 41, set by Event26. An artifact
    the logic doesn't hold never counts; a future goal is a new row.
 3. **A guard on those flags** (`GoalGuard`): a goal flag that turns on is kept only when one of its own events is
-   running (the game's `lastevent`, with an event in progress) or the dev console set it; anything else turns it back
-   off, logged as `[goal-guard] flag N turned on outside its events ... turned back off`. It checks before the goal is
-   counted, after each physics step, at each frame's end, and right before a save or a map's build, so a stray flag is
+   running (the game's `lastevent`, with an event in progress) or the dev console's `flag <n> on goal` set it;
+   anything else turns it back off, logged as `[goal-guard] flag N turned on outside its events ... turned back off`.
+   It checks before the goal is counted, after each physics step, at each frame's end, and right before a save or a
+   map's build, so a stray flag is
    never counted, saved or built into a room. A file's flags as loaded or started are taken as they are. With the
    repoints in place it should never fire: each firing is a bug to report.
 4. **The secret codes' new game held back** until the seed is known, like the other file choices (key 9 on an empty
@@ -5673,6 +5674,12 @@ without it). Otherwise each artifact flag is set only by its own events. Two mor
 
 The rule, in `CLAUDE.md`: a goal flag is set only by its own events, ever; a new goal joins the guard. Tests
 `TestGoalFlags` (not yet run: the suite and the fuzzer run before the next push).
+
+**The dev console's hole, closed (2026-10-10):** the console's `flag 41 on`, typed for a test of the Rubber Prison
+Pier's save crystal (which reads 41 too), was kept by the guard as the console's own choice, so the mod sent the goal
+and the server released the test seed's world. The user: "accidently sending a goal, is just as bad as having a
+impossible/invalid seed generation. we should have 0 accidental release". Now `flag <n> on` refuses a goal flag of the
+connected seed and says so; `flag <n> on goal` sets it when a goal test means to (`development.md`, Dev console).
 
 **Status:** built (2026-10-08), in seed `AP_70580691250444408633`; not yet seen in game.
 

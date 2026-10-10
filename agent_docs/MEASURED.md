@@ -1770,10 +1770,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Across the moving platforms to the Factory Pass (`keycard - Duplicate`, key item 95, flag 213) on the bottom left, by
   the lever ("By the Lever", the user's name, location 236, held out): Jump, Freeze, the Shield and a basic attack for
   a lever, which opens a shortcut back to the start (the user). Gen and Eri exist only until flag 211 (`Event98`, the
-  storage), the trigger until 216: with 211 set first, the scene would look for them (Next 68). An entity past its limit is
-  switched off, not destroyed (`SetActive(false)`, `NPCControl.cs:438-441`), and `GetEntity` returns it all the same
-  (`MainManager.cs:18510-18594`), so the scene would find them; what it, their switch and the holler then do is not
-  seen. Sticky honey; no other pickups.
+  storage), the trigger until 216: with 211 set first, the scene would look for them (Next 68). An entity past its
+  limit is switched off, not destroyed (`SetActive(false)`, `NPCControl.cs:438-441`), and `GetEntity` returns it all
+  the same (`MainManager.cs:18510-18594`), so the scene would find them; what it, their switch and the holler then do
+  is not seen. Sticky honey; no other pickups.
   **`FactoryProcessingPuzzle2`, the Training Grounds (2026-10-10, the user; named by the user after its sign):** a dead
   end with one door (`loadzone`, to the Pump Room), nothing needed in or out. The Factory Pass (`keycard`, key item 95,
   flag 212) on a platform behind a gate, far upper right ("Behind the Gate", the user's name, location 237): Beemerang

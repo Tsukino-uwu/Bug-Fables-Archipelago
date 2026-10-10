@@ -196,14 +196,21 @@ namespace BugFablesAP
         {
             if (parts.Length < 2)
             {
-                return "flag <n> [on|off]";
+                return "flag <n> [on|off] [goal]";
             }
             int n = int.Parse(parts[1]);
             if (parts.Length > 2)
             {
                 bool on = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
-                if (on)
+                if (on && GoalGuard.IsGoalFlag(n))
                 {
+                    // Turned on, a goal flag sends the goal and the server releases the world: only when asked for.
+                    if (parts.Length < 4 || parts[3].ToLowerInvariant() != "goal")
+                    {
+                        string refused = $"flag {n} counts toward this seed's goal: not set (\"flag {n} on goal\" sets it)";
+                        log.LogInfo("[dev] " + refused);
+                        return refused;
+                    }
                     GoalGuard.Allow(n);
                 }
                 MainManager.instance.flags[n] = on;

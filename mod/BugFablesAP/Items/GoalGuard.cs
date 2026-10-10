@@ -28,7 +28,13 @@ namespace BugFablesAP
                 "a goal flag set the wrong way is still caught each frame, but not right before a save or a map's build");
         }
 
-        // The dev console's flag command: a goal flag it turns on is kept, as if its event had set it.
+        internal static bool IsGoalFlag(int flag)
+        {
+            List<ApConnection.GoalFlag> goals = connection?.GoalFlags;
+            return goals != null && goals.Any(g => g.Flag == flag);
+        }
+
+        // The dev console's "flag <n> on goal": a goal flag it turns on is kept, as if its event had set it.
         internal static void Allow(int flag)
         {
             bool[] flags = MainManager.instance?.flags;

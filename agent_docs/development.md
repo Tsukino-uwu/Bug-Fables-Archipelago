@@ -351,7 +351,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   draws, from that location's scout (looks only; taking it gives the spawned item): a class or kind's colour seen
   where no check of it is left. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
-- `flag <n> [on|off]`: show or set a story flag.
+- `flag <n> [on|off] [goal]`: show or set a story flag. A flag that counts toward the connected seed's goal is
+  refused, since turning it on sends the goal and the server releases the world (2026-10-10, it did); `flag <n> on
+  goal` sets it on purpose.
 - `berry <n> [on|off]`: show or set a crystal berry's taken mark (`crystalbflags`); off brings it back on the next
   room load.
 - `liveslot [file]`: lays `BepInEx/bugfablesap-live.json` (or the file named) over the login's `slot_data`, rebuilds
