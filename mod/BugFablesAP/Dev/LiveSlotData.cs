@@ -27,10 +27,23 @@ namespace BugFablesAP
             var changed = new List<string>();
             foreach (JProperty key in JObject.Parse(File.ReadAllText(path)).Properties())
             {
+                // The goal stays the login's: a goal flag the file adds would be turned off by the guard, or counted.
+                if (key.Name == "goal_flags")
+                {
+                    continue;
+                }
+                JToken token = key.Value;
+                if (key.Name == "options" && token is JObject options && login.TryGetValue("options", out object seed)
+                    && seed != null && JToken.FromObject(seed)["artifacts_required"] is JToken required)
+                {
+                    options = (JObject)options.DeepClone();
+                    options["artifacts_required"] = required;
+                    token = options;
+                }
                 // As the login hands them over: objects and lists as tokens, a bare value as itself.
-                object value = key.Value is JValue bare ? bare.Value : key.Value;
+                object value = token is JValue bare ? bare.Value : token;
                 bool same = login.TryGetValue(key.Name, out object old)
-                    && JToken.DeepEquals(old == null ? JValue.CreateNull() : JToken.FromObject(old), key.Value);
+                    && JToken.DeepEquals(old == null ? JValue.CreateNull() : JToken.FromObject(old), token);
                 if (!same)
                 {
                     changed.Add(key.Name);

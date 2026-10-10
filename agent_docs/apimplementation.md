@@ -818,7 +818,8 @@ be wrong.
     mini-boss room's fight (`Event101`, flag 221; found by a review, 2026-10-10). The Wooden Crank's way (Next 62): in a
     seed the mod leaves the pass in the bag at each lock, so the pool holds one Factory Pass, progression, and every
     lock needs only it; the other pass pickups become ordinary locations. Asked by the user: "similar to the cranks
-    where we made it into just 1 reusable instead of having 3-4". Built: build step 79.
+    where we made it into just 1 reusable instead of having 3-4". Built: build step 79 (Gen and Eri's Room's pass held
+    out for now).
 68. **Chapter-gated characters and scenes, fixed for good** (decided 2026-10-10, the user: "are there any other
     npc/flags that only excist at/after certain chapters ? ... that will become a real issue for the goal of having
     things be openworld/anythign doable in any order"; "a really important thing to take a look at and properly fix
@@ -890,9 +891,9 @@ be wrong.
   a progressive item received meanwhile gets the wrong level (`KeyFor` on an emptied bag). The Warp still leaves. The
   hideout's spots are held out meanwhile (build step 67); the fix is Next 64's first part.
 
-- **The Rubber Prison's checkpoint corridor from the yard** (2026-10-04): in the game its gates may be shut from the
-  yard's side, so it never leads on; the logic still lets the yard reach the spike room through it (as before
-  2026-10-04). It needs the corridor split into two areas, the yard's and the spike room's (`room-logic.md`, the
+- **The Rubber Prison's checkpoint corridor from the Pier** (2026-10-04): in the game its gates may be shut from the
+  Pier's side, so it never leads on; the logic still lets the Pier reach the spike room through it (as before
+  2026-10-04). It needs the corridor split into two areas, the Pier's and the spike room's (`room-logic.md`, the
   model), which the apworld can do since build step 48 (`MAP_AREAS`); until it's written the prison's spots wait for
   the later chapters. Build step 9.
 - **Story scenes reached out of order freeze** (seen 2026-10-04, decoupled doors, a new file): the trigger `eventgl`
@@ -3382,7 +3383,8 @@ the Second Room (up to the pump door Jump or Bee Fly, a basic attack, the Shield
 down a drop; no location), 164 of 244; the Pump Room (up on the cranks, Beemerang Halt, then the platform loop, Jump and
 the Shield; the Shell Ointment behind the boxes, location 230, the Shield or Bee Fly; Malbee's door behind the Factory
 Pass scanner), 165 of 244; Gen and Eri's Room, the first puzzle room (one region, its door free; its Factory Pass by
-the lever, location 236), 166 of 244; the Training Grounds, the second puzzle room (the same; its pass, location 237,
+the lever, location 236, held out until the quest sweep), 166 of 244; the Training Grounds, the second puzzle room
+(the same; its pass, location 237,
 Beemerang Halt, Jump, the Shield and a basic attack for a lever), 167 of 244; the Pressure Plate Room, the third puzzle
 room (one region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #16, location 231, and its
 pass, location 238), 168 of 244; Malbee's Room (her fight, three Abomihoneys, a story event that needs nothing and
@@ -4565,7 +4567,8 @@ for a random start and the entrance randomizer.
    with the option check taken out. The test helpers follow a `WayBack`'s child and a transfer's `way_back`, so a
    misspelt name inside one is still caught.
 
-**Status:** built (2026-09-30), the tests pass and the mod builds; changes no seed until rooms are mapped; seen in game
+**Status:** built (2026-09-30), the tests pass and the mod builds; changes seeds as rooms are mapped (their one-ways;
+the option's text says so since 2026-10-10); seen in game
 (2026-10-04): a seed with it on and Travel Off keeps the Warp in the pause menu, though abilities as items force it on
 in every seed today, so the option's own part isn't singled out yet (the mod guide, step 38).
 
@@ -5706,7 +5709,9 @@ The rule, in `CLAUDE.md`: a goal flag is set only by its own events, ever; a new
 Pier's save crystal (which reads 41 too), was kept by the guard as the console's own choice, so the mod sent the goal
 and the server released the test seed's world. The user: "accidently sending a goal, is just as bad as having a
 impossible/invalid seed generation. we should have 0 accidental release". Now `flag <n> on` refuses a goal flag of the
-connected seed and says so; `flag <n> on goal` sets it when a goal test means to (`development.md`, Dev console).
+connected seed and says so, and every artifact flag before a login (the guard takes a file's flags as they are once
+the seed is known); `flag <n> on goal` sets it when a goal test means to (`development.md`, Dev console). The dev
+`liveslot` keeps the login's goal (`goal_flags` and `artifacts_required`), so a live file can't change what counts.
 
 **Status:** built (2026-10-08), in seed `AP_70580691250444408633`; not yet seen in game.
 
@@ -6158,7 +6163,7 @@ game pushes the party past from the far side join this step.
 **Built:**
 
 - **The pool:** "Factory Pass" (95, progression), marked *kept* in `items.json`, goes in once however many included
-  spots hold it (`items.py`); padding fills the other four.
+  spots hold it (`items.py`); padding fills the other three (four once Gen and Eri's Room's pass joins seeds).
 - **slot_data:** `kept_keys`, the kept key items' game ids, `[95]`. The mod (the mod guide, step 54) leaves a listed key
   in the bag at every `Event59` lock; a seed without the key keeps the game's way, every lock taking its key.
 - **Five spots, four in seeds:** "Honey Factory: Worker Rooms, On Top of the Bookshelf" (235, flag 178: Jump and the
@@ -6197,7 +6202,7 @@ set by the prison: players never see it. In a seed 41 can still be off there (`M
 **Asked and decided (the user, 2026-10-10):** "lets keep this one present all the time".
 
 **Built** (the apworld only: the mod's own list does it): `kept_present` gets the crystal, whose marker answers
-"exists" before the game reads its limit. Nothing in the logic changes.
+"exists" before the game reads its limit. Nothing in the logic changes. Test `TestPier`.
 
 **Status:** built (2026-10-10); seen the same day in seed `AP_80216874502571128696` through the dev `liveslot`, with
 41 on: the crystal there (the user).

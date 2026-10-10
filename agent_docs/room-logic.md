@@ -48,8 +48,8 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
    steps to the start, which is what Archipelago assumes of its origin region. The Warp is never that way back.
    **Unless the player turns on Points of No Return** (the user, 2026-09-30, off by default): then a one-way counts on
    its own need, and the Warp to Start is the way back, as Archipelago's "save and quit" is for its origin (`world
-   api.md`). Every one-way is written with `one_way(rule, way_back)`, so the option drops only the way back (none has
-   its way back written yet: build step 37).
+   api.md`). Every one-way is written with `one_way(rule, way_back)`, so the option drops only the way back (build
+   step 37); a one-way with no way back in the logic yet (`False_()`) counts only with it on.
 5. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
    little stricter; a rule that asks for too little can place an item somewhere the player can't reach, and the seed
    is impossible. Anything not yet measured is written the cautious way.

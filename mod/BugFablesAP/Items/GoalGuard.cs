@@ -28,10 +28,12 @@ namespace BugFablesAP
                 "a goal flag set the wrong way is still caught each frame, but not right before a save or a map's build");
         }
 
+        // Before a login every artifact flag counts: the seed's own goal flags aren't known yet, and the guard takes a
+        // file's flags as they are once they are.
         internal static bool IsGoalFlag(int flag)
         {
             List<ApConnection.GoalFlag> goals = connection?.GoalFlags;
-            return goals != null && goals.Any(g => g.Flag == flag);
+            return goals == null ? EnemyScaling.ArtifactFlags.Contains(flag) : goals.Any(g => g.Flag == flag);
         }
 
         // The dev console's "flag <n> on goal": a goal flag it turns on is kept, as if its event had set it.

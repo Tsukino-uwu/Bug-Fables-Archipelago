@@ -19,7 +19,7 @@ _LIFT_RUNNING = "Pier Lift Running"
 STORY_EVENTS = (
     # The lift lever on the ground floor's upper right, any attack: the lift between the dock and it runs for good.
     StoryEvent("Rubber Prison: Pier, Lift Lever Hit", _LIFT_RUNNING, "RubberPrisonPier", Source(flag=566),
-               rule=ANY_ATTACK),
+               rule=ANY_ATTACK, no_jump=True),
 )
 _FLOORS = ("Top Floor", "Third Floor", "Second Floor")
 _GROUND = ("Ground Upper Left", None, "Ground Lower Left", "Ground Lower Right")
@@ -53,10 +53,10 @@ MAP_AREAS = (
 )
 
 # The checkpoint corridor's gates open and shut by switches (the user, 2026-10-04: "has to be considered a oneway").
-# From the yard its gates may be shut (their switch on that side comes only from flag 79), so it never leads on; that
+# From the Pier its gates may be shut (their switch on that side comes only from flag 79), so it never leads on; that
 # needs the corridor split into two areas (room-logic.md), not yet possible: Known issues.
 DOOR_RULES = (
-    # Across to the yard from the far side: the switches take an attack.
+    # Across to the Pier from the far side: the switches take an attack.
     DoorRule("RubberPrisonCheckpointCorridor", "loadzoneexit", ANY_ATTACK),
     # Back to the spike room: its prison door (until flag 538) opens with the Explorer Permit.
     DoorRule("RubberPrisonCheckpointCorridor", "loadzoneforward", Has("Explorer Permit")),
@@ -76,8 +76,8 @@ TRANSFERS = (
 PRESENT_WITH_ITEM = (
     ItemEntity("RubberPrisonPier", "Fixedsub - Duplicate - Duplicate", SUBMARINE_KEY),
 )
-# The rock just inside the yard's left door, broken only by Horn Dash (until flag 589): coming in that way without it
-# stranded the party (the user, 2026-10-04).
+# The rock just inside the Pier's ground floor left door, broken only by Horn Dash (until flag 589): coming in that
+# way without it stranded the party (the user, 2026-10-04).
 KEPT_OPEN = (
     EntityRef("RubberPrisonPier", "rock"),
 )

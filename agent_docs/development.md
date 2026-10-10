@@ -351,13 +351,14 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   draws, from that location's scout (looks only; taking it gives the spawned item): a class or kind's colour seen
   where no check of it is left. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
-- `flag <n> [on|off] [goal]`: show or set a story flag. A flag that counts toward the connected seed's goal is
-  refused, since turning it on sends the goal and the server releases the world (2026-10-10, it did); `flag <n> on
-  goal` sets it on purpose.
+- `flag <n> [on|off] [goal]`: show or set a story flag. A flag that counts toward the connected seed's goal (before a
+  login, any artifact flag) is refused, since turning it on sends the goal and the server releases the world
+  (2026-10-10, it did); `flag <n> on goal` sets it on purpose.
 - `berry <n> [on|off]`: show or set a crystal berry's taken mark (`crystalbflags`); off brings it back on the next
   room load.
 - `liveslot [file]`: lays `BepInEx/bugfablesap-live.json` (or the file named) over the login's `slot_data`, rebuilds
-  the seed's tables and re-enters the room, logging which keys differ from the seed. Write the file with
+  the seed's tables and re-enters the room, logging which keys differ from the seed. The goal stays the login's
+  (`goal_flags` and the options' `artifacts_required` are never laid over). Write the file with
   `python dev-scripts/live-slot-data.py --archipelago <checkout> --yaml <the seed's player file> --out <that path>`:
   it generates that player file twice and keeps only the keys both seeds agree on, so a seed's own rolls (placements,
   shuffles) stay the server's. An apworld change then shows in the running game with no new seed or file.

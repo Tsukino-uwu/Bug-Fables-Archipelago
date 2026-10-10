@@ -1181,9 +1181,10 @@ class TestOutsideTheBeehive(BugFablesTestBase):
     def test_bridge_cut_off(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("BeehiveOutside")}
         self.assertEqual(parts, {"BeehiveOutside", "BeehiveOutside (Left)"})
-        everything = self.state_with(*(item.name for item in self.multiworld.itempool if item.player == self.player))
+        # Archipelago makes no entrance whose rule can never pass.
+        names = {e.name for e in self.multiworld.get_entrances(self.player)}
         for way in ("BeehiveOutside to BeehiveOutside (Left)", "BeehiveOutside (Left) to BeehiveOutside"):
-            self.assertFalse(self.multiworld.get_entrance(way, self.player).access_rule(everything), way)
+            self.assertNotIn(way, names)
 
     def test_elevator_down_free_up_not(self) -> None:
         down = self.multiworld.get_entrance("BeehiveOutside to DefiantRoot2 (Elevator) (elevator)", self.player)
@@ -1341,10 +1342,11 @@ class TestWorkerRooms(BugFablesTestBase):
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_two_parts_cut_off(self) -> None:
+        # Archipelago makes no entrance whose rule can never pass.
+        names = {e.name for e in self.multiworld.get_entrances(self.player)}
         for way in ("HoneyFactoryWorkerRooms to HoneyFactoryWorkerRooms (Sleeping Quarters)",
                     "HoneyFactoryWorkerRooms (Sleeping Quarters) to HoneyFactoryWorkerRooms"):
-            self.assertFalse(self.multiworld.get_entrance(way, self.player).access_rule(
-                self.state_with("Jump", "Bee Fly")))
+            self.assertNotIn(way, names)
 
     def test_desk_needs_jump_or_bee_fly(self) -> None:
         desk = self.multiworld.get_location("Honey Factory: Worker Rooms, On the Desk", self.player)
@@ -1679,33 +1681,52 @@ class TestPier(BugFablesTestBase):
         self.assertTrue(lever.access_rule(self.state_with("Horn Slash")))
 
     def test_the_submarine_docks_below(self) -> None:
-        self.assertTrue(self.way("MetalLake to RubberPrisonPier (Ground Lower Right) (submarine)")(self.state_with()))
+        way = self.multiworld.get_entrance("MetalLake to RubberPrisonPier (Ground Lower Right) (submarine)",
+                                           self.player)
+        self.assertEqual(way.connected_region.name, "RubberPrisonPier (Ground Lower Right)")
+
+    def names(self) -> set[str]:
+        return {e.name for e in self.multiworld.get_entrances(self.player)}
 
     def test_right_doors_shut(self) -> None:
-        everything = self.state_with("Jump", "Bee Fly", "Horn Slash", "Freeze", "Pier Lift Running")
+        # Neither counts yet, and Archipelago makes no entrance whose rule can never pass.
+        names = self.names()
         for joined, door in (("RubberPrisonPier (Second Floor)", "Second Floor Right Door"),
                              ("RubberPrisonPier", "Shortcut Door")):
             with self.subTest(door=door):
-                self.assertFalse(self.way(f"{joined} to RubberPrisonPier ({door})")(everything))
-                self.assertFalse(self.way(f"RubberPrisonPier ({door}) to {joined}")(everything))
+                self.assertNotIn(f"{joined} to RubberPrisonPier ({door})", names)
+                self.assertNotIn(f"RubberPrisonPier ({door}) to {joined}", names)
 
-    def test_floors_only_drop(self) -> None:
-        everything = self.state_with("Jump", "Bee Fly", "Horn Slash", "Freeze", "Pier Lift Running")
-        for i, floor in enumerate(self.FLOORS):
+    def test_floors_cut_off(self) -> None:
+        # Without Points of No Return each floor is reached by its own doors only: no way up, no drop counted.
+        names = self.names()
+        for floor in self.FLOORS:
             with self.subTest(floor=floor):
-                self.assertFalse(self.way(f"RubberPrisonPier to RubberPrisonPier ({floor})")(everything))
-                for below in (*self.FLOORS[i + 1:], "Ground Upper Left", "Ground Lower Left"):
-                    drop = self.way(f"RubberPrisonPier ({floor}) to RubberPrisonPier ({below}) (drop)")
-                    self.assertFalse(drop(everything))
-                for above in self.FLOORS[:i]:
-                    with self.assertRaises(KeyError):
-                        self.multiworld.get_entrance(
-                            f"RubberPrisonPier ({floor}) to RubberPrisonPier ({above}) (drop)", self.player)
+                self.assertNotIn(f"RubberPrisonPier to RubberPrisonPier ({floor})", names)
+                self.assertFalse([n for n in names if n.startswith(f"RubberPrisonPier ({floor}) to ")
+                                  and n.endswith("(drop)")])
+
+    def test_kept_pieces(self) -> None:
+        # The third floor bridge the crank drops (build step 78) and the crystal gone from 41 (80), both kept.
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": "RubberPrisonPier", "entity": "Base/BrokenBridge"}, slot["scenery_present"])
+        self.assertIn({"map": "RubberPrisonPier", "entity": "SavePoint  - Duplicate"}, slot["kept_present"])
 
 
 class TestPierPointsOfNoReturn(BugFablesTestBase):
     # With Points of No Return on, the Pier's drops and its pushed-past doors count with nothing.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "points_of_no_return": True}
+    FLOORS = ("Top Floor", "Third Floor", "Second Floor")
+
+    def test_drops_only_go_down(self) -> None:
+        names = {e.name for e in self.multiworld.get_entrances(self.player)}
+        for i, floor in enumerate(self.FLOORS):
+            with self.subTest(floor=floor):
+                for below in (*self.FLOORS[i + 1:], "Ground Upper Left", "Ground Lower Left", "Ground Lower Right"):
+                    self.assertIn(f"RubberPrisonPier ({floor}) to RubberPrisonPier ({below}) (drop)", names)
+                self.assertIn(f"RubberPrisonPier ({floor}) to RubberPrisonPier (drop)", names)
+                for above in self.FLOORS[:i]:
+                    self.assertNotIn(f"RubberPrisonPier ({floor}) to RubberPrisonPier ({above}) (drop)", names)
 
     def test_drops_count(self) -> None:
         for name in ("RubberPrisonPier (Top Floor) to RubberPrisonPier (Second Floor) (drop)",

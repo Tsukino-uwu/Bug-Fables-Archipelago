@@ -311,8 +311,8 @@ class PointsOfNoReturn(Toggle):
     transfer with no way back), so items can land in more places, and you're expected to warp back to the start. The
     Warp is always there with it on.
 
-    No one-way in the logic has a way back for it to drop until its rooms are mapped, so for now it changes nothing.
-    Off by default.
+    It matters in the rooms mapped so far: their one-ways (drops, doors that push you past a lock) count with it on
+    even where getting back would take what you don't have yet, or isn't in the logic at all. Off by default.
     """
 
     display_name = "Points of No Return"

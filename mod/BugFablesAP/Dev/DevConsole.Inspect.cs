@@ -207,7 +207,7 @@ namespace BugFablesAP
                     // Turned on, a goal flag sends the goal and the server releases the world: only when asked for.
                     if (parts.Length < 4 || parts[3].ToLowerInvariant() != "goal")
                     {
-                        string refused = $"flag {n} counts toward this seed's goal: not set (\"flag {n} on goal\" sets it)";
+                        string refused = $"flag {n} can count toward the goal: not set (\"flag {n} on goal\" sets it)";
                         log.LogInfo("[dev] " + refused);
                         return refused;
                     }
