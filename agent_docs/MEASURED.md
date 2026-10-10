@@ -1737,9 +1737,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   over the bottom: once the switch is hit, crossing either way takes the platforms and the Shield, nothing else; before
   it, Bee Fly crosses from the right, and the switch, once hit, takes that away (the user). The bottom: a drop from
   either side, a one-way; Jump or Bee Fly back up to the right only, platforms running or not, never to the left (the
-  user). The tram bot (`trambot`) rides to `FactoryProcessingMalbee` only from flag 211 (line 9, then line 10 runs
-  `Event68`, the elevator scene's factory part); `Base/Tram` stands until 211. Map enemies: a Turret by the left door,
-  a Denmuki and a bee-bot on the bottom. No pickups or auto-start scenes.
+  user). The tram bot (`trambot`) rides to `FactoryProcessingMalbee` (Malbee's Room) only from flag 211 (line 9, then
+  line 10 runs `Event68`, the elevator scene's factory part), to Malbee's Room's tram platform, both ways once her fight
+  is done (mapped with that room); `Base/Tram` stands until 211. Map enemies: a Turret by the left door, a Denmuki and a
+  bee-bot on the bottom. No pickups or auto-start scenes.
   **`FactoryProcessing2`, the Second Room (2026-10-10, the user; named by the user):** two areas. The bottom right: the
   door back to the first room (`loadzoneback`). The top left, a level up (y 7): the door to the pump room
   (`loadzone pump`). Up from the bottom right: Jump or Bee Fly, a basic attack for a switch (`switch1`), the Shield,
@@ -1782,6 +1783,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a gate and takes the party up to both pickups: crystal berry #16 (`cberry`) behind a pipe by the door ("Behind the
   Pipe", location 231) and the Factory Pass (`keycard - Duplicate`, key item 95, flag 215) behind the gate ("Behind the
   Gate" once a location) (the user). Map enemies: a Turret and a Denmuki.
+  **`FactoryProcessingMalbee`, Malbee's Room (2026-10-10, the user; named by the user):** the floor: one door
+  (`loadzone`, to the Pump Room), nothing needed from it; walking a bit left starts `Event98` (`eventtrigger`, until
+  211): Malbee (`Fixedmalbee`) and a mini-boss fight with three Abomihoneys (enemy 48, Ground, no escape), then flags
+  211 and 214 and the room loaded again. The tram's platform above: Jump or Bee Fly up, a drop down, a one-way (the
+  user). The tram (`Event68`) runs between this platform and the first room's right side (its door and switch), both
+  ways, only from 211: its bots there (`trambot`, line 9 there, line 4 here, then `Event68`) offer it only then (the
+  user: inactive until the fight). From 211 Malbee stands here (`malbee2`, until 324); the pump models swap at 211; the
+  broken Mender (325 to 326); Malbee again from 330. No pickups or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

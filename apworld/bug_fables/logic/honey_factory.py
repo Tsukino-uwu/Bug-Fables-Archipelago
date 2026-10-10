@@ -21,6 +21,8 @@ _UP = CanUse("Jump") | CanUse("Bee Fly")
 _PLATFORMS_RUNNING = "First Room Platforms Running"
 _ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
 _PROCESSING2_UP = _UP & ANY_ATTACK & CanUse("Shield") & (CanUse("Beemerang Halt") | CanUse("Bee Fly"))
+# Malbee's fight in her room (Event98, flag 211), which starts the tram between the first room and hers.
+_MALBEE_FOUGHT = "Malbee's Fight Done"
 # The pump room's moving platforms, a loop round its upper part (always running: ACTIVATION_FLAGS), Jump and the Shield.
 _PUMP_LOOP = CanUse("Jump") & CanUse("Shield")
 # Up from its floor: the cranks (Beemerang Halt) to a platform with nothing on it, then the loop.
@@ -53,6 +55,11 @@ LOCATIONS = (
 )
 
 STORY_EVENTS = (
+    # Malbee's Room (FactoryProcessingMalbee; named by the user, 2026-10-10): walking left from its door starts her
+    # scene, a mini-boss fight with three Abomihoneys (on the ground, so any member), which sets 211 and starts the
+    # tram.
+    StoryEvent("Honey Factory: Malbee's Room, Malbee's Fight", _MALBEE_FOUGHT, "FactoryProcessingMalbee",
+               Source(event=98, flag=211), no_jump=True),
     # The same switch hit, which starts the room's platforms for good.
     StoryEvent("Honey Factory: First Room, Platforms Running", _PLATFORMS_RUNNING, "FactoryProcessingFirstRoom",
                Source(event=95, flag=20), rule=ANY_ATTACK, no_jump=True),
@@ -114,10 +121,16 @@ MAP_AREAS = (
     # The Pressure Plate Room (FactoryProcessingPuzzle3; named by the user, 2026-10-10): one region, its one door free;
     # down to the puzzle a one-way without Jump or Bee Fly back up, which only the puzzle's spots need, Jump included.
     # Its pass's spot, once a location: "Honey Factory: Pressure Plate Room, Behind the Gate" (the user's name).
+    # Malbee's Room: the floor (its door, her fight) the map's own region; the tram's platform above it, Jump or Bee Fly
+    # up, a drop down, a one-way (the user).
+    Area("FactoryProcessingMalbee", "Tram", (), _UP, out=one_way(None, _UP)),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
 TRANSFERS = (
+    # The tram (Event68), between the first room's right side and Malbee's Room's platform, both ways, once her fight is
+    # done (its bots ride only from 211) (the user, 2026-10-10).
+    Transfer("tram", "FactoryProcessingFirstRoom", "FactoryProcessingMalbee", Has(_MALBEE_FOUGHT), to_area="Tram"),
     # The pump room's platform loop between its upper left and upper right, both ways.
     Transfer("platforms", "FactoryProcessingPump", "FactoryProcessingPump", _PUMP_LOOP, from_area="Upper Left",
              to_area="Upper Right"),

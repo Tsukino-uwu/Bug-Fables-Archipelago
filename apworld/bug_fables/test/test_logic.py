@@ -1476,6 +1476,32 @@ class TestPressurePlateRoom(BugFablesTestBase):
         self.assertTrue(spot.access_rule(self.state_with("Jump", "Progressive Freeze", "Horn Slash")))
 
 
+class TestMalbeesRoom(BugFablesTestBase):
+    # FactoryProcessingMalbee, Malbee's Room (the user, 2026-10-10): her fight needs nothing; the tram between the first
+    # room and her platform, both ways, once it's done; the platform Jump or Bee Fly up from the floor, a drop down.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def way(self, name: str):
+        return self.multiworld.get_entrance(name, self.player).access_rule
+
+    def test_fight_free(self) -> None:
+        fight = self.multiworld.get_location("Honey Factory: Malbee's Room, Malbee's Fight", self.player)
+        self.assertEqual(fight.parent_region.name, "FactoryProcessingMalbee")
+        self.assertTrue(fight.access_rule(self.state_with()))
+
+    def test_tram_after_the_fight(self) -> None:
+        for name in ("FactoryProcessingFirstRoom to FactoryProcessingMalbee (Tram) (tram)",
+                     "FactoryProcessingMalbee (Tram) to FactoryProcessingFirstRoom (tram)"):
+            self.assertFalse(self.way(name)(self.state_with("Jump", "Bee Fly")))
+            self.assertTrue(self.way(name)(self.state_with("Malbee's Fight Done")))
+
+    def test_platform(self) -> None:
+        up = self.way("FactoryProcessingMalbee to FactoryProcessingMalbee (Tram)")
+        self.assertFalse(up(self.state_with()))
+        self.assertTrue(up(self.state_with("Jump")))
+        self.assertTrue(up(self.state_with("Bee Fly")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

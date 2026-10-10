@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**168 of 244 done.**
+**169 of 244 done.**
 
 ## Outskirts
 
@@ -289,8 +289,8 @@ as it is, a frozen record.
   cube the finale hides in `DesertTrenchMiddle`, quest 28's Madeleine scenery at the Golden Hills dungeon entrance,
   and leaving the storage escort midway
 - [x] FactoryProcessingFirstRoom (83) — the First Room; its switch (location 70, the Shield's) a basic attack, the
-  platforms it starts the only way across (the Shield); the bottom a drop, up to the right only; for the quest pass:
-  the tram to Malbee's room (from 211, `Event68`; left to the story, the user)
+  platforms it starts the only way across (the Shield); the bottom a drop, up to the right only; the tram to Malbee's
+  Room, both ways after her fight (211), mapped with that room
 - [x] FactoryProcessing2 (84) — the Second Room; up to the pump door: Jump or Bee Fly, a basic attack, the Shield, and
   Beemerang Halt or Bee Fly; down a drop; no location
 - [x] FactoryProcessingPump (85) — the Pump Room; up on the cranks (Beemerang Halt), then the platform loop (Jump and
@@ -305,7 +305,9 @@ as it is, a frozen record.
 - [x] FactoryProcessingPuzzle3 (88) — the Pressure Plate Room; one region, its door free; its puzzle (Jump, Freeze,
   the horn) to crystal berry #16, "Behind the Pipe", location 231, and its Factory Pass (215, "Behind the Gate"),
   the game's own until Next 67
-- [ ] FactoryProcessingMalbee (89)
+- [x] FactoryProcessingMalbee (89) — Malbee's Room; its fight (`Event98`, three Abomihoneys, flag 211) a story event
+  that starts the tram, both ways to the First Room's right side; the platform Jump or Bee Fly up, a drop down; for
+  the quest pass: the broken Mender (325 to 326)
 - [ ] FactoryStorageMaze (90)
 - [ ] FactoryStorageElevator (91)
 - [ ] FactoryStorageMiniboss (92)

@@ -3330,7 +3330,9 @@ Pass scanner, a stand-in until Next 67), 165 of 244; Gen and Eri's Room, the fir
 free; its Factory Pass the game's own until Next 67), 166 of 244; the Training Grounds, the second puzzle room (the
 same; its pass Beemerang Halt, Jump and the Shield), 167 of 244; the Pressure Plate Room, the third puzzle room (one
 region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #16, location 231, and its pass), 168 of
-244; the rest of `room-checklist.md` to go.
+244; Malbee's Room (her fight, three Abomihoneys, a story event that needs nothing and starts the tram, both ways
+between her platform, Jump or Bee Fly up, and the First Room's right side, counted now), 169 of 244; the rest of
+`room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
