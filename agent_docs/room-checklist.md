@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**186 of 244 done.**
+**187 of 244 done.**
 
 ## Outskirts
 
@@ -387,7 +387,10 @@ as it is, a frozen record.
   back up by a bounce pad and the rock beside it (seen); the Venus bud's scene in the middle (Event194, 569; then a
   healing bud), fast-forwarded with *Skip cutscenes* (seen); the right door and a save crystal; a scene to the Roach
   Village from 586 (Event201); no location
-- [ ] GiantLairDeadLands1 (233)
+- [x] GiantLairDeadLands1 (233) — the Giant's Hand (named by the user); its left (the Entrance's door, the dig spot,
+  Crystal Berry 49, Beetle Dig: "Giant's Lair: Giant's Hand, Dig Spot") the map's own region; the lower right across
+  the platforms with Bee Fly, both ways; the right door's ledge up by the hand's rock only (Jump and Horn Slash, the hand
+  letting go whenever the room is left), a free drop down; for the enemy pass: three Dead Landers
 - [ ] GiantLairDeadLands2 (234)
 - [ ] GiantLairFridgeOutside (235)
 - [ ] GiantLairFridgeInside (236)

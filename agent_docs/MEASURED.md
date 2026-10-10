@@ -3330,6 +3330,21 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   hand lets go whenever the room is left, so the rock is needed every time; the ledge's drop to the lower right is
   free, a dead end without Bee Fly or Jump and Horn Slash (the user). Three Dead Landers (`DeadLanderA`, `DeadLanderB`,
   a copy). The game has no name for the hand; the party calls them "those giant eyes" (`GiantLairDeadLands2` line 0).
+- **Crane Crossing** (`GiantLairDeadLands2`, 2026-10-11, the user on screen, named by the user; EntityDump, code
+  read): the left door (`loadzoneback`, to the Giant's Hand) on a ledge, a drop down and back up by a bounce pad
+  (`jumpspring`), free. From the left up to the silver coin stack in the middle: the droplet by the flower
+  (`dropplet`) frozen, the ice knocked with the horn to climb a gold coin pile, then Bee Fly to the silver coins; from
+  them a drop back to the left or down to the middle right, and from the middle right back up with Jump. The middle
+  right: a Mystery Berry (`MysteryB`, item 156, regional flag 9, a respawning pickup) by a spear stuck in the ground,
+  Jump or Bee Fly. On to the right: Bee Fly and an attack on the switch (`switch`, data `0 1 0 0 0`: a toggle with no
+  flag of its own, `NPCControl.cs` Switch), which moves a toy crane's platform across; Bee Fly alone also crosses,
+  harder, left out of the base logic (the user). Back from the right by a red bounce pad (`mushroom`, an aimed
+  `JumpSpring`, `data[0]` 1), free. The Status Mirror (`statusmirror`, medal 75, flag 611) on a small ledge on the
+  right side (a book, a pipe, a stone and a big teddy around it, the user's screenshot), reached only from the middle
+  right with Bee Fly, no attack needed, never from the right door (the user). The right (the door
+  to the fridge outside, `loadzonenext`) also has a red save crystal (`redcrystal`) that heals but doesn't save, up
+  with Freeze, the horn and Jump (the second droplet). The game's text names none of the coins, the book, the spear or
+  the crane (`textsearch`). Three Dead Landers (copies of `DeadLanderA` and `DeadLanderB`).
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

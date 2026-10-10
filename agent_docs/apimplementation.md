@@ -874,6 +874,10 @@ be wrong.
       have room there, and fall back in a tight seed. The mapping widens it too: each mapped room marks the spots that
       need no Jump, where the blanket Jump rule stood. Decided with real fuzzer numbers once every room is mapped.
     - **To ask:** which abilities, and which meaning of late (not sphere 1, or not in chosen areas).
+71. **Harder logic, an idea for later** (the user, 2026-10-11, mapping Crane Crossing): ways the game doesn't expect
+    stay out of the base logic ("shouldn't be included in our current base logic"), kept here for a possible
+    harder-logic option. So far: Crane Crossing's middle right to its right with Bee Fly alone, without the switch's
+    crane platform ("technically possible ... but its harder"). Each one noted as it's found while mapping.
 
 **Known issues:**
 
@@ -6412,7 +6416,8 @@ world holds (2 today).
 - **The option, *Artifact Shuffle*:** Vanilla (the default) places each artifact item on its own scene as a locked
   item, out of the pool (`place_locked_item`). This World adds the artifacts to Archipelago's own `local_items`, so the
   fill keeps them in this game. Anywhere: any game in the multiworld. All three go through Archipelago's own fill, so a
-  plando can still place them.
+  plando can still place them. The option is sent in slot_data's `options` (`SLOT_OPTIONS`): without it, Universal
+  Tracker's rebuild would take the default and lock the artifacts at their scenes in an Anywhere seed.
 - **The goal:** `HasFromListUnique` of the artifact items, *Artifacts Required* of them, wherever they were placed.
   The client sends the goal once that many artifact items have arrived (the mod guide, step 57), never from the flags:
   a flag is now its location's check, still guarded to its own events (`goal_flags`, build step 60).

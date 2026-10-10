@@ -963,6 +963,43 @@ class TestGiantsHand(_PrisonRoom):
         self.assertTrue(dig.access_rule(self.state_with("Beetle Dig")))
 
 
+class TestCraneCrossing(_PrisonRoom):
+    # GiantLairDeadLands2, Crane Crossing (the user, 2026-10-11): up the coin stacks from the left (Freeze, the horn,
+    # Bee Fly), a drop to the middle right, back up with Jump; on to the right with Bee Fly and the switch's crane, back
+    # by the red bounce pad.
+    MAP = "GiantLairDeadLands2"
+
+    def test_the_coins(self) -> None:
+        up = self.way(f"{self.MAP} to {self.MAP} (Silver Coins)")
+        self.assertFalse(up(self.state_with("Freeze", "Horn Slash", "Jump")))
+        self.assertFalse(up(self.state_with("Freeze", "Bee Fly")))
+        self.assertTrue(up(self.state_with("Freeze", "Horn Slash", "Bee Fly")))
+        self.assertTrue(self.way(f"{self.MAP} (Silver Coins) to {self.MAP}")(self.state_with()))
+
+    def test_the_middle_right(self) -> None:
+        self.assertTrue(self.way(f"{self.MAP} (Silver Coins) to {self.MAP} (Middle Right)")(self.state_with()))
+        back = self.way(f"{self.MAP} (Middle Right) to {self.MAP} (Silver Coins)")
+        self.assertFalse(back(self.state_with("Bee Fly")))
+        self.assertTrue(back(self.state_with("Jump")))
+        berry = self.spot("Giant's Lair: Crane Crossing, By the Spear")
+        self.assertEqual(berry.parent_region.name, f"{self.MAP} (Middle Right)")
+        self.assertFalse(berry.access_rule(self.state_with("Horn Slash")))
+        self.assertTrue(berry.access_rule(self.state_with("Jump")))
+        self.assertTrue(berry.access_rule(self.state_with("Bee Fly")))
+        # The medal by Bee Fly from the middle right, no attack; never from the right door.
+        medal = self.spot("Giant's Lair: Crane Crossing, Ledge by the Crossing")
+        self.assertEqual(medal.parent_region.name, f"{self.MAP} (Middle Right)")
+        self.assertFalse(medal.access_rule(self.state_with("Jump", "Horn Slash")))
+        self.assertTrue(medal.access_rule(self.state_with("Bee Fly")))
+
+    def test_the_crane(self) -> None:
+        across = self.way(f"{self.MAP} (Middle Right) to {self.MAP} (Right)")
+        self.assertFalse(across(self.state_with("Bee Fly")))
+        self.assertFalse(across(self.state_with("Horn Slash", "Jump")))
+        self.assertTrue(across(self.state_with("Bee Fly", "Horn Slash")))
+        self.assertTrue(self.way(f"{self.MAP} (Right) to {self.MAP} (Middle Right)")(self.state_with()))
+
+
 class TestPrisonKey(BugFablesTestBase):
     # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The
     # Pier's comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.

@@ -4,17 +4,31 @@ from __future__ import annotations
 
 from rule_builder.rules import Rule
 
-from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
 from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Pickup, Source, Transfer
 
 # Up a bounce pad onto a rock, Jump, then the rock knocked with the horn into the hand, which opens the next pad; the
 # hand lets go whenever the room is left.
 _HAND_ROCK: Rule = CanUse("Jump") & CanUse("Horn Slash")
+# Dead Lands 2's coin stacks from its left: the droplet by the flower frozen, the ice knocked with the horn to climb the
+# gold coins, then Bee Fly over to the silver ones.
+_COINS: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Bee Fly")
+# Its right: Bee Fly, and an attack on the switch that moves a platform across.
+_TO_THE_RIGHT: Rule = CanUse("Bee Fly") & ANY_ATTACK
 
 LOCATIONS = (
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
              Source(berry=49, pickup=Pickup(map="GiantLairDeadLands1", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
+    # A respawning Mystery Berry by a spear stuck in the ground (regional flag 9): Jump or Bee Fly (the user).
+    Location("Giant's Lair: Crane Crossing, By the Spear", 248, "GiantLairDeadLands2",
+             Source(regional=9, pickup=Pickup(map="GiantLairDeadLands2", type=0, item=156)),
+             rule=CanUse("Jump") | CanUse("Bee Fly"), no_jump=True, area="Middle Right"),
+    # The Status Mirror on a small ledge by the crossing (a book, a pipe, a stone, a big teddy beside it): Bee Fly from
+    # the middle right, never from the right door (the user).
+    Location("Giant's Lair: Crane Crossing, Ledge by the Crossing", 249, "GiantLairDeadLands2",
+             Source(flag=611, pickup=Pickup(map="GiantLairDeadLands2", type=2, item=75)), rule=CanUse("Bee Fly"),
+             no_jump=True, area="Middle Right"),
 )
 
 # The Giant's Lair Entrance (GiantLairEntrance; named by the user, 2026-10-11): one region, nothing needed between its
@@ -27,6 +41,17 @@ MAP_AREAS = (
     Area("GiantLairDeadLands1", "Right", (), CanUse("Bee Fly")),
     Area("GiantLairDeadLands1", "Right Door", ("loadzoneforward",), _HAND_ROCK, out=one_way(None, _HAND_ROCK),
          to="GiantLairDeadLands1 (Right)"),
+    # Crane Crossing (GiantLairDeadLands2; named by the user, 2026-10-11): its left (the door to the Giant's Hand on a
+    # ledge, back up by a bounce pad; the flower's droplet) the map's own region. The silver coin stack in the middle up
+    # from it by the coins, a drop back; from the stack a drop to the middle right, back up with Jump. The middle right
+    # to the right (the door to the fridge outside) with Bee Fly and the switch, which sends a toy crane's platform
+    # across; back by the red bounce pad, free. Bee Fly alone also crosses, harder: left out, as the game expects the
+    # switch (the user, 2026-10-11).
+    Area("GiantLairDeadLands2", "Silver Coins", (), _COINS, out=one_way(None, _COINS)),
+    Area("GiantLairDeadLands2", "Middle Right", (), one_way(None, CanUse("Jump")), out=CanUse("Jump"),
+         to="GiantLairDeadLands2 (Silver Coins)"),
+    Area("GiantLairDeadLands2", "Right", ("loadzonenext",), _TO_THE_RIGHT, out=one_way(None, _TO_THE_RIGHT),
+         to="GiantLairDeadLands2 (Middle Right)"),
 )
 
 TRANSFERS = (
