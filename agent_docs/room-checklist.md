@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**171 of 244 done.**
+**172 of 244 done.**
 
 ## Outskirts
 
@@ -313,7 +313,9 @@ as it is, a frozen record.
   Jump, Beemerang Halt); the Overseer's door behind its pass lock (a stand-in until Next 67)
 - [x] FactoryStorageElevator (91) — the Storage Elevator; the top and the bottom joined by the elevator, a basic attack
   each way; no location
-- [ ] FactoryStorageMiniboss (92)
+- [x] FactoryStorageMiniboss (92) — the Storage Mini-boss Room; one region; the Magic Seed on top of the boxes,
+  location 234 (Jump or Bee Fly); its fight's Factory Pass (Jump, Beemerang Halt) the game's own until Next 67; for
+  the enemy pass: Ahoneynation (`Event101`)
 - [ ] FactoryStorageOverseer (93)
 
 ## Rubber Prison

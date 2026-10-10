@@ -3335,8 +3335,9 @@ region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #
 between her platform, Jump or Bee Fly up, and the First Room's right side, counted now), 169 of 244; the Storage
 Elevator (its top and bottom doors joined by the elevator, a basic attack each way), 170 of 244; the Storage Maze (its
 box tops up with Jump or Bee Fly; the medal Shock Trooper in the boxes and crystal berry #17 by a lever
-puzzle, locations 232-233; the Overseer's door behind its pass lock), 171 of 244; the rest of `room-checklist.md` to
-go.
+puzzle, locations 232-233; the Overseer's door behind its pass lock), 171 of 244; the Storage Mini-boss Room (one
+region; the Magic Seed on top of the boxes, location 234, Jump or Bee Fly; its fight's pass the game's own until Next
+67), 172 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

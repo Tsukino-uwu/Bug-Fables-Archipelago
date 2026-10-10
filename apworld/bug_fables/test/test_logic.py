@@ -1550,6 +1550,21 @@ class TestStorageMaze(BugFablesTestBase):
         self.assertFalse(self.way("FactoryStorageMaze: loadzoneos")(self.state_with("Jump", "Horn Slash", "Bee Fly")))
 
 
+class TestStorageMinibossRoom(BugFablesTestBase):
+    # FactoryStorageMiniboss, the Storage Mini-boss Room (the user, 2026-10-10): one region; the respawning Magic Seed
+    # on top of the boxes, Jump or Bee Fly.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_seed_on_the_boxes(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player)
+                 if r.name.startswith("FactoryStorageMiniboss")}
+        self.assertEqual(parts, {"FactoryStorageMiniboss"})
+        seed = self.multiworld.get_location("Honey Factory: Storage Mini-boss Room, On Top of the Boxes", self.player)
+        self.assertFalse(seed.access_rule(self.state_with("Horn Slash")))
+        self.assertTrue(seed.access_rule(self.state_with("Jump")))
+        self.assertTrue(seed.access_rule(self.state_with("Bee Fly")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

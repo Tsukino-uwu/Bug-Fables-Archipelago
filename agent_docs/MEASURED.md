@@ -1805,6 +1805,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   room (`loadzoneboss`), and the medal Shock Trooper (`shocktrooperMedal`, medal 34, flag 220) among the boxes. Crystal
   berry #17 (`crystal berry`) on top of a box, by a lever puzzle: a basic attack, Jump and Beemerang Halt (the user).
   Spikes; a Venus healer (130 to 299); map enemies, a Denmuki and a Turret.
+  **`FactoryStorageMiniboss`, the Storage Mini-boss Room (2026-10-10, the user; named by the user):** one door
+  (`loadzone`, to the Storage Maze) and a save crystal, nothing needed. A respawning Magic Seed (`seed`, item 11,
+  regional flag 20) on top of the boxes by the door: Jump or Bee Fly. To the left side, Jump and Beemerang Halt: the
+  trigger (`event`, until 221, up at y 4) plays `Event101`, a mini-boss fight with Ahoneynation (enemy 42, Ground; Zasp
+  and Mothiva in the scene), after which it gives a Factory Pass (`giveitem,1,95`) and sets 221 (the user; the code). A
+  switch, a diary to read (`notesDiary - Duplicate`), a bee-bot; sticky honey.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

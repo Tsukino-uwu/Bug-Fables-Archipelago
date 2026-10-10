@@ -14,7 +14,8 @@ from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemS
 # or Bee Fly alone (the user, 2026-10-10); so does the first puzzle room's (213): Jump, Freeze, the Shield and a basic
 # attack, past Gen and Eri's fight (two Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52); and
 # the second's (212): Beemerang Halt, Jump and the Shield, and a basic attack for a lever (Halt brings the Toss); the
-# third's (215): Jump, Freeze and the horn (its puzzle).
+# third's (215): Jump, Freeze and the horn (its puzzle); and the storage mini-boss's (Event101 gives it after its
+# fight, flag 221): Jump and Beemerang Halt to the fight's side of the room.
 FACTORY_PASS = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
@@ -64,6 +65,10 @@ LOCATIONS = (
              Source(berry=17, pickup=Pickup(map="FactoryStorageMaze", type=3, item=0)),
              rule=ANY_ATTACK & CanUse("Jump") & CanUse("Beemerang Halt"), category="crystal_berry", no_jump=True,
              area="Upper Middle"),
+    # The Storage Mini-boss Room's (named by the user, 2026-10-10) respawning Magic Seed (regional flag 20) on top of
+    # the boxes by its door: Jump or Bee Fly.
+    Location("Honey Factory: Storage Mini-boss Room, On Top of the Boxes", 234, "FactoryStorageMiniboss",
+             Source(regional=20, pickup=Pickup(map="FactoryStorageMiniboss", type=0, item=11)), rule=_UP, no_jump=True),
 )
 
 STORY_EVENTS = (
@@ -146,6 +151,9 @@ MAP_AREAS = (
     # a drop from the box tops with a green pad back up, free both ways.
     Area("FactoryStorageMaze", "Upper Middle", (), _MAZE_UP, out=one_way(None, _MAZE_UP)),
     Area("FactoryStorageMaze", "Bottom Left", ("loadzoneboss",), True_(), to="FactoryStorageMaze (Upper Middle)"),
+    # The Storage Mini-boss Room (FactoryStorageMiniboss; named by the user, 2026-10-10): one region, its door and save
+    # crystal free; its left side, the Ahoneynation fight (Event101) and the Factory Pass it gives, Jump and Beemerang
+    # Halt, holds nothing the logic counts until Next 67.
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
