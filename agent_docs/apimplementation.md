@@ -3332,7 +3332,8 @@ free; its Factory Pass the game's own until Next 67), 166 of 244; the Training G
 same; its pass Beemerang Halt, Jump and the Shield), 167 of 244; the Pressure Plate Room, the third puzzle room (one
 region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #16, location 231, and its pass), 168 of
 244; Malbee's Room (her fight, three Abomihoneys, a story event that needs nothing and starts the tram, both ways
-between her platform, Jump or Bee Fly up, and the First Room's right side, counted now), 169 of 244; the rest of
+between her platform, Jump or Bee Fly up, and the First Room's right side, counted now), 169 of 244; the Storage
+Elevator (its top and bottom doors joined by the elevator, a basic attack each way), 170 of 244; the rest of
 `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received

@@ -124,6 +124,10 @@ MAP_AREAS = (
     # Malbee's Room: the floor (its door, her fight) the map's own region; the tram's platform above it, Jump or Bee Fly
     # up, a drop down, a one-way (the user).
     Area("FactoryProcessingMalbee", "Tram", (), _UP, out=one_way(None, _UP)),
+    # The Storage Elevator (FactoryStorageElevator; named by the user, 2026-10-10): the top (the door to the Lobby) the
+    # map's own region; the bottom (the door to the maze) by the elevator (Event100), a switch on each level, a basic
+    # attack, both ways.
+    Area("FactoryStorageElevator", "Bottom", ("loadzonebottom",), ANY_ATTACK),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )

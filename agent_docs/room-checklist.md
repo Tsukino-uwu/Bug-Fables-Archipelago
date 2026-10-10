@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**169 of 244 done.**
+**170 of 244 done.**
 
 ## Outskirts
 
@@ -309,7 +309,8 @@ as it is, a frozen record.
   that starts the tram, both ways to the First Room's right side; the platform Jump or Bee Fly up, a drop down; for
   the quest pass: the broken Mender (325 to 326)
 - [ ] FactoryStorageMaze (90)
-- [ ] FactoryStorageElevator (91)
+- [x] FactoryStorageElevator (91) — the Storage Elevator; the top and the bottom joined by the elevator, a basic attack
+  each way; no location
 - [ ] FactoryStorageMiniboss (92)
 - [ ] FactoryStorageOverseer (93)
 

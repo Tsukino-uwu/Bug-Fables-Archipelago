@@ -1791,6 +1791,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   ways, only from 211: its bots there (`trambot`, line 9 there, line 4 here, then `Event68`) offer it only then (the
   user: inactive until the fight). From 211 Malbee stands here (`malbee2`, until 324); the pump models swap at 211; the
   broken Mender (325 to 326); Malbee again from 330. No pickups or map enemies.
+  **`FactoryStorageElevator`, the Storage Elevator (2026-10-10, the user; named by the user):** two levels: the top
+  (`loadzonetop`, to the Lobby) and the bottom, 19 down (`loadzonebottom`, to the Storage Maze). An elevator between
+  them (`Event100`, no flag), there whichever door the party comes in by; a switch on each level (`switch`, `ROTswitch`)
+  hit with a basic attack rides it, both ways (the user). No pickups, scenery, hazards or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

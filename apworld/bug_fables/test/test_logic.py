@@ -1502,6 +1502,19 @@ class TestMalbeesRoom(BugFablesTestBase):
         self.assertTrue(up(self.state_with("Bee Fly")))
 
 
+class TestStorageElevator(BugFablesTestBase):
+    # FactoryStorageElevator, the Storage Elevator (the user, 2026-10-10): between the top and the bottom by the
+    # elevator, a basic attack for its switch, both ways.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_ride_needs_a_basic_attack(self) -> None:
+        for way in ("FactoryStorageElevator to FactoryStorageElevator (Bottom)",
+                    "FactoryStorageElevator (Bottom) to FactoryStorageElevator"):
+            rule = self.multiworld.get_entrance(way, self.player).access_rule
+            self.assertFalse(rule(self.state_with("Jump", "Bee Fly")))
+            self.assertTrue(rule(self.state_with("Progressive Freeze")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:
