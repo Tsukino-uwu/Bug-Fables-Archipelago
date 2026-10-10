@@ -13,7 +13,7 @@ from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemS
 # Rooms' pass (flag 178, up high in the office) stays the game's own pickup until then: Jump and the Beemerang Toss,
 # or Bee Fly alone (the user, 2026-10-10); so does the first puzzle room's (213): Jump, Freeze, the Shield and a basic
 # attack, past Gen and Eri's fight (two Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52); and
-# the second's (212): Beemerang Halt, Jump and the Shield, and a basic attack for a switch (Halt brings the Toss).
+# the second's (212): Beemerang Halt, Jump and the Shield, and a basic attack for a lever (Halt brings the Toss).
 FACTORY_PASS = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
