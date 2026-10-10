@@ -4053,9 +4053,10 @@ either one wrong).
   one multi-replace by a Python script where Edit was the rule.
 - **Rules from the user:** nothing in a seed ever goes away (`CLAUDE.md`, `room-logic.md`); ordinary enemies always
   present, for the berry rule (Next 63). **Decided:** the later chapters' stand-in stays as it is, its comment made true
-  (the user: every room is mapped before the next release). **Asked, research running at the handoff:** a best-effort
-  option to place Jump, Bee Fly or both as late as possible, never failing a seed (the user, after Pokémon Emerald's
-  early Fly), and whether early and late can reach other worlds.
+  (the user: every room is mapped before the next release). **Asked and researched:** a best-effort option to place
+  Jump, Bee Fly or both as late as possible, never failing a seed (the user, after Pokémon Emerald's early Fly), and
+  whether early and late reach other worlds: written up as Next 70 (designs A to C, a recommendation), the choice the
+  user's (which abilities, which meaning of late).
 - **Seen:** the Pier's ways, both right doors pushing past, the kept bridge, the kept crystal, the bridge guard not
   blocking. **Not seen:** the Factory Pass hook (plugin `4237EF77A9E0` copied; the game closed before it reloaded),
   locations 235-239, the console's refusal. **Tests written and unrun** (the suite and the fuzzer before the next push):

@@ -841,6 +841,29 @@ be wrong.
     key pickups in Cells 2 and the Gym go without being taken (each spot must be kept until its check: "nothing in a
     seed ever goes away"), and it empties the bag of Prison Keys itself (`EventControl.cs:32140-32143`, not `Event59`),
     which would take the kept key too.
+70. **Late abilities** (asked 2026-10-10, the user; not decided): a way to keep a seed from giving out Jump, Bee Fly or
+    both early, for a player who wants to go without them through much of a seed; "just something that tries to put
+    it/them as far back/late as possible, not forcing it or breaking things". A research workflow (Archipelago
+    0.6.8, the cleared worlds, our apworld; every line re-read by its writer):
+    - **Archipelago's "early"** is best effort: `early_items` (sphere 1 of any world in the room) and
+      `local_early_items` (the player's own world) are the world's to set, not yaml options; a failure only logs a warning
+      (`Fill.py:1140-1225`). Worlds offer it as their own option (smw's Early Climb, messenger's, sm's morph placement).
+      Pokémon Emerald has no early-Fly option at 0.6.8 (its Fly options make Fly usable sooner, none moves it).
+    - **Archipelago's "late"** exists only as item plando: `non_early_locations`, anywhere past sphere 1, best effort
+      without `force: true` (`worlds/generic/docs/plando_en.md:63, :82`; `Fill.py:1779-1814`, `:1896-1900`), which needs
+      item plando on where the seed is generated. "Not before sphere N" can't be done: later spheres exist only once
+      every item is placed. Closest worlds: tunic's Laurels behind a count, civ_6 keeping late techs off its first era.
+    - **Ours:** Jump (with Shuffle Jump) is needed almost everywhere: about 3 start spots hold a key item with Jump and
+      the field moves shuffled, 5 with Jump alone (read, not run), so late Jump fights the known fill failure. Bee Fly
+      and the later abilities are mild: none of the about 16 default start spots needs Bee Fly. Kept late in a room
+      with others, the item would also have to stay in the player's own world (`local_items`), or another world's sphere
+      1 could hold it.
+    - **Designs:** A, no option: the plando recipe in the player guide, best effort as asked. B, a yaml option listing
+      abilities to place late: each never in the player's first sphere, in their own world, as an item rule set in
+      `pre_fill` (so plando still wins); best effort means falling back to a normal placement where it can't. C,
+      area-based: never in areas the user names (feels later; only for abilities those areas don't need). Recommended:
+      A now, B for Bee Fly and the later abilities, late Jump only once the start's no-Jump ground is bigger.
+    - **To ask:** which abilities, and which meaning of late (not sphere 1, or not in chosen areas).
 
 **Known issues:**
 
