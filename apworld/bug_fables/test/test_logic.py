@@ -781,6 +781,26 @@ class TestGym(_PrisonRoom):
         self.assertTrue(key.access_rule(self.state_with(*self.HALT)))
 
 
+class TestSecurityRoom(_PrisonRoom):
+    # RubberPrisonSecurity, the Security Room (the user, 2026-10-10): its left Beetle Dig away; the bottom right (the
+    # save crystal, the door to the Third Floor) a drop down a ledge, back up with Jump or Bee Fly.
+    MAP = "RubberPrisonSecurity"
+
+    def test_left_by_digging(self) -> None:
+        for name in (f"{self.MAP} to {self.MAP} (Left)", f"{self.MAP} (Left) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Bee Fly", "Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Beetle Dig")))
+
+    def test_the_ledge(self) -> None:
+        self.assertEqual(self.multiworld.get_entrance("RubberPrisonSecurity: loadzone3rdfloor",
+                                                      self.player).parent_region.name, f"{self.MAP} (Bottom Right)")
+        up = self.way(f"{self.MAP} (Bottom Right) to {self.MAP}")
+        self.assertFalse(up(self.state_with("Beetle Dig")))
+        self.assertTrue(up(self.state_with("Jump")))
+        self.assertTrue(up(self.state_with("Bee Fly")))
+
+
 class TestPrisonKey(BugFablesTestBase):
     # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The Pier's
     # comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.

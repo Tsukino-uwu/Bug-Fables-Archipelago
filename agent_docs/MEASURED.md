@@ -3258,6 +3258,12 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **The Gym** (`RubberPrisonGym`, 2026-10-10, the user on screen): its door free; the top left (the Prison Key, 551, and
   a Wasp Driller until 79) up the room's crank puzzle with Beemerang Halt alone, no Jump (corrected by the user from
   Jump and Halt); back down a drop. Loading it sets 535 off (`MapControl.cs:686-687`).
+- **The Security Room** (`RubberPrisonSecurity`, 2026-10-10, the user on screen; code read): its right (the door to the
+  Pier, the 535 lever, the PC `ITAHcomputer`) and left (the crank, three trapped guards until 79) joined by Beetle Dig;
+  the bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, Jump or Bee Fly back up. The PC
+  (`Event190`): the crank (Beemerang Halt) starts it with no caller, setting 552 (backup power); powered, a hit sets 553;
+  then talking flips 550, which raises the Cafeteria's tables against its cannons' rocks (seen), never needed there.
+  The guards' lines only hint at the crank and the hit.
 - **The Prison Key's sources and locks** (2026-10-10, EntityDump and code read): four `PrisonDoor` locks (`Event59` key
   index 17: 537, 539, 542, 567) and four keys: the Pier's `ShwKEY wasp`, whose death drops a key-item pickup of
   `vectordata[0].x` (161) when `vectordata[0].y` is -2, its flag the enemy's `limit[0]` (584,

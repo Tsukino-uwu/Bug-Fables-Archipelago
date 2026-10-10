@@ -143,6 +143,12 @@ MAP_AREAS = (
     # The Gym (RubberPrisonGym): its door free, the map's own region; up to the top left by the room's crank puzzle,
     # Beemerang Halt (no Jump); back down a drop (the user, 2026-10-10). Loading it sets the prison's gate flag 535 off.
     Area("RubberPrisonGym", "Top Left", (), CanUse("Beemerang Halt"), out=one_way(None, CanUse("Beemerang Halt"))),
+    # The Security Room (RubberPrisonSecurity; named by the user, 2026-10-10): its right (the door to the Pier, the 535
+    # lever, the PC) the map's own region; the left (the crank, the trapped guards) Beetle Dig away, both ways; the bottom
+    # right (the save crystal, the door to the Third Floor) a drop down a ledge, back up with Jump or Bee Fly. The crank
+    # (Beemerang Halt) powers the PC (552), which hit (553) toggles the Cafeteria's tables (550): never needed.
+    Area("RubberPrisonSecurity", "Left", (), CanUse("Beetle Dig")),
+    Area("RubberPrisonSecurity", "Bottom Right", ("loadzone3rdfloor",), one_way(None, _UP), out=_UP),
 )
 
 TRANSFERS = (
