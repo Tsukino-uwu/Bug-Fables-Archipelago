@@ -291,7 +291,7 @@ as it is, a frozen record.
 - [x] FactoryProcessingFirstRoom (83) — the First Room; its switch (location 70, the Shield's) a basic attack, the
   platforms it starts the only way across (the Shield); the bottom a drop, up to the right only; for the quest pass:
   the tram to Malbee's room (from 211, `Event68`; left to the story, the user)
-- [x] FactoryProcessing2 (84) — up to the pump door: Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt
+- [x] FactoryProcessing2 (84) — the Second Room; up to the pump door: Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt
   or Bee Fly; down a drop; no location
 - [ ] FactoryProcessingPump (85)
 - [ ] FactoryProcessingPuzzle1 (86)

@@ -3322,7 +3322,7 @@ Jump or Bee Fly; the Factory Pass the game's own pickup until Next 67), 161 of 2
 free, the gate to the boss arena the story's), 162 of 244; the First Room (its switch, the Shield's spot, a basic
 attack, its story-order stand-in gone; across only on the platforms it starts, the Shield, since Bee Fly works only
 before the switch; the bottom a drop, up to the right only; the tram left to the story), 163 of 244;
-`FactoryProcessing2` (up to the pump door Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly;
+the Second Room (up to the pump door Jump or Bee Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly;
 down a drop; no location), 164 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received

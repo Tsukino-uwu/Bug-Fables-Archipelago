@@ -75,9 +75,9 @@ MAP_AREAS = (
     # (room-logic.md, rule 3). The bottom below: a drop from either side, Jump or Bee Fly up to the right only.
     Area("FactoryProcessingFirstRoom", "Left", ("loadzoneforward",), _ON_THE_PLATFORMS),
     Area("FactoryProcessingFirstRoom", "Bottom", (), one_way(None, _UP), out=_UP),
-    # FactoryProcessing2 (the user, 2026-10-10): the bottom right (the door back to the first room) the map's own region;
-    # up to the top left (the door to the pump room) Jump or Bee Fly, a basic attack for a switch, the Shield, and
-    # Beemerang Halt or Bee Fly; back down a drop, a one-way.
+    # The Second Room (FactoryProcessing2; named by the user, 2026-10-10): the bottom right (the door back to the first
+    # room) the map's own region; up to the top left (the door to the pump room) Jump or Bee Fly, a basic attack for a
+    # switch, the Shield, and Beemerang Halt or Bee Fly; back down a drop, a one-way.
     Area("FactoryProcessing2", "Top Left", ("loadzone pump",), _PROCESSING2_UP,
          out=one_way(None, _PROCESSING2_UP)),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
