@@ -740,7 +740,8 @@ be wrong.
     flag 561, behind the bookshelf the History Book puzzle slides away, `Event191`, flag 554; the user's name). The
     puzzle takes the four History Books (key items 163 blue, 164 green, 165 yellow, 166 red, placed in that order), so
     with this step they become progression and their spots locations, held out until then (their pickups the game's
-    own): "Rubber Prison: Cafeteria, Behind the Cannons" (548: nothing, its left a drop down), the Office's (563),
+    own): "Rubber Prison: Cafeteria, Behind the Cannons" (548: nothing, its left a drop down), "Rubber Prison: Office,
+    Empty Bookshelf" (563: Freeze, the horn, Jump and Bee Fly),
     "Rubber Prison: Library, On Top of the Bookshelf" (564: Jump and the Beemerang Toss, or Bee Fly) and "Rubber
     Prison: Electric Cells, Middle Center Cell" (582: an attack, behind a 535 gate), the named ones the user's. A
     wrong order hands the books back at the scene's end (`:31506`).
@@ -3447,7 +3448,9 @@ Key's lock), 178 of 244; the Library (up the stairs, Jump or Bee Fly; the rail's
 Bee Fly back up; its History Book, "Behind the Cannons", with Next 62), 180 of 244; the Gym (up to the top left by its
 crank puzzle, Beemerang Halt, a drop back down; "Crank Puzzle", its Prison Key, build step 82), 181 of 244; the
 Security Room (its left Beetle Dig away; the bottom right a drop down a ledge, Jump or Bee Fly back up; its crank and
-PC only toggle the Cafeteria's tables; no location), 182 of 244; the rest of `room-checklist.md` to go.
+PC only toggle the Cafeteria's tables; no location), 182 of 244; the Office (one area; its crank slot, the Wooden Crank
+and Beemerang Halt, opens the Pier's second floor right door, written with it; "Empty Bookshelf" with Next 62), 183 of
+244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

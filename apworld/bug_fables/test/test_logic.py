@@ -1918,14 +1918,22 @@ class TestPier(BugFablesTestBase):
     def names(self) -> set[str]:
         return {e.name for e in self.multiworld.get_entrances(self.player)}
 
-    def test_right_doors_shut(self) -> None:
-        # Neither counts yet, and Archipelago makes no entrance whose rule can never pass.
+    def test_right_doors(self) -> None:
+        # The second floor's opens with the Office's crank (the Office mapped, 2026-10-10), a pushed-past one-way back;
+        # the ground floor's doesn't count yet, and Archipelago makes no entrance whose rule can never pass.
         names = self.names()
-        for joined, door in (("RubberPrisonPier (Second Floor)", "Second Floor Right Door"),
-                             ("RubberPrisonPier", "Shortcut Door")):
-            with self.subTest(door=door):
-                self.assertNotIn(f"{joined} to RubberPrisonPier ({door})", names)
-                self.assertNotIn(f"RubberPrisonPier ({door}) to {joined}", names)
+        self.assertNotIn("RubberPrisonPier to RubberPrisonPier (Shortcut Door)", names)
+        self.assertNotIn("RubberPrisonPier (Shortcut Door) to RubberPrisonPier", names)
+        for name in ("RubberPrisonPier (Second Floor) to RubberPrisonPier (Second Floor Right Door)",
+                     "RubberPrisonPier (Second Floor Right Door) to RubberPrisonPier (Second Floor)"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Jump", "Bee Fly")))
+                self.assertTrue(self.way(name)(self.state_with("Office Crank Turned")))
+
+    def test_office_crank(self) -> None:
+        crank = self.multiworld.get_location("Rubber Prison: Office, Crank Turned", self.player)
+        self.assertEqual(crank.parent_region.name, "RubberPrisonOffice")
+        self.assertFalse(crank.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang")))
 
     def test_floors_cut_off(self) -> None:
         # Without Points of No Return each floor is reached by its own doors only: no way up, no drop counted.

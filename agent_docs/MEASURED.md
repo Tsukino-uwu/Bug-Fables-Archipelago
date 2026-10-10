@@ -3264,6 +3264,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (`Event190`): the crank (Beemerang Halt) starts it with no caller, setting 552 (backup power); powered, a hit sets 553;
   then talking flips 550, which raises the Cafeteria's tables against its cannons' rocks (seen), never needed there.
   The guards' lines only hint at the crank and the hit.
+- **The Office** (`RubberPrisonOffice`, 2026-10-10, the user on screen; its line 0: "even a prison needs a normal
+  office"): one area. Its crank slot (`crankcheck`, `Event59` key index 2, the Wooden Crank, until 565) then its crank
+  (Beemerang Halt) play `Event193`'s first branch, 583: the Pier's second floor right door opens (and its third floor
+  bridge breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf up the top left:
+  Freeze, the horn, Jump and Bee Fly (the room's geyser and droplet on the way).
 - **The Prison Key's sources and locks** (2026-10-10, EntityDump and code read): four `PrisonDoor` locks (`Event59` key
   index 17: 537, 539, 542, 567) and four keys: the Pier's `ShwKEY wasp`, whose death drops a key-item pickup of
   `vectordata[0].x` (161) when `vectordata[0].y` is -2, its flag the enemy's `limit[0]` (584,

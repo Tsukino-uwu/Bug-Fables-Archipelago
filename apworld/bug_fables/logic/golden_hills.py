@@ -4,13 +4,10 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, WOODEN_CRANK, CanUse, one_way
 from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
-# The Wooden Crank (key item 58), found in the dungeon: not an item yet, so the later chapters' stand-in until its
-# room is mapped. In a seed it won't be used up (apimplementation.md, Next 62), so one is enough for every slot.
-WOODEN_CRANK = LATER_CHAPTERS
-# The Big Crank (key item 60), the same way.
+# The Big Crank (key item 60), the Wooden Crank's way (custom_rules.py, WOODEN_CRANK).
 BIG_CRANK = LATER_CHAPTERS
 # The Sun and Moon Offerings (key items 55, 56), items since the festival's farm was mapped (2026-10-07; their spots
 # in golden_settlement.py).

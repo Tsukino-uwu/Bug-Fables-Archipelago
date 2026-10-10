@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import CanReachRegion, False_, Has
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse, Member, one_way
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WOODEN_CRANK, CanUse, Member, one_way
 from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagSwap, ItemEntity, Location, Pickup, Source, StoryEvent,
                           Transfer)
 
@@ -16,6 +16,8 @@ _LIFT_RUNNING = "Pier Lift Running"
 # The Cell Block Crossroads' right wood lever hit (Event186, flag 540): its bottom right gate down for good, and its
 # rock kept in the knocked spot it climbs from.
 _CROSSROADS_RIGHT_GATE = "Crossroads Right Gate Open"
+# The Office's crank turned (Event193's first branch, flag 583): the Pier's second floor right door open for good.
+_OFFICE_CRANK = "Office Crank Turned"
 # The Cell Block Crossroads' barrier lever hit from inside the top door's area (flag 541): the barrier down for good.
 _CROSSROADS_BARRIER = "Crossroads Barrier Lowered"
 # Up from the Cell Block Crossroads' bottom: the bottom lever (Beetle Dig to its cell, an attack) opens the left cell,
@@ -65,6 +67,11 @@ STORY_EVENTS = (
                area="Upper"),
     StoryEvent("Rubber Prison: Cell Block Crossroads, Barrier Lever Hit", _CROSSROADS_BARRIER, "RubberPrisonCells1",
                Source(flag=541), rule=ANY_ATTACK, no_jump=True, area="Top Door"),
+    # The Office (RubberPrisonOffice; named by the user, 2026-10-10, the game's "a normal office"): one area. Its crank
+    # slot takes the Wooden Crank, then turned with Beemerang Halt (the user). Waiting for the Wooden Crank (Next 62):
+    # "Empty Bookshelf" (the green History Book on top of it, 563: Freeze, the horn, Jump and Bee Fly).
+    StoryEvent("Rubber Prison: Office, Crank Turned", _OFFICE_CRANK, "RubberPrisonOffice", Source(flag=583),
+               rule=WOODEN_CRANK & CanUse("Beemerang Halt"), no_jump=True),
 )
 _FLOORS = ("Top Floor", "Third Floor", "Second Floor")
 _GROUND = ("Ground Upper Left", None, "Ground Lower Left", "Ground Lower Right")
@@ -90,9 +97,10 @@ MAP_AREAS = (
     Area("RubberPrisonPier", "Second Floor", ("loadzonecell2",), False_()),
     # Two doors to the Giant's Lair Bridge, each shut until another room opens it, the party pushed past it when
     # arriving (seen): the second floor's right one by the Office's crank (Event193, flag 583: the Wooden Crank and
-    # Beemerang Halt, the user), the ground floor's right one from the bridge's side (flag 567). Neither room is mapped,
-    # so neither counts yet.
-    Area("RubberPrisonPier", "Second Floor Right Door", ("loadzoneboss",), False_(), out=one_way(None, False_()),
+    # Beemerang Halt, the user), the ground floor's right one from the bridge's side (flag 567, its room not mapped, so
+    # not counted yet).
+    Area("RubberPrisonPier", "Second Floor Right Door", ("loadzoneboss",), Has(_OFFICE_CRANK),
+         out=one_way(None, Has(_OFFICE_CRANK)),
          to="RubberPrisonPier (Second Floor)"),
     Area("RubberPrisonPier", "Shortcut Door", ("bossshortcut",), False_(), out=one_way(None, False_())),
     # The Checkpoint Corridor (RubberPrisonCheckpointCorridor; named by the user, 2026-10-10): two gates that follow flag

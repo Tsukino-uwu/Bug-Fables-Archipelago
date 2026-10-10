@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**182 of 244 done.**
+**183 of 244 done.**
 
 ## Outskirts
 
@@ -328,10 +328,10 @@ as it is, a frozen record.
   inside the room (the drops count with Points of No Return until the rooms behind each floor give a way back); the
   ground floor's upper left behind the gate levers' tutorial gates (Jump or Bee Fly round), its lower part (the gate
   lever, the dock) below, the lift once its lever is hit; the third floor bridge (build step 78) and save crystal (80)
-  kept; no location yet: the Wasp Driller's Prison Key ("Second Floor Fight") the game's own until Next 69; for the
-  Office: the second floor's right door (583, the crank: the Wooden Crank and Beemerang Halt); for the Giant's Lair
-  Bridge: the ground floor's right door (567); for the enemy pass: its four enemies (gone from 79) and the Wasp Driller;
-  for the discovery sweep: discovery 47, recorded on arriving in any prison room
+  kept; the Wasp Driller's Prison Key, "Second Floor Fight", a location since build step 82 (Kabbu); the second
+  floor's right door opened by the Office's crank (583), written with the Office; for the Giant's Lair Bridge: the
+  ground floor's right door (567); for the enemy pass: its four enemies (gone from 79) and the Wasp Driller; for the
+  discovery sweep: discovery 47, recorded on arriving in any prison room
 - [x] RubberPrisonCheckpointCorridor (219) — the Checkpoint Corridor; the left and the right an attack apart, both
   ways (two gates on flag 535, a lever between them and one on each side, the right one kept present, build step 81);
   the top left door behind the Explorer Permit's lock (until 538), the party pushed past it on arrival; no location;
@@ -362,7 +362,9 @@ as it is, a frozen record.
   bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, Jump or Bee Fly back up; the crank
   and PC (552, 553) only toggle the Cafeteria's tables (550); no location; for the quest pass: Tectec (from 555); for
   the enemy pass: a wasp trooper (gone from 79)
-- [ ] RubberPrisonOffice (229)
+- [x] RubberPrisonOffice (229) — the Office; one area; its crank slot (the Wooden Crank, Beemerang Halt to turn, 583)
+  opens the Pier's second floor right door, written now; with Next 62: "Empty Bookshelf" (the green History Book, 563:
+  Freeze, the horn, Jump and Bee Fly); for the enemy pass: a Wasp Driller (gone from 79)
 - [ ] RubberPrisonThirdFloor (230)
 - [ ] RubberPrisonGiantLairBridge (231) — when mapped: the ant tunnel's way in (`bugaria_city.py`, now later chapters
   and the submarine) needs flag 79, set only by this bridge's scene, reached before it only through the Pier's second

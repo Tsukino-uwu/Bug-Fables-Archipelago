@@ -129,3 +129,6 @@ INNER_CITY = Has("Chapter 2 Started")
 # the Shield or Beemerang Halt (nor Jump when shuffled); each area's rooms replace it before the next release.
 LATER_CHAPTERS = (INNER_CITY & Has("Explorer Permit") & BOAT_TICKET & Has("Snakemouth Den Cleared")
                   & WHOLE_PARTY & ALL_ATTACKS)
+# The Wooden Crank (key item 58), for the Golden Hills dungeon's slots and the Rubber Prison Office's: not an item yet,
+# so the later chapters' stand-in until Next 62. In a seed it won't be used up, so one is enough for every slot.
+WOODEN_CRANK = LATER_CHAPTERS
