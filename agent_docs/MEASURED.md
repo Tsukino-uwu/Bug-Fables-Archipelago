@@ -1817,8 +1817,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   at y 6.5). Talking to her starts the escort (`Event102`): she follows, Tattle goes off (flag 10, and
   `entitytouchevent` 102), 14 bees patrol (`honeye`, battle 48), one touching her puts her back; the end trigger by the
   door (`end event`, raised until the escort starts) sets 218 and flag 10. Seen twice (reset each time with flag 218 off
-  and a reload): bringing her back takes Jump and Beemerang Halt (on top of some boxes, past the bees; Freeze makes it
-  much easier), or Bee Fly alone (the user). No pickups.
+  and a reload): bringing her back takes Jump and Beemerang Halt (on top of some boxes, past the bees), with Freeze,
+  which makes it much easier and without which it is "pretty hard" (the user), so the logic asks for it as the vanilla
+  party has it; or Bee Fly alone (the user). No pickups.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

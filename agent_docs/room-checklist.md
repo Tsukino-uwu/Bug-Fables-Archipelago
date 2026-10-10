@@ -317,7 +317,7 @@ as it is, a frozen record.
   location 234 (Jump or Bee Fly); its fight's Factory Pass (Jump, Beemerang Halt) the game's own until Next 67; for
   the enemy pass: Ahoneynation (`Event101`)
 - [x] FactoryStorageOverseer (93) — one region, its door free, no location; for the quest pass: the overseer's escort
-  (`Event102`, flag 218: Jump and Beemerang Halt, or Bee Fly)
+  (`Event102`, flag 218: Jump, Beemerang Halt and Freeze, or Bee Fly)
 
 ## Rubber Prison
 
