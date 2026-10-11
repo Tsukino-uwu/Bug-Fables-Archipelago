@@ -110,6 +110,7 @@ anyone curious about the process, or thinking of doing the same for another game
 55. [The Prison Key never used up, the bridge scene included](#55-the-prison-key-never-used-up-the-bridge-scene-included)
 56. [An entity copied into a map: the Guard Floor's pocket pad](#56-an-entity-copied-into-a-map-the-guard-floors-pocket-pad)
 57. [The goal's artifacts as items: received, drawn and counted](#57-the-goals-artifacts-as-items-received-drawn-and-counted)
+58. [The Spy Cards tournament held back without a deck](#58-the-spy-cards-tournament-held-back-without-a-deck)
 
 ## Where it stands
 
@@ -3533,3 +3534,22 @@ check, and the item can arrive from anywhere, so the mod gives it, draws it and 
 
 *Code: `Core/ItemIds.cs` (`ArtifactKind`), `Items/ItemReceiver.cs`, `Ui/ArtifactIcons.cs`, `Items/ItemSwap.Looks.cs`,
 `Items/ItemSwap.cs`, `Items/LocationChecks.cs` (`CheckGoal`), `Items/GoalGuard.cs`, `Core/Plugin.cs`.*
+
+## 58. The Spy Cards tournament held back without a deck
+
+A seed opens the Metal Island Auditorium from the start (its guard and invisible wall, there until every Bugaria
+card master is beaten, kept away). The judge's tournament (`Event210`, after a 25-berry fee) ends in a deck builder
+that offers only cards of enemies spied on, and with no boss card spied it throws (`CardGame.ShowSelectedCard`) and
+the party is stuck (seen 2026-10-11 on a new file: a restart). In the game nobody gets there without a deck.
+
+So, as B.O.S.S. does with nobody met (step 51): while the cards spied on (`librarystuff[1, enemy]`, against
+`Data/CardData`'s types, as `LoadCardData` reads them) hold no boss, mini-boss or other card, the judge answers
+"Come back when you have a deck worth playing." in place of his question, so no fee is taken; if the tournament
+starts anyway, the fee goes back and it doesn't start. The log says `[cards] the judge holds the tournament back: 0
+boss, 0 mini-boss and 0 other cards spied`. Only the tournament: the card masters' duels are reached as in vanilla, the
+first a tutorial with a preset hand. Whether one of each is enough for the builder (it asks for two mini-boss cards)
+is not yet measured with a small deck.
+
+**Status:** built (2026-10-11); seen the same day: the judge's line with no cards spied, no fee taken.
+
+*Code: `World/CardDeckGuard.cs`, `Core/Plugin.cs`.*
