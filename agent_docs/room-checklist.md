@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**218 of 244 done.**
+**219 of 244 done.**
 
 ## Outskirts
 
@@ -536,7 +536,10 @@ as it is, a frozen record.
 
 ## Bandit Hideout
 
-- [ ] HideoutEntrance (99)
+- [x] HideoutEntrance (99) — free throughout; the story's capture skipped (its altar trigger `eventcheck` kept away):
+  flag 18's other changes made instead, the door below and Astotheles' fight trigger (`event2`) kept present and the
+  wall over that door (`Base/FakeWalls`, a ConditionChecker until 18) off, seen; Astotheles (until 301), his diary and
+  note (from 301); nothing to find. The Cell's check (Dig taught after the capture, flag 18) needs a new home
 - [ ] HideoutCell (100)
 - [ ] HideoutCentralRoom (101)
 - [ ] HideoutLeftA (102)

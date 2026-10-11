@@ -959,6 +959,52 @@ namespace BugFablesAP
                         ItemSwap.ClassColors[which] = Convert.ToInt32(parts[2], 16);
                         return $"markcolor: {classes[which]} now {parts[2]}";
                     }
+                    case "conditions":
+                    {
+                        // conditions: every map object with a ConditionChecker (scenery shown or hidden by flags), its
+                        // path, requires, limit and whether it is shown now.
+                        if (MainManager.map == null)
+                        {
+                            return "conditions: no map";
+                        }
+                        var condLog = new System.Text.StringBuilder($"[dev] conditions on {MainManager.map.mapid}:");
+                        foreach (ConditionChecker cc in MainManager.map.GetComponentsInChildren<ConditionChecker>(true))
+                        {
+                            string path = cc.name;
+                            for (Transform up = cc.transform.parent; up != null && up != MainManager.map.transform; up = up.parent)
+                            {
+                                path = up.name + "/" + path;
+                            }
+                            condLog.Append($"\n  {path} requires [{string.Join(",", cc.requires.Select(f => f.ToString()).ToArray())}] "
+                                + $"limit [{string.Join(",", cc.limit.Select(f => f.ToString()).ToArray())}] region {cc.regionID} "
+                                + $"shown {cc.gameObject.activeSelf}, start {cc.startpos}");
+                        }
+                        log.LogInfo(condLog.ToString());
+                        return "conditions logged";
+                    }
+                    case "restorestolen":
+                    {
+                        // restorestolen: puts back what the bandit hideout's capture (Event109) saved in flagstring[8], as
+                        // its West Storage scene does, without that scene's story flags. Test files only.
+                        string stolen = MainManager.instance.flagstring[8];
+                        string[] lists = string.IsNullOrEmpty(stolen) ? new string[0] : stolen.Split('-');
+                        if (lists.Length < 3)
+                        {
+                            return "restorestolen: nothing saved (flagstring[8] is '" + stolen + "')";
+                        }
+                        int restored = 0;
+                        for (int list = 0; list < 2; list++)
+                        {
+                            foreach (string id in lists[list].Split(',').Where(i => i.Length > 0))
+                            {
+                                MainManager.instance.items[list].Add(Convert.ToInt32(id));
+                                restored++;
+                            }
+                        }
+                        MainManager.instance.money += Convert.ToInt32(lists[2]);
+                        MainManager.instance.flagstring[8] = "";
+                        return $"restorestolen: {restored} items and {lists[2]} berries put back";
+                    }
                     case "tagged":
                     {
                         // tagged <tag>: every object on the map with that tag, its path, layer and collider bounds.

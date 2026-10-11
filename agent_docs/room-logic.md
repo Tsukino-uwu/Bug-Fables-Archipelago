@@ -334,6 +334,8 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
    intended one (rule 2). A script turns those into the room's checklist with a guess at each requirement.
    **Which rooms first:** those with early spots that need no Jump (the fill error with *minimal* accessibility and
    Shuffle Jump, `apimplementation.md`, Known issues: more early spots is its fix).
+   Scenery can carry flags too: run the console's `conditions` in the room (each `ConditionChecker`'s requires and
+   limit), since the entity dump leaves them out (2026-10-12: the Bandit Hideout entrance's door wall, hidden by 18).
 2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance and at each spawn, and try each way across without the ability or without Jump.
    Record what was seen, with the date, in `MEASURED.md`.
