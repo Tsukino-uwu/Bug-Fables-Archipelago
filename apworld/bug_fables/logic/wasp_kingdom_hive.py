@@ -8,7 +8,8 @@ from ..data_types import Area, EntityMove, EntityRef, Location, Pickup, Source
 
 LOCATIONS = (
     # WaspKingdom3 (2026-10-11): the Wasp Key (key item 119, flag 364), which lay free under the left ledge once the
-    # stealth wasps were away, moved up where it takes the Beemerang Halt and Bee Fly (ENTITIES_MOVED).
+    # stealth wasps were away, moved up where it takes the Beemerang Halt and Bee Fly (ENTITIES_MOVED); may go back to
+    # its own spot, free, later (2026-10-11).
     Location("Wasp Kingdom Hive: Fountain Room, On the Roof", 286, "WaspKingdom3",
              Source(flag=364, pickup=Pickup(map="WaspKingdom3", type=1, item=119)),
              rule=CanUse("Beemerang Halt") & CanUse("Bee Fly")),

@@ -504,7 +504,8 @@ as it is, a frozen record.
   up, 363), arriving there pushed past it, out shut until the key is an item; its two stealth wasps kept away; no pickup
 - [x] WaspKingdom3 (165) — Fountain Room; one door (the Central Hall's), everything free with its two stealth wasps
   away; the Wasp Key (key item 119, flag 364), which then lay free under the left ledge, moved on the roof: Beemerang
-  Halt and Bee Fly (location 286); the Wasp Key opens the Central Hall's lock
+  Halt and Bee Fly (location 286; seen reached so; may go back to the floor, free, later); the Wasp Key opens the
+  Central Hall's lock
 - [ ] WaspKingdom4 (166)
 - [ ] WaspKingdom5 (167)
 - [ ] WaspKingdomPrison (168)
