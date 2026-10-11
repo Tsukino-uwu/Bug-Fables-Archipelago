@@ -3426,10 +3426,19 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **Metal Island Hotel** (`MetalIsland2`, 2026-10-11, seen on screen; EntityDump, code read): all free; the
   receptionist's inn: pay, sleep, Master Slice's Tangy Jam (item 78) made by the sleep scene each stay (seen), the
   bedroom locked again on re-entering. The top left door (`loadzone aud`) behind `FxdColmothguard` (until 315), who
-  pushes the party back (seen); 315 is set by `Event122`'s seventh step, every Bugaria card master beaten. The ant
+  pushes the party back (seen), with an invisible wall (`Base/cardblocker`, a `ConditionChecker` until 315); 315 is
+  set by `Event122`'s seventh step, every Bugaria card master beaten; `FxdColmothguardallow` stands there from 315. In
+  a seed both blockers kept away and the allowing guard kept present (seen: in and out). The ant
   tunnel's end on the right: its miner sells the dig as the far ends' do (`Event48`, 0 berries in a seed, seen);
   Diana until 78, a tunnel soldier from 78 (`Event107`). Miners' lines 17-18 talk of the tunnel under the lake. Used
   by `metal_island.py`, `bugaria_city.py`.
+- **Metal Island Auditorium** (`MetalIslandAuditorium`, 2026-10-11, seen on screen; EntityDump, code read): the
+  hotel door, three NPCs and a save crystal at the bottom; the top and stage by Jump or Bee Fly. `carminaloadzone` at
+  the top right (a dig, seen) runs `Event192`: `LoadMap(131)`, the party dropped into the hotel's Carmina room (inside
+  1), her scene and, until 562, a fight (enemy 34, Miniboss, no fleeing), then 562; leaving her room comes out in the
+  lobby. The judge's line 6: `checkmoney,25` then `Event210`, the Spy Cards tournament: won, key item 184 (the Card
+  Trophy) given once (`items[1].Contains(184)`), key item 104 taken; flag 648 when contestant 32 plays, 400 in its
+  scene. No pickup. Used by `metal_island.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

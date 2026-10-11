@@ -2,10 +2,10 @@
 Outskirts'."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Rule
+from rule_builder.rules import Rule
 
 from ..custom_rules import SUBMARINE, SUBMARINE_KEY, CanUse, one_way
-from ..data_types import Area, DoorRule, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
+from ..data_types import Area, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
 
 _UP: Rule = CanUse("Jump") | CanUse("Bee Fly")
 
@@ -27,6 +27,9 @@ LOCATIONS = (
 
 TRANSFERS = (
     Transfer("submarine", "MetalIsland1", "MetalLake", SUBMARINE, from_area="Dock"),
+    # The Auditorium's dig at its top right into Carmina's room in the hotel (Event192, her fight once, flag 562), whose
+    # door leads into the lobby: one way, never shuffled.
+    Transfer("dig", "MetalIslandAuditorium", "MetalIsland2", CanUse("Beetle Dig"), two_way=False, from_area="Top"),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (448).
 PRESENT_WITH_ITEM = (
@@ -40,6 +43,11 @@ MAP_AREAS = (
     # (below).
     Area("MetalIsland1", "Dock", (), one_way(None, _UP), out=_UP),
     Area("MetalIsland1", "Chef's House", (), _UP),
+    # The Metal Island Hotel (MetalIsland2; named 2026-10-11): everything free, Carmina's room (reached only by the
+    # Auditorium's dig, out into the lobby) included; its Auditorium door's guard kept out of the way.
+    # The Metal Island Auditorium (MetalIslandAuditorium; named 2026-10-11): its bottom (the hotel door, a save crystal) the map's own region; the top
+    # and the stage (the judge's tournament, the dig to Carmina's room) by Jump or Bee Fly, both ways (a drop down).
+    Area("MetalIslandAuditorium", "Top", (), _UP),
 )
 
 # The log house's door on the left, made in the game only after the ending (555): open from the start, with its two
@@ -49,16 +57,18 @@ KEPT_PRESENT = (
     EntityRef("MetalIsland1", "doorloghouse"),
     EntityRef("MetalIsland1", "ladybugorange"),
     EntityRef("MetalIsland1", "FxdColladybugred"),
+    # The Metal Island Hotel's Auditorium guard who lets the party by, there in the game only once every Bugaria card
+    # master is beaten (315): from the start, the Auditorium open (decided 2026-10-11).
+    EntityRef("MetalIsland2", "FxdColmothguardallow"),
+)
+# The guard who turns the party back from the Auditorium until 315.
+KEPT_OPEN = (
+    EntityRef("MetalIsland2", "FxdColmothguard"),
 )
 # Its closed door, shown until 555: hidden with it.
 SCENERY_HIDDEN = (
     EntityRef("MetalIsland1", "Log House/Door"),
+    # The invisible wall before the Auditorium's door, there until 315 with its guard.
+    EntityRef("MetalIsland2", "Base/cardblocker"),
 )
 
-DOOR_RULES = (
-    # The Metal Island Hotel (MetalIsland2; named 2026-10-11): everything free but its top left door to the Auditorium, whose guard
-    # (until 315) lets the party by only once every card master of Bugaria is beaten (Event122). The card masters
-    # aren't in the logic, so the door is shut for the logic and left out of the door shuffle; the guard stays.
-    DoorRule("MetalIsland2", "loadzone aud", False_()),
-    DoorRule("MetalIslandAuditorium", "loadzone", False_()),
-)

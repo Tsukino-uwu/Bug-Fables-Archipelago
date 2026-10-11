@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**199 of 244 done.**
+**200 of 244 done.**
 
 ## Outskirts
 
@@ -454,8 +454,13 @@ as it is, a frozen record.
   the door, its closed-door scenery hidden, and its two ladybugs kept present; seen); quests for the quest pass
 - [x] MetalIsland2 (131) — Metal Island Hotel; everything free: the town's door, the inn (its Tangy Jam each stay, no
   location, Next 74), the rooms, the storage ant, the ant tunnel's end (its miner digs, a free far end); the top left
-  door to the Auditorium shut in the logic (its guard waits for every Bugaria card master, flag 315; the guard stays)
-- [ ] MetalIslandAuditorium (228)
+  door to the Auditorium open from the start (its blocking guard and invisible wall, there until every Bugaria card
+  master is beaten, flag 315, kept away; the guard who lets you by kept present; seen); Carmina's room reached only
+  by the Auditorium's dig
+- [x] MetalIslandAuditorium (228) — Metal Island Auditorium; its bottom (the hotel door, three NPCs, a save crystal)
+  the map's own region; the top and the stage by Jump or Bee Fly, both ways (a drop down); from the top a dig (Beetle
+  Dig) into Carmina's room in the hotel, one way (Event192: her scene and fight once, flag 562), out into the lobby;
+  the judge's Spy Cards tournament (25 berries, Event210: the Card Trophy, key item 184, once) for the card pass
 
 ## Termite Capitol
 
