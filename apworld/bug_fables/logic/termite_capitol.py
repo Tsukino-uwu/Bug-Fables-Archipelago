@@ -2,7 +2,7 @@
 what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
-from rule_builder.rules import Has, True_
+from rule_builder.rules import CanReachRegion, Has, True_
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
 from ..data_types import Area, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
@@ -59,6 +59,12 @@ LOCATIONS = (
     Location("Termite Capitol: Pier, Isolated Pillar by the Dock", 280, "TermitePier",
              Source(berry=28, pickup=Pickup(map="TermitePier", type=3, item=0)), rule=CanUse("Bee Fly"),
              category="crystal_berry", no_jump=True),
+    # The Colosseum Lobby (TermiteColiseum1; named 2026-10-11): the caravan's stall (Spicy Berry, Burly Berry, Magic
+    # Seed, Crunchy Leaf, Honey Drop), kept present: first purchase a check, then its own item.
+    *(Location(f"Termite Capitol: Colosseum Lobby, Caravan Shop {slot}", 280 + slot, "TermiteColiseum1",
+               Source(item_shop=ItemShop(map="TermiteColiseum1", keeper="crickerly", item=item)),
+               category="item_shop", no_jump=True)
+      for slot, item in enumerate((2, 3, 11, 0, 1), start=1)),
 )
 # The street outside the Colosseum is the same map, reached through a door pair that reloads it (loadzonenearcoliseum
 # and the three NEARloadzoneback); both ways free.
@@ -69,7 +75,9 @@ MAP_AREAS = (
 )
 TRANSFERS = (
     Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE, from_area="Dock"),
-    Transfer("arena", "TermiteColiseum1", "TermiteColiseum2", LATER_CHAPTERS),
+    # The receptionist offers fights only once the King has met the party (Event152 on entering the Royal Chamber,
+    # flag 386).
+    Transfer("arena", "TermiteColiseum1", "TermiteColiseum2", LATER_CHAPTERS & CanReachRegion("TermiteRoyalChamber")),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (379 here).
 PRESENT_WITH_ITEM = (
@@ -87,4 +95,9 @@ HELD_UNTIL_ITEM = (
 KEPT_OPEN = (
     EntityRef("TermiteMainPlaza", "elizant"),
     EntityRef("TermiteMainPlaza", "eventguard"),
+)
+# The caravan's stall in the Colosseum's lobby there for good: in the game Crickerly comes with chapter 1's end (flag 41),
+# an artifact flag a seed doesn't set (2026-10-11).
+KEPT_PRESENT = (
+    EntityRef("TermiteColiseum1", "crickerly"),
 )

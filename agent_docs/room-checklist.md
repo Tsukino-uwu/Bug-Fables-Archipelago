@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**204 of 244 done.**
+**205 of 244 done.**
 
 ## Outskirts
 
@@ -480,7 +480,9 @@ as it is, a frozen record.
 - [x] TermitePier (177) — Pier; the street door, the building and the sign free; the submarine's dock a one-way drop,
   Jump or Bee Fly back up (the submarine leaves and lands there); Crystal Berry 28 on an isolated pillar in the
   water, Bee Fly both ways (location 280)
-- [ ] TermiteColiseum1 (178)
+- [x] TermiteColiseum1 (178) — Colosseum Lobby; free; the guards' two openings scenery; the receptionist's fights
+  (Event163, the arena transfer) from flag 386 (the King's scene in the Royal Chamber) on; Crickerly's stall kept
+  present (Caravan Shop 1-5, locations 281-285)
 - [ ] TermiteColiseum2 (179)
 
 ## Wasp Kingdom Hive
