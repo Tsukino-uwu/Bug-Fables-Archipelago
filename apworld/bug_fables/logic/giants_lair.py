@@ -91,7 +91,7 @@ MAP_AREAS = (
     Area("GiantLairFridgeInside", "Lift", (), _FRIDGE_CLIMB, out=one_way(None, _FRIDGE_CLIMB),
          to="GiantLairFridgeInside (Top Floor)"),
     # The Roach Village (GiantLairRoachVillage; named 2026-10-11): its free ground the map's own region, with its
-    # scene (Event199, setting 586, which opens the roach lift), Amber's shop and the roach lift. The left door (to the
+    # scene (Event199, setting 586, which brings Amber's shop and the elder), the save crystal and the roach lift. The left door (to the
     # plains) is blocked until 595, set by the elder's talk upstairs (Event202, from 586), up by Jump or Bee Fly; free
     # in. The fridge's lift up a ledge, Jump or Bee Fly, a drop down from it.
     Area("GiantLairRoachVillage", "Left Door", ("loadzoneplains",), _UP, out=one_way(None, _UP)),
@@ -100,7 +100,7 @@ MAP_AREAS = (
 
 TRANSFERS = (
     Transfer("lift", "GiantLairFridgeInside", "GiantLairRoachVillage", from_area="Lift", to_area="Fridge Lift"),
-    # The roach lift, opened by the village's scene on its free ground: up from the Entrance only once that's seen, so
+    # The roach lift, free from the village; up from the Entrance only from 586 (its trigger), the village's scene, so
     # the logic takes it down only (cautious, without a story event).
     Transfer("lift", "GiantLairRoachVillage", "GiantLairEntrance", two_way=False),
     # The ending: from the Sapling's plains to the city's end.

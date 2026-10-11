@@ -414,7 +414,7 @@ as it is, a frozen record.
   the enemy pass: three enemies
 - [x] GiantLairRoachVillage (237) — Roach Village (the game's name); its free ground the map's own region: the
   scene (Event199, sets 586), Amber's shop (locations 251-254, from 586, kept past 555), the roach lift down to the
-  Entrance (opened by the scene; one way in the logic, its way up needing the scene seen); the left door free in, out
+  Entrance (free; one way in the logic, its way up from the Entrance needing the scene seen); the left door free in, out
   only from 595 (the elder upstairs, Event202, Jump or Bee Fly); the fridge's lift up a ledge, Jump or Bee Fly
 - [ ] GiantLairSaplingPlains (238)
 - [ ] GiantLairBeforeBoss (244)
