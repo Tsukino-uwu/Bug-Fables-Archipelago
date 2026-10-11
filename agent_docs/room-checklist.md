@@ -425,7 +425,7 @@ as it is, a frozen record.
   off; the left door (the Sapling Plains) up into the middle's left the same way, its blocker kept away; up the right
   by Bee Fly, Horn Dash and the lever below the right (the air pipe) to the bounce pad to room 245, whose drop lands
   in the middle's left; the pad and the drop never shuffled (build step 88)
-- [x] GiantLairBeforeBoss2 (245) — Kitchen Counter, above the Kitchen Stove; its right (the bounce pad's door) the
+- [x] GiantLairBeforeBoss2 (245) — Above the Stove, a shelf above the Kitchen Stove; its right (the bounce pad's door) the
   map's own region; the gate in the middle open only while the ice block sits on the right's pressure plate (no flag)
   by Jump, Bee Fly, Freeze and Horn Slash; the left's right part past it; its left part (the hole down into the
   stove's middle left) by the Beemerang on the switches, Jump, Bee Fly and the Shield over the thorns; no location
