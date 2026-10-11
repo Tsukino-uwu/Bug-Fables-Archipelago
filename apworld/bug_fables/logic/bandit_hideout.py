@@ -32,7 +32,7 @@ LOCATIONS = (
     # A Bond Berry (key item 84, flag 267) on the middle table, dropped onto from the platforms above (Jump or Bee Fly);
     # takeable only from the escape (11): from the start (2026-10-12). The table's food props (Base/items0_84, its
     # display copy among them) stay: the game hides them all from 11.
-    Location("Bandit Hideout: Dining Hall, On the Table", 298, "HideoutRightA",
+    Location("Bandit Hideout: Dining Hall, On Top of the Table", 298, "HideoutRightA",
              Source(flag=267, pickup=Pickup(map="HideoutRightA", type=1, item=84)),
              rule=CanUse("Jump") | CanUse("Bee Fly"), no_jump=True),
     Location("Bandit Hideout: Dining Hall, By the Cauldron", 297, "HideoutRightA",
@@ -116,4 +116,9 @@ MAP_AREAS = (
 TRANSFERS = (
     Transfer("drop", "HideoutGarden", "HideoutGarden", two_way=False,
              way_back=CanUse("Beetle Dig") & (CanUse("Jump") | CanUse("Bee Fly")), from_area="Upper"),
+)
+# The Dining Hall's display Bond Berry: the food group's own sprite (its stands are its children), hidden for good since
+# the takeable one (the seed's item) lies in its place (2026-10-12).
+SCENERY_SPRITE_OFF = (
+    EntityRef("HideoutRightA", "Base/items0_84"),
 )

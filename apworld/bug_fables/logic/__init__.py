@@ -60,6 +60,8 @@ SCENERY_FITTED: tuple[SceneryFit, ...] = tuple(e for area in AREAS for e in geta
 PICKUPS_PLACED: tuple[PlacedPickup, ...] = tuple(e for area in AREAS for e in getattr(area, "PICKUPS_PLACED", ()))
 # Scenery with no flag of its own, switched off on load (a night map's copy of something its day map hides by flag).
 SCENERY_OFF: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_OFF", ()))
+# Map objects whose own drawing alone is switched off, their children kept (a display copy of an item atop its stands).
+SCENERY_SPRITE_OFF: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_SPRITE_OFF", ()))
 ENTITIES_MOVED: tuple[EntityMove, ...] = tuple(e for area in AREAS for e in getattr(area, "ENTITIES_MOVED", ()))
 # Doors the client adds to a map or sends elsewhere, and flags it sets with another (the Bee Kingdom's Scanner Room).
 DOOR_ROWS: tuple[DoorRow, ...] = tuple(e for area in AREAS for e in getattr(area, "DOOR_ROWS", ()))

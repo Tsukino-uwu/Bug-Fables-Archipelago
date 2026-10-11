@@ -429,6 +429,15 @@ namespace BugFablesAP
                 }
                 log.LogInfo($"[night] {map}: {off.Entity} {(t != null ? "switched off" : "NOT FOUND")}");
             }
+            foreach (EntityName off in (seed?.Invoke()?.ScenerySpriteOff ?? new List<EntityName>()).Where(o => o.Map == map))
+            {
+                Renderer own = __instance.transform.Find(off.Entity)?.GetComponent<Renderer>();
+                if (own != null)
+                {
+                    own.enabled = false;
+                }
+                log.LogInfo($"[night] {map}: {off.Entity} {(own != null ? "own drawing switched off" : "NOT FOUND")}");
+            }
             Pair p = PairOf(map);
             if (p == null || !On)
             {

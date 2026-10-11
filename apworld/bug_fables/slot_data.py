@@ -8,7 +8,8 @@ from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIG
                           ENTITIES_MOVED, FLAGS_WITH, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
                           KEPT_PRESENT, LIMIT_FLAGS, LOCATION_NAME_TO_ID, PICKUPS_PLACED, PRESENT_FROM,
                           PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_COPIED, SCENERY_FITTED, SCENERY_HIDDEN,
-                          SCENERY_LAYERS, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, SCENES_KEPT_AWAY,
+                          SCENERY_LAYERS, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT,
+                          SCENERY_SPRITE_OFF, SCENES_KEPT_AWAY,
                           STORY_ONLY_MAPS, TIME_SWITCHES)
 from .data_types import (DayNight, DialogueFlag, DoorRow, EntityMove, EntityRef, FlagEntity, FlagSwap, FlagWith,
                          ItemEntity, MapScene, PlacedPickup, SceneCamera, SceneryCopy, SceneryFit, SceneryLayer,
@@ -157,6 +158,7 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "pickups_placed": _entities(PICKUPS_PLACED),
         # Scenery with no flag of its own the client switches off on load ([{"map", "entity"}], by its path).
         "scenery_off": _entities(SCENERY_OFF),
+        "scenery_sprite_off": _entities(SCENERY_SPRITE_OFF),
         # Entities standing somewhere else than their own spot ([{"map", "entity", "at"}]).
         "entities_moved": _entities(ENTITIES_MOVED),
         # A scene's fixed camera point moved with its characters ([{"map", "event", "from", "to"}]).

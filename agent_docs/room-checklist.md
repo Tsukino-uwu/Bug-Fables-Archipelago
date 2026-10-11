@@ -570,7 +570,7 @@ as it is, a frozen record.
   Bee Fly) and the platforms, back by its own pad: Crystal Berry 20 dug up (Beetle Dig, 296) and a respawning Squash
   by the cauldron (from 301, made from the start; 297); a Bond Berry on the middle table, dropped onto from the
   platforms (Jump or Bee Fly; takeable only from 11, made from the start; 298, seen taken), the table's food props
-  kept (hidden from 11 in vanilla); its stealth bandits and catch triggers away, two regular enemies kept; for the
+  kept (hidden from 11 in vanilla) but their own display Bond Berry hidden (seen); its stealth bandits and catch triggers away, two regular enemies kept; for the
   quest pass: the Orange Horn (from 139, set at the Golden Settlement's entrance) and the cook (from 301)
 
 ## Stream Mountain

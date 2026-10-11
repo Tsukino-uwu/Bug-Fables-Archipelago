@@ -3626,4 +3626,9 @@ object's box collider to its own mesh: the altar's stood 7.9 high over a short m
 **Status:** built (2026-10-12); seen through the dev `liveslot`: the item on the altar, reached by Jump or Bee Fly
 (the user). Its swap to the seed's item needs a seed that has the location.
 
-*Code: `World/DayNight.cs` (`Placed`, `PlaceWhenReady`), `Core/SeedData.cs` (`SceneryFitted`, `PickupsPlaced`).*
+The same day, the Dining Hall's Bond Berry (made from the start, build step 90's room) lay under a display copy that is
+the table food group's own sprite (`Base/items0_84`, the food stands its children): `scenery_sprite_off`
+(`[{"map", "entity"}]`) switches off only an object's own renderer, its children kept. Seen: only that sprite gone.
+
+*Code: `World/DayNight.cs` (`Placed`, `PlaceWhenReady`, `ScenerySpriteOff`), `Core/SeedData.cs` (`SceneryFitted`,
+`PickupsPlaced`, `ScenerySpriteOff`).*
