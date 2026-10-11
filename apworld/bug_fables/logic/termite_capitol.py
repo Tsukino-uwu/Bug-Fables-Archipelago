@@ -14,7 +14,7 @@ LOCATIONS = (
              & CanUse("Horn Dash") & CanUse("Bee Fly"), reach=LATER_CHAPTERS),
 )
 TRANSFERS = (
-    Transfer("submarine", "TermitePier", "MetalLake", LATER_CHAPTERS & SUBMARINE),
+    Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE),
     Transfer("arena", "TermiteColiseum1", "TermiteColiseum2", LATER_CHAPTERS),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (379 here).

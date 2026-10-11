@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import CanReachRegion, False_, Has, True_
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WOODEN_CRANK, CanUse, Member, one_way
+from ..custom_rules import ANY_ATTACK, SUBMARINE, SUBMARINE_KEY, WOODEN_CRANK, CanUse, Member, one_way
 from ..data_types import (ALWAYS_SET, Area, EntityMove, EntityRef, FlagEntity, FlagSwap, ItemEntity, Location, Pickup,
                           Source, StoryEvent, Transfer)
 
@@ -210,7 +210,7 @@ MAP_AREAS = (
 )
 
 TRANSFERS = (
-    Transfer("submarine", "RubberPrisonPier", "MetalLake", LATER_CHAPTERS & SUBMARINE, from_area="Ground Lower Right"),
+    Transfer("submarine", "RubberPrisonPier", "MetalLake", SUBMARINE, from_area="Ground Lower Right"),
     # The Pier's lower part, left and right, across platforms with Jump or Bee Fly, both ways.
     Transfer("platforms", "RubberPrisonPier", "RubberPrisonPier", _UP, from_area="Ground Lower Left",
              to_area="Ground Lower Right"),

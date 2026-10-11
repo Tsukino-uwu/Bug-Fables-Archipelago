@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import (ALL_ATTACKS, ANY_ATTACK, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
+from ..custom_rules import (ALL_ATTACKS, ANY_ATTACK, BOAT_TICKET, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
                             CanUse, one_way)
 from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
                           Source, Transfer)
@@ -152,7 +152,7 @@ TRANSFERS = (
     # boat back lands too.
     Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET, from_area="Dock"),
     # Every dock takes the submarine (and the Boat Ticket, inside the later chapters' stand-in).
-    Transfer("submarine", "BugariaPier", "MetalLake", LATER_CHAPTERS & SUBMARINE),
+    Transfer("submarine", "BugariaPier", "MetalLake", SUBMARINE),
 )
 # The submarine's docks exist with its key item in the bag, whatever the story's flags (448 here).
 PRESENT_WITH_ITEM = (

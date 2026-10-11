@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**194 of 244 done.**
+**195 of 244 done.**
 
 ## Outskirts
 
@@ -432,7 +432,10 @@ as it is, a frozen record.
 
 ## Metal Lake
 
-- [ ] MetalLake (183)
+- [x] MetalLake (183) — Metal Lake, the submarine's lake: no doors, no pickups, six docks (Termite, Metal Island,
+  Bugaria, the prison, the Fishing Village, Mystery Island), each reaching every other by the submarine alone (the
+  later-chapters stand-in dropped from the rides); never a start or shuffled, having no door; for the enemy pass: two
+  wasps (until 79) and Striders
 - [ ] MysteryIsland (206)
 - [ ] MysteryIslandInside (207)
 

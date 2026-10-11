@@ -3399,6 +3399,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   player), and with no activation flag it rises again once nothing sits on it (`NPCControl` trigger enter and exit).
   Its pieces: a droplet (Freeze), Horn Slash on the block, Jump and Bee Fly; on the left two `ROTwallswitch`es
   (Beemerang), Jump, Bee Fly and thorns (the Shield). No pickup. Used by `giants_lair.py`.
+- **Metal Lake** (`MetalLake`, 2026-10-11, EntityDump): no door; six docks (`docktermite`, `dockmetal`,
+  `dockbugaria`, `dockprison`, `dockvillage`, `dockisland`, each an `Event` interaction); two wasps (until 79) and six
+  Striders; no pickup. Used by `metal_lake.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
