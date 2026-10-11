@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**220 of 244 done.**
+**221 of 244 done.**
 
 ## Outskirts
 
@@ -546,7 +546,9 @@ as it is, a frozen record.
 - [x] HideoutCell (100) — Cell; the middle (door, save crystal; the crystal's copies swapped by 11) free; the left cell
   dug into (Beetle Dig), its Dig scene's trigger kept away (location 71 is on the Entrance's altar); the right cell dug into, its dig
   spot starting Event217, Cerise with Crystal Berry 19 (674, 682; location 293, seen given); a droplet that only drips
-- [ ] HideoutCentralRoom (101)
+- [x] HideoutCentralRoom (101) — free between its four doors (the Cell's, left, bottom, right); a talk in the middle on
+  the first visit (Event109's part here, until 259; sets 259 and 401, nothing given) from any door; its stealth bandits
+  away, two regular enemies kept; no flag-driven scenery; no pickup
 - [ ] HideoutLeftA (102)
 - [ ] HideoutStairsRoom (103)
 - [ ] HideoutGarden (104)
