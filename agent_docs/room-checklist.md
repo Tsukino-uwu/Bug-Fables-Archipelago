@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**191 of 244 done.**
+**192 of 244 done.**
 
 ## Outskirts
 
@@ -416,7 +416,9 @@ as it is, a frozen record.
   scene (Event199, sets 586), Amber's shop (locations 251-254, from 586, kept past 555), the roach lift down to the
   Entrance (free; one way in the logic, its way up from the Entrance needing the scene seen); the left door free in, out
   only from 595 (the elder upstairs, Event202, Jump or Bee Fly); the fridge's lift up a ledge, Jump or Bee Fly
-- [ ] GiantLairSaplingPlains (238)
+- [x] GiantLairSaplingPlains (238) — the Sapling Plains; its door and a save crystal the map's own region; the last
+  fight's scene (Event200, until 555; two fights) up by Jump or Bee Fly, where the ending leaves to the city's end
+  (seen won); its scene fast-forwarded; no location
 - [ ] GiantLairBeforeBoss (244)
 - [ ] GiantLairBeforeBoss2 (245)
 

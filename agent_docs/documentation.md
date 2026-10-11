@@ -1082,6 +1082,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    fight?"): `Event198` talks, starts a fight with three Dead Landers, talks again, sets 593 and builds the map again;
    fast-forwarded (a `Scenes` row), the fight at the game's own speed as in every sped-up scene. **Seen (2026-10-11):**
    from both doors, the log's `[qol] Event198: passing it by at speed`, then `scene over: normal speed`.
+   **The last fight's scenes** (2026-10-11, mapping the Sapling Plains: "can we speedup this cutscene ?"): `Event200`
+   talks, fights, talks, fights again, talks, then the ending's scenes (`Event203` among them); `Event200`
+   fast-forwarded (a `Scenes` row), the fights at the game's own speed. Not yet seen sped up: the one run so far
+   played before the plugin reloaded.
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

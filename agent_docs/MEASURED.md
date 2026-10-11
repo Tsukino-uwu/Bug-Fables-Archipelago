@@ -3377,6 +3377,12 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (`elevatorroach`, line 16) goes to the Entrance, before the scene too (seen); back up from the Entrance only from
   586 (`loadzoneroachvillage`); the save crystal is reachable before the scene (seen); the fridge's lift (`lift`) needs Jump or Bee
   Fly up its ledge. A save crystal. Used by `giants_lair.py`.
+- **Sapling Plains** (`GiantLairSaplingPlains`, 2026-10-11, seen on screen; EntityDump, code read): one door
+  (`loadzonevillage`, to `GiantLairBeforeBoss`) and a save crystal; up by Jump or Bee Fly, a trigger (`eventtrigger`,
+  until 555) runs `Event200`: talk, a fight (enemy 90, no fleeing), talk, a second fight, talk; 400 on and off, 555
+  and 586 on; then `Event203` (586 on, 555 and 664 off, `LoadMap(237)`, the Roach Village; then 555 and 664 on) and
+  the ending to `BugariaEndPlaza` (seen won with no artifact). From 555 the elder (until 597) and the sapling. No
+  pickup. Used by `giants_lair.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

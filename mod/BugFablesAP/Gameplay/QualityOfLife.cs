@@ -100,6 +100,9 @@ namespace BugFablesAP
             // The explorers' stand outside the giant's fridge: talk, a fight (at normal speed), talk, flag 593 and the
             // map built again, so fast-forwarded.
             new Scene { Map = "GiantLairFridgeOutside", Event = 198, Flags = null },
+            // The last fight's scene on the Sapling Plains: talk, the fight (at normal speed), then the ending's scenes,
+            // so fast-forwarded.
+            new Scene { Map = "GiantLairSaplingPlains", Event = 200, Flags = null },
         };
 
         // A talk trigger that starts by itself on entering (a DialogueTrigger with data[2] 1) opens its line with no

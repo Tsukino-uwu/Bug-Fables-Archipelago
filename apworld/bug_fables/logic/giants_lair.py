@@ -20,6 +20,7 @@ _FRIDGE_FIGHT = "Outside the Fridge Fight Won"
 # Bee Fly across to the next bounce pad (on the top floor, to the lift and into it).
 _FRIDGE_CLIMB: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump") & CanUse("Bee Fly")
 _UP: Rule = CanUse("Jump") | CanUse("Bee Fly")
+_ROACH_SCENE = "Roach Village Scene Seen"
 
 LOCATIONS = (
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
@@ -56,6 +57,9 @@ STORY_EVENTS = (
                Source(flag=593), rule=Member("Vi"), no_jump=True),
     StoryEvent("Giant's Lair: Outside the Fridge, Dead Lander Fight from the Right", _FRIDGE_FIGHT,
                "GiantLairFridgeOutside", Source(flag=593), rule=Member("Vi"), no_jump=True, area="Right"),
+    # The Roach Village's scene on its free ground (Event199, until 586), which opens the roach lift's way up.
+    StoryEvent("Giant's Lair: Roach Village, Arrival Scene", _ROACH_SCENE, "GiantLairRoachVillage", Source(flag=586),
+               no_jump=True),
 )
 
 # The Giant's Lair Entrance (GiantLairEntrance; named by the user, 2026-10-11): one region, nothing needed between its
@@ -91,20 +95,24 @@ MAP_AREAS = (
     Area("GiantLairFridgeInside", "Lift", (), _FRIDGE_CLIMB, out=one_way(None, _FRIDGE_CLIMB),
          to="GiantLairFridgeInside (Top Floor)"),
     # The Roach Village (GiantLairRoachVillage; named 2026-10-11): its free ground the map's own region, with its
-    # scene (Event199, setting 586, which brings Amber's shop and the elder), the save crystal and the roach lift. The left door (to the
-    # plains) is blocked until 595, set by the elder's talk upstairs (Event202, from 586), up by Jump or Bee Fly; free
-    # in. The fridge's lift up a ledge, Jump or Bee Fly, a drop down from it.
+    # scene (Event199, setting 586, which brings Amber's shop and the elder), the save crystal and the roach lift. The
+    # left door (to the plains) is blocked until 595, set by the elder's talk upstairs (Event202, from 586), up by Jump
+    # or Bee Fly; free in. The fridge's lift up a ledge, Jump or Bee Fly, a drop down from it.
     Area("GiantLairRoachVillage", "Left Door", ("loadzoneplains",), _UP, out=one_way(None, _UP)),
     Area("GiantLairRoachVillage", "Fridge Lift", (), _UP, out=one_way(None, _UP)),
+    # The Sapling Plains (GiantLairSaplingPlains; named 2026-10-11): its door and a save crystal the map's own region;
+    # up by Jump or Bee Fly to the last fight's scene (Event200, until 555), where the ending leaves from.
+    Area("GiantLairSaplingPlains", "Last Fight", (), _UP),
 )
 
 TRANSFERS = (
     Transfer("lift", "GiantLairFridgeInside", "GiantLairRoachVillage", from_area="Lift", to_area="Fridge Lift"),
-    # The roach lift, free from the village; up from the Entrance only from 586 (its trigger), the village's scene, so
-    # the logic takes it down only (cautious, without a story event).
+    # The roach lift, free down from the village; up from the Entrance only from 586 (its trigger), the village's scene.
     Transfer("lift", "GiantLairRoachVillage", "GiantLairEntrance", two_way=False),
+    Transfer("lift", "GiantLairEntrance", "GiantLairRoachVillage", Has(_ROACH_SCENE), two_way=False),
     # The ending: from the Sapling's plains to the city's end.
-    Transfer("story", "GiantLairSaplingPlains", "BugariaEndPlaza", LATER_CHAPTERS, two_way=False),
+    Transfer("story", "GiantLairSaplingPlains", "BugariaEndPlaza", LATER_CHAPTERS, two_way=False,
+             from_area="Last Fight"),
 )
 
 # The hidden switch under the platforms before the boss, hit while flag 41 (the first boss) is set: always on, as in
