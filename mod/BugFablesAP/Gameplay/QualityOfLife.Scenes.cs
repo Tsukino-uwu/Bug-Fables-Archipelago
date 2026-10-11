@@ -114,11 +114,6 @@ namespace BugFablesAP
             [HarmonyPrefix]
             private static bool BeforeStartEvent(int id)
             {
-                if (fightsInScene > 0)
-                {
-                    log.LogInfo($"[qol] Event{id} starts: the scene's fight count ({fightsInScene}) reset");
-                }
-                fightsInScene = 0;
                 if (id == TrapdoorEvent && randomizerOn() && MainManager.map != null
                     && MainManager.map.mapid.ToString() == "SnakemouthDoorRoom")
                 {
@@ -195,30 +190,16 @@ namespace BugFablesAP
             return map == null ? null : Scenes.FirstOrDefault(s => s.Event == id && s.Map == map);
         }
 
-        // The fights the running scene has started, for a scene sped up only after some of them.
-        private static int fightsInScene;
-        private static bool inSceneFight;
-
         private static bool InFastScene()
         {
-            bool fighting = MainManager.battle != null || MainManager.instance.inbattle;
-            if (fighting && !inSceneFight && MainManager.instance.inevent)
-            {
-                fightsInScene++;
-            }
-            if (fighting != inSceneFight)
-            {
-                log.LogInfo($"[qol] Event{MainManager.lastevent}: fighting {fighting}, fights so far {fightsInScene}, "
-                    + $"inevent {MainManager.instance.inevent}, battle {(MainManager.battle != null)}");
-            }
-            inSceneFight = fighting;
             // A battle a scene starts is played at the game's own speed.
-            if (!SkipCutscenes.Value || !MainManager.instance.inevent || fighting)
+            if (!SkipCutscenes.Value || !MainManager.instance.inevent || MainManager.battle != null
+                || MainManager.instance.inbattle)
             {
                 return false;
             }
             Scene scene = SceneFor(MainManager.lastevent);
-            return scene != null && scene.Flags == null && fightsInScene >= scene.AfterFights;
+            return scene != null && scene.Flags == null;
         }
 
         // The mod's hold-ups ask for ItemSwap.EmptyLine as their follow-up: answer |end|, which skips the wait for a

@@ -67,7 +67,6 @@ namespace BugFablesAP
             internal int OnlyWhileUnset =
                 -1; // skipped only while this flag is unset (a scene with a later, needed part)
             internal int Discovery = -1; // a journal discovery the scene records, recorded by the skip too
-            internal int AfterFights; // fast-forwarded only once this many of its fights are over
         }
 
         private static readonly Scene[] Scenes =
@@ -105,8 +104,8 @@ namespace BugFablesAP
             // so fast-forwarded.
             new Scene { Map = "GiantLairSaplingPlains", Event = 200, Flags = null },
             // The Colosseum: talk, three fights (at normal speed) with talk between, then the win's scenes, so
-            // fast-forwarded; its first talk (the Queen carried in) at normal speed for now.
-            new Scene { Map = "TermiteColiseum2", Event = 163, Flags = null, AfterFights = 1 },
+            // fast-forwarded.
+            new Scene { Map = "TermiteColiseum2", Event = 163, Flags = null },
         };
 
         // A talk trigger that starts by itself on entering (a DialogueTrigger with data[2] 1) opens its line with no
