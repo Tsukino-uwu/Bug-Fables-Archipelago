@@ -4,8 +4,8 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member
-from ..data_types import (Area, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
-                          Source)
+from ..data_types import (Area, DoorRule, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
+                          Source, Transfer)
 
 LOCATIONS = (
     # WaspKingdom3 (2026-10-11): the Wasp Key (key item 119, flag 364), which lay free under the left ledge once the
@@ -96,6 +96,15 @@ KEPT_OPEN = (
         ("WaspKingdom3", ("wasp", "waspsleep")),
         ("WaspKingdom4", ("wasp1", "wasp2", "wasp3", "wasp4", "wasp5")),
     ) for e in names),
+)
+# The Queen's room (WaspKingdomQueen; 2026-10-11): nothing to find. Its door back to the Throne Room is made only from
+# the ending (555); its scene on entering (Event141, until 555) sends the party to Bugaria's main plaza once General
+# Ultimax is beaten (371; before that it walks it back out), on every visit.
+DOOR_RULES = (
+    DoorRule("WaspKingdomQueen", "loadzone", False_()),
+)
+TRANSFERS = (
+    Transfer("scene", "WaspKingdomQueen", "BugariaMainPlaza", two_way=False),
 )
 # WaspKingdom4's twig (its only dig wall) copied across the way to its left barrier, the room's hard floor made ground
 # so it can be dug under there: no way to the top without Beetle Dig, where the barrier shuts behind the party and only
