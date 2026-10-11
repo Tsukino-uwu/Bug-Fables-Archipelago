@@ -235,7 +235,9 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
    **Check both directions:** keeping one direction of a way open means checking the other (learned in build step 9,
    the trapdoor's way back).
 4. Is it open only in some story states (a door opening on a flag, a blocker that leaves)? See
-   [Chains](#chains-what-other-rooms-do-to-this-one).
+   [Chains](#chains-what-other-rooms-do-to-this-one). In some rooms a door's way is hidden by scenery a flag removes:
+   a wall that looks solid, though the door's own zone is there (the Bandit Hideout entrance, `Base/FakeWalls` until
+   18). The console's `conditions` lists it; the entity dump doesn't.
 
 **Crossing the room**
 
@@ -318,7 +320,10 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
 
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
-   `RotatingPlatform`, `PathPlatform`, `TempPlatform`, plus the doors (`door-graph.py`), the flag-gated doors
+   `RotatingPlatform`, `PathPlatform`, `TempPlatform`. It leaves out scenery that flags show or hide: the console's
+   `conditions`, run in the room, lists each `ConditionChecker` with its `requires` and `limit` (2026-10-12: the Bandit
+   Hideout entrance's door was behind `Base/FakeWalls`, hidden from flag 18, which the dump never showed). Then the
+   doors (`door-graph.py`), the flag-gated doors
    (`gate-table.py`), the transfers scenes make (`event-transfers.py`), the flag cross-reference (planned, see
    Chains), each spawn's spot, and, still to script, the scenes that move the party within a map (story events that
    set the player's position).
@@ -334,8 +339,6 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
    intended one (rule 2). A script turns those into the room's checklist with a guess at each requirement.
    **Which rooms first:** those with early spots that need no Jump (the fill error with *minimal* accessibility and
    Shuffle Jump, `apimplementation.md`, Known issues: more early spots is its fix).
-   Scenery can carry flags too: run the console's `conditions` in the room (each `ConditionChecker`'s requires and
-   limit), since the entity dump leaves them out (2026-10-12: the Bandit Hideout entrance's door wall, hidden by 18).
 2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance and at each spawn, and try each way across without the ability or without Jump.
    Record what was seen, with the date, in `MEASURED.md`.
@@ -410,9 +413,9 @@ entrance randomizer and a random start stay labelled experimental until their ro
 - Unused and test maps (the model).
 - Stealth (decided 2026-10-11): the Wasp Kingdom's and the Bandit Hideout's patrols and their see areas are kept away,
   all at once (each guard's battle data is its catch scene and sight), so only the way across a room is logic; the
-  hideout's regular enemies, which the game makes only after the story's capture (flag 11), kept present instead. Caught, the game puts the party back,
-  takes the Wasp Key in `WaspKingdom3` (`Event138`) or jails it, Beetle Dig the only way out (`Event108`); and the
-  sneaking slowed the game down. The bandits' story capture (`Event109`, the Cell's check) is decided with its room.
+  hideout's regular enemies, which the game makes only after the story's capture (flag 11), kept present instead.
+  Caught, the game puts the party back, takes the Wasp Key in `WaspKingdom3` (`Event138`) or jails it, Beetle Dig the
+  only way out (`Event108`); and the sneaking slowed the game down. The bandits' story capture (`Event109`, the Cell's check) is decided with its room.
 
 ## The facts it relies on
 
