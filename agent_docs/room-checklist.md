@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**189 of 244 done.**
+**190 of 244 done.**
 
 ## Outskirts
 
@@ -405,7 +405,13 @@ as it is, a frozen record.
   scene fast-forwarded with *Skip cutscenes*; Roy's quest's last step here (quest 62, Event223, from 703: the same
   fight, then a Bond Berry), out of the seed until that quest is gone through (build step 44); no location; for the
   enemy pass: the fight
-- [ ] GiantLairFridgeInside (236)
+- [x] GiantLairFridgeInside (236) — Inside the Fridge; its 1st floor (the door to Outside the Fridge) the map's own
+  region; each floor up by its climb (Freeze, Horn Slash, Jump, Bee Fly: droplets and geysers frozen, ice knocked
+  into place, Bee Fly to the next bounce pad, on the top floor to the lift and into it); down a free drop a floor at a
+  time round the puzzle areas' edges (a drop into one needs Jump or Bee Fly back); the lift (to the Roach Village)
+  at the top, a drop from it; Crystal Berry 48 behind the milk on the 2nd floor (location 250): from the 2nd floor up
+  its ice with Freeze, Horn Slash and Jump and a drop to it, or Bee Fly across the gap, never down from the top; for
+  the enemy pass: three enemies
 - [ ] GiantLairRoachVillage (237)
 - [ ] GiantLairSaplingPlains (238)
 - [ ] GiantLairBeforeBoss (244)

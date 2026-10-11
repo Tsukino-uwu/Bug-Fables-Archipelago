@@ -3360,6 +3360,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   quest ends here: `royevent` (from 703 until 704) runs `Event223`, the same fight, then 704, a Bond Berry
   (`giveitem,1,84`) and `CompleteQuest(62)`; quest 62 is "A New Hope", on the boards from 555 (`QuestDump`); from 704
   Roy, a warden and two Krawlers stand there. No pickup.
+- **Inside the Fridge** (`GiantLairFridgeInside`, 2026-10-11, seen on screen; the console's `items`): the door
+  `loadzone` (to `GiantLairFridgeOutside`'s `fridgeloadzone`) on the 1st floor; three floors, each climbed by
+  freezing droplets and geysers (on the top floor an enemy too), knocking ice into place with the horn, Jump onto it
+  and Bee Fly across to a green bounce pad (the top floor's Bee Fly to the lift and into it); each floor's puzzle area
+  is a ledge drop (back up by Jump or Bee Fly), the 2nd floor's ledges small. Down: a free drop a floor at a time
+  round the edges. The lift (a ridden lift, a scene at the top) goes to `GiantLairRoachVillage`. One pickup: Crystal
+  Berry 48 (`crystalberry`, at (-16.4, 16.0, 10.0)), behind the milk on the 2nd floor's upper left. Used by
+  `giants_lair.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

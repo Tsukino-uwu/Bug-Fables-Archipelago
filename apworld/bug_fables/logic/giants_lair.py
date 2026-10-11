@@ -16,6 +16,9 @@ _COINS: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Bee Fly")
 # Its right: Bee Fly, and an attack on the switch that moves a platform across.
 _TO_THE_RIGHT: Rule = CanUse("Bee Fly") & ANY_ATTACK
 _FRIDGE_FIGHT = "Outside the Fridge Fight Won"
+# Each floor's climb inside the fridge: droplets and geysers frozen, ice knocked into place with the horn, Jump onto it,
+# Bee Fly across to the next bounce pad (on the top floor, to the lift and into it).
+_FRIDGE_CLIMB: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump") & CanUse("Bee Fly")
 
 LOCATIONS = (
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
@@ -30,6 +33,12 @@ LOCATIONS = (
     Location("Giant's Lair: Crane Crossing, Ledge by the Crossing", 249, "GiantLairDeadLands2",
              Source(flag=611, pickup=Pickup(map="GiantLairDeadLands2", type=2, item=75)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Middle Right"),
+    # Behind the milk, the 2nd floor's upper left: up its climb's ice and a drop to it, or Bee Fly across the gap from
+    # the 1st floor's bounce pad; never reached down from the top (seen).
+    Location("Giant's Lair: Inside the Fridge, Behind the Milk", 250, "GiantLairFridgeInside",
+             Source(berry=48, pickup=Pickup(map="GiantLairFridgeInside", type=3, item=0)),
+             rule=(CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")) | CanUse("Bee Fly"),
+             category="crystal_berry", no_jump=True, area="Second Floor"),
 )
 
 STORY_EVENTS = (
@@ -66,10 +75,18 @@ MAP_AREAS = (
     # Outside the Fridge (GiantLairFridgeOutside; named by the user, 2026-10-11): its left (the door to Crane Crossing, a
     # save crystal) the map's own region; its right (the fridge's door) past the fight, nothing else needed.
     Area("GiantLairFridgeOutside", "Right", ("fridgeloadzone",), Has(_FRIDGE_FIGHT)),
+    # Inside the Fridge (GiantLairFridgeInside; named 2026-10-11): its 1st floor (the door) the map's own
+    # region. Each floor up by its climb; down a free drop at a time round the puzzle areas' edges (a drop into a
+    # puzzle area needs Jump or Bee Fly back, which every climb holds). The lift at the top, a drop from it.
+    Area("GiantLairFridgeInside", "Second Floor", (), _FRIDGE_CLIMB, out=one_way(None, _FRIDGE_CLIMB)),
+    Area("GiantLairFridgeInside", "Top Floor", (), _FRIDGE_CLIMB, out=one_way(None, _FRIDGE_CLIMB),
+         to="GiantLairFridgeInside (Second Floor)"),
+    Area("GiantLairFridgeInside", "Lift", (), _FRIDGE_CLIMB, out=one_way(None, _FRIDGE_CLIMB),
+         to="GiantLairFridgeInside (Top Floor)"),
 )
 
 TRANSFERS = (
-    Transfer("lift", "GiantLairFridgeInside", "GiantLairRoachVillage", LATER_CHAPTERS),
+    Transfer("lift", "GiantLairFridgeInside", "GiantLairRoachVillage", LATER_CHAPTERS, from_area="Lift"),
     Transfer("lift", "GiantLairRoachVillage", "GiantLairEntrance", LATER_CHAPTERS),
     # The ending: from the Sapling's plains to the city's end.
     Transfer("story", "GiantLairSaplingPlains", "BugariaEndPlaza", LATER_CHAPTERS, two_way=False),
