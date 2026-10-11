@@ -519,7 +519,7 @@ as it is, a frozen record.
   366 is off) gives the game's second Wasp Key (location 291, Arrival) and sets 366, which swaps her for her shop
   (Shop 1-3: Jayde's Stew, Magic Seed, Mushroom Salad; 288-290); seen in a seed, walked in. The dev warp marks a
   room's own scenes seen, so warping straight in skips it
-- [x] WaspKingdomMainHall (170) — the vent from the Food Storage opens on its own ledge, a drop to the floor with no way
+- [x] WaspKingdomMainHall (170) — Main Hall; the vent from the Food Storage opens on its own ledge, a drop to the floor with no way
   back up (the dev warp's landing there sticks; walked through, fine); the front door to Outside the Hive (both ends
   from 555) kept present, its barrier here (`Base/gate`) off and the outside one kept: one way out, seen; the throne room's door up top by Jump
   or Bee Fly, a drop back; everyone else here from 555; no pickup
