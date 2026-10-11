@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**200 of 244 done.**
+**201 of 244 done.**
 
 ## Outskirts
 
@@ -464,7 +464,10 @@ as it is, a frozen record.
 
 ## Termite Capitol
 
-- [ ] TermiteMainPlaza (174)
+- [x] TermiteMainPlaza (174) — Main Plaza, the Capitol's entrance; everything free: the gate (a ride from outside),
+  the doors to the industrial district and the Royal Chamber, the save crystal, the shop computer (Shop 1-4: Squash,
+  Shell Ointment, Mega-Rush, Aphid Shake; locations 262-265), DineMite's Mite Burger (dialogue, repeatable), the poster;
+  the worker's request (a Drowsy Cake, then a Shock Candy, flags 626 and 627, for the TP Plus medal) for the quest pass
 - [ ] TermiteRoyalChamber (175)
 - [ ] TermiteIndustrial (176)
 - [ ] TermitePier (177)

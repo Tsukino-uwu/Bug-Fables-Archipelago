@@ -3439,6 +3439,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   lobby. The judge's line 6: `checkmoney,25` then `Event210`, the Spy Cards tournament: won, key item 184 (the Card
   Trophy) given once (`items[1].Contains(184)`), key item 104 taken; flag 648 when contestant 32 plays, 400 in its
   scene. No pickup. Used by `metal_island.py`.
+- **Main Plaza** (`TermiteMainPlaza`, 2026-10-11, seen on screen; EntityDump, ScriptDump): all free. The shop
+  computer (`Fixedshopcomputer`, a `Shop`, inside 0): items 125, 97, 155, 130. `barkeeper` (DineMite, line 43-44):
+  a Mite Burger (154) for 15 berries by dialogue, each time. `workerguy`: line 49 takes a Drowsy Cake (147, flag
+  626), line 56 a Shock Candy (75, flag 627) and gives medal 1 (TP Plus). The poster (line 27) is text. No pickup.
+  Used by `termite_capitol.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

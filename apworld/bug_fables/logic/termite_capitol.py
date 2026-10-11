@@ -3,7 +3,7 @@ what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
-from ..data_types import EntityRef, ItemEntity, Location, Source, Transfer
+from ..data_types import EntityRef, ItemEntity, ItemShop, Location, Source, Transfer
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
@@ -12,6 +12,12 @@ LOCATIONS = (
              Source(event=164, flag=379),
              rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
              & CanUse("Horn Dash") & CanUse("Bee Fly"), reach=LATER_CHAPTERS),
+    # The Main Plaza (TermiteMainPlaza; named 2026-10-11): everything free. Its shop computer (Squash, Shell Ointment, Mega-Rush, Aphid
+    # Shake): first purchase a check, then its own item.
+    *(Location(f"Termite Capitol: Main Plaza, Shop {slot}", 261 + slot, "TermiteMainPlaza",
+               Source(item_shop=ItemShop(map="TermiteMainPlaza", keeper="Fixedshopcomputer", item=item)),
+               category="item_shop", no_jump=True)
+      for slot, item in enumerate((125, 97, 155, 130), start=1)),
 )
 TRANSFERS = (
     Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE),
