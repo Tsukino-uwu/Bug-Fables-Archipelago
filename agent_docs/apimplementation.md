@@ -882,6 +882,14 @@ be wrong.
     stay out of the base logic ("shouldn't be included in our current base logic"), kept here for a possible
     harder-logic option. So far: Crane Crossing's middle right to its right with Bee Fly alone, without the switch's
     crane platform ("technically possible ... but its harder"). Each one noted as it's found while mapping.
+72. **Dev tools to end a fight and reset a room** (asked 2026-10-11, mapping the Sapling Plains; not now): a console
+    command that ends the current fight at once (even one that can't be fled), and one that puts a room back as it
+    was (every flag its scenes set this visit), so a test never needs a game restart.
+73. **The Final Boss goal** (decided 2026-10-11, mapping the Sapling Plains; its own step): the default goal as vanilla
+    plays it: X artifacts open the last fight (its trigger, `Event200`, held until then), and winning it is the goal.
+    The current goal becomes the optional "Artifact Hunt" (sent on X artifacts). Where it sends is not yet decided:
+    "The End" is the lean, the exact moment to be picked in game. A first hold (the trigger switched off) didn't hold;
+    a second (a marker limit, as kept_open does) held: seen 2026-10-11, walked up to with 0 of 1 artifacts.
 
 **Known issues:**
 
