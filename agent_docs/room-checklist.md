@@ -506,7 +506,7 @@ as it is, a frozen record.
   away; the Wasp Key (key item 119, flag 364), which then lay free under the left ledge, moved on the roof: Beemerang
   Halt and Bee Fly (location 286; seen reached so; may go back to the floor, free, later); the Wasp Key opens the
   Central Hall's lock
-- [x] WaspKingdom4 (166) — the left door's area; a lever (any attack) and a copied twig dug under (Beetle Dig, build
+- [x] WaspKingdom4 (166) — Barrier Room; the left door's area; a lever (any attack) and a copied twig dug under (Beetle Dig, build
   step 89) to the top, both ways; across the top under its own twig (Dig) to a lever (any attack) opening the right
   door's barrier; no way back from the right; its five stealth wasps kept away; no pickup
 - [ ] WaspKingdom5 (167)
