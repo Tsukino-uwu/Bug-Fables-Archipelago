@@ -2437,11 +2437,13 @@ whether a garbage collection ran. Two clocks showed up:
    grows by) found the receiver at 35.7 KB a frame: every frame it worked out the party members received by reading
    each received item's game name, each a fresh cleaned string. Now only when the received count moves (and again on
    another save): 0.1 KB a frame, one collection in 20 s where there were three. The dev console still shows 35 KB a
-   frame in `jobs`, unexplained (its per-frame helpers allocate nothing found); dev builds only.
+   frame in `jobs`, unexplained (its per-frame helpers allocate nothing found); dev builds only. To catch the next one
+   early: `GcWatch` (a Debug setting, dev only) logs every collection with the gap since the last and the jobs that
+   made the most, warning under 10 s; after the fix, collections came 62 s apart in the plaza.
 
 **Status:** works, measured (2026-09-27). The tester's FPS counter dipping to 220 was that stall; confirmation on screen
 that it's gone waived by the user (2026-10-04: assumed fine until an issue shows). The receiver's regrowth fixed and
-measured (2026-10-11); not yet confirmed by feel in the plaza.
+measured (2026-10-11); seen the same day: no hitch dashing round the plaza.
 
 *Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames`
 (`DevConsole.cs`, `Dev/FrameRate.Dev.cs`).*

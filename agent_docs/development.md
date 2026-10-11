@@ -50,6 +50,12 @@ up to 120 characters (the limit core Archipelago's `ruff.toml` sets for Python).
 which the markdownlint extension checks: lines up to 120 as well, tables and code blocks exempt. An item numbered 10 or
 more indents its content by 4, where its text starts: with 3, a paragraph after a blank line falls out of the list.
 
+**Per-frame code makes no garbage.** Every `Tick` and every patch on a game method that runs each frame computes when
+its inputs change, not each frame: no new strings, lists, LINQ queries, closures or `FindObjectsOfType` per frame. Garbage
+made each frame brings the collector round every few seconds, a ~60 ms hitch each time; it happened twice (a shop
+lookup, 2026-09-27; the receiver's party count, 2026-10-11; documentation.md, step 25). Check a new per-frame job with
+`GcWatch` on (below): a collection more than a minute apart is normal, under 10 s is a warning.
+
 ## Trying it in the running game: build, then copy
 
 The build and the copy into the game are separate steps. The build never writes to the game install.
@@ -543,6 +549,7 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | Setting | What it does |
 |---|---|
 | `DevConsole` | F9 opens the dev console (section above). |
+| `GcWatch` | Logs each garbage collection (`[gc]`): the time since the last, the collecting frame's time, the memory made since, and the mod's per-frame jobs that made the most; a warning when collections come under 10 s apart. Measures every job each frame, so it costs a little itself. The console's `jobs <seconds>` is the one-off version. |
 | `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free, the opening done and no fade playing (2026-10-07: one fired between the opening's end and its fade-in, whose new fade destroyed the one the transfer waited on), and `unstick` goes first, dropping any waiting warp (2026-10-06: a frozen scene held it behind one for good). |
 | `InfJump`, `OneHit`, `BumpKill`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; field enemies die on touch; 999 berries once per save played. The console's `infjump`, `onehit`, `bumpkill` and `infberries` flip them. |
 | `MedalPrices` | Medal shop prices in tenths of the normal price, 10 (normal) by default, 0 free; the console's `medalprices` sets it. A cheat, moved off the Gameplay page (2026-10-09). |

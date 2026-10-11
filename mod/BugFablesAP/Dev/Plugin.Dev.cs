@@ -12,6 +12,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> textProbeEnabled;
         private ConfigEntry<bool> tlsProbeEnabled;
         private ConfigEntry<bool> scriptDumpEnabled;
+        private ConfigEntry<bool> gcWatch;
         private ConfigEntry<bool> entityDumpEnabled;
         private ConfigEntry<bool> mapDumpEnabled;
         private ConfigEntry<bool> varDumpEnabled;
@@ -97,6 +98,10 @@ namespace BugFablesAP
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");
+            gcWatch = Config.Bind("Debug", "GcWatch", false,
+                "Dev only. Logs every garbage collection: the time since the last, the collecting frame's time, the "
+                + "memory made since and the mod's jobs that made the most; warns when they come closer than 10 s. "
+                + "Measuring every job costs a little itself. Off by default.");
             scriptDumpEnabled = Config.Bind("Debug", "ScriptDump", false,
                 "Dev only. Once per load, writes the item and flag command tokens of every map's dialogue lines to "
                 + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
@@ -169,7 +174,7 @@ namespace BugFablesAP
 
         partial void DevJobStart()
         {
-            if (JobSampler.Active)
+            if (JobSampler.Active || JobSampler.Watching)
             {
                 JobSampler.JobStart();
             }
@@ -177,7 +182,7 @@ namespace BugFablesAP
 
         partial void DevJobEnd(string name)
         {
-            if (JobSampler.Active)
+            if (JobSampler.Active || JobSampler.Watching)
             {
                 JobSampler.JobEnd(name);
             }
@@ -190,6 +195,8 @@ namespace BugFablesAP
             {
                 Log.LogInfo("[dev] " + jobs);
             }
+            JobSampler.Watching = gcWatch.Value;
+            JobSampler.WatchFrameEnd(Log);
             if (!saveDiffDone && !string.IsNullOrEmpty(saveDiff.Value))
             {
                 saveDiffDone = true;
