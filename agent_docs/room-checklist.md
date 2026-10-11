@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**225 of 244 done.**
+**226 of 244 done.**
 
 ## Outskirts
 
@@ -566,7 +566,12 @@ as it is, a frozen record.
   blocked path opens), then the Lore Book by the stolen-goods chest (location 295); that chest's switch (the items'
   return, sets 11) kept away (its scenery's open look from 11); for the quest pass: the bandits' scene from 512 until
   513 (`munevent`)
-- [ ] HideoutRightA (106)
+- [x] HideoutRightA (106) — Dining Hall; its door's floor free; the kitchen (right) by the green bounce pad (Jump or
+  Bee Fly) and the platforms, back by its own pad: Crystal Berry 20 dug up (Beetle Dig, 296) and a respawning Squash
+  by the cauldron (from 301, made from the start; 297); a Bond Berry on the middle table, dropped onto from the
+  platforms (Jump or Bee Fly; takeable only from 11, made from the start; 298, seen taken), the table's food props
+  kept (hidden from 11 in vanilla); its stealth bandits and catch triggers away, two regular enemies kept; for the
+  quest pass: the Orange Horn (from 139, set at the Golden Settlement's entrance) and the cook (from 301)
 
 ## Stream Mountain
 

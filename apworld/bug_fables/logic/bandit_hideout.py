@@ -24,6 +24,19 @@ LOCATIONS = (
     Location("Bandit Hideout: Treasury, By the Chest", 295, "HideoutWestStorage",
              Source(flag=271, pickup=Pickup(map="HideoutWestStorage", type=1, item=52)),
              rule=CanUse("Beetle Dig") & (CanUse("Jump") | CanUse("Bee Fly")), no_jump=True),
+    # The Dining Hall (HideoutRightA; named 2026-10-12): its kitchen (right side) holds crystal berry #20 in a dig spot
+    # and a respawning Squash by the cauldron (regional 6, made only from 301: from the start, PRESENT_FROM).
+    Location("Bandit Hideout: Dining Hall, Dig Spot", 296, "HideoutRightA",
+             Source(berry=20, pickup=Pickup(map="HideoutRightA", type=3, item=0)), rule=CanUse("Beetle Dig"),
+             category="crystal_berry", area="Kitchen", no_jump=True),
+    # A Bond Berry (key item 84, flag 267) on the middle table, dropped onto from the platforms above (Jump or Bee Fly);
+    # takeable only from the escape (11): from the start (2026-10-12). The table's food props (Base/items0_84, its
+    # display copy among them) stay: the game hides them all from 11.
+    Location("Bandit Hideout: Dining Hall, On the Table", 298, "HideoutRightA",
+             Source(flag=267, pickup=Pickup(map="HideoutRightA", type=1, item=84)),
+             rule=CanUse("Jump") | CanUse("Bee Fly"), no_jump=True),
+    Location("Bandit Hideout: Dining Hall, By the Cauldron", 297, "HideoutRightA",
+             Source(regional=6, pickup=Pickup(map="HideoutRightA", type=0, item=125)), area="Kitchen", no_jump=True),
     # The right cell, dug into (Beetle Dig): its dig spot starts Event217, Cerise appearing with Crystal Berry 19.
     Location("Bandit Hideout: Cell, Dig Spot", 293, "HideoutCell",
              Source(event=217, flag=674, berry=19, give=Give(map="HideoutCell", type=3, item=19)),
@@ -76,6 +89,8 @@ PRESENT_FROM = (
     # The Garden's well door (to the Defiant Root's well), made only from the escape (11): from the start, a second way
     # out (2026-10-12).
     FlagEntity("HideoutGarden", "loadzone well", ALWAYS_SET),
+    FlagEntity("HideoutRightA", "squosh", ALWAYS_SET),
+    FlagEntity("HideoutRightA", "tp berry", ALWAYS_SET),
 )
 MAP_AREAS = (
     # HideoutLeftA (2026-10-12): its right door's lower area the map's own region; the upper left (the garden door) up a
@@ -91,6 +106,9 @@ MAP_AREAS = (
     # The Garden (HideoutGarden; 2026-10-12): its right door's bottom right the map's own region; the bottom left (the
     # well door) dug to (Beetle Dig) both ways; the upper area (the storage door, the Stolen Silk) up from the bottom left
     # by Jump or Bee Fly, a drop back to either side (TRANSFERS for the right one).
+    # The Dining Hall: up to the green bounce pad at the top left (Jump or Bee Fly), across the platforms and down into
+    # the kitchen on the right; back by the kitchen's own pad and the platforms.
+    Area("HideoutRightA", "Kitchen", (), CanUse("Jump") | CanUse("Bee Fly"), out=CanUse("Jump") | CanUse("Bee Fly")),
     Area("HideoutGarden", "Bottom Left", ("loadzone well",), CanUse("Beetle Dig"), out=CanUse("Beetle Dig")),
     Area("HideoutGarden", "Upper", ("loadzonestorage",), CanUse("Jump") | CanUse("Bee Fly"),
          out=one_way(None, CanUse("Jump") | CanUse("Bee Fly")), to="HideoutGarden (Bottom Left)"),
