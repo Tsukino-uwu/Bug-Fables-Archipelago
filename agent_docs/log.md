@@ -101,6 +101,7 @@ said them.
 - [2026-10-10: the Bee Kingdom finished, the Honey Factory mapped; Tattle and Relay from the start](#2026-10-10-the-bee-kingdom-finished-the-honey-factory-mapped-tattle-and-relay-from-the-start)
 - [2026-10-10: the Pier mapped, the Factory Pass never used up, an accidental goal and its fix](#2026-10-10-the-pier-mapped-the-factory-pass-never-used-up-an-accidental-goal-and-its-fix)
 - [2026-10-11: the Rubber Prison finished, the artifacts as items, the Giant's Lair begun](#2026-10-11-the-rubber-prison-finished-the-artifacts-as-items-the-giants-lair-begun)
+- [2026-10-11: the Giant's Lair, Metal Lake and Metal Island finished, the plaza's hitches found](#2026-10-11-the-giants-lair-metal-lake-and-metal-island-finished-the-plazas-hitches-found)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4105,3 +4106,30 @@ said them.
   earlier text (decided: no rewrite of history). The ~2,200 "the user ..." attributions across docs and code wait for
   a scrub of their own (decided: everything but `CLAUDE.md`, plain dated facts, then a preflight check), planned in a
   local, untracked file; no new ones are written from now on.
+
+## 2026-10-11: the Giant's Lair, Metal Lake and Metal Island finished, the plaza's hitches found
+
+- **Setup:** a new seed (the artifacts as items), then another for Amber's shop, `AP_92030501143228725479`, hosted on
+  38281 (`Start-Process`, left running); the test file re-tied with `AdoptSeed`, then off. A copy of the seed's zip
+  and player file is in `stage/handoff/`.
+- **Rooms mapped** (195 to 202 of 244): Inside the Fridge, the Roach Village (Amber's shop 251-254, kept past 555; the
+  roach lift both ways behind its scene's story event), the Sapling Plains (its last fight sped up), the Kitchen Stove
+  and Above the Stove (kept together, build step 88), Metal Lake (the submarine alone joins its docks), Peacock Island
+  and its cave (named from discovery 46), Metal Island (its log house and ladybugs kept present), the Metal Island
+  Hotel and Auditorium (opened; its guard, wall and the dig to Carmina's room), the Termite Main Plaza (its shop,
+  262-265) and the Royal Chamber (266-267). The underground bar's door up never shuffled (build step 87).
+- **Built on the way:** the Spy Cards tournament held back without a deck (mod guide 58; a new file softlocked in the
+  deck builder); the inn's food logged as an idea (Next 74); the Final Boss goal decided (Next 73): its hold of the last
+  fight and the artifact sign by the Sapling Plains' door built and seen, kept uncommitted until the goal is built (the
+  sign in `KeptOpen.cs`, the hold in `stage/handoff/KeptOpen.hold.cs`); where the goal sends is still to be picked.
+- **The plaza's hitches** (found how): the user felt spikes dashing across the Termite plaza. The dev `frames` sampler
+  showed ~60 ms every 7.08 s, the same standing still, so a clock, not the room. First theory, the game's own: a
+  vanilla save in the plaza (mod loaded, randomizer off) hitched every 5 s, a quiet room never. PresentMon from
+  outside the game (new `copy-dev.ps1 -Layout None`) then showed no hitch in the plaza with no plugin at all, so the
+  mod. A new console `jobs` timed each per-frame job and the memory it grew by: the receiver at 35.7 KB a frame,
+  re-reading every received item's game name each frame to count party members (a fresh string each). Fixed to count
+  only when the count moves: collections 62 s apart after. `GcWatch` (Debug) now logs every collection; the developer
+  guide says per-frame code makes no garbage. The dev console still shows 35 KB a frame in `jobs`, unexplained.
+- **Handoff:** the server left running; the game open on the test file in the Royal Chamber; `GcWatch` on. Next room:
+  `TermiteIndustrial` (176). Uncommitted on purpose: `KeptOpen.cs` (the artifact sign). Open: Room Swap's stuck test
+  seed (Known issues); the Final Boss goal's build; the goal's send point; a re-run of every test before a push.
