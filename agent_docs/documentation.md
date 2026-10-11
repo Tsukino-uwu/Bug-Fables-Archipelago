@@ -2418,7 +2418,7 @@ shook with her carriers at 240 fps. `bodytrace 900 queen` (a named character in 
 gravity pulled her about 0.3 a step, the scene set her height back before the draw, and the smoothing drew the
 undone fall, a 7-pixel saw-tooth. Each axis the game set again after the step now keeps no step move. The first try
 missed her (it skipped characters with an unchanged parent, and hers is the map). Seen steady on the second; walking,
-followers, flight and platforms not yet seen again with it.
+both followers, Vi's flight and a conveyor seen fine with it (2026-10-11).
 
 *Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
 after-physics hooks in `Plugin.cs`, the waits in `HoldUps.cs` and `AutoSave.cs`; the
