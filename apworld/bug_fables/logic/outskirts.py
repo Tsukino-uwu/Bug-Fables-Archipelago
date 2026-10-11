@@ -150,7 +150,7 @@ LOCATIONS = (
 TRANSFERS = (
     # The sailor sails only for the Boat Ticket (with Progressive Boat on, its first copy), from the dock, where the
     # boat back lands too.
-    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET, from_area="Dock"),
+    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET, from_area="Dock", to_area="Dock"),
     # Every dock takes the submarine (and the Boat Ticket, inside the later chapters' stand-in).
     Transfer("submarine", "BugariaPier", "MetalLake", SUBMARINE),
 )

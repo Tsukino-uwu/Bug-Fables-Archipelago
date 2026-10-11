@@ -3413,6 +3413,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   along the stream by Icicle and Jump to the top, where a trigger (`event`, until 502) runs `Event124`, the Peacock
   Spider's bounty (board quest 23); the Crystal Feather after it (seen); `spring` until 502, and `spring - Duplicate`
   from 502, a red bounce pad back down to the door (seen). No pickup. Used by `metal_lake.py`.
+- **Metal Island** (`MetalIsland1`, 2026-10-11, seen on screen; EntityDump): the town's ground free (the hotel door
+  `loadzone hotel`, `save`, `FxdColteaseller`, a `Shop` of items 81 and 80, Burly and Spicy Tea; `questboard`; the
+  statue `discovery`, "To Mothington X, who dreamed of making this haven a reality.", recording discovery 44); the dock
+  below (the submarine `Fixedsub - Duplicate`, the boat) a drop; the Chef's house (`doorrestaurant`, insideid 0;
+  Master Slice, `slice`, who ignores you while cooking; the inn's lobby says sleeping there gets one of his dishes)
+  up by Jump or Bee Fly; `crystalberry` (#36, data `3 -1 0 36`) on its roof by a ledge, a dig under a fence and a
+  bounce pad; the log house (`doorloghouse`, from 555) holds only `ladybugorange` (from 555, line 78: "Elizant II's
+  lifting the ban soon!"). Used by `metal_island.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

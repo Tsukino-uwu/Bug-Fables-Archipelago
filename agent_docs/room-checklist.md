@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**197 of 244 done.**
+**198 of 244 done.**
 
 ## Outskirts
 
@@ -446,7 +446,12 @@ as it is, a frozen record.
 
 ## Metal Island
 
-- [ ] MetalIsland1 (94)
+- [x] MetalIsland1 (94) — Metal Island (the game's name); the town's ground the map's own region: the hotel door, the
+  save crystal, the tea seller (Tea Shop 1 and 2, Burly and Spicy Tea, locations 260-261), the Mothington X Statue
+  (discovery 44, location 259), the quest board; the dock below (the boat, the submarine) a drop, back up by Jump or
+  Bee Fly; Master Slice's house (the Chef's) up by Jump or Bee Fly; the Chef's Roof (crystal berry #36, location 258)
+  by Jump or Bee Fly and Beetle Dig under a fence to a bounce pad; the left log house kept open (from 555 in the game;
+  inside only a ladybug, from 555 too); quests for the quest pass
 - [ ] MetalIsland2 (131)
 - [ ] MetalIslandAuditorium (228)
 
