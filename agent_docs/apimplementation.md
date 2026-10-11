@@ -895,6 +895,10 @@ be wrong.
     A sign showing the artifacts had and needed, at (19.9, 0, 5.2) on the Sapling Plains, by the door and the save
     crystal (the spot picked in game, 2026-10-11): built and seen the same day, one centred line, "Artifacts required:
     X" (the count had is in the pause menu); kept uncommitted with the hold until the goal is built.
+74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
+    after sleeping (the hotel's Tangy Jam from Master Slice, the Bugaria inn's Honey Drop) comes every stay, made fresh
+    by the sleep scene with no flag, so it's no location today. It could be one: the first food after sleeping at each
+    inn the check, later stays the game's own. It needs a mod hook (no flag to read), every inn at once.
 
 **Known issues:**
 

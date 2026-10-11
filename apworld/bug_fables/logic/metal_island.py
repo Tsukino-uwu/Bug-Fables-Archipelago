@@ -2,10 +2,10 @@
 Outskirts'."""
 from __future__ import annotations
 
-from rule_builder.rules import Rule
+from rule_builder.rules import False_, Rule
 
 from ..custom_rules import SUBMARINE, SUBMARINE_KEY, CanUse, one_way
-from ..data_types import Area, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
+from ..data_types import Area, DoorRule, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
 
 _UP: Rule = CanUse("Jump") | CanUse("Bee Fly")
 
@@ -53,4 +53,12 @@ KEPT_PRESENT = (
 # Its closed door, shown until 555: hidden with it.
 SCENERY_HIDDEN = (
     EntityRef("MetalIsland1", "Log House/Door"),
+)
+
+DOOR_RULES = (
+    # The Metal Island Hotel (MetalIsland2; named 2026-10-11): everything free but its top left door to the Auditorium, whose guard
+    # (until 315) lets the party by only once every card master of Bugaria is beaten (Event122). The card masters
+    # aren't in the logic, so the door is shut for the logic and left out of the door shuffle; the guard stays.
+    DoorRule("MetalIsland2", "loadzone aud", False_()),
+    DoorRule("MetalIslandAuditorium", "loadzone", False_()),
 )

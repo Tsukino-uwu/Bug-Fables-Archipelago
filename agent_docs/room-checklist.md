@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**198 of 244 done.**
+**199 of 244 done.**
 
 ## Outskirts
 
@@ -452,7 +452,9 @@ as it is, a frozen record.
   Bee Fly; Master Slice's house (the Chef's) up by Jump or Bee Fly; the Chef's Roof (crystal berry #36, location 258)
   by Jump or Bee Fly and Beetle Dig under a fence to a bounce pad; the left log house kept open (from 555 in the game:
   the door, its closed-door scenery hidden, and its two ladybugs kept present; seen); quests for the quest pass
-- [ ] MetalIsland2 (131)
+- [x] MetalIsland2 (131) — Metal Island Hotel; everything free: the town's door, the inn (its Tangy Jam each stay, no
+  location, Next 74), the rooms, the storage ant, the ant tunnel's end (its miner digs, a free far end); the top left
+  door to the Auditorium shut in the logic (its guard waits for every Bugaria card master, flag 315; the guard stays)
 - [ ] MetalIslandAuditorium (228)
 
 ## Termite Capitol

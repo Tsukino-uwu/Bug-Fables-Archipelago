@@ -3423,6 +3423,13 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   lifting the ban soon!"); its closed door is scenery (`Log House/Door`, a `ConditionChecker` hiding it from 555, the
   map flags dump); `FxdColladybugred` stands by it (from 555). In a seed all three kept as from 555 (seen). Used by
   `metal_island.py`.
+- **Metal Island Hotel** (`MetalIsland2`, 2026-10-11, seen on screen; EntityDump, code read): all free; the
+  receptionist's inn: pay, sleep, Master Slice's Tangy Jam (item 78) made by the sleep scene each stay (seen), the
+  bedroom locked again on re-entering. The top left door (`loadzone aud`) behind `FxdColmothguard` (until 315), who
+  pushes the party back (seen); 315 is set by `Event122`'s seventh step, every Bugaria card master beaten. The ant
+  tunnel's end on the right: its miner sells the dig as the far ends' do (`Event48`, 0 berries in a seed, seen);
+  Diana until 78, a tunnel soldier from 78 (`Event107`). Miners' lines 17-18 talk of the tunnel under the lake. Used
+  by `metal_island.py`, `bugaria_city.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

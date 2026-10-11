@@ -20,11 +20,11 @@ TRANSFERS = (
     # (rubber_prison.py, mapped 2026-10-10).
     Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", Has("Giant's Lair Bridge Fight Won"),
              to_area="Middle"),
-    Transfer("ant tunnel", "AntTunnels", "MetalIsland2", LATER_CHAPTERS),
     # Each far end's miner opens its shortcut to the tunnel hub, for free in a seed (free_ant_tunnels); the hub's way
     # back out needs that end's flag, set by having been there (Defiant Root's 75 by chapter 3's finale too), so the
     # way out isn't listed: the logic counts less than the game.
     Transfer("ant tunnel", "GoldenSettlementEntrance", "AntTunnels", two_way=False),
+    Transfer("ant tunnel", "MetalIsland2", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "DefiantRoot2", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "BarrenLandsAntTunnel", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "FGCave", "AntTunnels", two_way=False, from_area="Tunnel"),
