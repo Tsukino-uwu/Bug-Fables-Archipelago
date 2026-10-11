@@ -16,7 +16,7 @@
     {"name": "Beetle Dig", "game_id": 6, "kind": 6, "classification": "progression", "move": true},
     {"name": "Shield", "game_id": 7, "kind": 6, "classification": "progression", "move": true},
     {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "progression"},
-    {"name": "Wasp Key", "game_id": 119, "kind": 1, "classification": "progression", "_comment": "Opens the Wasp Kingdom's Central Hall lock (Event59 key list index 9), used up there; that lock is its only one."},
+    {"name": "Wasp Key", "game_id": 119, "kind": 1, "classification": "progression", "kept": true, "_comment": "Opens the Wasp Kingdom's two locks (Event59 key list index 9: the Central Hall's right door, WaspKingdom5's left), the game's one key for both: never used up in a seed (World/KeptKeys.cs), so either can come first."},
     {"name": "Heart Berry", "game_id": 83, "kind": 1, "classification": "useful"},
     {"name": "Sun Offering", "game_id": 55, "kind": 1, "classification": "progression"},
     {"name": "Moon Offering", "game_id": 56, "kind": 1, "classification": "progression"},

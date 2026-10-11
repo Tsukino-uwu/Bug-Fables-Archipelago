@@ -34,7 +34,7 @@ MAP_AREAS = (
     # WaspKingdom2 (2026-10-11): its bottom (the Pantry's door and the lower left one, to 243) the map's own region; up
     # to the top (the save crystal, the upper left and right doors) on the wooden lift, started by a lever in a small
     # house dug into (Beetle Dig, then any attack) and boarded by Jump or Bee Fly; down, a free drop. The right door behind a lock that
-    # takes the Wasp Key (Event59, key index 9, used up; gone from 363): arriving through it the game puts the party
+    # takes the Wasp Key (Event59, key index 9, kept in a seed; gone from 363): arriving through it the game puts the party
     # past the lock; out through it with the key.
     Area("WaspKingdom2", "Top", ("loadzoneleft",),
          CanUse("Beetle Dig") & ANY_ATTACK & (CanUse("Jump") | CanUse("Bee Fly")), out=True_()),
