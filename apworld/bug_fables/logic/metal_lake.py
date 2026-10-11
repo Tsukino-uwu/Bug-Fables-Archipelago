@@ -35,7 +35,8 @@ MAP_AREAS = (
     Area("MysteryIsland", "Door", ("loadzone",), _ICICLE_UP | CanUse("Bee Fly")),
     Area("MysteryIsland", "Venus", (), _ICICLE_UP | CanUse("Bee Fly")),
     Area("MysteryIsland", "Back", (), _ICICLE_UP),
-    # Peacock Island Cave (MysteryIslandInside; named 2026-10-11): the door the map's own region; up by Icicle and Jump, both ways, to
-    # the top, where the Peacock Spider's bounty fight starts (Event124, until 502; for the quest pass).
+    # Peacock Island Cave (MysteryIslandInside; named 2026-10-11): the door the map's own region; up by Icicle and
+    # Jump, both ways, to the top, where the Peacock Spider's bounty fight starts (Event124, until 502; for the quest
+    # pass).
     Area("MysteryIslandInside", "Top", (), _ICICLE_UP),
 )
