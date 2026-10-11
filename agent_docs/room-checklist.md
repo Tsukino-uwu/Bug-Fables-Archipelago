@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**214 of 244 done.**
+**215 of 244 done.**
 
 ## Outskirts
 
@@ -492,7 +492,7 @@ as it is, a frozen record.
 - [x] WaspKingdomOutside (147) — Outside the Hive; the top right door free both ways; the left (the cave's) pushes the party past a
   boulder, Horn Dash back out; the hive's left door (to `WaspKingdom1`, a one-way drop) inside grass that grows back,
   Horn Slash both ways; the hive's door and the lake's gate behind barriers (the hive's from 555), each putting
-  an arriving party past it; the hive's door one way out, the lake's gate still shut both ways (both ends from 555);
+  an arriving party past it; the hive's door barred from the Main Hall's side too, so never walked through, the lake's gate still shut both ways (both ends from 555);
   the patrol and its see area kept away (they guarded only the barred door, and caught a party arriving from the lake
   in a loop: arriving there seen free with them away); no pickup
 - [x] WaspKingdom1 (163) — Pantry; the grass door's one-way drop lands at its bottom left; up to its one door (to
@@ -519,7 +519,10 @@ as it is, a frozen record.
   366 is off) gives the game's second Wasp Key (location 291, Arrival) and sets 366, which swaps her for her shop
   (Shop 1-3: Jayde's Stew, Magic Seed, Mushroom Salad; 288-290); seen in a seed, walked in. The dev warp marks a
   room's own scenes seen, so warping straight in skips it
-- [ ] WaspKingdomMainHall (170)
+- [x] WaspKingdomMainHall (170) — the vent from the Food Storage opens on its own ledge, a drop to the floor with no way
+  back up (the dev warp's landing there sticks; walked through, fine); the front door to Outside the Hive barred on
+  both sides (from 555), arriving through either end free, neither end passable; the throne room's door up top by Jump
+  or Bee Fly, a drop back; everyone else here from 555; no pickup
 - [ ] WaspKingdomThrone (171)
 - [ ] WaspKingdomQueen (172)
 - [ ] WaspKingdomDrillRoom (243)

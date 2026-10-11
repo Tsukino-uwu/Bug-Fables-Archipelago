@@ -65,6 +65,14 @@ MAP_AREAS = (
     # from 365); the vent to the main hall on a small ledge of its own, dropped from free, up by Jump.
     Area("WaspKingdom5", "Top", (), Has("Wasp Key"), out=Has("Wasp Key")),
     Area("WaspKingdom5", "Vent", ("loadzone vent",), CanUse("Jump"), out=True_(), to="WaspKingdom5 (Top)"),
+    # The Main Hall (WaspKingdomMainHall; 2026-10-11): the vent from the Food Storage opens on a ledge of its own, a
+    # drop into the hall with no way back up.
+    Area("WaspKingdomMainHall", "Vent", ("loadzonevent",), False_(), out=True_()),
+    # Its front door to Outside the Hive, barred on both sides (Outside the Hive's Hive Door too): arriving through
+    # either end puts the party past its barrier, neither end lets it back through.
+    Area("WaspKingdomMainHall", "Front Door", ("loadzoneoutside",), False_(), out=True_()),
+    # The throne room's door up top: Jump or Bee Fly from the hall floor, a free drop back down.
+    Area("WaspKingdomMainHall", "Top", ("loadzonethrone",), CanUse("Jump") | CanUse("Bee Fly"), out=True_()),
     Area("WaspKingdom2", "Right Door", ("loadzoneright",), Has("Wasp Key"), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
