@@ -484,7 +484,7 @@ as it is, a frozen record.
   (Event163, the arena transfer: three fights in a row, the whole party) from flag 386 (the King's scene in the
   Royal Chamber) on; Crickerly's stall kept
   present (Caravan Shop 1-5, locations 281-285)
-- [x] TermiteColiseum2 (179) — the Colosseum's arena; no door, reached only by the receptionist's scene (Event163: three
+- [x] TermiteColiseum2 (179) — Colosseum Arena; no door, reached only by the receptionist's scene (Event163: three
   fights in a row, the whole party); no pickup or check of its own
 
 ## Wasp Kingdom Hive
