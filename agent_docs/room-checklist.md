@@ -553,9 +553,9 @@ as it is, a frozen record.
   knocked over and jumped onto (Freeze, Horn Slash, Jump), a free drop back; the crates that make steps from the
   escape on (11, ConditionCheckers) left hidden on purpose (2026-10-12, seen both ways); its stealth bandits away, a
   regular burglar kept; no pickup
-- [x] HideoutStairsRoom (103) — its north door and a crank (the map's own region); the bottom (the door up to the
+- [x] HideoutStairsRoom (103) — Crank Room; its north door and a crank (the map's own region); the bottom (the door up to the
   Entrance, another crank) across a platform the cranks flip (Beemerang Halt) or flown over (Bee Fly), both ways; that
-  door, made only from 11, made from the start (seen); its save crystal and Venus healer from 11 left as they are; no
+  door, made only from 11, made from the start (seen), and its save crystal and Venus healer (from 11) too; no
   flag-driven scenery; no pickup
 - [ ] HideoutGarden (104)
 - [ ] HideoutWestStorage (105)

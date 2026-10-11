@@ -58,6 +58,9 @@ PRESENT_FROM = (
     # The stairs room's door up to the Entrance, made only from the escape (11): from the start, so the way down from
     # the Entrance has its way back.
     FlagEntity("HideoutStairsRoom", "loadzoneup", ALWAYS_SET),
+    # Its save crystal and Venus healer, also only from 11 (2026-10-12).
+    FlagEntity("HideoutStairsRoom", "save", ALWAYS_SET),
+    FlagEntity("HideoutStairsRoom", "venushealer - Duplicate - Duplicate", ALWAYS_SET),
 )
 MAP_AREAS = (
     # HideoutLeftA (2026-10-12): its right door's lower area the map's own region; the upper left (the garden door) up a
