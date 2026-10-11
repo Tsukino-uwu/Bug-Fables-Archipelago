@@ -357,7 +357,9 @@ says the libraries changed.
 **The copy keeps a backup.** `dev-scripts/copy-dev.ps1` does that copy, and can switch Debug settings in the
 mod's config in the same run. Before replacing anything it copies the old file to `stage/backup/`, and
 `-Restore` puts it back. It exists because an agent's copy into the game was refused twice as irreversible
-(2026-09-24): a copy that can be undone is the safe kind.
+(2026-09-24): a copy that can be undone is the safe kind. `-Layout None` (game closed) moves every plugin file out,
+backed up, for a run of the game without the mod; `-Layout Dev` puts the dev setup back (added 2026-10-11 to compare
+frame times with and without the mod, recorded with PresentMon from outside the game).
 
 *Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/stage-dev.ps1`, `dev-scripts/copy-dev.ps1`.*
 

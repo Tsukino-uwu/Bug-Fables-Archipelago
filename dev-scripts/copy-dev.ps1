@@ -2,11 +2,12 @@
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 [-GameDir <dir>]
 #       [-DebugOn A,B] [-DebugOff C] [-DebugSet Key=Value] [-ConfigSet Section.Key=Value]
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Restore <folder under stage\backup>
-#   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Layout Release|Dev   (game closed)
+#   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Layout Release|Dev|None   (game closed)
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Status   (which build the game runs; copies nothing)
 param(
-    # Release: the dev copies out, release\mod in, as a player's install; Dev: back to the hot-reload setup.
-    [ValidateSet('', 'Release', 'Dev')][string]$Layout = '',
+    # Release: the dev copies out, release\mod in, as a player's install; Dev: back to the hot-reload setup; None: both
+    # out, the game without the mod (a performance comparison), back with Dev.
+    [ValidateSet('', 'Release', 'Dev', 'None')][string]$Layout = '',
     [string]$GameDir = 'C:\Program Files (x86)\Steam\steamapps\common\Bug Fables',
     [string[]]$DebugOn = @(),
     [string[]]$DebugOff = @(),
@@ -78,6 +79,9 @@ if ($Layout) {
         foreach ($rel in $devFiles + $releaseDir) { MoveOut $rel }
         Copy-Item $src (Join-Path $GameDir '.') -Recurse -Force
         Get-ChildItem (Join-Path $GameDir $releaseDir) -File | ForEach-Object { Write-Output "installed $releaseDir\$($_.Name)" }
+    } elseif ($Layout -eq 'None') {
+        foreach ($rel in $devFiles + $releaseDir) { MoveOut $rel }
+        Write-Output 'no plugin left: the game runs without the mod (back with -Layout Dev)'
     } else {
         $every = Join-Path $stage 'every-build\BepInEx\scripts'
         $setup = Join-Path $stage 'setup\BepInEx\plugins'

@@ -902,6 +902,12 @@ be wrong.
 
 **Known issues:**
 
+- **Hitches in the Termite Capitol's main plaza** (measured 2026-10-11, PresentMon and the dev `frames` sampler,
+  standing still): about 60 ms every 7.08 s on a seed file; 2 of 33 and 53 ms in 30 s on a vanilla file with the
+  mod's room work off; none in a quiet room with or without the mod (frame times identical at the 60 fps cap). So
+  the plaza hitches in the game itself; the mod may add to it (more and steadier hitches with more of it active),
+  likely through per-frame allocations that bring the garbage collector round more often. Not yet profiled; a
+  plaza run with no plugin needs a save already in the plaza.
 - **Room Swap's repair runs out of tries on a stuck test seed** (found 2026-10-11, mapping the Giant's Lair):
   `TestRoomSwapRepairsQuickly.test_stuck_starts_are_repaired` gives up at 1500 tries on seed 334640838 (`STUCK`), on
   the commits before build step 87 too, so a newly mapped room shifted it, as mapping did before (2026-10-10, the

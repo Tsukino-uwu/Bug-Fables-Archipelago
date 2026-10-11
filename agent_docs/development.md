@@ -89,7 +89,8 @@ The build and the copy into the game are separate steps. The build never writes 
      config stay the once-per-setup copy of step 2.
 4. **Trying the release download instead (game closed):** `copy-dev.ps1 -Layout Release` moves the dev copies out
    (the plugin in `scripts`, the libraries loose in `plugins`) and installs `release/mod`, exactly what the zip
-   holds; `-Layout Dev` switches back (it needs `stage-dev.ps1` run first). Both layouts at once would load the
+   holds; `-Layout Dev` switches back (it needs `stage-dev.ps1` run first); `-Layout None` takes both out, the game
+   without the mod. Both layouts at once would load the
    plugin twice, so each switch takes the other one out, into `stage/backup/<time>/`. DevReload stays off in the
    release layout: it only starts when `BepInEx/scripts/BugFablesAP.dll` exists.
    - **Why a script with backups** (2026-09-24): Claude Code's auto mode refused, as irreversible, both a
