@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**203 of 244 done.**
+**204 of 244 done.**
 
 ## Outskirts
 
@@ -477,7 +477,9 @@ as it is, a frozen record.
   left roof (270); the bomb shop (Bomb Shop 1-7, 271-277) and Bomb Master on its stand (Bomb Shop Medal, 278). Outside
   the Colosseum, an area of the same map behind its in-map door pair, free both ways: the Lore Book Between the Boxes
   (268) and the Plushie for Terrie (279: the plushie, once the Colosseum is beaten; the beggar's berry not a check)
-- [ ] TermitePier (177)
+- [x] TermitePier (177) — Pier; the street door, the building and the sign free; the submarine's dock a one-way drop,
+  Jump or Bee Fly back up (the submarine leaves and lands there); Crystal Berry 28 on an isolated pillar in the
+  water, Bee Fly both ways (location 280)
 - [ ] TermiteColiseum1 (178)
 - [ ] TermiteColiseum2 (179)
 

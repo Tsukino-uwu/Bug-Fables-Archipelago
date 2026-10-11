@@ -3461,6 +3461,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   from the champions on (line 72 `pickitem`, 74 `removeitem,1,25 flag,410`); 410 adds Logbook entry 11
   (`MainManager`'s journal check). The beggar (`sittingtermite`, line 104) takes 1 berry and sets 649, read by
   nothing. Used by `termite_capitol.py`.
+- **The Pier, `TermitePier` (177)** (2026-10-11, EntityDump; seen in play): `cberry` (#28, data `3 -1 0 28`) at
+  (38.2, 0, -5.6) on a pillar alone in the water, Bee Fly both ways; `Fixedsub` (Event153) on the dock (y -4.25), a
+  one-way drop from the pier, Jump or Bee Fly back up. No other pickup. Used by `termite_capitol.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

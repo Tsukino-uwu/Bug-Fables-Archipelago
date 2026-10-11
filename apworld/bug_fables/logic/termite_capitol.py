@@ -55,6 +55,10 @@ LOCATIONS = (
     Location("Termite Capitol: Outside the Colosseum, Plushie for Terrie", 279, "TermiteIndustrial", Source(flag=410),
              rule=_COLOSSEUM & Has("G-Bug Ranger Plushie"), reach=LATER_CHAPTERS, no_jump=True,
              area="Outside the Colosseum"),
+    # The Pier (TermitePier; named 2026-10-11): crystal berry #28 on a pillar alone in the water, by Bee Fly both ways.
+    Location("Termite Capitol: Pier, Isolated Pillar by the Dock", 280, "TermitePier",
+             Source(berry=28, pickup=Pickup(map="TermitePier", type=3, item=0)), rule=CanUse("Bee Fly"),
+             category="crystal_berry", no_jump=True),
 )
 # The street outside the Colosseum is the same map, reached through a door pair that reloads it (loadzonenearcoliseum
 # and the three NEARloadzoneback); both ways free.
