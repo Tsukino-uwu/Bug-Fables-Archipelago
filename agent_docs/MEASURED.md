@@ -3393,6 +3393,12 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   softlock); entity 23 (until 664): the explorers' scene, sets 664, which plays from the left too, the fires already
   out (seen). A dig spot
   (data `0 0 11`, regional 30): a respawning Magic Seed, Bee Fly then Beetle Dig (seen). Used by `giants_lair.py`.
+- **Kitchen Counter** (`GiantLairBeforeBoss2`, 2026-10-11, seen on screen; EntityDump, code read): `loadzoneright`
+  (the Kitchen Stove's bounce pad) and the one-way hole `loadzoneleft` down to the stove's middle left. The middle
+  gate opens while the right's `pressureplate` is pressed: its data `0 1 -1` lets only an ice block press it (not the
+  player), and with no activation flag it rises again once nothing sits on it (`NPCControl` trigger enter and exit).
+  Its pieces: a droplet (Freeze), Horn Slash on the block, Jump and Bee Fly; on the left two `ROTwallswitch`es
+  (Beemerang), Jump, Bee Fly and thorns (the Shield). No pickup. Used by `giants_lair.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
