@@ -406,6 +406,10 @@ entrance randomizer and a random start stay labelled experimental until their ro
 - Tricks, skips and clever routes (rule 2).
 - Anything seen to work only sometimes: the logic follows what always works.
 - Unused and test maps (the model).
+- Stealth (decided 2026-10-11): the Wasp Kingdom's and the Bandit Hideout's patrols and their see areas are kept away,
+  room by room as each is mapped, so only the way across a room is logic. Caught, the game puts the party back,
+  takes the Wasp Key in `WaspKingdom3` (`Event138`) or jails it, Beetle Dig the only way out (`Event108`); and the
+  sneaking slowed the game down. The bandits' story capture (`Event109`, the Cell's check) is decided with its room.
 
 ## The facts it relies on
 
