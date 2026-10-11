@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, True_
 
-from ..custom_rules import CanUse
+from ..custom_rules import ANY_ATTACK, CanUse
 from ..data_types import Area, EntityRef
 
 MAP_AREAS = (
@@ -20,6 +20,14 @@ MAP_AREAS = (
     # WaspKingdom2, by Jump or Bee Fly.
     Area("WaspKingdom1", "Bottom", (), True_(), out=CanUse("Jump") | CanUse("Bee Fly"),
          landings=(("WaspKingdomOutside", "loadzoneinside#14"),)),
+    # WaspKingdom2 (2026-10-11): its bottom (the Pantry's door and the lower left one, to 243) the map's own region; up
+    # to the top (the save crystal, the upper left and right doors) on the wooden lift, started by a lever in a small
+    # house dug into (Beetle Dig, then any attack) and boarded by Jump or Bee Fly; down, a free drop. The right door behind a lock that
+    # takes the Wasp Key (Event59, key index 9, used up; gone from 363): arriving through it the game puts the party
+    # past the lock; out through it shut until the key is an item (its room, WaspKingdom3, unmapped).
+    Area("WaspKingdom2", "Top", ("loadzoneleft",),
+         CanUse("Beetle Dig") & ANY_ATTACK & (CanUse("Jump") | CanUse("Bee Fly")), out=True_()),
+    Area("WaspKingdom2", "Right Door", ("loadzoneright",), False_(), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
 # barrier; caught, the party is put back where it came in, which from the lake's gate is inside the see area, a loop.
