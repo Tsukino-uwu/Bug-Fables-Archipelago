@@ -51,10 +51,10 @@ which the markdownlint extension checks: lines up to 120 as well, tables and cod
 more indents its content by 4, where its text starts: with 3, a paragraph after a blank line falls out of the list.
 
 **Per-frame code makes no garbage.** Every `Tick` and every patch on a game method that runs each frame computes when
-its inputs change, not each frame: no new strings, lists, LINQ queries, closures or `FindObjectsOfType` per frame. Garbage
-made each frame brings the collector round every few seconds, a ~60 ms hitch each time; it happened twice (a shop
-lookup, 2026-09-27; the receiver's party count, 2026-10-11; documentation.md, step 25). Check a new per-frame job with
-`GcWatch` on (below): a collection more than a minute apart is normal, under 10 s is a warning.
+its inputs change, not each frame: no new strings, lists, LINQ queries, closures or `FindObjectsOfType` per frame.
+Garbage made each frame brings the collector round every few seconds, a ~60 ms hitch each time; it happened twice (a
+shop lookup, 2026-09-27; the receiver's party count, 2026-10-11; documentation.md, step 25). Check a new per-frame job
+with `GcWatch` on (below): a collection more than a minute apart is normal, under 10 s is a warning.
 
 ## Trying it in the running game: build, then copy
 
