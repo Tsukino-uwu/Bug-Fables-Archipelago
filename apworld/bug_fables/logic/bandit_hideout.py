@@ -1,8 +1,10 @@
 """Bandit Hideout (the game's area 20, MapControl.areaid): its spots. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
+from rule_builder.rules import True_
+
 from ..custom_rules import CanUse
-from ..data_types import ALWAYS_SET, EntityRef, FlagEntity, Give, Location, Pickup, PlacedPickup, SceneryFit, Source
+from ..data_types import ALWAYS_SET, Area, EntityRef, FlagEntity, Give, Location, Pickup, PlacedPickup, SceneryFit, Source
 
 LOCATIONS = (
     # Where the story teaches Dig (flag 18), moved from the Cell's scene to an item lying on the Entrance's altar
@@ -53,4 +55,11 @@ PICKUPS_PLACED = (
 PRESENT_FROM = (
     FlagEntity("HideoutEntrance", "loadzone below", ALWAYS_SET),
     FlagEntity("HideoutEntrance", "event2", ALWAYS_SET),
+)
+MAP_AREAS = (
+    # HideoutLeftA (2026-10-12): its right door's lower area the map's own region; the upper left (the garden door) up a
+    # frozen droplet knocked over and jumped onto (Freeze, Horn Slash, Jump), a free drop back. The crates that make
+    # steps there from the escape on (11, ConditionCheckers) are left out: the droplet keeps the room's own puzzle.
+    Area("HideoutLeftA", "Upper Left", ("loadzone garden",), CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump"),
+         out=True_()),
 )

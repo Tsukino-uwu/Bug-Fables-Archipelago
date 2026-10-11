@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**221 of 244 done.**
+**222 of 244 done.**
 
 ## Outskirts
 
@@ -549,7 +549,10 @@ as it is, a frozen record.
 - [x] HideoutCentralRoom (101) — Central Room; free between its four doors (the Cell's, left, bottom, right); a talk in the middle on
   the first visit (Event109's part here, until 259; sets 259 and 401, nothing given) from any door; its stealth bandits
   away, two regular enemies kept; no flag-driven scenery; no pickup
-- [ ] HideoutLeftA (102)
+- [x] HideoutLeftA (102) — its right door's lower area; up to the upper left (the garden door) by a frozen droplet
+  knocked over and jumped onto (Freeze, Horn Slash, Jump), a free drop back; the crates that make steps from the
+  escape on (11, ConditionCheckers) left hidden on purpose (2026-10-12, seen both ways); its stealth bandits away, a
+  regular burglar kept; no pickup
 - [ ] HideoutStairsRoom (103)
 - [ ] HideoutGarden (104)
 - [ ] HideoutWestStorage (105)
