@@ -18,6 +18,12 @@ LOCATIONS = (
     # The Stolen Silk (key item 108, flag 270) by a box on the right of the Garden's upper area.
     Location("Bandit Hideout: Garden, By the Box", 294, "HideoutGarden",
              Source(flag=270, pickup=Pickup(map="HideoutGarden", type=1, item=108)), area="Upper", no_jump=True),
+    # The Treasury (HideoutWestStorage; named 2026-10-12): under a barrier (Beetle Dig) and up on boxes (Jump or Bee Fly)
+    # to the story's scene there (Event109, until 260: talk only, it sets 260 and its wasps and bandits leave), then its
+    # Lore Book (flag 271).
+    Location("Bandit Hideout: Treasury, By the Chest", 295, "HideoutWestStorage",
+             Source(flag=271, pickup=Pickup(map="HideoutWestStorage", type=1, item=52)),
+             rule=CanUse("Beetle Dig") & (CanUse("Jump") | CanUse("Bee Fly")), no_jump=True),
     # The right cell, dug into (Beetle Dig): its dig spot starts Event217, Cerise appearing with Crystal Berry 19.
     Location("Bandit Hideout: Cell, Dig Spot", 293, "HideoutCell",
              Source(event=217, flag=674, berry=19, give=Give(map="HideoutCell", type=3, item=19)),
@@ -34,6 +40,8 @@ LOCATIONS = (
 KEPT_OPEN = tuple(EntityRef(m, e) for m, names in (
     ("HideoutEntrance", ("eventcheck",)),
     ("HideoutCell", ("eventrigger",)),
+    # The stolen-goods chest: it would return items never taken (the capture is skipped) and set 11, the escape.
+    ("HideoutWestStorage", ("chest",)),
     ("HideoutCentralRoom", ("bandit1", "bandit2", "bandit2 - Duplicate")),
     ("HideoutLeftA", ("burglar", "bandit1 - Duplicate")),
     ("HideoutGarden", ("burglar - Duplicate", "bandit1 - Duplicate - Duplicate", "thief", "burglar - Duplicate - Duplicate",

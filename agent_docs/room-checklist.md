@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**224 of 244 done.**
+**225 of 244 done.**
 
 ## Outskirts
 
@@ -561,7 +561,11 @@ as it is, a frozen record.
   the start) dug to (Beetle Dig) both ways; the upper area (the storage door, the Stolen Silk by a box, location 294)
   up from the bottom left by Jump or Bee Fly, a one-way drop to either side; its stealth bandits away, three regular
   enemies kept; no flag-driven scenery
-- [ ] HideoutWestStorage (105)
+- [x] HideoutWestStorage (105) — Treasury; the door and save crystal free; under a barrier (Beetle Dig) and up on boxes
+  (Jump or Bee Fly) to the story's scene (Event109, until 260: talk only, sets 260, its wasps and bandits leave and the
+  blocked path opens), then the Lore Book by the stolen-goods chest (location 295); that chest's switch (the items'
+  return, sets 11) kept away (its scenery's open look from 11); for the quest pass: the bandits' scene from 512 until
+  513 (`munevent`)
 - [ ] HideoutRightA (106)
 
 ## Stream Mountain
