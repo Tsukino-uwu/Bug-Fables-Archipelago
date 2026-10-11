@@ -292,6 +292,33 @@ class SceneryLayer:
 
 
 @dataclass(frozen=True, slots=True)
+class SceneryFit:
+    """Scenery (by its path inside the map) whose box collider is fitted to its own drawn mesh on load: an altar whose
+    collider stood far above its model."""
+
+    map: str
+    entity: str
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity}
+
+
+@dataclass(frozen=True, slots=True)
+class PlacedPickup:
+    """A pickup the client makes on a map while its flag is unset, lying on top of a piece of scenery (by its path), as
+    the game makes a dug-up item (EntityControl.CreateItem): taking it sets the flag, so a location's Pickup finds it."""
+
+    map: str
+    on: str
+    type: int
+    item: int
+    flag: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "on": self.on, "type": self.type, "item": self.item, "flag": self.flag}
+
+
+@dataclass(frozen=True, slots=True)
 class FlagEntity:
     """A map entity tied to a story flag instead of, or on top of, its own requirements; in its area's module.
 

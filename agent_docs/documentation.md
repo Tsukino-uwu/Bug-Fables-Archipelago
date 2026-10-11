@@ -112,6 +112,7 @@ anyone curious about the process, or thinking of doing the same for another game
 57. [The goal's artifacts as items: received, drawn and counted](#57-the-goals-artifacts-as-items-received-drawn-and-counted)
 58. [The Spy Cards tournament held back without a deck](#58-the-spy-cards-tournament-held-back-without-a-deck)
 59. [Scenery copied and made diggable: a twig before the hive's barrier](#59-scenery-copied-and-made-diggable-a-twig-before-the-hives-barrier)
+60. [A pickup placed on an altar: where the hideout teaches Dig](#60-a-pickup-placed-on-an-altar-where-the-hideout-teaches-dig)
 
 ## Where it stands
 
@@ -3608,3 +3609,21 @@ dug under both ways, the lever and Dig in and out of the top (the user).
 
 *Code: `World/DayNight.cs` (`Copy`, `Layer`), `Core/SeedData.cs` (`SceneryCopied`, `SceneryLayers`), `Dev/DevConsole.cs`
 (`tagged`, `layer`).*
+
+## 60. A pickup placed on an altar: where the hideout teaches Dig
+
+Found 2026-10-12, mapping the Bandit Hideout: the story teaches Dig in the cell after a capture (Event109) that hides
+every item in a saved string (`flagstring[8]`) until the West Storage, so a seed skips the capture. The teaching spot,
+a location, moved to the Entrance's altar, where the capture began: an item lying on it, taken like any pickup.
+
+Built: `pickups_placed` (`[{"map", "on", "type", "item", "flag"}]`) makes a pickup the way the game makes a dug-up item
+(`EntityControl.CreateItem`), once the party is in the room (it needs their colliders), on top of the named scenery's
+drawn shape, with the flag as its own (`activationflag`), while that flag is unset; the location's `Pickup` finds it by
+that flag, so its look and its check work as any pickup's. `scenery_fitted` (`[{"map", "entity"}]`) sizes a scenery
+object's box collider to its own mesh: the altar's stood 7.9 high over a short model, an invisible wall. The log says
+`[night] <map>: item <type>/<id> placed on <path> at <spot>, flag <n>` and `<path> collider fitted to its mesh`.
+
+**Status:** built (2026-10-12); seen through the dev `liveslot`: the item on the altar, reached by Jump or Bee Fly
+(the user). Its swap to the seed's item needs a seed that has the location.
+
+*Code: `World/DayNight.cs` (`Placed`, `PlaceWhenReady`), `Core/SeedData.cs` (`SceneryFitted`, `PickupsPlaced`).*

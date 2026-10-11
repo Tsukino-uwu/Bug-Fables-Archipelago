@@ -539,9 +539,11 @@ as it is, a frozen record.
 - [x] HideoutEntrance (99) — Entrance; free throughout; the story's capture skipped (its altar trigger `eventcheck` kept away):
   flag 18's other changes made instead, the door below and Astotheles' fight trigger (`event2`) kept present and the
   wall over that door (`Base/FakeWalls`, a ConditionChecker until 18) off, seen; Astotheles (until 301), his diary and
-  note (from 301); nothing to find. The Cell's check (Dig taught after the capture, flag 18) needs a new home
+  note (from 301). The Dig location (flag 18, location 71) moved here from the Cell (build step 90): an item on the
+  altar, its collider fitted to its model, by Jump or Bee Fly (seen). For the quest pass: Astotheles' fight at the far
+  right (`event2`, Event109) gives the Earth Key (106), half the Sand Castle Key (seen)
 - [x] HideoutCell (100) — Cell; the middle (door, save crystal; the crystal's copies swapped by 11) free; the left cell
-  dug into (Beetle Dig) to the Dig scene's trigger (Event109, until 18; location 71); the right cell dug into, its dig
+  dug into (Beetle Dig), its Dig scene's trigger kept away (location 71 is on the Entrance's altar); the right cell dug into, its dig
   spot starting Event217, Cerise with Crystal Berry 19 (674, 682; location 293, seen given); a droplet that only drips
 - [ ] HideoutCentralRoom (101)
 - [ ] HideoutLeftA (102)

@@ -93,6 +93,8 @@ namespace BugFablesAP
         internal readonly List<DayNight.Move> SceneryMoved;
         internal readonly List<DayNight.Copy> SceneryCopied;
         internal readonly List<DayNight.Layer> SceneryLayers;
+        internal readonly List<DayNight.EntityName> SceneryFitted;
+        internal readonly List<DayNight.Placed> PickupsPlaced;
         internal readonly List<DayNight.EntityName> SceneryOff;
         internal readonly List<DayNight.Switch> EntitiesMoved;
         // Doors the seed adds to a map or sends elsewhere; null for a seed from an older apworld.
@@ -286,6 +288,19 @@ namespace BugFablesAP
                 Map = e.Value<string>("map"),
                 Entity = e.Value<string>("entity"),
                 To = e.Value<int>("layer"),
+            });
+            SceneryFitted = SlotData.List(data, "scenery_fitted", e => new DayNight.EntityName
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+            });
+            PickupsPlaced = SlotData.List(data, "pickups_placed", e => new DayNight.Placed
+            {
+                Map = e.Value<string>("map"),
+                On = e.Value<string>("on"),
+                Type = e.Value<int>("type"),
+                Item = e.Value<int>("item"),
+                Flag = e.Value<int>("flag"),
             });
             FreeAntTunnels = data != null && data.TryGetValue("free_ant_tunnels", out object tunnels)
                 && tunnels is bool tunnelsFree && tunnelsFree;

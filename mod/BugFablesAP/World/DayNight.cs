@@ -78,6 +78,15 @@ namespace BugFablesAP
             internal int To;
         }
 
+        internal sealed class Placed
+        {
+            internal string Map;
+            internal string On;
+            internal int Type;
+            internal int Item;
+            internal int Flag;
+        }
+
         private static ManualLogSource log;
         private static Func<SeedData> seed;
         private static Func<bool> randomizerOn;
@@ -298,6 +307,28 @@ namespace BugFablesAP
             return result.ToArray();
         }
 
+        // A pickup made as the game makes a dug-up item, once the party is in the room (CreateItem needs its colliders),
+        // lying on top of the scenery named.
+        private static IEnumerator PlaceWhenReady(MapControl map, Placed placed)
+        {
+            while (MainManager.map == map && (MainManager.player == null || MainManager.roomtransition))
+            {
+                yield return null;
+            }
+            Transform on = MainManager.map == map ? map.transform.Find(placed.On) : null;
+            Renderer shape = on != null ? on.GetComponent<Renderer>() : null;
+            if (shape == null)
+            {
+                log.LogWarning($"[night] {map.mapid}: {placed.On} NOT FOUND: no pickup placed");
+                yield break;
+            }
+            Bounds b = shape.bounds;
+            Vector3 top = new Vector3(b.center.x, b.max.y + 0.1f, b.center.z);
+            NPCControl item = EntityControl.CreateItem(top, placed.Type, placed.Item, Vector3.zero, -1);
+            item.activationflag = placed.Flag;
+            log.LogInfo($"[night] {map.mapid}: item {placed.Type}/{placed.Item} placed on {placed.On} at {top}, flag {placed.Flag}");
+        }
+
         // On load: scenery set where a scene would leave it, and the map's switch NPC moved to its spot with the
         // nightfall or morning prompt as its only talk.
         [HarmonyPatch(typeof(MapControl), "CreateEntities")]
@@ -353,6 +384,26 @@ namespace BugFablesAP
                     t.gameObject.layer = layer.To;
                 }
                 log.LogInfo($"[night] {map}: {layer.Entity} {(t != null ? "on layer " + layer.To : "NOT FOUND")}");
+            }
+            foreach (EntityName fit in (seed?.Invoke()?.SceneryFitted ?? new List<EntityName>()).Where(f => f.Map == map))
+            {
+                Transform t = __instance.transform.Find(fit.Entity);
+                BoxCollider box = t != null ? t.GetComponent<BoxCollider>() : null;
+                MeshFilter mesh = t != null ? t.GetComponent<MeshFilter>() : null;
+                if (box != null && mesh != null && mesh.sharedMesh != null)
+                {
+                    box.center = mesh.sharedMesh.bounds.center;
+                    box.size = mesh.sharedMesh.bounds.size;
+                }
+                log.LogInfo($"[night] {map}: {fit.Entity} "
+                    + (box != null && mesh != null ? "collider fitted to its mesh, " + box.size : "NOT FOUND or no box/mesh"));
+            }
+            foreach (Placed placed in (seed?.Invoke()?.PickupsPlaced ?? new List<Placed>()).Where(p => p.Map == map))
+            {
+                if (!MainManager.instance.flags[placed.Flag])
+                {
+                    MainManager.instance.StartCoroutine(PlaceWhenReady(__instance, placed));
+                }
             }
             string entityMap = EntityMap(map);
             foreach (Switch moved in (seed?.Invoke()?.EntitiesMoved ?? new List<Switch>()).Where(m => m.Map == entityMap))

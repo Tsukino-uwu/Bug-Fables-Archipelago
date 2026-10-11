@@ -2,13 +2,16 @@
 from __future__ import annotations
 
 from ..custom_rules import CanUse
-from ..data_types import EntityRef, Give, Location, Source
+from ..data_types import EntityRef, Give, Location, Pickup, PlacedPickup, SceneryFit, Source
 
 LOCATIONS = (
-    # The Cell (HideoutCell; 2026-10-12): its middle (the door, the save crystal) free; the left cell, where the capture
-    # left the party, dug into (Beetle Dig) to its trigger for the scene that teaches Dig (Event109, flag 18; the
-    # capture itself is skipped in a seed, so this is reached walking in).
-    Location("Bandit Hideout: Cell", 71, "HideoutCell", Source(event=109, flag=18), rule=CanUse("Beetle Dig")),
+    # Where the story teaches Dig (flag 18), moved from the Cell's scene to an item lying on the Entrance's altar
+    # (2026-10-12): the capture that led to the cell is skipped, and the cell's own teaching trigger kept away.
+    Location("Bandit Hideout: Entrance, Altar", 71, "HideoutEntrance",
+             Source(flag=18, pickup=Pickup(map="HideoutEntrance", type=0, item=0)),
+             rule=CanUse("Jump") | CanUse("Bee Fly")),
+    # The Cell (HideoutCell; 2026-10-12): its middle (the door, the save crystal) free; the left and right cells dug
+    # into (Beetle Dig).
     # The right cell, dug into (Beetle Dig): its dig spot starts Event217, Cerise appearing with Crystal Berry 19.
     Location("Bandit Hideout: Cell, Dig Spot", 293, "HideoutCell",
              Source(event=217, flag=674, berry=19, give=Give(map="HideoutCell", type=3, item=19)),
@@ -23,6 +26,7 @@ LOCATIONS = (
 # limited by 18) switched off: flag 18's whole change to the room (its altar is scenery, no flag's).
 KEPT_OPEN = tuple(EntityRef(m, e) for m, names in (
     ("HideoutEntrance", ("eventcheck",)),
+    ("HideoutCell", ("eventrigger",)),
     ("HideoutCentralRoom", ("bandit1", "bandit2", "bandit2 - Duplicate")),
     ("HideoutLeftA", ("burglar", "bandit1 - Duplicate")),
     ("HideoutGarden", ("burglar - Duplicate", "bandit1 - Duplicate - Duplicate", "thief", "burglar - Duplicate - Duplicate",
@@ -38,4 +42,11 @@ KEPT_PRESENT = tuple(EntityRef(m, e) for m, names in (
 ) for e in names)
 SCENERY_OFF = (
     EntityRef("HideoutEntrance", "Base/FakeWalls"),
+)
+# The altar's collider stands 7.9 high over a short model: fitted to the model, so the Dig location's item lies on it.
+SCENERY_FITTED = (
+    SceneryFit("HideoutEntrance", "Base/AncientPillarSmall"),
+)
+PICKUPS_PLACED = (
+    PlacedPickup("HideoutEntrance", "Base/AncientPillarSmall", 0, 0, 18),
 )

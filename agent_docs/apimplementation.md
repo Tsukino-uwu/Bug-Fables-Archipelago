@@ -162,6 +162,7 @@ this file and that doc disagree, that doc is right.
 87. [Build step 87: a ride's way back is never shuffled](#build-step-87-a-rides-way-back-is-never-shuffled)
 88. [Build step 88: the Kitchen Stove and the room above kept together](#build-step-88-the-kitchen-stove-and-the-room-above-kept-together)
 89. [Build step 89: a twig copied before the hive's barrier](#build-step-89-a-twig-copied-before-the-hives-barrier)
+90. [Build step 90: the Dig location on the hideout's altar](#build-step-90-the-dig-location-on-the-hideouts-altar)
 
 **How it works**
 
@@ -6531,6 +6532,21 @@ attack and Dig both ways, the right door from it by Dig and any attack, no way b
 **Status:** built (2026-10-11); seen through the dev `liveslot` the same day; not yet in a generated seed.
 
 *Code: `data_types.py`, `logic/__init__.py`, `data_tables.py`, `slot_data.py`, `logic/wasp_kingdom_hive.py`.*
+
+## Build step 90: the Dig location on the hideout's altar
+
+**Found** (2026-10-12, mapping the Bandit Hideout): the story's capture at the entrance's altar (Event109) hides every
+item until the West Storage and jails the party, where Dig is taught (flag 18, location 71). **Decided** (the same
+day): the capture skipped (build step 67's pending note settled), the location an item on the altar instead, taken
+like any pickup, the cell's own teaching trigger kept away.
+
+**Built:** `PlacedPickup` and `SceneryFit` in `data_types.py`, each area's `PICKUPS_PLACED` and `SCENERY_FITTED`, sent
+as `pickups_placed` and `scenery_fitted` (the mod: `documentation.md`, step 60). Location 71 (`Bandit Hideout:
+Entrance, Altar`) is a pickup on flag 18 by Jump or Bee Fly; it shows the seed's item, no longer silent.
+
+**Status:** built (2026-10-12); seen through `liveslot`; not yet in a generated seed.
+
+*Code: `data_types.py`, `logic/__init__.py`, `data_tables.py`, `slot_data.py`, `logic/bandit_hideout.py`.*
 
 # How it works
 
