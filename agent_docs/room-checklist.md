@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**212 of 244 done.**
+**213 of 244 done.**
 
 ## Outskirts
 
@@ -512,7 +512,9 @@ as it is, a frozen record.
 - [x] WaspKingdom5 (167) — Food Storage; the bottom (left and right doors, save crystal) free; the top behind a key
   door on the ground, the Wasp Key both ways (Event59 index 9, kept in a seed; 365); the vent (to the main hall) on a
   ledge, down free, up by Jump; a party talk on entering (until 368), nothing given; one regular enemy; no pickup
-- [ ] WaspKingdomPrison (168)
+- [x] WaspKingdomPrison (168) — Prison; free between its two doors (the bottom right opening scenery); the cells, the
+  messenger ant's among them, burrowed into (Beetle Dig); Dark Cherries dug up in the bottom right cell past a boulder
+  (Horn Dash, then Dig; flag 369, location 287)
 - [ ] WaspKingdomJayde (169)
 - [ ] WaspKingdomMainHall (170)
 - [ ] WaspKingdomThrone (171)

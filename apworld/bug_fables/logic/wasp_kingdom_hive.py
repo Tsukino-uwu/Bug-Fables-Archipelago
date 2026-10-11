@@ -13,6 +13,11 @@ LOCATIONS = (
     Location("Wasp Kingdom Hive: Fountain Room, On the Roof", 286, "WaspKingdom3",
              Source(flag=364, pickup=Pickup(map="WaspKingdom3", type=1, item=119)),
              rule=CanUse("Beemerang Halt") & CanUse("Bee Fly")),
+    # The Prison (WaspKingdomPrison; named 2026-10-11): free between its two doors; Dark Cherries (item 121, flag 369)
+    # dug up in its bottom right cell, past a boulder (Horn Dash) and burrowed into (Beetle Dig).
+    Location("Wasp Kingdom Hive: Prison, Dig Spot", 287, "WaspKingdomPrison",
+             Source(flag=369, pickup=Pickup(map="WaspKingdomPrison", type=0, item=121)),
+             rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
 )
 ENTITIES_MOVED = (
     EntityMove("WaspKingdom3", "key", (-3.4, 6.0, 11.7)),
