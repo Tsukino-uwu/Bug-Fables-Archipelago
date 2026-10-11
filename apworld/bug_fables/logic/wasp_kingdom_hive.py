@@ -45,6 +45,11 @@ MAP_AREAS = (
     Area("WaspKingdom4", "Top", (), ANY_ATTACK & CanUse("Beetle Dig"), out=ANY_ATTACK & CanUse("Beetle Dig")),
     Area("WaspKingdom4", "Right", ("loadzonenext",), ANY_ATTACK & CanUse("Beetle Dig"), out=False_(),
          to="WaspKingdom4 (Top)"),
+    # Food Storage (WaspKingdom5; named 2026-10-11 from its sign): its bottom (the Barrier Room's door, the save crystal,
+    # the right door) the map's own region; the top through a key door on the ground, the Wasp Key either way (gone
+    # from 365); the vent to the main hall on a small ledge of its own, dropped from free, up by Jump.
+    Area("WaspKingdom5", "Top", (), Has("Wasp Key"), out=Has("Wasp Key")),
+    Area("WaspKingdom5", "Vent", ("loadzone vent",), CanUse("Jump"), out=True_(), to="WaspKingdom5 (Top)"),
     Area("WaspKingdom2", "Right Door", ("loadzoneright",), Has("Wasp Key"), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own

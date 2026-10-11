@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**211 of 244 done.**
+**212 of 244 done.**
 
 ## Outskirts
 
@@ -509,7 +509,9 @@ as it is, a frozen record.
 - [x] WaspKingdom4 (166) — Barrier Room; the left door's area; a lever (any attack) and a copied twig dug under (Beetle Dig, build
   step 89) to the top, both ways; across the top under its own twig (Dig) to a lever (any attack) opening the right
   door's barrier; no way back from the right; its five stealth wasps kept away; no pickup
-- [ ] WaspKingdom5 (167)
+- [x] WaspKingdom5 (167) — Food Storage; the bottom (left and right doors, save crystal) free; the top behind a key
+  door on the ground, the Wasp Key both ways (Event59 index 9, kept in a seed; 365); the vent (to the main hall) on a
+  ledge, down free, up by Jump; a party talk on entering (until 368), nothing given; one regular enemy; no pickup
 - [ ] WaspKingdomPrison (168)
 - [ ] WaspKingdomJayde (169)
 - [ ] WaspKingdomMainHall (170)
