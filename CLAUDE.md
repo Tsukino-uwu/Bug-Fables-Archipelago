@@ -115,7 +115,6 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   combination you haven't tested. Each attempt costs the user a game launch.
 - **Test instructions use up/down/left/right**, never compass points.
 - **Agent memory is for the user, not the project:** decisions, measurements and status go in `agent_docs/` or the code.
-- **Before a session ends, add a dated `agent_docs/log.md` entry:** what was tried, what happened, what the user said.
 
 ## Method
 
@@ -136,11 +135,12 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 - **`agent_docs/MEASURED.md`** holds game facts, your measurements among them (class, method, field, flag, hook, save
   field), each with its evidence and date. What a source says but we haven't measured waits in its last section.
 - **Comments are lean** (the user, 2026-09-25). One line, only where the code can't say it (a game quirk, a
-  non-obvious why). No provenance, dates or decompiled line numbers in code: those go to `agent_docs/`.
+  non-obvious why). No provenance, dates or decompiled line numbers in code: those go to `agent_docs/`. **Nowhere
+  "the user said/picked"** (2026-10-11): a decision as a fact with its date, evidence `seen` or `code read`.
 - **Before changing a file, look it up in `agent_docs/code-map.md`** and read the notes it links. A new file
   gets its row in the same commit; a fact moved out of code ends "Used by `File.cs`" so its name finds it.
-- **When the user confirms a fix, write down HOW it was found** (wrong theories, the measurement that
-  settled it) in `agent_docs/log.md` before moving on.
+- **The log, `agent_docs/log.md`:** a dated entry before a session ends, and HOW each confirmed fix was found (wrong
+  theories, the measurement that settled it). The project only: its top says what stays out (2026-10-11).
 
 ## Read before
 

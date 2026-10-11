@@ -3632,6 +3632,11 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 - **Secrets:** no token, key or webhook in any file, the mod's DLL included.
 - **Personal paths and names:** no home-folder path, and not this machine's user or computer name, in any file, the
   DLL included. This replaced the old pre-commit check, which saw only text and skipped its own folder.
+- **Personal details in the log** (2026-10-11): the session log keeps to the project, so no clock time, time of day,
+  VPN or credential store, or account usage in it (`log_personal` in the patterns file). Found when a read of the
+  whole log turned up the maintainer's working hours, setup and account limits, and other people's words; the log was
+  rewritten the same day (its entry) and keeps to Bug Fables and Archipelago from then on. What a pattern can't catch
+  (someone's words, a private project, an unrelated errand) is the agent's rule.
 - **Game files:** no game assembly, asset, save or decompiled code.
 - **Hosts and addresses:** every host named anywhere is in the capabilities list with a reason, and no public IP
   address appears (the four-part version numbers that look like one are listed by name).

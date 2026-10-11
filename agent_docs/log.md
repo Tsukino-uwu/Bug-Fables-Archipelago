@@ -1,8 +1,16 @@
 # Session log
 
-Newest last. What was tried, what happened, what the user said. Each entry's heading is `## YYYY-MM-DD: title`,
+Newest last. What was tried, what happened, what was decided. Each entry's heading is `## YYYY-MM-DD: title`,
 nothing between the date and the colon, and gets its line in Contents too (the pre-commit `doc-coverage.py` refuses
 either one wrong).
+
+**The project only** (2026-10-11): Bug Fables and Archipelago, the work and its decisions. The repo is public for
+good, so these stay out: when the work happened (clock times, times of day), the maintainer's machine, setup and
+account (screen, network, other software, usage), their play, saves or skills, feelings quoted (the decision stays,
+the mood goes), anyone else's words, reports, plans or identity, private projects of anyone, other projects judged or
+compared, and errands that aren't the project. The preflight's "Personal details in the log" catches the patterns it
+can (build step 28); the rest is the writer's to keep out. Decisions are written as facts with their date, not as who
+said them.
 
 ## Contents
 
@@ -33,9 +41,9 @@ either one wrong).
 - [2026-09-28: save crystals without a move, DeathLink, auto-save](#2026-09-28-save-crystals-without-a-move-deathlink-auto-save)
 - [2026-09-28: Uncap FPS as ten pips, the boat, Leif's boss, traps](#2026-09-28-uncap-fps-as-ten-pips-the-boat-leifs-boss-traps)
 - [2026-09-28: the fuzzer joins the tests](#2026-09-28-the-fuzzer-joins-the-tests)
-- [2026-09-28: outside criticism, seven reviewers, part 1 of the fixes](#2026-09-28-outside-criticism-seven-reviewers-part-1-of-the-fixes)
+- [2026-09-28: a quality review, seven reviewers, part 1 of the fixes](#2026-09-28-a-quality-review-seven-reviewers-part-1-of-the-fixes)
 - [2026-09-28: playtesting the start of a new file](#2026-09-28-playtesting-the-start-of-a-new-file)
-- [2026-09-28: three projects compared, the cleanup plan](#2026-09-28-three-projects-compared-the-cleanup-plan)
+- [2026-09-28: what other projects do, the cleanup plan](#2026-09-28-what-other-projects-do-the-cleanup-plan)
 - [2026-09-29: the cleanup plan finished](#2026-09-29-the-cleanup-plan-finished)
 - [2026-09-29: the preflight, the reviewing page, and a hole it found](#2026-09-29-the-preflight-the-reviewing-page-and-a-hole-it-found)
 - [2026-09-29: the agent's guard, the cache fix, the TLS probe](#2026-09-29-the-agents-guard-the-cache-fix-the-tls-probe)
@@ -57,13 +65,13 @@ either one wrong).
 - [2026-09-30: long names in the item-get box, what a death costs, one world shape, the icon's outline](#2026-09-30-long-names-in-the-item-get-box-what-a-death-costs-one-world-shape-the-icons-outline)
 - [2026-09-30: a checklist of everything not yet seen in game](#2026-09-30-a-checklist-of-everything-not-yet-seen-in-game)
 - [2026-09-30: stale lines fixed, the whole repo fact-checked, the panel's letters](#2026-09-30-stale-lines-fixed-the-whole-repo-fact-checked-the-panels-letters)
-- [2026-09-30: MeshGhost compared, four of its gates brought here](#2026-09-30-meshghost-compared-four-of-its-gates-brought-here)
+- [2026-09-30: MeshGhost's gates brought here](#2026-09-30-meshghosts-gates-brought-here)
 - [2026-10-01: the Rubber Prison's swinging platforms smoothed at 240](#2026-10-01-the-rubber-prisons-swinging-platforms-smoothed-at-240)
 - [2026-10-01: a stale check against the code, then a fact check](#2026-10-01-a-stale-check-against-the-code-then-a-fact-check)
 - [2026-10-01: text logic or the Rule Builder, for the trackers](#2026-10-01-text-logic-or-the-rule-builder-for-the-trackers)
 - [2026-10-01: an unlisted project's licence needs the user's yes too](#2026-10-01-an-unlisted-projects-licence-needs-the-users-yes-too)
 - [2026-10-01: both trackers planned, nothing built](#2026-10-01-both-trackers-planned-nothing-built)
-- [2026-10-02: other Bug Fables apworlds](#2026-10-02-other-bug-fables-apworlds)
+- [2026-10-02: no other Bug Fables project looked at](#2026-10-02-no-other-bug-fables-project-looked-at)
 - [2026-10-02: the fog maze shuffled, travel through doors, respawn loops ended](#2026-10-02-the-fog-maze-shuffled-travel-through-doors-respawn-loops-ended)
 - [2026-10-03: map travel through a door, seen](#2026-10-03-map-travel-through-a-door-seen)
 - [2026-10-03: boss prizes on Normal, seeds only](#2026-10-03-boss-prizes-on-normal-seeds-only)
@@ -128,7 +136,7 @@ either one wrong).
     never appeared after a redeploy. **F6 didn't reload either**, pressed in the focused window during play.
     Both are unexplained. `DevReload.cs` now polls our DLL and sets ScriptEngine's `shouldReload`; it's
     untested in the game so far.
-  - **The log was a false lead:** it stopped at 00:56:53, which looked like a buffer. BepInEx flushes its
+  - **The log was a false lead:** it stopped early, which looked like a buffer. BepInEx flushes its
     disk log every 2 s (`DiskLogListener`, read with ilspycmd), and on close one more line appeared at frame
     25478 (about 58 fps since launch). So the plugin ran the whole time. **The probe's safety check at the
     top returned early silently through the entire session.** It now logs why it's waiting each time the
@@ -137,8 +145,8 @@ either one wrong).
     `Application.runInBackground`, `MainManager.cs:16737`; set in `PauseMenu.cs:1626`). Use that rather
     than the mod overriding it.
   - **The user asked for spoiler-free chat:** the docs and the apworld hold everything, but chat refers to
-    late content by id or chapter only. They haven't finished the game.
-- **The hot-reload loop works (the third launch, 01:13):** the Unity log is copied into BepInEx's
+    late content by id or chapter only.
+- **The hot-reload loop works (the third launch):** the Unity log is copied into BepInEx's
   (`WriteUnityLog = true` in the dev config) and the console is on. That showed ScriptEngine's
   `new FileSystemWatcher` throwing `NotImplementedException` in this game's Mono, which aborts
   `ScriptEngine.Awake` and explains why F6 did nothing. The watcher is now off, and the plugin's
@@ -148,8 +156,7 @@ either one wrong).
   no change.
 - **A game freeze explained (the user, 2026-09-24):** clicking inside the BepInEx console, even while
   dragging the window, starts a Windows QuickEdit selection. The game then waits on its next console write
-  until Enter or Esc. The user turned QuickEdit off in the console's Properties. The same cause explains
-  an earlier freeze seen in another BepInEx game.
+  until Enter or Esc. QuickEdit off in the console's Properties prevents it.
 - **The main menu and the Archipelago panel, confirmed on screen by the user (2026-09-24).** How it got there,
   all from the user's screenshots:
   - A fourth line overlapped the credits: tightened the spacing and moved the cursor to match.
@@ -165,7 +172,7 @@ either one wrong).
     as a small tag to its right, placed by measuring the screenshot (1 unit ≈ 69 px at 1280×720).
   **Reach first next time:** the game's own screen code for positions and draw orders, and a screenshot per
   change.
-- **Connecting, 2026-09-24 (late):** an Archipelago panel on the main menu (address and port separate,
+- **Connecting, 2026-09-24:** an Archipelago panel on the main menu (address and port separate,
   archipelago.gg by default; typing, paste and copy; the gamepad works). The mod connects by itself while the
   Archipelago mod is enabled. Refusals wait; an unreachable or dropped server retries with backoff. Measured:
   killing the local server wasn't noticed by the idle socket, so a watchdog now pings `_read_race_mode` every
@@ -179,10 +186,10 @@ either one wrong).
 - **Earlier next:** read the TextProbe output from the user's play: which dialogue script carries each item
   command, and whether a key item's grant and its completion flag (15 for the first one) sit in the same
   script. That decides how locations are identified.
-- **Lag and a memory leak after a server drop, 2026-09-24 (04:45):** the user said the game felt laggy and
-  asked whether it was the probes. Measured with the game running: 3.7 cores busy, private memory 3.2 GB and
-  growing about 2.5 MB/s, 95 threads. Five thread-pool threads started together at 04:28:01–02 (when the
-  server was stopped while connected) were each spinning at about 75% of a core. The game's own threads were
+- **Lag and a memory leak after a server drop, 2026-09-24:** the user said the game felt laggy and asked
+  whether it was the probes. Measured with the game running: 3.7 cores busy, private memory 3.2 GB and
+  growing about 2.5 MB/s, 95 threads. Five thread-pool threads started together (when the server was
+  stopped while connected) were each spinning at about 75% of a core. The game's own threads were
   normal, and the probes run on the game thread, so **the probes were not the cause.** GrantProbe allocates a
   little garbage each frame, but it doesn't leak. Cause, read from MultiClient.Net 6.7.1 and the game's
   `System.dll` with ilspycmd: the library's `PollingLoop` loops `while (State == Open)`. Mono's
@@ -194,17 +201,17 @@ either one wrong).
   and a hot reload can't reach them, so the game must restart once.
   The watchdog test from the entry above half-happened: the drop was caught by the socket error, not by the
   15 s silence.
-- **The socket fix, measured in the game (04:55):** restarted, deployed, fresh seed, local server. The mod
+- **The socket fix, measured in the game:** restarted, deployed, fresh seed, local server. The mod
   logged in on its own. Before the drop: 107% of a core, 69 threads, 737 MB. After the server was stopped:
   `socket closed: Open -> Aborted`, `connection lost: socket error ...`. Then 26% of a core (menu), 65 threads,
   memory flat around 720–790 MB with a save loaded. Before the fix it was 5 spinning threads and +2.5 MB/s. No retry
   followed, correctly: the user switched the Archipelago mod off right after and loaded a normal save.
   **Still open:** the user's on-screen check that the game stays smooth, and the retry after a drop on this build.
-- **Retry after a drop, on the fixed build (04:58):** the user switched the mod back on with the server down.
-  It retried with backoff (`could not reach the server`, no stuck attempt). The server was restarted at
-  04:58:13 and the mod logged in by itself at 04:58:19. Across the retries: 64 threads, memory flat at about
+- **Retry after a drop, on the fixed build:** the user switched the mod back on with the server down.
+  It retried with backoff (`could not reach the server`, no stuck attempt). The server was restarted, and
+  the mod logged in by itself 6 s later. Across the retries: 64 threads, memory flat at about
   793 MB. The user saw it retrying on screen ("its trying to reconnect").
-- **Compression, 2026-09-24 (05:00–05:13):** the user wanted it even though it's optional, "as an example of
+- **Compression, 2026-09-24:** the user wanted it even though it's optional, "as an example of
   how it's done". Research first. The game's Mono `ClientWebSocket` has no permessage-deflate. MultiClient.Net's
   net40 build runs on websocket-sharp, which has it but never turns it on. Upstream issue #141 warned, and
   both codebases confirmed, that websocket-sharp refuses MultiServer's `server_max_window_bits=11`. Built:
@@ -220,19 +227,19 @@ either one wrong).
   The user also reported that backing out of Start Game or Settings puts the leaf on Start Game, while backing
   out of Archipelago keeps it on Archipelago. The game's `SetMenuText` resets `option = 0`
   (`StartMenu.cs:319`); our panel doesn't call it. Asked which the user wants.
-- **A hosted room, 2026-09-24 (05:17):** the user generated a seed with the installed Archipelago (slot
-  `Player1`), uploaded it to archipelago.gg (port 52073), and set the panel on screen. The old slot `BugTester`
+- **A hosted room, 2026-09-24:** the user generated a seed with the installed Archipelago (slot
+  `Player1`), uploaded it to archipelago.gg, and set the panel on screen. The old slot `BugTester`
   was refused (`InvalidSlot`, the room log and ours agree); after the slot changed, the mod logged in by itself.
   With a bare `archipelago.gg` address it connected **over wss, compressed** (logged from the socket's own
   `Url` and `Extensions` after a hot reload). The room log showed no compression warning. The user saw
   "Connected as Player1." on screen. The TLS 1.3 worry didn't come true. The local server was stopped.
   The generator warned that our hand-zipped apworld lacks manifest fields (`compatible_version`), which will
   break with 0.7.0: package it with "Build APWorlds" (asked the user first, since it runs in the checkout).
-- **Packaging, 2026-09-24 (05:22):** with the user's OK, ran `Launcher.py "Build APWorlds" -- "Bug Fables"` in
+- **Packaging, 2026-09-24:** with the user's OK, ran `Launcher.py "Build APWorlds" -- "Bug Fables"` in
   the Archipelago checkout. `build/apworlds/bug_fables.apworld` came out with 11 files (no `__pycache__`) and a
-  manifest carrying `compatible_version: 7` and `version: 7`. The user's hand-zipped copy (same hash as the one
-  in `custom_worlds`) sits untracked in `apworld/`; `*.apworld` is now gitignored. The menu leaf now returns to
-  Start Game on closing the panel (the user's choice), hot-reloaded but not yet checked on screen.
+  manifest carrying `compatible_version: 7` and `version: 7`. A hand-zipped copy sat untracked in `apworld/`;
+  `*.apworld` is now gitignored. The menu leaf now returns to Start Game on closing the panel (the user's choice),
+  hot-reloaded but not yet checked on screen.
 - **Menu polish, confirmed on screen by the user (2026-09-24):** closing the Archipelago panel puts the leaf on
   Start Game, and opening and closing play the game's Confirm and Cancel. The user: "I think its just like the
   other in game menu's now". Both came from the user noticing a difference from Start Game and Settings. The
@@ -270,8 +277,8 @@ either one wrong).
   second one. That's correct: the server sends each location's item once per seed, and that location was
   already done. The full sequence (check, then arrival) needs a fresh seed.
 - **Separate saves, checked on disk (2026-09-24):** the user pointed out that normal saves are only reachable with the
-  mod disabled. The file times back it up: normal `save2.dat` 03:42 and `save0.dat` 2023, both before this
-  session's first launch (03:53), while `archipelago\save0.dat` was written at 05:06 with the mod enabled.
+  mod disabled. The file times back it up: the normal saves were last written before this session's first
+  launch, while `archipelago\save0.dat` was written with the mod enabled.
 - **Panel polish, confirmed on screen (2026-09-24):** the leaf placed like the Settings screen and wiggling like
   the game's cursor ("yee it works now"). The first two placement nudges came from single cropped screenshots and
   went wrong; the user's side-by-side screenshots of both screens settled it. Vertical alignment came from
@@ -322,7 +329,7 @@ either one wrong).
   install (the build reference, and comparing the libraries). `stage/` is gitignored.
 - **First run:** staged DLL sha256 `DB5957D63A12…`, libraries equal to the game's. Copying the two
   every-build files into the game's `BepInEx/scripts` worked, and the copy's hash matched.
-- **The Compression setting, tested (15:08, local server, throwaway seed, game started and closed by the
+- **The Compression setting, tested (local server, throwaway seed, game started and closed by the
   agent with the user's yes):** `Compression = true` logged `[ws] new socket, compression requested`, the
   header stripped to the two named settings, `connected over ws, compression: permessage-deflate; ...`, and
   no warning from the server. Set to `false` in the config and hot-reloaded by copying the staged DLL again:
@@ -355,21 +362,21 @@ either one wrong).
 - **What happened:** with the user's yes, the agent tried to copy the staged plugin into the game and add
   `EntityDump = true` to the config with `cp` and `sed -i`. Claude Code's auto mode refused it, the second
   time as "irreversible local destruction". The old `deploy-dev.ps1` had been refused the same way.
-- **How MeshGhost avoids it (the user asked):** its `tevi-hotreload.ps1 -Deploy` is one named repo script
-  that only replaces its own rebuildable DLL, and its CLAUDE.md makes dev-scripts launchers the agent's job.
-  Ours rewrote configs and libraries in the game, or edited the user's config in place with no copy kept.
+- **The pattern taken from MeshGhost (the user asked):** one named repo script that only replaces its own
+  rebuildable DLL, with a CLAUDE.md that makes dev-scripts launchers the agent's job. Ours rewrote configs
+  and libraries in the game, or edited the user's config in place with no copy kept.
 - **Done:** `dev-scripts/copy-dev.ps1` copies only the plugin, and switches named `[Debug]` keys with
   `-DebugOn`/`-DebugOff`, backing up every file it replaces into `stage/backup/<time>/` (`-Restore` undoes
   it). Tested on a fake game folder in the scratchpad: copy, key added and switched, restore put the old
   files back. Not yet run against the real install. A CLAUDE.md rule sends every copy into the game
   through it. Whether auto mode accepts it isn't known until it runs.
-- **Correction, from the session logs (the user asked why MeshGhost never fails):** the missing backup wasn't
-  the difference. In this project's own history, PowerShell `Copy-Item`/`Set-Content` writes into the game
-  (DLL and config, no backup) passed about 12 times out of 12, and `deploy-dev.ps1` 5 times out of 6. The only
-  other refusals were today's two Bash `cp` plus `sed -i`. MeshGhost: 253 copies into TEVI, all passed, always
-  its named script from the PowerShell tool, with a CLAUDE.md that makes dev-scripts launchers the agent's
-  job. Ours lists "deploying the mod" under "ask before touching anything outside this repo". The check judges
-  each call, so a refusal can be made rare, never impossible.
+- **Correction (the user asked what decides a refusal):** the missing backup wasn't the difference. In this
+  project's own history, PowerShell `Copy-Item`/`Set-Content` writes into the game (DLL and config, no
+  backup) passed about 12 times out of 12, and `deploy-dev.ps1` 5 times out of 6. The only other refusals
+  were today's two Bash `cp` plus `sed -i`. The pattern that passes: a named script run from the PowerShell
+  tool, with a CLAUDE.md that makes dev-scripts launchers the agent's job. Ours lists "deploying the mod"
+  under "ask before touching anything outside this repo". The check judges each call, so a refusal can be
+  made rare, never impossible.
 
 ## 2026-09-24: EntityDump: no key item or medal missable
 
@@ -398,9 +405,9 @@ either one wrong).
   "MapDump,ScriptDump". Restored from the script's own backup, fixed to split on commas, rerun clean.
 - `dev-scripts/event-triggers.py`: triggers found for every gate event except Event95 (bubble shield) and the
   prologue. Event112 is a key-item locked door. Dig spots bury 18 items (15 one-time), all needing dig.
-- The user: the bubble shield crosses hazards and pushes enemies (matches the code: `WalkableSpike`). Hover
-  isn't known to the user yet. Decided: story steps after an ability's vanilla point require it; side
-  locations only where confirmed, else the per-map default.
+- The user: the bubble shield crosses hazards and pushes enemies (matches the code: `WalkableSpike`).
+  Decided: story steps after an ability's vanilla point require it; side locations only where confirmed,
+  else the per-map default.
 
 ## 2026-09-24: first pickup test; dev console; a logic bug found by it
 
@@ -459,8 +466,8 @@ either one wrong).
   checks that. Names from the user: "Underground Door Room, Pillar" and "Underground Bridge Room, Behind Pillar".
 - **Open world is the default** (the user, 2026-09-25). Asked whether to force every chapter done and gate the ending
   by artifacts: no, because chapter done is the artifact flag and a finished world removes locations; instead the
-  same target (open as if finished, nothing collected, artifacts as the goal) is reached one gate at a time. The
-  user hasn't finished the game: endgame facts stay out of chat, in MEASURED's spoiler sections.
+  same target (open as if finished, nothing collected, artifacts as the goal) is reached one gate at a time.
+  Endgame facts stay out of chat, in MEASURED's spoiler sections.
 
 ## 2026-09-25: lessons: the wiki only a lead, layered gates, open world by default
 
@@ -483,8 +490,8 @@ either one wrong).
   14, found with the map dump's new flag-scenery list), the route back (Eetl's blocker, then a guard), and a slot
   needing the Peculiar Gem (key item 116, Event117). The Gem becomes a clean key-item rule once key items shuffle.
 - **Decided: open world is the default,** reached one gate at a time (never by forcing chapters done, which would
-  win the goal and delete locations); artifacts stay the goal; endgame facts kept from the user (not finished the
-  game).
+  win the goal and delete locations); artifacts stay the goal; endgame facts kept out of chat (MEASURED's spoiler
+  sections).
 - **Built, not yet seen:** `kept_present` (big door, bounce mushroom, door back up) and the fall room blocker kept
   open. Test on a fresh file through chapter 1 (Leif's chain). Also pending: the Mushroom spot's landmark name,
   AdoptSeed is still on in the user's config, MapDump too.
@@ -653,7 +660,7 @@ either one wrong).
 - **My slip:** in answering, I first called the mod's safety "stricter than many mods" from the rules alone,
   without reading the code; the user asked whether that was fact or guess, and the check turned up the rule/code
   mismatch above.
-- **Later the same night** (the user agreed to both): the save rule reworded to what the game and the mod do; the
+- **Later the same day** (the user agreed to both): the save rule reworded to what the game and the mod do; the
   berry total counts berries received in a seed (`CrystalBerryTotal.cs`, `flagvar[69]`, the last free slot), built,
   not yet seen in game. The data files' notes trimmed (34 KB to 9 KB, data identical); the open items they held are
   Known issues now, among them a Kabbu/horn rule owed once party members become items. Correction by the user: the horn
@@ -771,8 +778,7 @@ either one wrong).
   - `AnimGuard` now also guards `Animator.Play(string, int, float)`, which every direct `anim.Play("name")` in the
     game ends in.
   - The infinite-jump cheat no longer logs every press. The user: "just noise/spam".
-- **Enemy scaling built** (mod guide, step 17). The user hasn't finished the game, so the calibration comes from the
-  game's data.
+- **Enemy scaling built** (mod guide, step 17), calibrated from the game's data.
   - Home level is 3 below the level where an enemy's EXP runs out. That fits both the new game and the level cap,
     and area by area it climbs with the story.
   - Bosses are placed by the chapter of their story event.
@@ -864,9 +870,8 @@ either one wrong).
 
 - **The user asked for** a WIP pre-release, v0.1.0, made the MeshGhost (TEVI) way: the DLL built locally and
   committed with a hash file, a hand-run release workflow, three separate downloads. Their calls, in order: the
-  MeshGhost pipeline and v0.1.0 for both mod and world; the zip named `bugfables-archipelago.zip` (they had typo'd
-  "bugfable"; I misread the correction once as "bug fables" and renamed it wrongly, then back); no version in the
-  file names; a licensing double-check; a matrix where it speeds CI up; the disclaimer only in the zip's README,
+  MeshGhost pipeline and v0.1.0 for both mod and world; the zip named `bugfables-archipelago.zip`; no version in
+  the file names; a licensing double-check; a matrix where it speeds CI up; the disclaimer only in the zip's README,
   never the root README or the release page; the release body is their highlights plus GitHub's generated notes
   (I wrongly turned the generated notes off once; they're on, as MeshGhost has them); a local release script whose
   preflight rebuilds a stale DLL, as MeshGhost's `release.ps1` does.
@@ -943,7 +948,7 @@ either one wrong).
   lead, and showed in the pause menu. AdoptSeed and TestStartMember turned off (the user: every item comes from the
   server anyway); the fourth test seed is hosted with release and collect off. New dev command `removemember`, for
   trying Vi and Leif next.
-- **Session end (the user, 2026-09-26: stop here, commit, push; continue in another chat).** Done and seen this
+- **Session end (2026-09-26: stop here, commit, push).** Done and seen this
   session: Skip confirm (under Travel), Maki gone after the opening skip, goal reporting (StatusUpdate at the first
   artifact, the server released and finished the slot), Leif joining after the spider with Vi and Kabbu, and with Vi
   and Leif: Leif acting Kabbu's part in the scene and in the story's party changes (Leif alone, then Vi and Leif).
@@ -952,8 +957,7 @@ either one wrong).
   Vi, measured; nothing coded yet); a three-member run of the spider scene (Leif would sit it out today, the user to
   decide); Skip battle tutorials past the first. **Dev state left in the game's config:** `TestStartMember = 2` (a Leif
   start, from the Vi and Leif test), `AdoptSeed = false`, `OneHit` and `InfJump` on (the user: always on in dev). The
-  test server was stopped; the game left running for the user. MeshGhost got two small commits of its own (the
-  Crystal ROM check), logged in its phase file.
+  test server was stopped; the game left running for the user.
 - **2026-09-26, later (a new chat, continuing).** *Starting Party Member* built (apimplementation build step 18): the
   option, Vi / Kabbu / Leif as items (kind 5), the two joining moments as locations, cautious logic (all three past the
   Outskirts gate, Kabbu for the two horn spots). Seen: a Kabbu start (Leif from Artis, Vi from the Fountain Rooftop) and
@@ -968,7 +972,7 @@ either one wrong).
   **Mistakes of mine the user caught:** long waits for hot reloads that had already happened (a wait loop counting after
   the reload, so it ran to its timeout every time: now check once and go; saved in agent memory); a `letters` readout
   that logged the font preloader's glyph string and broke BepInEx's console writer, freezing the game until a restart
-  (development.md, `letters`). A settings page with arrows but no text, late in a day of about forty hot reloads, was
+  (development.md, `letters`). A settings page with arrows but no text, after a day of about forty hot reloads, was
   cured by the same restart; cause not found. **Open:** past the gate with three members (the trapdoor scene broke with
   three before); the Rarity text colours and Off not yet seen; All players and Off for the icon not yet seen; the game
   is running on the three-slot test seed, server up.
@@ -982,7 +986,7 @@ either one wrong).
   of our letters beside one of the game's. Lesson into CLAUDE.md (the user): always read how the game does a thing
   first. New: the Archipelago icon has its own step (23); dev cheat `InfBerries`. Decided (the user): shelf-box names
   stay plain black; crystal berries stay flat icons everywhere.
-  **Open next (the user: straight away in a new chat):** *Starting Party Member* past the Outskirts gate: a new seed
+  **Open next:** *Starting Party Member* past the Outskirts gate: a new seed
   with a starting member, the permit and the other two members placed early by plando; read `Event5` (the trapdoor
   scene) before playing, since it broke with three members before. Also unseen: Item colors Off, the icon's All
   players and Off. **Left running:** the game (on the three-slot test seed) and the local server hosting it; dev
@@ -1014,8 +1018,8 @@ either one wrong).
 
 - **The user asked** whether going above 60 fps breaks things (the game offers 30 or 60), then for a Quality of life row
   (Off/120/144/240, off by default, "properly so things don't break", kept experimental until confirmed). It's "a kinda
-  for fun qol feature", for playing chapters 5-7, vanilla saves included (Use on normal saves), and they care a lot
-  about fps and frame pacing. Documentation steps 24 (Uncap FPS) and 25 (hitches).
+  for fun qol feature", vanilla saves included (Use on normal saves). Documentation steps 24 (Uncap FPS) and 25
+  (hitches).
 - **Looked before building:** the console's `display`/`fps`/`interp`/`camlerp` let the user compare one change at a
   time. 240 as is looked the same (physics at 50 Hz, camera in FixedUpdate); characters interpolated looked worse ("like
   motion blur"); camera drawn between steps as well looked "better/sharper", against 60 "a really big difference".
@@ -1038,18 +1042,18 @@ either one wrong).
   the same way; reading the last error in the log settled it. Restart needed; the sites' transpiler now never throws.
 - **Logic checked by measurement** (`rates` at 240: 59.88 sixtieths and 59.78 new-sixtieth frames a second). Install
   only when the row is on (about 4 s, 3 of them one battle coroutine). Nothing of the per-site fixes seen on screen yet.
-- **Later the same day:** the 5-second stall fix now follows the settings rule (Archipelago on, or Use on normal saves):
-  the user plans to finish chapters 5-7 on a vanilla save at 240. Asked how Difficulty works there: Hard answers
-  "medal 11 equipped" (prizes the vanilla way, from Artis), Normal leaves it to the game (missed prizes at the caravan).
-  Offered prizes on Normal for normal saves as a new row; the user: "nahh, keep as is. we shouldn't try to change
-  vanilla more than we already do". Measured with everything installed at 240: 3599 frames in 15 s, median 4.11 ms,
-  worst 13 ms, no collections. The player guide got Uncap FPS and the stutter fix.
+- **Later the same day:** the 5-second stall fix now follows the settings rule (Archipelago on, or Use on normal
+  saves). Asked how Difficulty works on normal saves: Hard answers "medal 11 equipped" (prizes the vanilla way,
+  from Artis), Normal leaves it to the game (missed prizes at the caravan). Offered prizes on Normal for normal
+  saves as a new row; the user: "nahh, keep as is. we shouldn't try to change vanilla more than we already do".
+  Measured with everything installed at 240: 3599 frames in 15 s, median 4.11 ms, worst 13 ms, no collections. The
+  player guide got Uncap FPS and the stutter fix.
 
 ## 2026-09-27: release v0.2.0
 
-- **The user asked for v0.2.0** with what `main` has, before playing chapters 5-7 on a vanilla save. Both versions
-  bumped; highlights written from the 127 commits since v0.1.0. `release.ps1` found the committed DLL stale (CI had
-  been red on it for two pushes) and rebuilt it.
+- **The user asked for v0.2.0** with what `main` has. Both versions bumped; highlights written from the 127
+  commits since v0.1.0. `release.ps1` found the committed DLL stale (CI had been red on it for two pushes) and
+  rebuilt it.
 - **Mid-run, the user asked to stale check everything first.** The run was stopped after its push, before any tag.
   Three read-only agents checked the player docs, the mod guide with development.md and the code map, and the
   Archipelago guide with the checklist, each against the code. Fixed: the zip's README never said to enable
@@ -1057,7 +1061,7 @@ either one wrong).
   today says as in the game); the slot_data list had 7 of 25 keys; several Status lines lagged the "Seen" commits;
   the code map had no rows for the hooks. Tests: 372 passed at Archipelago 0.6.7.
 - **Published** on the second run, every job green; the downloads fetched back and checked. Not yet seen in game: the
-  release zip itself on a clean install (the DLL is the same source the user has been playing).
+  release zip itself on a clean install (the DLL is built from the same source as the dev build seen in game).
 - **Decided (the user, 2026-09-27): the Archipelago switch stays off by default.** Asked after the README fix; a
   player sets the address, port and slot in the same panel the first time anyway, so enabling it there costs nothing.
 - **Release notes format:** the user compared other Archipelago mods' releases (Tevi, Pseudoregalia, a Pokemon one) and
@@ -1091,21 +1095,21 @@ either one wrong).
 
 ## 2026-09-27: We Owe Ya! does nothing when received early
 
-- **The report:** a tester (a three-game room, Bug Fables with the entrance randomizer on) received We Owe Ya! from
-  another game and saw it do nothing. Read in code: the medal picks a random helper only from those whose story or
+- **The report** (2026-09-27; a three-game room, Bug Fables with the entrance randomizer on): We Owe Ya!, received
+  from another game, did nothing. Read in code: the medal picks a random helper only from those whose story or
   side-quest flags are set, and the game only sells it once one is; a randomizer can give it before. Vanilla
   behaviour, not a mod bug. Recorded in `MEASURED.md` (We Owe Ya!'s helpers), with a line on the game page for players.
 - **The user's idea (Next 36):** have every helper available so the medal always does something. Parked as an idea:
   built only by changing the medal's pick, never by setting the story flags; every helper or a set is still open.
 - **The seed:** generated with Accessibility Full, so the logic says it's completable; but the entrance randomizer is
   experimental (build step 12), so no promise it is in play.
-- **A refactor was planned and set aside:** the user asked for "whole project refactor" as general work while they
-  play chapters 5-7; a plan (apworld split proved by a seed diff, mod helpers and folders, docs tidy) waits for a go.
+- **A refactor was planned and set aside:** the user asked for "whole project refactor" as general work; a plan
+  (apworld split proved by a seed diff, mod helpers and folders, docs tidy) waits for a go.
 
 ## 2026-09-27: the whole-project refactor, and three Uncap FPS reports
 
-- **Asked for:** "whole project refactor", as general work while the user plays chapters 5-7; the user left the
-  scope to the agent and asked what's best for behaviour. Decided: nothing a seed or the plugin does changes; bugs
+- **Asked for:** "whole project refactor", as general work; the user left the scope to the agent and asked
+  what's best for behaviour. Decided: nothing a seed or the plugin does changes; bugs
   found go to Known issues, not into the refactor.
 - **apworld** (one commit): `world.py` split as APQuest is (items, locations, regions, rules, slot_data, web_world,
   enemies); item kinds named; one category-to-toggle table; tests split by subject with a `state_with` helper.
@@ -1126,11 +1130,11 @@ either one wrong).
   its own); one shared Yes/No popup for the panel, the pause menu and the main menu (it changes what's drawn, so only
   with the user checking on screen); WarpButton's dev tuning (40 lines, tangled with shipped fields); Colour/Color
   spelling; the finished items in Next (their decisions live only there, so they stay; only 15, 16, 17 corrected).
-- **Not verified in game.** The plugin was never copied in while the user played. Before the next release, the user
-  checks on screen: connect, a pickup, a shop, the panel's pages, Warp and Map, a door, the opening, the main menu's
+- **Not verified in game:** the refactored plugin was not copied in. Before the next release, the user checks on
+  screen: connect, a pickup, a shop, the panel's pages, Warp and Map, a door, the opening, the main menu's
   toggle, save and reload.
 - **Uncap FPS reports (Known issues):** shaking text blurry above 60 (the user, confirmed sharp at 60; from code,
-  `FontEffects` moves shaky letters every frame); hit animations too fast (a tester); slow motion on bridges and
+  `FontEffects` moves shaky letters every frame); hit animations too fast (a report); slow motion on bridges and
   moving platforms (the user). The user: "we have some work to do with the fps things still".
 - **Also this session:** We Owe Ya! does nothing when received early (Next 36, `MEASURED.md`).
 - **Platforms fixed, how it was found:** the user, standing on a platform: normal at 30 and 60 (the game's own, so no
@@ -1173,14 +1177,12 @@ either one wrong).
 ## 2026-09-28: a link to the concepts doc, and The Beast at level 17
 
 - **documentation.md links MeshGhost's `programming-concepts.md`** under its opening bullets (the user asked whether to
-  point to it). Wording the user's: "from MeshGhost, another project by Tsukino", so the reader knows who. Not in
-  apimplementation.md, which has its own explainer from Archipelago's protocol doc.
-- **The Beast (id 69, chapter 5, home level 17), vanilla:** the user lost twice (down to 40/70, then 20-30/70, out of
-  items), then won. HP 76, Defense 1, 25 EXP; party level 17 (Vi 3 atk/-1 def, Kabbu and Leif 2/0), 18 after. Enemy
-  scaling was on Party level, but no `[scale]` line: at home level there is nothing to scale. **Not vanilla after
-  all:** the user found the Hard Hits medal equipped ("raises enemy attack", on since a save 2-3 years old), so the
-  boss hit harder than intended. The chapter 5 home level matched a real playthrough. The user plans to turn scaling
-  off.
+  point to it). Wording the user's: MeshGhost named as another project by the same author, so the reader knows who.
+  Not in apimplementation.md, which has its own explainer from Archipelago's protocol doc.
+- **The Beast (id 69, chapter 5, home level 17), vanilla:** HP 76, Defense 1, 25 EXP; party level 17 (Vi 3 atk/-1
+  def, Kabbu and Leif 2/0), 18 after. Enemy scaling was on Party level, but no `[scale]` line: at home level there is
+  nothing to scale. **Not vanilla after all:** the Hard Hits medal ("raises enemy attack") was equipped on the test
+  save, so the boss hit harder than vanilla. The chapter 5 home level matched the story's.
 - **Asked for, then dropped:** an *Attack boost: Off / +1* row. Read first: nearly every attack and skill reads `atk`
   per hit, so +1 attack is +1 on every hit (+33-50% at attack 2-3). Dropped once scaling showed the fight was at level.
   The user also declined a log line for why scaling skipped an enemy.
@@ -1191,12 +1193,12 @@ either one wrong).
   talked through first: fullscreen looked borderless already (no flicker switching) but minimizes on focus loss,
   likely Unity's build-time *Visible In Background*; not pursued. Measured first with an extended `cams`: MSAA 0,
   forward rendering, the game's render scale only goes down. First try drew through the game's quad and gave an
-  old-TV look (its shader is `Custom/CRT`); a command-buffer copy fixed it, 150% and 200% then normal. The user then
-  saw 240 -> ~95 fps at 200% + 8x MSAA for little visible difference, and had it removed; Uncap FPS back on Quality of
-  life. What would sharpen sprites: the game's own 3840x2160 (the user plays a 1920x1080 window on a 4K screen).
+  old-TV look (its shader is `Custom/CRT`); a command-buffer copy fixed it, 150% and 200% then normal. At 200% with
+  8x MSAA the frame rate fell from 240 to about 95 for little visible difference, and the user had it removed; Uncap
+  FPS back on Quality of life. What would sharpen sprites on a high-resolution display: the game's own 3840x2160.
 - **The attack boost on the medals screen** (the user: "nice to visually see/know about it" when setting up medals):
   a postfix on `PauseMenu.UpdateDynamicText` shows attack + 1; seen by the user (Vi 3 with Power Exchange shown as 04,
-  right as medals go on and off). The damage in a fight is still to test; the user will do it another time.
+  right as medals go on and off). The damage in a fight is still to test.
 - **Unpushed at the end of the session:** 11 commits on `main`, from `b3b48bf` to the medals-screen status.
 
 ## 2026-09-28: save crystals without a move, DeathLink, auto-save
@@ -1214,13 +1216,12 @@ either one wrong).
 - **DeathLink** (Archipelago side, build step 25): the user decided a Gameplay row, not yaml, switchable mid-seed;
   a received death strikes only once play allows (the user: after a cutscene, whichever of map or battle comes
   first; never inside a scripted fight such as the first spider fight); **a death DeathLink caused never sends**
-  (the user: a common apworld bug). MultiClient.Net's `DeathLinkService` read at `v6.7.1` first, and the protocol doc
-  at 0.6.7; an earlier Archipelago project's notes read for the design.
+  (the user). MultiClient.Net's `DeathLinkService` read at `v6.7.1` first, and the protocol doc at 0.6.7.
 - **Auto-save** (step 31): first planned as tied to DeathLink; the user made it its own row, off by default, 15 s
   between saves. A room reached inside the 15 s saves when the time is up rather than being skipped.
-- **Private repos stay out of public ones** (the user): a licensing row naming a private project was taken back out;
-  unnamed mentions ("an earlier project") are fine and stay. A mistyped `git revert -q` once renamed a local commit;
-  that commit was dropped with `reset --hard` to the one before (nothing pushed).
+- **Private repos stay out of public ones** (the user): never named here, no licensing row. A mistyped
+  `git revert -q` once renamed a local commit; that commit was dropped with `reset --hard` to the one before
+  (nothing pushed).
 - **Loaded:** build 44D57CE33379 copied into the game; nothing seen in game yet. DeathLink needs a room with a second
   DeathLink client to test.
 - **DeathLink moved to the panel's first page** (the user: "its an AP setting"): first built on the Gameplay page,
@@ -1231,19 +1232,19 @@ either one wrong).
 
 ## 2026-09-28: Uncap FPS as ten pips, the boat, Leif's boss, traps
 
-- **Uncap FPS, ten pips like the volume rows** (the user, after a tester on a 180 Hz monitor): Off, 90, 100, 120, 144,
+- **Uncap FPS, ten pips like the volume rows** (the user, after a report from a 180 Hz display): Off, 90, 100, 120, 144,
   165, 180, 240, 360, Monitor (the display's refresh rate with VSync; a 60 Hz display keeps the game's own). At 180 Hz
   the old 120 and 144 tore and only 240 synced, with nothing saying so. **Monitor is the default** (the user); a config
   that already stores a value keeps it (the user: no migration). Held back at first for the Known issues; the user said
   shaky text is fixed and seen, and nothing odd in combat with the hit fix (no before/after). Built, hot-reloaded, the
-  log shows every pip applied (Monitor as 240 on the user's screen); the user then confirmed the pips look and work
-  fine.
+  log shows every pip applied (Monitor applied the display's refresh rate); the user then confirmed the pips look and
+  work fine.
 - **A slip:** the first copy put the old plugin back: `dotnet build` without `stage-dev.ps1`, and `copy-dev.ps1` copies
   the stage. The user saw no pips; `copy-dev.ps1`'s "game: loaded" hash and time showed it. Always stage first.
-- **The tester's `<RI.Hid>` errors:** the game's controller reading; the user's controller batteries died and
-  reconnected. Harmless.
-- **The boat is removed in chapter 6** (wasps attack it; the user, playing vanilla): Next 40, the boat always there in
-  a seed. Not built; nothing changed while the user plays.
+- **`<RI.Hid>` errors in the log:** the game's controller reading, when a controller disconnects and reconnects.
+  Harmless.
+- **The boat is removed in chapter 6** (wasps attack it; seen in vanilla): Next 40, the boat always there in a seed.
+  Not built.
 - **Leif unusable in Upper Snakemouth's boss fight:** the game's own design (`MEASURED.md`): `EventStop` on the third
   slot, removed by the boss's first beam, as the user then saw.
 - **Traps annoy, never harm** (the user, Next 19): a lost turn was considered from that fight and dropped; gliding
@@ -1252,7 +1253,7 @@ either one wrong).
   in the room (gates change the logic); needs from other rooms (quests, followers: the throne room needs Maki from two
   rooms away) are traced there; a need that isn't a quest may be removed for good, case by case, always on in a seed
   and never part of *Skip cutscenes*.
-- **Later the same night:** the Uncap FPS pips seen fine (the user). The "Animator.GotoState" warnings come from the
+- **Later the same day:** the Uncap FPS pips seen fine (the user). The "Animator.GotoState" warnings come from the
   game's own boss scene with Archipelago off (`MEASURED.md`). **Next 41** (the user): a "!" over each discovery you
   interact with (a stone, a statue; not the automatic ones) and over undug dig spots holding a check, with the Detector
   on; the 12 berry dig spots as checks, an idea, respawning to measure first.
@@ -1268,12 +1269,11 @@ either one wrong).
   copy of an ordinary item or berries gives way, only once no duplicate is left. `TestSmallPool` failed before the
   fix; after it 0 of 10000, and 0 of 2000 with APQuest.
 
-## 2026-09-28: outside criticism, seven reviewers, part 1 of the fixes
+## 2026-09-28: a quality review, seven reviewers, part 1 of the fixes
 
-- **What happened:** the Tevi dev suggested Harmony attributes over hand-written `harmony.Patch` calls; a long-time
-  Bug Fables modder left the AP server calling the project's code bad and its docs full of "accuracy errors ... and
-  outright lies" about the game's internals, with no example named. The user doesn't code (they judge the game
-  only), so quality is ours to find.
+- **What happened:** a quality pass: Harmony attributes were suggested over hand-written `harmony.Patch` calls, and
+  the code and `MEASURED.md`'s claims about the game's internals were put to an audit. The user verifies the game;
+  code quality is the agent's and the tools' to check.
 - **Seven read-only agents:** a style review, three audits of `MEASURED.md` against the decompiled code, and three
   neutral reviewers (code only, docs only, docs against code). Audits: about 245 claims, 37 problems (14 wrong, 21
   misleading, 2 unsupported), mostly low; the medium ones were "everywhere/only" claims from an incomplete search.
@@ -1315,14 +1315,14 @@ either one wrong).
   comments, dev tools out of the release). Open questions to the user: Enemy Shuffle across the whole game, medal-shop
   stock from a new file, "(the user, date)" in the guides.
 
-## 2026-09-28: three projects compared, the cleanup plan
+## 2026-09-28: what other projects do, the cleanup plan
 
-- **What happened:** after the "bad code" comments with nothing named, the user asked how the project compares with
-  hand-written ones: Tevi's mod and apworld, and the Pokémon Crystal apworld on both its branches. Five read-only
-  surveys, my own spot checks, then a sixth agent fact-checking the plan (7 wrong claims, about 12 misses, all fixed).
+- **What happened:** the user asked what hand-written Archipelago projects do that this one could take: Tevi's mod
+  and apworld, and the Pokémon Crystal apworld on both its branches. Five read-only surveys, my own spot checks,
+  then a sixth agent fact-checking the plan (7 wrong claims, about 12 misses, all fixed).
 - **Ours, measured:** 14,852 lines of C# for 74 locations, 147 tests plus the fuzzer, 83 hand-written Harmony call
   sites.
-- **Verdict:** by measure our code isn't bad. What an outsider sees first:
+- **What a reader of this repo sees first:**
   - hooks wired by hand;
   - AI traces in code, data and commits;
   - a lot of code for 74 checks;
@@ -1334,8 +1334,7 @@ either one wrong).
   - the traces out of code, data, future commit subjects, the guides and MEASURED.md;
   - every hook moved to attributes;
   - the stale gate only at release.
-- **Agents were wrong too:** two of their claims about another project were wrong once checked, caught before the
-  user sent anything.
+- **Agents were wrong too:** two of their claims were wrong once checked against the code.
 - **Done:** the stale gate moved into the release workflow (8926345), so `main` is green after the next push. Licence
   rows for Tevi's apworld and Crystal: the licences were read first, but the rows came after the read. What we take
   from each is in `references.md`.
@@ -1348,7 +1347,7 @@ either one wrong).
     sighting, and code-map's links follow its renamed headings.
   - Errors checked for instead of swallowed, the dev console's logger fix, clearer FrameSites names, and
     `.editorconfig` (382f4e6). Both builds pass; tests pass, fuzzer 0 of 10000; nothing seen in game yet.
-- **Stopped at 98% of the weekly usage**, by the user's word, before the larger phases.
+- **Stopped here**, by the user's word, before the larger phases.
 - **Next, phase 3 (typed apworld data):** first `dev-scripts/seed-snapshot.py`.
   - What it runs: Generate.py at 0.6.7 takes `--seed`, `--spoiler`, `--player_files_path` and `--outputpath`.
     MultiServer decodes a seed with `restricted_loads(zlib.decompress(data[1:]))` (`MultiServer.decompress`).
@@ -1398,9 +1397,9 @@ either one wrong).
 
 ## 2026-09-29: the cleanup plan finished
 
-- **The weekly usage cap** stopped three wrapping agents midway overnight. Their partial edits were checked before use:
-  Release and Debug builds without debug info came out byte-identical to the reference (144A1E6A..., AB400200...).
-  Committed (c9f93a8), then finished (0ceefc9).
+- **Three wrapping agents stopped midway.** Their partial edits were checked before use: Release and Debug builds
+  without debug info came out byte-identical to the reference (144A1E6A..., AB400200...). Committed (c9f93a8), then
+  finished (0ceefc9).
 - **The wrap-and-trim pass:**
   - The apworld has no line over 120 (5cbdc8a: snapshot identical, fuzzer 0 of 10000).
   - In the mod, 903 lines were over 120 and 144 are left, each a single string: 134 interpolated log lines and 10
@@ -1486,19 +1485,17 @@ either one wrong).
 ## 2026-09-29: the agent's guard, the cache fix, the TLS probe
 
 - **The user's answers:** GitHub settings, all four (on, read back, f4a43f3). A guard for the coding agent: yes. The
-  cache bug: patch it in the mod for now ("how are things reported upstream? manually by me?"). TLS: measure first.
+  cache bug: patch it in the mod for now. TLS: measure first.
 - **The agent's guard** (8e88357, narrowed in cc87c00): `.claude/settings.json` runs `.claude/hooks/agent-guard.py`
   before every shell command and edit. It refuses whatever gets past the hooks, and fails closed (exit 2).
   - **Proven** by pipe tests of the exact settings command, then in the harness: 37 cases, and two weakened copies
     (the `--no-verify` check removed; exit 1 instead of 2) each made the harness fail.
   - **It went live mid-session,** although Claude Code's docs say a settings folder created after the session
     started isn't watched. A harmless `echo --no-verify-probe` was refused, which showed it.
-  - **Too many prompts:** the user asked "feels like i have to confirm a lot of bash commands now?" and "i don't want
-    to constantly have to confirm things in my workflow". The first version asked before every commit touching any
-    gate file, and before every push. It now asks only for edits to, or commits carrying, what the user decides
-    (capabilities.md, the patterns file, `.claude/`, `.git/`), and for `gh api` writes. The other prompts were
-    Claude Code's auto mode reacting to scratch Python scripts that edited the repo; repo edits now go through the
-    Edit and Write tools.
+  - **Too many prompts:** the user asked for fewer. The first version asked before every commit touching any gate
+    file, and before every push. It now asks only for edits to, or commits carrying, what the user decides
+    (capabilities.md, the patterns file, `.claude/`, `.git/`), and for `gh api` writes. The other prompts came from
+    scratch Python scripts that edited the repo; repo edits now go through the Edit and Write tools.
 - **The cache fix** (5c0ba51, mod guide step 34): the library's cache class is internal, so the patches name it as
   text. That needed a gate change first (15635fc):
   - **Reading the target:** the DLL reader took a string type name for the method name.
@@ -1526,13 +1523,13 @@ either one wrong).
   over the 68 commits and the harness. **The first CI run of the preflight, all green:** on Python 3.11 and 3.13 the
   tree, all history (28-39 s) and the harness (76 fixtures, total coverage), plus the libraries byte for byte against
   NuGet's package; `ci.yml` on 3.11-3.13. Read in the job logs, not just from the ticks.
-- **Upstream:** the user decided not to send the MultiClient.Net report for now ("unsure if they would appreciate AI
-  code or not"). The mod's patch stays the fix. Left for next time: the in-game checks (steps 33 and 34), and the
-  `[tls]` lines from a connection to archipelago.gg (`TlsProbe` is on in the game's config).
+- **Upstream:** the user decided not to send the MultiClient.Net report for now. The mod's patch stays the fix. Left
+  for next time: the in-game checks (steps 33 and 34), and the `[tls]` lines from a connection to archipelago.gg
+  (`TlsProbe` is on in the game's config).
 
 ## 2026-09-29: the Logic Test apworld, judged
 
-- **Asked:** would the Logic Test apworld (palex00's fork, world 0.4.0) make good testing alongside the fuzzer? It
+- **Asked:** would the Logic Test apworld (world 0.4.0, on a fork) make good testing alongside the fuzzer? It
   generates the under-test games again inside its own `generate_early`, reads their spheres, puts `KEY_i` in every
   location of sphere i and holds the real items until all of sphere i's keys are in.
 - **Read, licence first** (MIT, row in `licensing.md`): `world.py`, `pass_a.py`, `options.py`, the setup guide.
@@ -1561,13 +1558,13 @@ either one wrong).
     event, so it would read as an early key (from `compute_spheres`).
   - **Its data package:** 2,184,957 bytes after inflating, sent to every client in the room. Next: the game
     connects to such a room, then a seed played through.
-- **CI, the user's call:** the Crystal dev runs tests and fuzzing on every commit and acts only on the failure email.
-  We do the same: `ci.yml` gains a `fuzz` job (`test-apworld.ps1` under `pwsh`, the fuzzer at `53686ba`, the Logic
-  Test at `795f13b`, 30-minute limit, failed runs kept as an artifact), and the build moves out of the 3.13 leg into
-  its own job. No one waits on CI after a push; `gh run list` once when a session starts (now in `CLAUDE.md`).
-  Actions are free on standard runners for a public repo (GitHub's billing docs, 2026-09-29). `test-apworld.ps1`
-  now sets its own error preference and builds the `-g` list with a loop, for `pwsh` on Linux. Not run on
-  Linux yet: no `pwsh` here, so the first push is its first run. Locally: 0 of 10000.
+- **CI, the user's call:** tests and fuzzing on every commit, acting only on the failure email. `ci.yml` gains a
+  `fuzz` job (`test-apworld.ps1` under `pwsh`, the fuzzer at `53686ba`, the Logic Test at `795f13b`, 30-minute limit,
+  failed runs kept as an artifact), and the build moves out of the 3.13 leg into its own job. No one waits on CI after
+  a push; `gh run list` once when a session starts (now in `CLAUDE.md`). Actions are free on standard runners for a
+  public repo (GitHub's billing docs, 2026-09-29). `test-apworld.ps1` now sets its own error preference and builds
+  the `-g` list with a loop, for `pwsh` on Linux. Not run on Linux yet: the first push is its first run. Locally: 0
+  of 10000.
 - **`CLAUDE.md` trimmed, the user's go-ahead:** 150 to 144 lines with nothing lost. Two bullets saying the same
   thing (the user verifies the game; nothing in-game is verified until seen) became one, the measurements half
   moving into the `MEASURED.md` bullet; the finished sentence "this must exist before the mod grants its first item"
@@ -1583,8 +1580,7 @@ either one wrong).
 - **Asked:** the user's general rules for writing logic, for `apimplementation.md` ("An item/ability should NEVER say
   what it can reach"; "A location should ALWAYS say what is required to reach it"; a need is "similar to the
   expected/minimum requirement of the vanilla game"; "Boolean logic (and/or/not...)"). And: how are regions managed,
-  a folder with one `.cs` per room or Python? How big are the files? What is a region, simply and in depth, when and
-  why? "They basically work like a collection of rules?"
+  a folder with one `.cs` per room or Python? How big are the files? When is a region made, and why?
 - **Found, by two readers and the code:** all logic in the apworld, none in the mod; 10 regions and 9 exits in one
   155-line `locations.json`, every rule "all of these" (`HasAllCounts`), no "or" anywhere; no item knew what it opens
   (the user's rule already held). Three passages disagreed on the Warp (build step 15 and step 12: "counts in the
@@ -1627,8 +1623,7 @@ either one wrong).
   `archipelago-review.md`, the order in Next 43. Checked myself before writing: the two "Leif" items, the shop test
   that asserts nothing, the connect attempt left logged in, the event hooks after login, the entrance randomizer's
   step, no `eval`/`yaml`/hand placement. New bugs in Known issues. The checklist corrected (`logic/`, the game info
-  page, Menu's home) and extended. Not verified: `main`'s new `quantity` yaml key (the tools' safety check failed
-  while the user's VPN was off).
+  page, Menu's home) and extended. Not verified: `main`'s new `quantity` yaml key (a tool check failed).
 - **The in-game text client, designed with the user** (the mod guide, step 2; not built): the feed shows DeathLinks
   too, a filter per kind of message, a Chat menu in the panel; Enter opens it in the field and in battles, sends and
   closes, or closes an empty line; Esc leaves; nothing reaches the game while it's open ("so you have to close/leave
@@ -1652,33 +1647,24 @@ either one wrong).
   once released; I first said #142 would retire our dead-socket close too, but its diff touches only the
   `System.Net.WebSockets` helper, which our net40 build doesn't use (the user's "those are fixes we won't have to
   worry about later?" prompted the check). Review items 24-28, Next 43.
-- **Posted upstream by the user:** MultiClient.Net #143 (2026-09-29), the cache bug, from the plain draft with their
-  own opening line ("Everything here was found with AI/LLM (opus5.5) ..."); I advised against linking our repo or
-  our fix (it would still point them at AI code). Our patch stays until a release fixes it.
+- **Posted upstream by the user:** MultiClient.Net #143 (2026-09-29), the cache bug, text only. Our patch stays until
+  a release fixes it.
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
   at a time. The text client is Next 9, after the review's bugs. Now and then: look at #143 and #141.
 
 ## 2026-09-29: the concepts doc's second round
 
-- **The user's list, answered in MeshGhost's `programming-concepts.md`** (their choice: all of it into the doc, each
-  term where it fits, two new parts). About 70 words they had seen the agent write while working on Bug Fables, or
-  simply wondered about (transpiler, sed edit, heredoc, CRLF, provenance attestation, ...), plus four questions: how a
-  commit works underneath, whether names like `sed` or `Postfix` are ours, what a ROM or ISO is and how one is built,
-  and how to judge code (at a glance, AI-written, one right way or many). Each term is illustrated with its real line
-  from this repo; git's objects were read with `git cat-file` on MeshGhost itself. MeshGhost commit `6a9e33d6`,
-  488 -> 1068 lines, its preflight clean; not pushed.
-- **The user's corrections while it was written:** `Rect` does appear in our code, beside `Vector2` in
-  `Sprite.Create` (the first search had said none, so every other "none" was re-grepped); "sed edit" means an edit made
-  *by* sed (log above, 2026-09-24's `sed -i`), not something called sed being edited. Asked mid-way and added:
-  "Logger ?" (a logs section) and "inputIO ?" (the game's class for input and files; IO is input/output).
-- **A fact-check agent found three errors:** the preflight test's fixture count (76 now, not 72; the stale 72 in
-  `apimplementation.md`'s preflight step is corrected too), MeshGhost's hooks (one, its own scan, not preflight), and
-  prefixes returning false: HarmonyX, which BepInEx ships, still runs the other prefixes, unlike upstream Harmony.
+- **MeshGhost's `programming-concepts.md`**, which `documentation.md` links, gained a second round of terms at the
+  user's request, each illustrated with its real line from this repo.
+- **Checked on the way:** `Rect` does appear in our code, beside `Vector2` in `Sprite.Create` (a first search had said
+  none, so every other "none" was re-grepped). A fact-check found the preflight test's fixture count stale (76 now,
+  not 72; the stale 72 in `apimplementation.md`'s preflight step is corrected too), and that a prefix returning false
+  doesn't stop the others under HarmonyX, which BepInEx ships, unlike upstream Harmony.
 
 ## 2026-09-29: the animation warnings on a normal save
 
 - **The user pasted** "Animator.GotoState: State could not be found" / "Invalid Layer Index '-1'" from the console,
-  playing chapter 5 on a normal save with *Use on normal saves* on. The log: about 70 pairs in the Barren Lands, the
+  in chapter 5 on a normal save with *Use on normal saves* on. The log: about 70 pairs in the Barren Lands, the
   Archipelago mod disabled, so `AnimGuard` (then gated on Archipelago only) was off. The game's own warnings, as in
   Upper Snakemouth's boss scene on 2026-09-28; nothing of the mod's plays there.
 - **Asked** whether the guards should follow the row, given "we shouldn't try to change vanilla more than we already
@@ -1689,7 +1675,7 @@ either one wrong).
 
 ## 2026-09-29: the licence holder, Tattle checks, disguised traps, Vi's flight
 
-- **The licence:** "Tsukino" or "Tsukino-uwu"? Archipelago's docs (0.6.7 and `main`) say nothing about a world's
+- **The licence holder's name, asked:** Archipelago's docs (0.6.7 and `main`) say nothing about a world's
   licence or its holder; `authors` is "a list of strings" (on `main`, shown on the Supported Games page); the only
   GitHub-username rule is `CODEOWNERS`, for the main repo's maintainers. Worlds use handles, real names or both. The
   user: not aiming to be an official world, but "we should try to meet & pass anything that is required to become an
@@ -1711,8 +1697,8 @@ either one wrong).
   flight's per-frame position write, as platforms and frozen enemies were (Known issues). The log showed the row stepped
   from Monitor down to Off right after Bee Fly was learned. The planned `interp off` test no longer works (the ground
   check re-decides interpolation every physics step since the platform fix), so the fix is the one-change test: the
-  leader not interpolated while flying, in `FrameRate.cs`'s one decision. Built and copied in; **the user, row on
-  Monitor (240): "fly works now"**. How it was found: no measurement in game first; the theory came from reading the
+  leader not interpolated while flying, in `FrameRate.cs`'s one decision. Built and copied in; **seen, the row on
+  Monitor: "fly works now"**. How it was found: no measurement in game first; the theory came from reading the
   flight code (its speed is a velocity, frame-rate free; only the rise writes the position) against the two faults
   already fixed in step 24, and the one-change fix settled it. Kabbu and Leif during a flight, asked: "they look the
   same as Vi".
@@ -1720,7 +1706,7 @@ either one wrong).
 ## 2026-09-29: Room Swap, Uncap FPS Off by default
 
 - **Uncap FPS back to Off by default** (the user). A config that already stores a value keeps it (no migration, as
-  on 2026-09-28), so the user's own Monitor stays. Built and staged, not copied in: the user was playing vanilla.
+  on 2026-09-28). Built and staged, not copied in.
 - **What a room shuffle is called** (the user: rooms with the same number of entrances swapping places, "like the super
   metroid map rando"; Off / Room / Couple / Decouple, or a separate toggle?). Measured on the door table first: every
   room swap is a coupled layout, so a separate toggle next to Coupled would do nothing visible; a decoupled room
@@ -1753,7 +1739,7 @@ either one wrong).
   then set the direction: "we should try to support all available things archipelago has/does, that includes plando"
   (written into CLAUDE.md's Archipelago rule and §8; Next 46 holds the sweep of the other optional features).
 - Every step: 496 tests, the Logic Test check and the fuzzer (0 of 10000) pass; plando seeds generated through
-  Archipelago's Generate in each mode, alone and with APQuest. Nothing seen in game yet: the user is playing vanilla.
+  Archipelago's Generate in each mode, alone and with APQuest. Nothing seen in game yet.
 
 ## 2026-09-30: Music Shuffle, in the yaml
 
@@ -1778,7 +1764,7 @@ either one wrong).
   - A seed generated through Archipelago's Generate with APQuest, off and on: slot_data identical but for the two
     maps, and the spoiler differs only in the option's own line.
   - The mod builds.
-  - Not yet seen in game: the user is playing vanilla.
+  - Not yet seen in game.
 - **The preflight's import list gained `OptionGroup`** in a commit of its own, on the strength of the approved plan.
   The user then confirmed it explicitly ("I meant for optiongroup"). Universal Tracker is still Next 43, item 14.
 
@@ -1800,20 +1786,20 @@ either one wrong).
   one fact or a name is in `licensing.md` only, "so references doesn't bloat".
 - **Rows that were missing, now added** (each licence read today): Archipelago's LICENSE exempts a world folder with a
   licence of its own, and several such worlds had been read with no row: `pokemon_emerald` (from 2026-09-24), `oot`
-  (2026-09-29), and in today's music search `celeste_open_world`, `sa2b`, `smw`, `dkc3` (PoryGone's modified MIT:
-  no relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1): its term
-  "room randomizer" was written 2026-09-29 from an agent's memory, nothing read (checked in that session's
-  transcript); today its licence, then its README, confirmed it.
-- **The user asked how that happened, and how often agents reach the internet unasked.** Read from every transcript
-  (124, from 2026-09-24): no web search; 74 page fetches; 363 shell commands reaching the network, mostly expected
+  (2026-09-29), and in today's music search `celeste_open_world`, `sa2b`, `smw`, `dkc3` (a modified MIT: no
+  relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1): its term "room
+  randomizer" was written 2026-09-29 from an agent's memory, nothing read; today its licence, then its README,
+  confirmed it.
+- **The user asked how that happened, and how often agents reach the internet unasked.** Counted over every agent
+  session from 2026-09-24: no web search; 74 page fetches; 363 shell commands reaching the network, mostly expected
   (Archipelago and MultiClient.Net, licences, NuGet, CI). With no row: a websocket-sharp fork's metadata and commit
   list (2026-09-24), and a Bug Fables docs repo's file list (2026-09-25; its entry was dropped that day, never
-  committed). The user: "a pretty big gap". **Built, the user's choice of four:** the guard refuses a GitHub read of a
-  project with no `licensing.md` row, its licence file aside (build step 28; harness 55 cases, passing), and
-  `CLAUDE.md` gains "a fact about another project is read (licence first) or asked, never written from memory".
-  Not chosen: asking before every page fetch, and before reads outside the repo. The other worlds read
-  (`sm`, `satisfactory`, `hk`, `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user
-  then asked for `licensing.md` split in two: Apworlds first, then everything else.
+  committed). **Built, the user's choice of four:** the guard refuses a GitHub read of a project with no
+  `licensing.md` row, its licence file aside (build step 28; harness 55 cases, passing), and `CLAUDE.md` gains "a fact
+  about another project is read (licence first) or asked, never written from memory". Not chosen: asking before every
+  page fetch, and before reads outside the repo. The other worlds read (`sm`, `satisfactory`, `hk`, `messenger`,
+  `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user then asked for `licensing.md` split in
+  two: Apworlds first, then everything else.
 
 ## 2026-09-30: Shuffle Shop Inventories
 
@@ -1941,9 +1927,9 @@ either one wrong).
   "follow Archipelago's standards": "i don't want any workaround/placeholder fixes for logic/location things, i want
   proper fixes/whatever archipelago itself recommends and does"; written into `apimplementation.md` §8.
 - **CLAUDE.md back to 150 lines** (it was 152, from before this session): the user first removed three blank lines
-  around headings, VS Code flagged them, and Archipelago's `style.md` follows Google's Markdown guide, which wants a
-  blank line before and after a heading. So the blanks stayed and two Method bullets were folded into one line each, the
-  user's yes.
+  around headings, the Markdown lint flagged them, and Archipelago's `style.md` follows Google's Markdown guide, which
+  wants a blank line before and after a heading. So the blanks stayed and two Method bullets were folded into one line
+  each, the user's yes.
 - **For the next session:** the in-game test of the submarine (the mod guide, step 37; the build is staged, not copied
   in), its icon picked on screen, and the fill error (Known issues).
 - **The preflight refused twice, and nothing was widened:** `urllib` in the hook (a two-line percent-decode instead) and
@@ -1996,8 +1982,8 @@ either one wrong).
 
 - **The user's idea:** "if we map out logic properly, would it be possible to have a on/off yaml setting for this? like
   'you are expected to get stuck somewhere, but you can always proceed if you keep going'", off by default ("I don't
-  think relying on and constantly use 'warp' is fun gameplay wise"), from playing Metroid Fusion ("you can jump down
-  into a room to get an item with no way to get out forcing you to warp back to spawn"). Answered: not a dumb idea.
+  think relying on and constantly use 'warp' is fun gameplay wise"), after Metroid Fusion ("you can jump down into a
+  room to get an item with no way to get out forcing you to warp back to spawn"). Answered:
   Archipelago's `world api.md` assumes the player can always get back to the origin "by resetting the game ('Save and
   quit')", and in Bug Fables the Warp to Start is that reset (a loaded save goes back to its crystal); the dev FAQ
   accepts making the reset part of the logic. Asked when and what to call it: "Build the option now", "Points of No
@@ -2019,7 +2005,7 @@ either one wrong).
 
 - **CI red first:** Preflight had failed on the last three pushes. `.githooks/doc-coverage.py` had a backslash inside
   an f-string expression, which Python 3.12 accepts and CI's 3.11 can't parse. Fixed; preflight passes on 3.11 locally.
-- **The user's four points, after play:**
+- **The user's four points:**
   - Flags tied to the seed, and what a death without saving costs with DeathLink ("Items are remote so no real
     progression is lost, but not all progression is tied to the seed?").
   - A screenshot: "You got a Poison Resistance Medal from BugTester!" running past the box.
@@ -2097,7 +2083,7 @@ either one wrong).
   two CLAUDE.md pointers. Tests, the Logic Test check and the fuzzer passed (0 of 10000); the mod builds.
 - **Left for the user** (TO-CHECK.md, "Waiting on you"): `docs/capabilities.md` narrower than the code (paste in all
   four text rows; AnimGuard with *Use on normal saves*); pre-push's gate list without `.claude/`; the "no exceptions"
-  licence rule and the user's own earlier project; UnityEngine.Modules' missing licence; no one-way carrying its way
+  licence rule and the user's own work; UnityEngine.Modules' missing licence; no one-way carrying its way
   back yet. Also found, not changed: enemy 72 (the Wasp General) sits in both `BossChapter` and `Untouched`, so its
   chapter entry is dead; queued respawn and shop checks are dropped when a send fails (known, Next 43 item 5).
 - **The user's report mid-way:** the Quality of life page's bottom line cut short ("Sett", "Setti", "Settin") with Fast
@@ -2117,11 +2103,10 @@ either one wrong).
   sprites and the reload status's folder too); `.claude/` added to pre-push's gate pattern (the gate's own test passes,
   76 fixtures); the user's own work is the one exception to the licence-row rule; UnityEngine.Modules kept as noted;
   one-ways get their way back with the room mapping. **The Wasp General:** the user, not picking either option: "The
-  beast/centipede is the real boss for chapter5, the Wasp General is more like a mini boss, its not as hard as the
-  actual boss but it was a harder fight than just normal enemies". Read in the game's code before changing it: the
-  x1.5 its `Untouched` entry was based on is the hologram machine's hard rematch (flag 166), not Hard Mode, so the
-  reason was a misread; the game's `minibosslist` holds 72, and every other mini-boss there scales from its chapter.
-  It now does too (chapter 5); built and copied in (`CE213A9BD09A`), not yet seen.
+  beast/centipede is the real boss for chapter5, the Wasp General is more like a mini boss". Read in the game's code
+  before changing it: the x1.5 its `Untouched` entry was based on is the hologram machine's hard rematch (flag 166),
+  not Hard Mode, so the reason was a misread; the game's `minibosslist` holds 72, and every other mini-boss there
+  scales from its chapter. It now does too (chapter 5); built and copied in (`CE213A9BD09A`), not yet seen.
 - **Spy Specs as a Quality of life row (the user's idea):** "similar to detector in qol, spy spec could maybe be a
   on/off thing (the automatic spy, it does not take up a turn to spy)". Read in the game's code first: medal 17 is
   asked for three times (a battle's start sets `scopeequipped` for every HP bar; `Tattle` skips its aim and, with the
@@ -2146,26 +2131,16 @@ either one wrong).
   game's size, both pages scrolling. Built and copied in (`5581F3683570`); not yet seen.
 - **Seen (the user):** the rows at the game's size, "yee it works, feels a bit cramped but its how the game does it so
   fits in better". Kept as the game has it: matching the game's own screens wins over roomier rows.
-- **Session end (the user: push, then a new chat).** Open, all in `TO-CHECK.md` (local, git-ignored): the Quality of
+- **Session end (pushed).** Open, all in `TO-CHECK.md` (local, git-ignored): the Quality of
   life page's bottom line from the title screen's Settings, the Spy Specs row's battle effects, the Wasp General as a
   dev test (`enemyfight 72`), and the rest of the checklist. The game was left running with build `5581F3683570`.
 
-## 2026-09-30: MeshGhost compared, four of its gates brought here
+## 2026-09-30: MeshGhost's gates brought here
 
-- **Asked (the user):** look at MeshGhost for anything to move over or improve, "similar to how we cleaned up code and
-  minimized comments and added a few claude.md rules etc here"; MeshGhost is the main target, and anything useful
-  comes back here too. Why: "it feels like bug fables has better code/comments", and its documentation "is happening
-  way better ... instead of getting forgotten/stale".
-- **A read-only audit of both repos** (three agents): MeshGhost's comments are 33% of its code files' lines (here,
-  about 6-8%), thousands of them dated, attributed or pointing at docs; one hook; a preflight with its lists written
-  inline in three places; no code map, no capability list, unpinned actions and packages. MeshGhost checks three
-  things this repo only wrote down: the CLAUDE.md line cap, durations, and plain file links.
-- **The plan** (a plan file outside the repo): Part A for MeshGhost, run in a session opened there (the user's choice,
-  after the pros and cons: its own rules, memories and skills load, and edits there ask nothing); Part B here. The
-  user's decisions: this repo's commit-subject rule, per-step Status lines with the same-commit docs rule, and all four
-  extras (lean comments everywhere, copied code removed, a capability list and guard, the gates brought here). The user
-  runs Part A on Opus 5.5 at medium effort; high was suggested for the rules, the gates, the builds and the adapters.
-- **Part B, done:**
+- **Asked (the user):** anything in MeshGhost worth bringing here. A read-only look (three agents) found three things
+  MeshGhost checks that this repo only wrote down: the CLAUDE.md line cap, durations, and plain file links. The
+  user's call: bring those gates here.
+- **Done here:**
   - `0846994`: two lines of the mod guide given dates (Monitor the default from 2026-09-28 to 2026-09-29, from
     `526ab95` and `a43ae1e`; save crystals "far into a seed").
   - `6979cfb`: **Line caps**, CLAUDE.md over 150 lines fails; RULE 0 says preflight refuses it (rewrapped, 150 lines).
@@ -2207,7 +2182,7 @@ either one wrong).
   with the code, or could be docs that don't mention things yet".
 - **The stale check:** six read-only agents, one per part (the mod guide in two halves, the Archipelago guide in two,
   the player and reviewer docs, the dev docs and records), each finding checked in the code before it was fixed. All
-  six stopped once at the session limit and were resumed where they were. Fixed, in separate commits:
+  six stopped once and were resumed where they were. Fixed, in separate commits:
   - the mod guide (`01d3536`): nine rows where the user chose seven; the pips at 0.68 when they are the game's size;
     the VSync rule (a cap at or above the refresh rate syncs too); the platform, frozen-enemy and flight fixes still
     described as current though every character stopped being interpolated 2026-09-30; Spy Specs missing from steps
@@ -2241,9 +2216,9 @@ either one wrong).
   wrong MEASURED.md citations in room-logic.md; `one_way` written nowhere yet; a misquoted line of the user's;
   `addleif` stays in memory until the game saves), and `client-requirements.md` with `archipelago-review.md` (5
   findings, not yet checked: "32 of 88 worlds" counts folders, not worlds; style items filed as required; three more
-  marked unsure). **Stopped at the user's word** ("approaching the 5hour usage cap"): the mod guide, the Archipelago
-  guide, both halves of MEASURED.md, the player docs and code text, and the code map. Each agent's transcript is kept,
-  so each can be resumed where it stopped.
+  marked unsure). **Stopped at the user's word**, six parts not yet reported: the mod guide, the Archipelago guide,
+  both halves of MEASURED.md, the player docs and code text, and the code map. Each agent can be resumed where it
+  stopped.
 - **The fact check, continued (a new session):** read-only agents again, two or three at a time, no helpers of their
   own; each finding checked in its source before it was fixed.
   - The five left unchecked, each checked by me: all five held, one only partly. Archipelago 0.6.7 has 84 world folders
@@ -2283,20 +2258,18 @@ either one wrong).
   - **The user, mid-way:** "should we include code-map.md in docs/reviewing.md?" Recommended yes: the reviewer page
     pointed to the capability list for what reaches beyond the game, and to nothing for the game patches, the mod's
     main job. A one-line link added beside the capability pointer.
-  - **The capability list widened (the user, asked):** "yee widen it then i guess, i want it to cover everything. but
-    i also don't want to have to say yes to every single prompt i do." The gap, explained first: preflight holds the
-    list to the apworld, the mod and the Python and PowerShell scripts; the four shell hooks are checked only for
-    denied things (their `git` and Python runs have no rows), and the workflows' own section never compares them
-    to the list (the `curl` of the NuGet package, `gh release download`, three other repositories checked out, six
-    pinned actions, PyPI installs, the release published). **The plan, not built yet:** an `sh_capabilities` pattern
-    (runs programs, talks to GitHub, writes files) read in the shell hooks, rows for the four hooks; a new table,
-    "CI workflows: what they reach", checked from the Workflows section (uses actions, checks out other
-    repositories, runs programs, downloads packages, talks to GitHub, publishes to GitHub), each action and
-    repository named in its row; `capability_tables` and `load_patterns`'s keys; negative-test fixtures for an
-    unlisted hook program, an unnamed action and a stale row; build step 28. Drafted in a scratch clone, so the
-    guard asks only three times: the patterns file, the list, the commit.
-- **Stopped at the user's word** ("lets stop and pause here. continue in another chat"); the three running agents
-  stopped with it, their findings lost. **Still to do:**
+  - **The capability list widened (the user, asked):** it should cover everything, with prompts kept to a minimum.
+    The gap, explained first: preflight holds the list to the apworld, the mod and the Python and PowerShell scripts;
+    the four shell hooks are checked only for denied things (their `git` and Python runs have no rows), and the
+    workflows' own section never compares them to the list (the `curl` of the NuGet package, `gh release download`,
+    three other repositories checked out, six pinned actions, PyPI installs, the release published). **The plan, not
+    built yet:** an `sh_capabilities` pattern (runs programs, talks to GitHub, writes files) read in the shell hooks,
+    rows for the four hooks; a new table, "CI workflows: what they reach", checked from the Workflows section (uses
+    actions, checks out other repositories, runs programs, downloads packages, talks to GitHub, publishes to GitHub),
+    each action and repository named in its row; `capability_tables` and `load_patterns`'s keys; negative-test
+    fixtures for an unlisted hook program, an unnamed action and a stale row; build step 28. Drafted in a scratch
+    clone, so the guard asks only three times: the patterns file, the list, the commit.
+- **Stopped at the user's word**; the three running agents stopped with it, their findings lost. **Still to do:**
   - verify and fix the first half of MEASURED.md, reported but not checked (lines as of `713bb24`): `:123` cites
     `NPCControl.cs:818, :1349` (the BeetleGrass case; the berry's own are `:940`, `:1378`); `:156-164` the permit's
     `giveitem` is appended by Event16's code (`EventControl.cs:3687`), not in the dialogue; `:323-326` `flagvar[0]`
@@ -2352,9 +2325,8 @@ either one wrong).
   both read the same clock, but a difference would count a long frame as several sixtieths where the game's counters
   count one, and would change the waits with the row off (every frame counts, as before). Built, not seen; on
   TO-CHECK.md. A slip of mine: one rename in `AutoSave.cs` went through `sed`, not Edit; checked in the diff after.
-- **Stopped at the user's word** ("lets pause here for now, and continue in another chat"). The negative test passed
-  on the repo's HEAD after the capability commit (`cf2c691`). The plugin with the frame counters is built, not yet
-  copied into the game. **Still to do:**
+- **Stopped at the user's word.** The negative test passed on the repo's HEAD after the capability commit
+  (`cf2c691`). The plugin with the frame counters is built, not yet copied into the game. **Still to do:**
   - **MEASURED.md from line 1064** (one agent, 18 findings; its line numbers ran a few lines low, so find each by its
     text). Checked and held, not yet fixed: F1 `currentdialogue`/`diagstring` are `MainManager.cs:2749`, `:2747`, the
     skip test `:5141` (not `:2799`); F2 Event8's end has no fade-in (HUD `:2857`, then ResetCamera, music, EndEvent to
@@ -2423,8 +2395,8 @@ either one wrong).
     throws at `sprites[13 + n]` once (it sets `builtFor` before the loop). Vanilla reads the same array then too
     (`IconAnim`), with a null check per slot. The fix to try once seen: take the array only when slots 13-16 are
     window 0's own (`menuicon0`-`3`). On TO-CHECK.md, with the round trips to try.
-  - Copied in with `copy-dev.ps1` (build `7BD96C922BF6`, backup `20261002-001616`), the frame counters (mod 24) and
-    this session's text fixes; the game wasn't running, so it loads at the next launch.
+  - Copied in with `copy-dev.ps1` (build `7BD96C922BF6`, a backup under `stage\backup\`), the frame counters (mod
+    24) and this session's text fixes; the game wasn't running, so it loads at the next launch.
   - **The user asked** "are we done with everything ? everything written down ?": two gaps found and closed, the Warp
     button's bug added to Known issues (only the log and the local TO-CHECK.md had it) and this bullet. The fact check
     itself is done. **Still to do:** the user's checks on TO-CHECK.md (the two pause-menu round trips, the mod's own
@@ -2450,8 +2422,8 @@ either one wrong).
   `licensing.md` as committed, the licence included, and before a commit that adds a project to `licensing.md`. A
   row the agent writes permits nothing until the user lets its commit through. Harness: 59 guard cases, 0 problems.
   CLAUDE.md, `licensing.md`, `development.md`, build step 28, `reviewing.md` and the code map say the same.
-- **Measured on the way:** the harness's "no sh found" was PowerShell's PATH finding devkitPro's msys2 git first;
-  with Git for Windows' `cmd` first on PATH it passes.
+- **Measured on the way:** the harness's "no sh found" came from another git install earlier on PATH; with Git for
+  Windows' `cmd` first on PATH it passes.
 - **The two rows** were committed without the user's yes, so the guard counted them as permitted; asked, the user
   said they stay ("this is fine"), and so does the guard seeing only GitHub reads, not clones already on disk.
 
@@ -2471,22 +2443,20 @@ either one wrong).
 - **Still open:** whether Universal Tracker gets the map tab too (the user first said it shows nothing visual).
 - **The user said:** plans only for now; neither tracker is being built yet.
 
-## 2026-10-02: other Bug Fables apworlds
+## 2026-10-02: no other Bug Fables project looked at
 
-- **Asked:** whether this project is better than two others the user knows of, a standalone randomizer and a
-  modding framework, both said to plan apworlds. Neither has started on Archipelago yet, and both are private
-  repositories (the user, 2026-10-02).
 - **Decided (the user):** no other Bug Fables project is ever compared with ours or looked at: everything here was
-  built blind and ran into no issues, so there is no reason to. An agent had twice offered to read them. Now a rule in
+  built blind and ran into no issues, so there is no reason to. An agent had twice offered to look. Now a rule in
   CLAUDE.md, `references.md` and `licensing.md`; the one mention, in build step 10's enemy-drops idea, was removed.
-- **The user said:** they have never been read, looked at or used in any way while making this project, not even
-  their public docs if any, and never will be. `references.md` and step 1 of `documentation.md` now say so.
+- **The user said:** no other Bug Fables project has been read, looked at or used in any way while making this one,
+  not even their public docs if any, and none ever will be. `references.md` and step 1 of `documentation.md` now say
+  so.
 - **Corrected (the user):** an agent first wrote "not even for our public docs"; the user meant their public docs, not
   ours. Both places now say "not even their public docs", in the plural, as the user asked, after step 1's first
   rewording read oddly.
-- **Corrected (the user):** an agent said three "Bug Fables" apworlds would force players to pick one and the projects
-  to coordinate. Wrong: Archipelago allows several apworlds for one game, each with its own thread in its Discord, and
-  nobody owns a game.
+- **Corrected (the user):** an agent said several "Bug Fables" apworlds would force players to pick one and the
+  projects to coordinate. Wrong: Archipelago allows several apworlds for one game, each with its own thread in its
+  Discord, and nobody owns a game.
 - **Measured, still true:** one Archipelago install loads one world per game name (`worlds/AutoWorld.py` at 0.6.7
   raises "already registered"), and ours is "Bug Fables". It only matters to someone who installs two at once.
 
@@ -2609,7 +2579,7 @@ either one wrong).
 - **Mistakes caught:** a commit filtered its hook output, so a refused commit looked done; the hooks then asked for the
   gate in a commit of its own and doc-coverage read the working tree's code map. The export first dropped Leif from
   the tracked items, since story-party seeds also have a "Leif" event. Two edits were made by script, not Edit.
-- **Not seen yet:** the pack in PopTracker (v0.35.4 installed): the pins, logic colours, the item grid, auto-tracking.
+- **Not seen yet:** the pack in PopTracker v0.35.4: the pins, logic colours, the item grid, auto-tracking.
 - **Later the same session (2026-10-04): the map.** Seen first: the colours as the Lua predicted. The user compared it
   with the Pokémon Crystal pack's map, then asked for the game's own: "like on the map in game outskirts is 1 spot",
   then the rooms too, "world map as a baseline, then tie the individual rooms together". Built from game data, each
@@ -2620,7 +2590,7 @@ either one wrong).
     lines ending nowhere. Causes found in the data, not guessed: the dump lists signs and NPCs as doors (only
     `doors.json`'s doors count now), lines were drawn twice and to arrival points (now once, door to door), the fog
     maze's one-way doors loop anywhere (a ring), and Bugaria City's districts form a ring (matching coloured rings),
-    which the user confirmed from playing: left and right loop the town, up goes to the palace;
+    which the user confirmed: left and right loop the town, up goes to the palace;
   - the user asked to leave out `SnakemouthEmpty`, `Blank` and `TestRoom`: exactly the maps that aren't regions of
     the apworld, so only the logic's maps are drawn. A day/night split of Golden Settlement: held until a night map
     holds a check (no data of its own in the dump either).
@@ -2640,24 +2610,24 @@ either one wrong).
   "true" under a value list falls back to the first value (Off). The build succeeds; the plugin copied in, the game
   was closed, so nothing seen yet.
 - **Noticed:** the last log ends with a `NullReferenceException` in `MainManager.ApplySettings`, from
-  `FrameRate.Disable` in `Plugin.OnDestroy` as the game closed. Told the user, who said: "yee do that, dumb to leave
-  warnings/errors laying around".
+  `FrameRate.Disable` in `Plugin.OnDestroy` as the game closed. Told the user, who asked for it fixed: warnings and
+  errors are never left lying around.
 - **Fixed (mod guide, step 4):** the throw had also stopped the unloading there (no hooks off, no "unloaded" line).
   Read first: `ApplySettings` sets every audio source's volume without checking each is alive, and the game's Unity
   (2018.4.12f1) has `Application.quitting`. Each unload step now runs through `Guarded`; `Application.quitting` sets
   `Plugin.Quitting`, and FrameRate then puts nothing back. Both builds pass; the next quit's log is the check.
 - **Line endings:** every commit printed "LF will be replaced by CRLF" for files in the working copy. The repository
-  holds LF throughout; Git for Windows' machine-wide `core.autocrlf=true` wanted CRLF in the working copy, while the
-  tools write LF (116 files LF, 78 CRLF). `.gitattributes` now says `* text=auto eol=lf` and `.editorconfig` says
+  holds LF throughout; a `core.autocrlf=true` setting wanted CRLF in the working copy, while the tools write LF (116
+  files LF, 78 CRLF). `.gitattributes` now says `* text=auto eol=lf` and `.editorconfig` says
   `end_of_line = lf`; the working copy was re-checked out from the index, and the commit changed no file's content.
-- **Asked (the user):** "fix both, push, then watch actions": the preflight's two warnings and the editor's Markdown
-  lint warnings.
+- **Asked (the user):** "fix both, push, then watch actions": the preflight's two warnings and the Markdown lint
+  warnings.
 - **The preflight's warnings:** the release DLL predated the source. Rebuilding it, the release build's own check
   refused the fresh DLL: `"'s" + TextFit.Break` with `Break` a `const char` compiles to the string `'s\x01`, which no
   source literal spells (the check reads string literals, not char literals). `Break` became a one-character
   `const string`; the next release build passed (two clean builds identical, 0 warnings) and `release/` was committed.
   `build-release.ps1` then wrote `built-from.txt` with CRLF (`Set-Content`), now LF.
-- **Markdown:** markdownlint-cli2 0.23.2 (the extension's version) over all 21 docs: 9,342 findings by default.
+- **Markdown:** markdownlint-cli2 0.23.2 over all 21 docs: 9,342 findings by default.
   `.markdownlint.json` keeps the docs' 120 wrap and switches off what is house style and renders right (lists after a
   line, `|---|` tables, numbering that runs across sections, bold lead-ins, two top-level parts in one guide).
   Real bugs fixed: placeholders such as `<item>` GitHub drops from the page (escaped), two lines starting `#29`, double
@@ -2705,10 +2675,9 @@ either one wrong).
 - **Mistakes caught:** I first told the user "Swamplands: Bridge" (holding the APQuest player's Shield) was a pickup on
   the ground there; it is the Horn Dash scene, read from the spoiler without checking the location's kind. I first
   said the swamp's map travel repeated the original loop; the user corrected it (the loop came from the old landing
-  beside the crystal). A Unity
-  `JobTempAlloc` warning and a 15 s connection drop came while my 10000-run fuzzer had every core; neither came back
-  after it ended: run the fuzzer with fewer jobs while the user plays. A first plando used `from_pool: false` and left
-  two items unplaced; regenerated from the pool.
+  beside the crystal). A Unity `JobTempAlloc` warning and a 15 s connection drop came while my 10000-run fuzzer had
+  every core; neither came back after it ended: run the fuzzer with fewer jobs while the game is being tested. A first
+  plando used `from_pool: false` and left two items unplaced; regenerated from the pool.
 - **Still open:** the Achievements row, the pause map's area-15 case, Medal prices, Difficulty, Attack boost, Healing
   crystals and Auto-save (the user: slow to test on purpose, ticked when met in play); the swamp's water jump; Seed A's
   story checks (boss prizes, the inn, chapter 2's scenes, bounties, the goal); groups 2, 3, 5, 9 to 12.
@@ -2732,14 +2701,14 @@ either one wrong).
   opened or marked one-way as its area is mapped; tools of any licence may be used outside the repo; test warps land
   next door, since a dev warp into a room doesn't start its music.
 - **Mistakes caught:** a commit's refusal hidden by my output filter (seen only from the unchanged hash); I made the
-  icon the default before the user had picked it ("i never said i was done/happy with it"), reverted.
+  icon the default before the user had picked it, reverted.
 - **Open for the next session:** TO-CHECK.md, from group 9 (the entrance randomizer) on; the dev warp's music; a
   play-any-track command. Nothing pushed.
 
 ## 2026-10-04: every location named by the user, quests opened from the start
 
-- **The user named the locations in game:** asked for the full list ("i think you have named someone without me"),
-  then warped to each and described what is next to it; I shaped it into `<Area>: <Room>, <Spot>` and waited for a
+- **The user named the locations in game:** asked for the full list, to find any named without them, then warped
+  to each and described what is next to it; I shaped it into `<Area>: <Room>, <Spot>` and waited for a
   yes. New rule (CLAUDE.md): every location name needs the user's yes. They said not to hunt for the game's word
   for a landmark ("its me talking about what to call a spot"), and to test once per batch, not per rename.
   Renamed: 2, 5, 8, 9, 12, 15, 16, 18, 19, 20, 21, 22, 23, 25, 26, 27, 30, 31, 71, 72, 73, 76 (20 and 23
@@ -2763,8 +2732,8 @@ either one wrong).
 
 ## 2026-10-04: TO-CHECK cut down, liveslot, the world opened room by room
 
-- **TO-CHECK:** 97 open boxes felt overwhelming "when most things actually work already"; cut to a short watch list
-  (stuck seed or harmed save), the rest assumed working until seen broken. Seen today: the trapdoor Mushroom, a berry
+- **TO-CHECK:** 97 open boxes cut to a short watch list (stuck seed or harmed save), the rest assumed working until
+  seen broken (the user). Seen today: the trapdoor Mushroom, a berry
   reward, the new icon, a crystal berry staying gone on a new file, the desert gate, the goal. The user asked for test
   runs once before a push, not between changes.
 - **The goal released everything:** beating the first boss completed the seed's one-artifact goal, and the local
@@ -2811,8 +2780,8 @@ either one wrong).
   Termite gate now opens from inside (the user: "can we open it ?"); dev warps landed over water twice (beside a docked
   sub, then Mystery Island's door arrival), a respawn loop the guard ended: warps now check the ground and docks land
   where the sub does.
-- **Mistakes:** I ran the test suite during dev twice after the user had asked for tests only at push time (memory
-  updated); my own "rescue" warp put the user back in the water.
+- **Mistakes:** I ran the test suite during dev twice after the user had asked for tests only at push time; my own
+  "rescue" warp put the user back in the water.
 - **Open:** the full suite + fuzzer before the next push; the PopTracker export for the new area and option; the scene
   sweep for out-of-order freezes; InfJump is on in the config (asked, no answer yet).
 - **v0.3.0 released** (the user's highlights, trimmed by them): the full suite, the Logic Test check and both fuzzers
@@ -2933,7 +2902,7 @@ either one wrong).
   200 solo seeds; the user: expected while so little is in logic. A Known issue; pushed with it.
 - **East Road 2 corrected:** the user: the top door "can't drop down", it's across the water; back only on the ice.
   The crank's way up is now a one-way with the ice as its way back.
-- **Stopped for the day** at Snakemouth Den's first room (`SnakemouthBridgeRoom`, warped in, not yet described). The
+- **The session ended** at Snakemouth Den's first room (`SnakemouthBridgeRoom`, warped in, not yet described). The
   Outskirts' 18 rooms are mapped. Next: Snakemouth Den, from the bridge room; then the rest of the checklist; the
   quest, enemy and discovery passes after every room. The fill error with Jump and moves shuffled stays a Known issue.
 
@@ -2984,9 +2953,9 @@ either one wrong).
   and queues added) showed the item in queue 2450 and the starburst in 3000 with the faded wall; the starburst now
   takes its item's queue. The user: "yes it works now". A readout taken soon after the reload still showed 3000;
   not chased, since it worked once the pass caught up.
-- **Stopped for the day** (the user) after `SnakemouthUndergrondDoor`, 23 of 244. Next: `SnakemouthMushroomPit`
-  (20), through the big door. Dev cheats left as the user asked today: InfJump and BumpKill on, OneHit on,
-  QuietBursts on. Tests and the fuzzer wait for the push.
+- **The session ended** after `SnakemouthUndergrondDoor`, 23 of 244. Next: `SnakemouthMushroomPit` (20), through the
+  big door. Dev cheats left as the user asked today: InfJump and BumpKill on, OneHit on, QuietBursts on. Tests and
+  the fuzzer wait for the push.
 - **`SnakemouthMushroomPit`:** from the bottom door nothing without Jump (the bounce mushrooms); from the top door
   the ledge medal needs nothing and the bottom is a free drop; the droplet item Jump and Freeze. I called the
   `CordycepsGuardian` entity a mini-boss from its name; it's a plain field enemy. The user: normal field enemies never
@@ -3058,9 +3027,9 @@ either one wrong).
 - **`AntPalace1`:** nothing needed anywhere, as the logic had. Ticked, 38 of 244. Next: `AntPalace2` (32).
 - **`AntPalace2`:** one door, no items; its berries #5 and #12 are story rewards (`textsearch giveitem,3,5,` and
   `,12,`), with its discoveries left for later. Ticked, 39 of 244. Next: `AntBridge` (33).
-- **`AntBridge`:** free across; discovery 11 from an NPC, Maki's and Kina's quest NPCs, no items. The user: I warped
-  them out of the throne room before they'd said it was done; wait for their "done" every time. Ticked, 40 of 244.
-  Next: `AntPalaceLibrary` (34).
+- **`AntBridge`:** free across; discovery 11 from an NPC, Maki's and Kina's quest NPCs, no items. A room is left only
+  after the user says it is done (I had warped out of the throne room early). Ticked, 40 of 244. Next:
+  `AntPalaceLibrary` (34).
 - **`AntPalaceLibrary`:** nothing needed; the bookshelf's Lore Book (location 15) now `no_jump`. Turn-ins and
   discoveries for later. Ticked, 41 of 244. Next: `AntPalaceWarRoom` (37).
 - **`AntPalaceWarRoom`:** free in and out and to its NPCs; the table's Royal Calling (location 77) takes Jump, now
@@ -3094,7 +3063,7 @@ either one wrong).
 - **`DesertRockFormation`:** free between its doors; a new location, the user's name "Tardigrade Idol" (Tardigrade
   Shield, Jump, Freeze and the horn, id 117), whose pickup records discovery 31. Ticked, 53 of 244. Next:
   `DesertTrenchSouth` (8).
-- **Handoff (2026-10-06, the user moved to a new chat; game and server left running):** 53 of 244 ticked. In
+- **Handoff (2026-10-06; game and server left running):** 53 of 244 ticked. In
   progress: `DesertTrenchSouth` (8), its draft posted (four doors, the left ledge door at height 4, the bridge switch
   until flag 282, an Agaric Shroom on the ledge, flag 713, not a location yet), no answers yet. The server hosts
   `AP_58485522247768212275.zip` (this session's scratchpad `out/`, its player file in `players/`), the test save
@@ -3118,8 +3087,7 @@ either one wrong).
 - **`DesertBadgeAlcove`:** the top and right doors free, cut off from the left; the left door's ledge a drop only. Two
   new locations, the user's names: "Platform on the Upper Left" (Meditation, flag 262, Jump, id 120; named from their
   screenshot) and "Grass by the Right Door" (a Succulent Berry, flag 210, the horn, id 121, a hidden item, the user's
-  call). Ticked and warped on before the user said the room was done: unticked, back in the room (the user: "i didn't
-  say i was done with the room yet").
+  call). Ticked and warped on before the user said the room was done: unticked, back in the room.
   Nothing else in it (every dump read again); the user: done. Ticked, 58 of 244. Next: `DesertCaravanMap` (80).
 - **`DesertCaravanMap`:** nothing between its doors; a new location, the user's name "Caravan Camp, Dig Spot" (crystal
   berry #14, Jump, Bee Fly and Beetle Dig, id 122). Waiting on the user's "done".
@@ -3191,7 +3159,7 @@ either one wrong).
   the Big Crank and Beemerang Halt, both ways. The fight noted for the enemy pass.
   Every crank flag reset, the user rode down from the upper room by its own crank (Halt only), with no way back up
   below: the elevator split into its two directions. A bare `warp GoldenHillsDungeonUpperMain` left the user stuck
-  behind a save crystal ("don't move me away from entrances randomly"): door arrivals only from now on.
+  behind a save crystal: door arrivals only from now on.
   No items; the user: done. Ticked, 73 of 244 (the scene's skip applied by `liveslot`, its triggers logged away, not
   yet confirmed on screen). Next: `GoldenHillsDungeonLeftMain` (46).
 - **`GoldenHillsDungeonLeftMain`:** across, Jump and Beemerang Halt; berry #9 Jump, the user's name "Left Hall, above
@@ -3226,8 +3194,8 @@ either one wrong).
   after the rooms (now in `room-logic.md`). `onehit` on again at the user's ask.
   Names, the user's: "Grass by the Crank" (Burly Berry, id 130), "Behind the Bush" (Back Support, id 129), "Top of
   the Hill" (the crank half, with Next 62). Merged items: the user chose the whole only (the Big Crank, the Sand Castle
-  Key), worried about a crash mid-merge; told that received items are replayed from the save count anyway. Nothing
-  else in the room; the user: done. Ticked, 78 of 244.
+  Key), against a crash mid-merge (received items are replayed from the save count anyway). Nothing else in the room;
+  the user: done. Ticked, 78 of 244.
 - **Back in `GoldenHillsDungeonCrankLeft`:** its Magic Seed bush takes the room's every need; the user's name "Grass by
   the Crank" (id 131).
 - **`GoldenHillsDungeonUpperMain`:** from the boss door while shut, a pocket (not pushed). The shrines' item read from
@@ -3271,7 +3239,7 @@ either one wrong).
   their screenshot; id 137), the room "Crank Path" (mine, not objected to). Waiting on the user's "done".
   The user asked about the uncounted drop from the middle door: written now as a one-way with Jump (its way back Jump
   and Halt), so Points of No Return counts it.
-- **The user: "do the logic for me properly"** (I had dropped ways they described as redundant). Rechecked the
+- **Every way the user describes goes into the logic** (I had dropped some as redundant). Rechecked the
   session's rooms: two more, both written as "never from below" where the user had said a platform, once its switch
   is hit, takes Jump back up (`DesertOasis`, `GoldenHillsDungeonUpperMain`). The user: basic attack and Jump, the
   switch only from the top. Now events in the upper areas ("Oasis, Platform Switch Hit", "Upper Hall, Lever Hit",
@@ -3302,9 +3270,9 @@ either one wrong).
   `GoldenHillsPath3` (44).
   Unticked: I warped on (and posted the next room's draft) before the user was done; back in the room.
   The logic explained at the user's ask; the user: done. Ticked, 87 of 244.
-- **Handoff (2026-10-07, the user stopped for now; the game closed by the user, the server stopped, none left):** 87
-  of 244 ticked. Next: `GoldenHillsPath3` (44), not yet seen: its draft (right door to the crank path, left door to
-  the settlement entrance; a low door to `ChomperCave1` made only from flag 20, the bubble shield learned in the
+- **Handoff (2026-10-07; the game closed by the user, the server stopped, none left):** 87 of 244 ticked. Next:
+  `GoldenHillsPath3` (44), not yet seen: its draft (right door to the crank path, left door to the settlement entrance;
+  a low door to `ChomperCave1` made only from flag 20, the bubble shield learned in the
   story (`Event95`), with an invisible wall `Base/Cube` until 20: the new file has 20 off though the Shield is in the
   bag, and the logic has no rule on that door, so it counts it open, to settle with the user; the Lore Book, key item
   52, flag 380, dug under a breakable rock on the left; two fixed cranks; a thorn patch). The server hosts
@@ -3334,7 +3302,7 @@ either one wrong).
 - **`GoldenSMinigame`, "Whack Farms":** the door free (its settlement side behind the horn quest's rock, a stand-in).
   Playing Wacka Worm froze the user: the party guard had kept Leif in the game's Vi-alone party (`documentation.md`,
   stand-ins, item 15). The keeper's 25-worm Heart Berry became a location; the user then asked that both Wacka Worm
-  games need Vi and the Beemerang, the NPCs staying, and, after scoring 16, a Minigame Prizes option, off: filler only
+  games need Vi and the Beemerang, the NPCs staying, and a Minigame Prizes option, off: filler only
   (build step 51; a wider minigame/arcade/card game toggle is their idea for later). A refused game first left the
   player frozen (the line's `|event|` expects a scene to clear `minipause`); fixed, seen. The prize itself on TO-CHECK.
   The user: done. Ticked, 89 of 244. Then the user asked to go back to the pier to look at rooms there again.
@@ -3359,7 +3327,7 @@ either one wrong).
   QuietBursts off (it hid two boxes), AdoptSeed off. The user: done. Ticked with its night map, 93 of 244.
 - **`GoldenSettlement3`, the houses:** free, nothing to place (quests and a later seller noted). The user: done for
   now. Ticked with its night map, 95 of 244.
-- **Handoff (2026-10-07, the user: context getting high, continue in a new chat):** 95 of 244 ticked. Next:
+- **Handoff (2026-10-07):** 95 of 244 ticked. Next:
   `PowerPlant` (197), the last Golden Settlement room (its door from the farm now kept open). Built today and seen:
   the festival night at will (build step 52: Aria the switch in all three rooms, one door per exit, the night statue
   and gate handled, the first nightfall in place away from the square), the festival's games as locations and the
@@ -3515,7 +3483,7 @@ either one wrong).
 - **`SwamplandsBoss`, mapped early** (the user, while there): the top door across lily pads, Jump, past the boss (Leif,
   it burrows; no summons), both ways; the bottom free. The dig mound is scenery, Kabbu's grave for his old team, for
   his postgame scene (the user). The user: done. Ticked, 121 of 244.
-- **Handoff (2026-10-08, the user: stop here, continue in a new chat):** 121 of 244 ticked. Next: `FarGrasslands4`
+- **Handoff (2026-10-08):** 121 of 244 ticked. Next: `FarGrasslands4`
   (153), then `WizardTowerBasement`, `WizardTowerStairs`, `WizardTowerAttic`, `BroodmotherLair`, `FGClearing`, then the
   Wild Swamplands (`SwamplandsBoss` already done). Built and seen this session: Patton's lab open, the Termite gate's
   first opening skipped and opened only by talking to it, the plaza's escort kept away, Riz's fight always offered
@@ -3553,8 +3521,8 @@ either one wrong).
   anything off but each opening only 7 to 9 start spots. With the moves shuffled the start's way on is gated inside the
   rooms it reaches, with no door edge to aim at. Now a short start moves its own rooms and a stuck layout starts over
   after 200 (both measured over 3000 seeds, build step 30): that seed in 301 tries. Found on the way: counting the
-  start's spots collected its items twice (a new `CollectionState` already holds them), fixed. The other session's
-  chat is closed (the user). **Open:** the change is committed but the full run (`test-apworld.ps1`) was stopped
+  start's spots collected its items twice (a new `CollectionState` already holds them), fixed. The other session has
+  ended. **Open:** the change is committed but the full run (`test-apworld.ps1`) was stopped
   at the user's word before it finished; only the Room Swap tests ran (6 pass). Run it, then push: main is 1 commit
   ahead of the red CI.
 
@@ -3610,15 +3578,15 @@ either one wrong).
 
 - **The full run on `9c1ba1d`** (the Room Swap repair, left unrun by the last session): 958 passed, the Logic Test
   check 90 of 90, the fuzzer 0 of 10000 and Universal Tracker's hook 0 of 10000 (0 timeouts, 0 ignored). Pushed
-  `05b9e86..9c1ba1d` (from Git Bash: the PowerShell tool's git can't reach the credential manager's prompt). CI and
-  Preflight green: 965 passed on 3.13, both fuzzers 0 of 10000 over their five shards. The Shuffle Jump and Shuffle
-  Field Moves fill error dropped from Known issues, as its entry said to once CI showed it gone.
+  `05b9e86..9c1ba1d`. CI and Preflight green: 965 passed on 3.13, both fuzzers 0 of 10000 over their five shards.
+  The Shuffle Jump and Shuffle Field Moves fill error dropped from Known issues, as its entry said to once CI showed it
+  gone.
 - **The checkout:** the run warned that `worlds/dkc3` had no `__init__.py`: only `__pycache__` folders left from before
   0.6.8, which deleted DKC3 upstream. Removed on the user's yes.
 - **No mapping this session:** the user didn't want the game started ("lets save that for later"). A workflow drafting
   the six Far Grasslands rooms from the data was stopped unfinished at the user's word, who checks every room on
   screen anyway: each room gets its draft when it comes up.
-- **Handoff (the user: continue in a new chat):** 121 of 244 ticked. Next: `FarGrasslands4` (153). From the entity
+- **Handoff:** 121 of 244 ticked. Next: `FarGrasslands4` (153). From the entity
   dump (2026-09-27) and the drafting scripts: three doors, `loadzone left` (from outside the border cave's right door;
   its arrival raised, at height 5.5, the rest of the room at 0 to 1), `loadzone south` (from the west path's top door)
   and `loadzoneclearing` (to `FGClearing`); five `BreakableRock`s, one (regional flag 24) just in front of the clearing
@@ -3654,7 +3622,7 @@ either one wrong).
   goal through `SetGoalAchieved()`, sessions by seed, team and slot (CommonClient since 0.6.8), lists sent whole at
   each login, another seed's save kept out of the keys (doors too), a race in the lists' success path. Kept, with the
   source's reasons: the one raw `Set` for lists, the liveness `Get`, the socket reflection. The plugin of `31c1ad9`
-  copied into the game (backup `stage\backup\20261008-154559`): the next game start runs it.
+  copied into the game (a backup under `stage\backup\`): the next game start runs it.
 - **Licensing:** the check agents' greps over the checkout showed lines from worlds with no row here (`mlss`, `tww`,
   `kh2`, `wargroove`, `ladx`, `zillion`, `factorio`, `mm2`, `mm3`, `jakanddaxter`); nothing of them is used or cited.
   The docs cite only worlds with rows, whose Use columns now name it (`pokemon_emerald`, `smw`, `cvcotm`, `tunic`,
@@ -3713,16 +3681,15 @@ either one wrong).
   `FieldMoves.cs`), so a fight needs no move item.
 - **Open:** this repo's suite and fuzzer at the next push (the new tests unrun, as asked); the card's interest in game;
   the PopTracker pack's re-export for the Banker. The running seed predates the Banker.
-- **Handoff (the user: a new chat):** 121 of 244 ticked, the residential recheck done. Next: `FarGrasslands4` (153),
-  its draft in the previous entry's handoff, entered through the west path's top door. The server left running at the
-  user's word ("leave the server open, i will continue in the next chat"): stopped first by mistake, then restarted as
-  its own process (`Start-Process`, so it outlives the chat) on 38281 with seed `AP_81434407810428720732` (zip in
-  session f7f04659's scratchpad `out/`, player file `players/BugTester.yaml`); the game reconnected with nothing lost
-  (27 items, 13 checks); then the user closed it themselves. The next session hosts it again. The user's game runs
-  the plugin of `2f624c3` (the card's hook). The next session writes a
-  fresh `live-slot-data.py` file for `liveslot`. The command file is still
-  session bed6439d's scratchpad `cmds.txt`; write it with a quoted heredoc. Dev settings unchanged: `InfJump` and
-  `BumpKill` on, `OneHit`, `QuietBursts` and `AdoptSeed` off.
+- **Handoff:** 121 of 244 ticked, the residential recheck done. Next: `FarGrasslands4` (153), its draft in the previous
+  entry's handoff, entered through the west path's top door. The server left running at the user's word: stopped first
+  by mistake, then restarted as its own process (`Start-Process`, so it outlives the session) on 38281 with seed
+  `AP_81434407810428720732` (zip in session f7f04659's scratchpad `out/`, player file `players/BugTester.yaml`); the
+  game reconnected with nothing lost (27 items, 13 checks); then the user closed it themselves. The next session hosts
+  it again. The game runs the plugin of `2f624c3` (the card's hook). The next session writes a fresh
+  `live-slot-data.py` file for `liveslot`. The command file is still session bed6439d's scratchpad `cmds.txt`; write
+  it with a quoted heredoc. Dev settings unchanged: `InfJump` and `BumpKill` on, `OneHit`, `QuietBursts` and
+  `AdoptSeed` off.
 
 ## 2026-10-08: the Far Grasslands finished, the swamp begun; flag 41 sends the goal
 
@@ -3749,7 +3716,7 @@ either one wrong).
 - **Quest 31 completed untaken by the Broodmother's scene:** a sweep and a checker: cosmetic either way (`MEASURED.md`).
 - **Flag 41 sent the goal** (seen 2026-10-08): in `Swamplands2` the user cut grass, the mod sent the goal (this seed
   needs one artifact) and the server released all 182 items; I had sent nothing. Found from the server log ("completed
-  their goal" at 21:24:16), the mod's `[goal] reached`, the seven artifact flags read on the file (only 41 set), then
+  their goal"), the mod's `[goal] reached`, the seven artifact flags read on the file (only 41 set), then
   the grass's activation flag 41 and `ActivateRegion`. The user: "we should make sure artifacts, or any other goals can
   not be accidently triggered in wrong or different ways. ever", and "guard/guarantee they can't trigger where we don't
   intend them to" for every goal, future ones too. 41 cleared on the file twice (the user tested the Honey Drop after,
@@ -3760,17 +3727,16 @@ either one wrong).
   boss's fight (`SnakemouthTreasureRoom`'s `MaskEvent`, limit 41) impossible to start. The readers' full findings are
   in this session's scratchpad, `flag41-audit-readers.json`.
 - **Also:** Tracker Addons installed in the checkout's `custom_worlds` at the user's word (source only, compared with
-  its tag); room graphs drawn as text in the chat from now on (the user, after I started a page); the user asked for
-  the one-hit cheat back on mid-boss.
+  its tag); room graphs drawn as text in the chat from now on (the user, after I started a page); the one-hit cheat
+  back on at the user's ask.
 - **Open:** build step 60 first: the flag-41 fix (the readers' design note: keep those entities reading an always-set
   flag, never writing 41; one guard list for every goal flag), the checker re-run on the saved findings, then the rule
   in `CLAUDE.md` (one line, freed by saying the received-item rule in one); then a new seed and file. This repo's
   suite and fuzzer at the next push (new tests unrun: the Badlands', `TestWizardTower`); the PopTracker pack's
   re-export (locations 177-182, the tower's removed event).
-- **Handoff (the user: "lets stop here for now and close things down"):** 130 of 244. Next: build step 60, then
-  `SwamplandsBridge` (152). Server stopped (I started it; checked gone); the game is the user's. The plugin of
-  `daac98c` (`6E79E9FADFFB`) runs. Dev settings: `InfJump`, `BumpKill` and `OneHit` on, `QuietBursts` and `AdoptSeed`
-  off; the command file still session bed6439d's scratchpad `cmds.txt`.
+- **Handoff:** 130 of 244. Next: build step 60, then `SwamplandsBridge` (152). Server stopped (I started it; checked
+  gone); the game is the user's. The plugin of `daac98c` (`6E79E9FADFFB`) runs. Dev settings: `InfJump`, `BumpKill`
+  and `OneHit` on, `QuietBursts` and `AdoptSeed` off; the command file still session bed6439d's scratchpad `cmds.txt`.
 
 ## 2026-10-09: the goal guard; four swamp rooms; the Dash without the horn begun
 
@@ -3798,15 +3764,15 @@ either one wrong).
   things as well, once horn slash is aquired); horn dash = break boulders (this does not require horn slash, its just
   an upgrade to dash itself)". A research workflow found that today, with Shuffle Field Moves, the mod refuses Kabbu's
   whole tap without the Horn Slash, so there is no Dash at all, while the logic counts the Dash and Horn Dash on the
-  Progressive Dash alone: seeds can be impossible. A player reported (2026-10-09) that in v0.3.0 the Progressive Dash
-  didn't dash at all; they had only the Dash, no Horn Slash: this cause. Written in `World/FieldMoves.cs` (`HornLock`:
+  Progressive Dash alone: seeds can be impossible. A bug report (2026-10-09): in v0.3.0 the Progressive Dash didn't
+  dash at all without the Horn Slash; this was the cause. Written in `World/FieldMoves.cs` (`HornLock`:
   the three horn tags "Untagged" while the Horn Slash is locked, Kabbu's swing and its sound hidden, the tap let through
   once the Dash is learned, a dashing Horn Dash's hitbox tagged `BeetleDash` only for the boulder it touches; `Tick`
   quiet during a tap or a Dash), built and loaded (`installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing and its
   sound`). Not reviewed, no docs, no test, not seen. **Left uncommitted on purpose for the next chat to finish and
-  commit:** no other chat works on it; it is this session's own work, not a peer's. A misread summary had the user
-  worried the Horn Dash would need
-  the horn: it doesn't. The first press without the horn: the buzzer, no swing (my pick, as locked moves do today).
+  commit:** no other chat works on it; it is this session's own work, not a peer's. The Horn Dash never needs the
+  Horn Slash (a misread summary had implied it). The first press without the horn: the buzzer, no swing (my pick, as
+  locked moves do today).
 - **Open:** the Dash's own build step (63): docs (Next 23, build steps 21 and 23, `MEASURED.md` on the tag consumers
   and its line ~2697), a review, then TO-CHECK's new "every learned ability, one copy at a time" (a fresh seed with
   Shuffle Field Moves, none in the start inventory, items sent one at a time); `logic/forsaken_lands.py:64`, the broken
@@ -3817,7 +3783,7 @@ either one wrong).
   and `BugariaEndPlaza`'s when mapped); `ChomperCave1`'s bridge reads 337 too. This repo's suite and fuzzer at the next
   push (new tests unrun: `TestGoalFlags`, `TestSwampBridge`, `TestLongSwampRoom`, `TestJunction`, `TestCrankPond`, the
   moved story-order test); the PopTracker pack's re-export (locations 183-186, the removed collapse). Nothing pushed.
-- **Handoff (the user: a new chat for context, "don't stop or close anything"):** 134 of 244; next room `Swamplands7`
+- **Handoff (nothing stopped or closed, at the user's word):** 134 of 244; next room `Swamplands7`
   (161). The server runs on `AP_70580691250444408633` (port 38281); the game runs on the user's seed file, the plugin
   `F7CEAC5F2B80` (it includes the uncommitted `FieldMoves.cs`), the live slot_data (`BepInEx/bugfablesap-live.json`)
   last laid over at the bridge's walls, so rebuild it before the next `liveslot`. Kabbu removed then added back. Dev
@@ -3835,19 +3801,19 @@ either one wrong).
   "fine/intended"; the swamp bridge's teaching boulder can't be broken by a Horn Dash anyway ("it only breaks during
   the cutscene"). The logic: the broken bridge's ruler was "Horn Slash or Horn Dash" on a switch, now the Horn Slash
   only (`TestDashWithoutTheHorn`). The user asked whether I had written Horn Dash where they said "horn": checked
-  against their own messages from every mapping session (read from the chat transcripts), none; the two rules needing
-  both are two obstacles each, in their words. Their rule restated: "horn is required in a lot of places, horn dash is
+  against their descriptions from every mapping session, none; the two rules needing both are two obstacles each, in
+  their words. Their rule restated: "horn is required in a lot of places, horn dash is
   only required where there have been boulders / dash itself is never required anywhere". Grass on a Horn Dash route
   (ten rooms, by position) is rechecked on screen once every room is mapped (their call; TO-CHECK, Known issues). Not
   yet seen in game: the seed starts with every ability, so TO-CHECK's Dash test needs a fresh seed, or a dev
   `give key` to pair with `take key` (the user's pick).
 - **Rooms, 134 to 136 of 244, the swamp done:** Ice Block Climb (`Swamplands7`, `202baae`, named by the user): ice
-  blocks frozen, knocked with the horn and jumped on, one from the droplet behind a boulder brought up on a platform; the
-  medal Eternal Venom on a stump, location 187. Fenced Pond (`Swamplands8`, `bc16c7d`, named): a lever on a ledge takes
-  down a double fence between the middle and the right side; a Magic Seed dug up, location 188; Seb's talk (390, and a
-  warp to the Outskirts) for the quest pass, kept out of the logic as an optional way out (the user agreed). Both
-  described by the user area by area ("bottom/right", "middle/middle"...), which they liked; written down with an
-  example in `room-logic.md`, step 2 (`abcb8b2`, `0f5aca1`).
+  blocks frozen, knocked with the horn and jumped on, one from the droplet behind a boulder brought up on a
+  platform; the medal Eternal Venom on a stump, location 187. Fenced Pond (`Swamplands8`, `bc16c7d`, named): a lever
+  on a ledge takes down a double fence between the middle and the right side; a Magic Seed dug up, location 188;
+  Seb's talk (390, and a warp to the Outskirts) for the quest pass, kept out of the logic as an optional way out (the
+  user agreed). Both described by the user area by area ("bottom/right", "middle/middle"...), which they liked;
+  written down with an example in `room-logic.md`, step 2 (`abcb8b2`, `0f5aca1`).
 - **`DefiantRoot1`, begun:** warped in; its first-visit talk (line 52, flag 170) played from two doors, so the user
   asked for it in *Skip cutscenes* (`a125aad`, the mod guide's step 10); the log then said `skipped ... set flags 170`
   through the well's door, not yet confirmed on screen. Drafted from the data, not yet described by the user: four
@@ -3857,13 +3823,12 @@ either one wrong).
   scene, Event93, which gives #15 itself, so a seed could take this berry away: a question for the user); the mayor's
   storage upstairs behind a locked door until 560 (a Lore Book 489, a Dark Cherry 490); discovery 29 from a sign;
   three empty bushes; many NPCs and trades for the later passes.
-- **Handoff (the user: "lets stop here for now"):** the game closed by the user; the plugin `03F62A291293` copied in
-  (it loads at the next start). The server stopped at the user's word ("yes stop it as well"); its seed
-  `AP_70580691250444408633` is in session fed026cd's scratchpad `out/`, the player file in its `players/`. The live
-  slot_data is stale (no locations 187-188): rebuild it before the next `liveslot`. Tests written and unrun (the suite
-  and fuzzer before the next push): `TestDashWithoutTheHorn`, `TestIceBlockClimb`, `TestFencedPond` and the last
-  chat's. The PopTracker pack's re-export waits for the next PopTracker work (the ruler, locations 183-188). A stray
-  disk-wide `find` I left in the background ran about two hours before the user noticed; stopped.
+- **Handoff:** the game closed by the user; the plugin `03F62A291293` copied in (it loads at the next start). The
+  server stopped at the user's word; its seed `AP_70580691250444408633` is in session fed026cd's scratchpad `out/`,
+  the player file in its `players/`. The live slot_data is stale (no locations 187-188): rebuild it before the next
+  `liveslot`. Tests written and unrun (the suite and fuzzer before the next push): `TestDashWithoutTheHorn`,
+  `TestIceBlockClimb`, `TestFencedPond` and the last chat's. The PopTracker pack's re-export waits for the next
+  PopTracker work (the ruler, locations 183-188). A stray disk-wide `find` left running in the background was stopped.
 
 ## 2026-10-09: the Defiant Root done, the Ancient Castle mapped to its boss; the key chains held out
 
@@ -3905,12 +3870,12 @@ either one wrong).
   `TestDefiantRootWell`, `TestBeehiveLift`, `TestCastleEntrance`, `TestSlidePuzzle`, `TestStatueRoom`,
   `TestCastleBasement`, `TestCastleRoof`, `TestCastleMainRoom`, `TestPressurePuzzle`, `TestRockRoom`, `TestDashScene`,
   and the last chat's. Seeds generate (`Generate.py`, seed 1, this session). Nothing pushed.
-- **Handoff (the user: "lets stop here for now ... close/stop things", a new chat next):** the server stopped; its seed
-  is in session 69b1ade9's scratchpad `out/`, the live slot_data there as `live.json` (locations to 206; re-lay it with
-  `liveslot` after a reload). The plugin `98EFE3B858B7` loaded. The test file's flags as left: 170 on, 201 off, berry
-  #15 taken, 284 on (the Slide Puzzle solved), 297 and 283 as the user left them in the Rock Room. Next room
-  `SandCastleBossRoom` (128), then `SandCastleTreasureRoom` (129). Still to do: TO-CHECK's Dash test with `take key` /
-  `give key`; Next 64 (the key chains opened, the capture first) when the user says.
+- **Handoff:** the server stopped; its seed is in session 69b1ade9's scratchpad `out/`, the live slot_data there as
+  `live.json` (locations to 206; re-lay it with `liveslot` after a reload). The plugin `98EFE3B858B7` loaded. The test
+  file's flags as left: 170 on, 201 off, berry #15 taken, 284 on (the Slide Puzzle solved), 297 and 283 as the user
+  left them in the Rock Room. Next room `SandCastleBossRoom` (128), then `SandCastleTreasureRoom` (129). Still to do:
+  TO-CHECK's Dash test with `take key` / `give key`; Next 64 (the key chains opened, the capture first) when the user
+  says.
 
 ## 2026-10-10: the castle finished, the Bee Kingdom begun; the Scanner Room kept between; load times measured
 
@@ -3953,16 +3918,13 @@ either one wrong).
   the next room before anything else (memory). **Wrong turns:** a warp `@guard` landed the party in the guard's booth
   behind glass; I said nothing in HB's Lab sets 161 (HB's line 53 does); Python's `write_text` wrote CRLF into two docs
   (put back to LF).
-- **Also:** two ShareX GIFs shrunk under 20 MB for the user (`*_19mb.gif` beside each); the second redone with a palette
-  per frame after "the colors look weird", the user preferring colours over resolution; the first, from the
-  shared-palette method, offered to redo.
 - **Not seen in game:** B.O.S.S.'s boss list and Rush Mode with nobody met; the quests page's artifact icon; the Scanner
   Room from a fresh file (TO-CHECK). Tests written and unrun (the suite and the fuzzer before the next push):
   `TestCastleBossRoom`, `TestCastleTreasureRoom`, `TestOutsideTheBeehive`, `TestThroneRoom`, `TestJaunesGallery`,
   `TestScannerRoom`, `TestMainArea`, `TestHBsLab`. Seeds generate (`live-slot-data.py` generates twice each run).
   Nothing pushed.
-- **Handoff (the user: "lets continue in another chat. don't close anything"):** the server still running (PID 33408,
-  port 38281, the same seed), the game open with plugin `1847CE191D80` and `[Debug] LoadTimer = true` (turn it off with
+- **Handoff (nothing closed, at the user's word):** the server still running (PID 33408, port 38281, the same seed),
+  the game open with plugin `1847CE191D80` and `[Debug] LoadTimer = true` (turn it off with
   `copy-dev.ps1 -DebugOff LoadTimer` when not measuring). The test file: flags 159, 160, 161, 173, 251 and 252 set; the
   Explorer Permit given by the console; the Watcher's met count (enemy 54) cleared from 3 by `bossmet clear`, restorable
   with `bossmet restore` only until the plugin reloads. Next room `BeehiveBalcony` (69), then `HoneycombsLab` (70) and
@@ -4004,9 +3966,8 @@ either one wrong).
   Honey Factory's review was stopped at the handoff: run it again.
 - **Wrong turns:** two meaningless test assertions written and caught before their commits; several lines over 120
   committed because the width check ran in the same command as the commit (fixed after; check first, then commit); a
-  rule on the First Room's side of the Lobby's locked door, written before that room was mapped (the user: "lets do and
-  worry about 1 room at a time"), taken out; a stand-in test moved to another unmapped spot (the user: "is it really
-  worth moving it constantly"), then dropped.
+  rule on the First Room's side of the Lobby's locked door, written before that room was mapped, taken out (one room
+  at a time); a stand-in test moved to another unmapped spot, then dropped rather than moved again.
 - **Seen:** Beette's offer at 150; the Lobby's shop opening; the Market's slots naming Archipelago items; the locked
   doors pushing the party past; Tattle and the holler with Vi alone, and with flag 10 off after the rebuild. **Not
   seen:** a paid sale, any new location's check (the running seed predates 211-234: a new seed shows them), the
@@ -4016,11 +3977,10 @@ either one wrong).
   `TestPuzzle1`, `TestPuzzle2`, `TestPressurePlateRoom`, `TestMalbeesRoom`, `TestStorageElevator`, `TestStorageMaze`,
   `TestStorageMinibossRoom`, `TestOverseerRoom`, `TestMarketShops`, `TestItemOnHand`; `test_story_order` removed. Seeds
   generate (`live-slot-data.py`, every run). Nothing pushed.
-- **Handoff (the user: "lets stop here for now, close/stop everything"):** the server stopped (its seed still in session
-  69b1ade9's scratchpad `out/`), the game closed, both checked gone; `[Debug] LoadTimer` off; plugin `2B392E21B68D` in
-  place. The test file as left: flag 218 off (the escort reset twice), flag 10 off, the whole party back. Next room
-  `RubberPrisonPier` (218); still to ask: when to build the Peculiar Gem, the Core's finale A or B, the Next 68 census
-  (about a million tokens, the user's OK).
+- **Handoff:** the server stopped (its seed still in session 69b1ade9's scratchpad `out/`), the game closed, both
+  checked gone; `[Debug] LoadTimer` off; plugin `2B392E21B68D` in place. The test file as left: flag 218 off (the
+  escort reset twice), flag 10 off, the whole party back. Next room `RubberPrisonPier` (218); still to ask: when to
+  build the Peculiar Gem, the Core's finale A or B, the Next 68 census (its run needs the user's OK).
 
 ## 2026-10-10: the Pier mapped, the Factory Pass never used up, an accidental goal and its fix
 
@@ -4063,7 +4023,7 @@ either one wrong).
   locations 235-239, the console's refusal. **Tests written and unrun** (the suite and the fuzzer before the next push):
   `TestPier`, `TestPierPointsOfNoReturn`, `TestFactoryPass`, `TestPool`'s kept key, and the factory room tests.
   Nothing pushed.
-- **Handoff (the user: "I closed the game for now, you can close the server as well"):** both closed and checked gone.
+- **Handoff:** the game closed by the user, the server by me at their word; both checked gone.
   Next room `RubberPrisonCheckpointCorridor` (219), its data draft given (name offered: "Checkpoint Corridor"); a new
   seed is needed (this one is finished, and the Factory Pass needs one). Still to ask: the Peculiar Gem, the Core's
   finale A or B, the Next 68 census.
@@ -4078,7 +4038,7 @@ either one wrong).
 - **The Coupled deadlock** (Known issues): Archipelago never retries; Pokémon Crystal retries on the same shuffler;
   the failing yaml's 17 failures in 2000 left 52 different dead-end doors waiting, none in more than 4, the most three
   unmapped one-door rooms. Decided (the user): revisit after every room is mapped, a retry, counting, or door by door
-  ("i don't want to keep trying to fix temporary issues"). Next 70 got the user's late Jump point (a random start or
+  (no fixes for temporary issues). Next 70 got the user's late Jump point (a random start or
   door shuffle gives a best-effort late Jump room).
 - **Pushed** 140 commits (`1084522..1ff330f`), the last few sessions' work, then the deadlock's options. **CI**
   (run 38063364414): the build, the tests on Python 3.11 to 3.13, the suite and the Logic Test (90 of 90) passed; red
@@ -4130,10 +4090,10 @@ either one wrong).
   twice; fixed in its repo (the user: "Fix it now"; its `25bba3e`, not pushed). Its `tools/test.ps1` on the current
   apworld: the export, parity on 200 seeds and pack-checker all passed. The run regenerated the pack's output from the
   development apworld (the Lua logic, item and map images); put back, so the pack stays the 0.3.0 export until the
-  next release's. The user's own uncommitted `README.md` change there left as it was.
-- **Handoff (the user: "lets stop here for now and stop/close things"):** the game closed by the user; the server
-  already gone (its log ends "connection closed" at 01:40; no process, nothing on the port), the user's pick being to
-  close it. The final plugin copied in (`00BA0DDDCE55`). Next room `GiantLairFridgeInside` (236), its data draft
-  given (Crystal Berry 48 partway up, the lift at the top, an ice and geyser climb). A new seed is needed (the
-  artifacts, locations 247-249). Still to ask: the Peculiar Gem, the Core's finale A or B, the Next 68 census, Next 70,
-  and whether enemy scaling's *Artifacts* follows the items received or the scenes played (and its in-game text).
+  next release's. Nothing else in that repo was touched.
+- **Handoff:** the game closed by the user; the server already gone (its log ends with "connection closed"; no
+  process, nothing on the port), as the user had picked. The final plugin copied in (`00BA0DDDCE55`). Next room
+  `GiantLairFridgeInside` (236), its data draft given (Crystal Berry 48 partway up, the lift at the top, an ice and
+  geyser climb). A new seed is needed (the artifacts, locations 247-249). Still to ask: the Peculiar Gem, the Core's
+  finale A or B, the Next 68 census, Next 70, and whether enemy scaling's *Artifacts* follows the items received or
+  the scenes played (and its in-game text).

@@ -568,6 +568,27 @@ def durations(ctx, out):
         out.ok(f'{len(sources)} {what}: every span of time is a date or a figure with its number')
 
 
+# The session log keeps to the project: when the work happened, on what machine and account, isn't part of it.
+@section('Personal details in the log')
+def log_personal(ctx, out):
+    rules = [(re.compile(rx, re.I), why) for rx, why in ctx.patterns['log_personal']['rules']]
+    wanted = ctx.patterns['log_personal']['files']
+    logs = [f for f in ctx.texts() if f.path in wanted]
+    hits = []
+    for f in logs:
+        for n, line in enumerate(f.text.split('\n'), 1):
+            for rx, why in rules:
+                for m in rx.finditer(line):
+                    hits.append(f'{f.path}:{n}: "{m.group(0)}" ({why})')
+    if len(logs) != len(wanted):
+        out.fail('a log the patterns file names is missing: the listing is wrong')
+    elif hits:
+        out.fail('a detail of the day, the machine or the account in the log: keep the project fact, drop the detail',
+                 hits)
+    else:
+        out.ok(f'{len(logs)} log(s): no clock time, time of day, network or login setup, or account usage')
+
+
 @section('Licences')
 def licences(ctx, out):
     lic = ctx.file(LICENSING)
@@ -1769,11 +1790,11 @@ def load_patterns(files):
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
                 'workflows', 'workflow_capabilities', 'dependencies', 'capability_tables', 'mod_server_text',
-                'agent_settings', 'line_caps', 'durations'}
+                'agent_settings', 'line_caps', 'durations', 'log_personal'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
-            rx for rx, why in patterns['durations']] + [
+            rx for rx, why in patterns['durations'] + patterns['log_personal']['rules']] + [
             rx for key in ('mod_denied', 'mod_capabilities', 'ps1_denied', 'ps1_capabilities', 'sh_denied',
                            'sh_capabilities', 'workflow_capabilities')
             for rx in patterns[key].values()]:

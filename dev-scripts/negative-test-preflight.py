@@ -336,6 +336,11 @@ def fixtures():
     def _(c):
         c.git('-c', 'core.hooksPath=.git/hooks', 'commit', '-q', '--allow-empty', '-m', 'broke ' + 'weeks' + ' ago')
 
+    # Assembled at run time, like the spans of time above.
+    @add('a clock time in the log', 'Personal details in the log', names=('agent_docs/log.md',))
+    def _(c):
+        c.append('agent_docs/log.md', 'stopped at ' + '04' + ':45')
+
     @add('a project cited without a licence row', 'Licences')
     def _(c):
         c.append('agent_docs/references.md', 'see github' + '.com/someone-else/some-project')

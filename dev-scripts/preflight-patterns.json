@@ -577,5 +577,14 @@
     ["\\b(?:that|this) (?:week|month|year|decade)s?\\b", "named from the day it was written, wrong on any later day"],
     ["\\b(?:hour|day|week|month|year|decade)s of\\b", "a span of time where a date belongs"],
     ["\\blong-?standing\\b|\\blong time\\b|\\bdecades\\b|\\bover the years\\b", "a span of time with no figure"]
-  ]
+  ],
+  "log_personal": {
+    "files": ["agent_docs/log.md"],
+    "rules": [
+      ["(?<![\\d:.])(?:[01]?\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d)?(?![\\d:])", "a clock time: when the work happened isn't the project's; the date is"],
+      ["\\b(?:overnight|late at night|(?:the )?same night|stopped for the day|this morning|tonight)\\b", "a time of day: when the work happened isn't the project's"],
+      ["\\bVPN\\b|\\bcredential manager\\b", "the maintainer's network or login setup"],
+      ["\\busage (?:cap|limit)s?\\b|\\bweekly usage\\b|\\b5-?hour\\b|\\bmillion tokens\\b", "the maintainer's account usage or budget"]
+    ]
+  }
 }
