@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from ..custom_rules import CanUse
-from ..data_types import EntityRef, Give, Location, Pickup, PlacedPickup, SceneryFit, Source
+from ..data_types import ALWAYS_SET, EntityRef, FlagEntity, Give, Location, Pickup, PlacedPickup, SceneryFit, Source
 
 LOCATIONS = (
     # Where the story teaches Dig (flag 18), moved from the Cell's scene to an item lying on the Entrance's altar
@@ -22,7 +22,8 @@ LOCATIONS = (
 # story's capture (flag 11) for regular enemies, made only from 11 on: those kept present instead.
 # The story's capture at the entrance's altar (eventcheck, Event109 until 18) takes every item into a saved string and
 # drops the party in the cell: skipped in a seed (2026-10-11, the user's pick); the door below and Astotheles' fight
-# trigger, made only from 18, kept present instead, and the wall over that door (Base/FakeWalls, a ConditionChecker
+# trigger, made only from 18, made from the start instead (PRESENT_FROM: their limits still count, so the fight
+# ends at 301), and the wall over that door (Base/FakeWalls, a ConditionChecker
 # limited by 18) switched off: flag 18's whole change to the room (its altar is scenery, no flag's).
 KEPT_OPEN = tuple(EntityRef(m, e) for m, names in (
     ("HideoutEntrance", ("eventcheck",)),
@@ -34,7 +35,6 @@ KEPT_OPEN = tuple(EntityRef(m, e) for m, names in (
     ("HideoutRightA", ("burglarpatrol", "bandittrigger", "tabletrigger", "tabletrigger - Duplicate")),
 ) for e in names)
 KEPT_PRESENT = tuple(EntityRef(m, e) for m, names in (
-    ("HideoutEntrance", ("loadzone below", "event2")),
     ("HideoutCentralRoom", ("enemy bandit",)),
     ("HideoutLeftA", ("burglar enemy",)),
     ("HideoutGarden", ("enemyburglar", "enemy bandit")),
@@ -49,4 +49,8 @@ SCENERY_FITTED = (
 )
 PICKUPS_PLACED = (
     PlacedPickup("HideoutEntrance", "Base/AncientPillarSmall", 0, 0, 18),
+)
+PRESENT_FROM = (
+    FlagEntity("HideoutEntrance", "loadzone below", ALWAYS_SET),
+    FlagEntity("HideoutEntrance", "event2", ALWAYS_SET),
 )
