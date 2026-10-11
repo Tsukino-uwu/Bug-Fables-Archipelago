@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**217 of 244 done.**
+**218 of 244 done.**
 
 ## Outskirts
 
@@ -530,7 +530,9 @@ as it is, a frozen record.
   party to Bugaria's main plaza once Ultimax is beaten (371), every visit (seen); before 371 the room started his fight
   itself, which hangs (seen): that trigger (`event2`) kept away, the scene held until 371, the door back kept present,
   so an early visit is quiet and walks out (seen); nothing to find
-- [ ] WaspKingdomDrillRoom (243)
+- [x] WaspKingdomDrillRoom (243) — Drill Room; one door (the Central Hall's lower left); a respawning mound (no flag of
+  its own, regional flag 6) dropping a berry pile (item 186), Beetle Dig (location 292, not yet seen sent: needs a
+  seed that has it)
 
 ## Bandit Hideout
 

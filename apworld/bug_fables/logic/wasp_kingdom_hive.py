@@ -23,6 +23,11 @@ LOCATIONS = (
     # (Event139, while 366 is off), ends with the game's second Wasp Key (the one for the Food Storage) and sets 366.
     Location("Wasp Kingdom Hive: Jayde's Room, Arrival", 291, "WaspKingdomJayde",
              Source(event=139, flag=366, give=Give(map="WaspKingdomJayde", type=1, item=119)), no_jump=True),
+    # The Drill Room (WaspKingdomDrillRoom; 2026-10-11): one door, to the Central Hall's lower left; a respawning mound
+    # (no flag of its own, regional flag 6) that drops a berry pile (item 186); Beetle Dig. The first dig is the check.
+    Location("Wasp Kingdom Hive: Drill Room, Dig Spot", 292, "WaspKingdomDrillRoom",
+             Source(regional=6, pickup=Pickup(map="WaspKingdomDrillRoom", type=0, item=186)), rule=CanUse("Beetle Dig"),
+             category="dig_spot", no_jump=True),
     # Her shop from 366 on (Jayde's Stew, Magic Seed, Mushroom Salad): first purchase a check, then its own item.
     *(Location(f"Wasp Kingdom Hive: Jayde's Room, Shop {slot}", 287 + slot, "WaspKingdomJayde",
                Source(item_shop=ItemShop(map="WaspKingdomJayde", keeper="jayde - Duplicate", item=item)),
