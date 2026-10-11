@@ -140,8 +140,10 @@ Read from code only; nothing observed running yet.
   fields directly, and so does the mod, write for write:
   - item and key item: `items[type].Add(id)`. The game drops an item when the bag is full
     (`items[0].Count + 1 > maxitems`); the mod puts it in storage (`items[2]`) while `items[2].Count < maxstorage`,
-    the game's own storage-full test (`Checkinvqtd`, `:12503`; `Additem` itself adds with no cap), else holds it
-    back.
+    the game's own storage-full test (`Checkinvqtd`, `:12503`; `Additem` itself adds with no cap), else drops it at
+    the party's feet as a bush does (`EntityControl.CreateItem`), or holds it back with no party to drop it by. **Seen
+    (2026-10-11, a new file's release replay):** the bag filled first, then storage, then the rest dropped around the
+    party.
   - money: `showmoney = 1`, `money = Clamp(money + n, 0, 999)`: the same two lines.
   - medal: `badges.Add({id, -2})`, which is the game's `AddBadge` (`:16974`); the mod calls `AddBadge`.
   - crystal berry: `flagvar[14]++` (the shop currency) **and** `crystalbflags[n] = true`. The mod does only the
