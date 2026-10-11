@@ -3389,7 +3389,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   levers `switch1` (entity 6, 666), `- Duplicate` (10, 667), `- Duplicate - Duplicate` (11, 668), Horn Slash only
   (seen); 667 and 668 each shrink one burner's fire (the mesh's children 1 and 2), both off clears the way; 666 with
   665 (the boulder, `rock`) set starts the wind pusher (entity 7), else a line. Entity 12 (`event before final`, until
-  670) by the left door: a line and a walk right; entity 23 (until 664): the explorers' scene, sets 664. A dig spot
+  670) by the left door: a line and a walk right, kept away in a seed (seen: the left door reached again, no
+  softlock); entity 23 (until 664): the explorers' scene, sets 664, which plays from the left too, the fires already
+  out (seen). A dig spot
   (data `0 0 11`, regional 30): a respawning Magic Seed, Bee Fly then Beetle Dig (seen). Used by `giants_lair.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
