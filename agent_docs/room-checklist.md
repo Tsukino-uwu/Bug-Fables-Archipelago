@@ -498,7 +498,7 @@ as it is, a frozen record.
 - [x] WaspKingdom1 (163) — Pantry; the grass door's one-way drop lands at its bottom left; up to its one door (to
   `WaspKingdom2`) by Jump or Bee Fly, down free; its two stealth wasps kept away; a party talk on entering (until
   367), nothing given; no pickup
-- [x] WaspKingdom2 (164) — the bottom (the Pantry's door, the lower left to 243) free; up on the wooden lift, its lever
+- [x] WaspKingdom2 (164) — Central Hall; the bottom (the Pantry's door, the lower left to 243) free; up on the wooden lift, its lever
   in a small house (Beetle Dig, then any attack; reset on leaving), boarded by Jump or Bee Fly; down a free drop; the top (save crystal,
   upper left door; the top middle opening scenery); the right door behind the Wasp Key's lock (Event59 index 9, used
   up, 363), arriving there pushed past it, out shut until the key is an item; its two stealth wasps kept away; no pickup
