@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**196 of 244 done.**
+**197 of 244 done.**
 
 ## Outskirts
 
@@ -440,7 +440,9 @@ as it is, a frozen record.
   map's own region; the door inside and the Venus bud each their own area, by Icicle and Jump or Bee Fly from the dock;
   the back by Icicle and Jump: the Camp Sign (discovery 46, Jump, location 257) and the Dig Spot (Dark Cherries, Jump,
   Bee Fly, Beetle Dig, location 256); four grass patches hide nothing
-- [ ] MysteryIslandInside (207)
+- [x] MysteryIslandInside (207) — Peacock Island Cave; the door the map's own region; up along the cave's stream by
+  Icicle and Jump, both ways, to the top: the Peacock Spider's bounty fight (Event124, until 502; the Crystal Feather),
+  for the quest pass; after it a red bounce pad back down to the door; no location
 
 ## Metal Island
 
