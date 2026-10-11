@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**215 of 244 done.**
+**216 of 244 done.**
 
 ## Outskirts
 
@@ -523,7 +523,9 @@ as it is, a frozen record.
   back up (the dev warp's landing there sticks; walked through, fine); the front door to Outside the Hive (both ends
   from 555) kept present, its barrier here (`Base/gate`) off and the outside one kept: one way out, seen; the throne room's door up top by Jump
   or Bee Fly, a drop back; everyone else here from 555; no pickup
-- [ ] WaspKingdomThrone (171)
+- [x] WaspKingdomThrone (171) — its bottom door free; up a ledge (Jump or Bee Fly) the fight with General Ultimax, a
+  Wasp Driller and a Wasp Bomber (Event140, until 370; Kabbu for the Driller); the Queen's door beyond, Jump or Bee Fly
+  both ways; everyone else here from 555; no pickup
 - [ ] WaspKingdomQueen (172)
 - [ ] WaspKingdomDrillRoom (243)
 

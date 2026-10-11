@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has, True_
 
-from ..custom_rules import ANY_ATTACK, CanUse
+from ..custom_rules import ANY_ATTACK, CanUse, Member
 from ..data_types import (Area, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
                           Source)
 
@@ -73,6 +73,11 @@ MAP_AREAS = (
     Area("WaspKingdomMainHall", "Front Door", ("loadzoneoutside",), True_(), out=True_()),
     # The throne room's door up top: Jump or Bee Fly from the hall floor, a free drop back down.
     Area("WaspKingdomMainHall", "Top", ("loadzonethrone",), CanUse("Jump") | CanUse("Bee Fly"), out=True_()),
+    # The Throne Room (WaspKingdomThrone; 2026-10-11): its bottom door free; up a ledge (Jump or Bee Fly) General
+    # Ultimax, a Wasp Driller and a Wasp Bomber are fought (Event140, until 370): Kabbu for the Driller, nothing for the
+    # others; the Queen's door beyond, Jump or Bee Fly both ways.
+    Area("WaspKingdomThrone", "Top", ("loadzonequeen",), (CanUse("Jump") | CanUse("Bee Fly")) & Member("Kabbu"),
+         out=CanUse("Jump") | CanUse("Bee Fly")),
     Area("WaspKingdom2", "Right Door", ("loadzoneright",), Has("Wasp Key"), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
