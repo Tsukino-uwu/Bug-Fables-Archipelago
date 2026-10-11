@@ -4097,3 +4097,11 @@ said them.
   geyser climb). A new seed is needed (the artifacts, locations 247-249). Still to ask: the Peculiar Gem, the Core's
   finale A or B, the Next 68 census, Next 70, and whether enemy scaling's *Artifacts* follows the items received or
   the scenes played (and its in-game text).
+- **The log kept to the project** (decided 2026-10-11, after the handoff): a read of the whole log (three readers)
+  found working hours, the maintainer's setup and account limits, their play, feelings quoted, an outside developer's
+  words, two private projects' plans, other projects judged and an unrelated errand. Rewritten the same day (three
+  editors in turn, a fourth reread), every project fact kept (`50501bb`). The rule is at the log's top and in
+  `CLAUDE.md`; a preflight section refuses what a pattern can catch (build step 28). The old git history keeps the
+  earlier text (decided: no rewrite of history). The ~2,200 "the user ..." attributions across docs and code wait for
+  a scrub of their own (decided: everything but `CLAUDE.md`, plain dated facts, then a preflight check), planned in a
+  local, untracked file; no new ones are written from now on.
