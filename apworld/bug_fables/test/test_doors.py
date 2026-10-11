@@ -446,14 +446,16 @@ class TestDoorTargetsReadBack(TestCase):
                 random.shuffle(landings)
                 pairings = [*zip(doors, ys), *zip(one_ways, landings)]
                 targets = door_targets(pairings, DOORS.connections, SHUFFLED_ONE_WAYS)
-                self.assertEqual(set(pairings_from_targets(targets, DOORS.connections, SHUFFLED_ONE_WAYS)), set(pairings))
+                read = pairings_from_targets(targets, DOORS.connections, SHUFFLED_ONE_WAYS)
+                self.assertEqual(set(read), set(pairings))
                 # Coupled: doors in pairs, each leading to the other.
                 matched = doors[:]
                 random.shuffle(matched)
                 pairs = _both_ways(list(zip(matched[::2], matched[1::2])))
                 pairings = [*pairs, *zip(one_ways, landings)]
                 targets = door_targets(pairings, DOORS.connections, SHUFFLED_ONE_WAYS)
-                self.assertEqual(set(pairings_from_targets(targets, DOORS.connections, SHUFFLED_ONE_WAYS)), set(pairings))
+                read = pairings_from_targets(targets, DOORS.connections, SHUFFLED_ONE_WAYS)
+                self.assertEqual(set(read), set(pairings))
                 # Room Swap: whole areas trade places, the one-ways stay, their story copies still listed.
                 pairings = _both_ways(room_pairs(DOORS.connections, DOORS.fixed, random))
                 targets = door_targets(pairings, DOORS.connections, SHUFFLED_ONE_WAYS)
