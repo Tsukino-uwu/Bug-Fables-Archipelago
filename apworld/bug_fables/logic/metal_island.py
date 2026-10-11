@@ -45,8 +45,9 @@ MAP_AREAS = (
     Area("MetalIsland1", "Chef's House", (), _UP),
     # The Metal Island Hotel (MetalIsland2; named 2026-10-11): everything free, Carmina's room (reached only by the
     # Auditorium's dig, out into the lobby) included; its Auditorium door's guard kept out of the way.
-    # The Metal Island Auditorium (MetalIslandAuditorium; named 2026-10-11): its bottom (the hotel door, a save crystal) the map's own region; the top
-    # and the stage (the judge's tournament, the dig to Carmina's room) by Jump or Bee Fly, both ways (a drop down).
+    # The Metal Island Auditorium (MetalIslandAuditorium; named 2026-10-11): its bottom (the hotel door, a save
+    # crystal) the map's own region; the top and the stage (the judge's tournament, the dig to Carmina's room) by Jump
+    # or Bee Fly, both ways (a drop down).
     Area("MetalIslandAuditorium", "Top", (), _UP),
 )
 
