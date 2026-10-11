@@ -189,8 +189,13 @@ namespace BugFablesAP
         private static readonly System.Text.StringBuilder bodyTraceLog = new System.Text.StringBuilder();
         private static readonly Traced tracedLeader = new Traced(), tracedFollower = new Traced();
 
-        internal static string StartBodyTrace(int frames)
+        // A character named in the command, traced in the follower's place (a scene's actor).
+        private static string tracedName;
+        private static Vector3 traceLastNamed;
+
+        internal static string StartBodyTrace(int frames, string name = null)
         {
+            tracedName = string.IsNullOrEmpty(name) ? null : name;
             bodyTraceLeft = frames;
             bodyTraceLog.Length = 0;
             foreach (Traced t in new[] { tracedLeader, tracedFollower, tracedPlatform })
@@ -198,7 +203,7 @@ namespace BugFablesAP
                 t.Drawn.Clear();
                 t.True.Clear();
             }
-            return $"bodytrace: {frames} frames, from when the leader or a follower moves";
+            return $"bodytrace: {frames} frames, from when the leader or {(tracedName ?? "a follower")} moves";
         }
 
         // Its pose read at draw, before anything was shifted: a parent drawn shifted (a swing) moves it too.
@@ -230,7 +235,12 @@ namespace BugFablesAP
             into.Drawn.Add(dx);
             into.True.Add(tx);
             float move = bodies.TryGetValue(e.GetInstanceID(), out Body b) ? b.Move.magnitude : -1f;
-            return $"drawn x {dx:0.0} true x {tx:0.0} move {move:0.000} vel {(e.rigid != null ? e.rigid.velocity.magnitude : 0f):0.00}"
+            float dy = cam.WorldToScreenPoint(e.transform.position).y;
+            float ty = cam.WorldToScreenPoint(truePos).y;
+            Vector3 v = e.rigid != null ? e.rigid.velocity : Vector3.zero;
+            Vector3 m = bodies.TryGetValue(e.GetInstanceID(), out Body mb) ? mb.Move : Vector3.zero;
+            return $"drawn x {dx:0.0} y {dy:0.0} true x {tx:0.0} y {ty:0.0} world y {truePos.y:0.000} "
+                + $"move {move:0.000} ({m.x:0.00},{m.y:0.00},{m.z:0.00}) vel ({v.x:0.0},{v.y:0.0},{v.z:0.0})"
                 + $"{(e.forcemove ? " walking" : "")}";
         }
 
@@ -244,11 +254,24 @@ namespace BugFablesAP
             MainManager.BattleData[] party = MainManager.instance.playerdata;
             EntityControl follower = party != null && party.Length > 1 && party[1].entity != leader ? party[1].entity
                 : party != null && party.Length > 0 && party[0].entity != leader ? party[0].entity : null;
+            bool namedMoved = false;
+            if (tracedName != null)
+            {
+                follower = bodies.Values.Select(b => b.Entity)
+                    .FirstOrDefault(e => e != null && e.name == tracedName && e.gameObject.activeInHierarchy);
+                if (follower == null)
+                {
+                    return;
+                }
+                Vector3 namedPos = TruePos(follower);
+                namedMoved = (namedPos - traceLastNamed).sqrMagnitude > 1e-6f;
+                traceLastNamed = namedPos;
+            }
             Vector3 leaderPos = TruePos(leader);
             bool leaderMoved = (leaderPos - traceLastLeader).sqrMagnitude > 1e-6f;
             traceLastLeader = leaderPos;
             // Armed until something moves, so the trace covers a walk, not the wait for one.
-            if (tracedLeader.Drawn.Count == 0 && !leaderMoved && (leader.rigid == null
+            if (tracedLeader.Drawn.Count == 0 && !leaderMoved && !namedMoved && (leader.rigid == null
                 || leader.rigid.velocity.sqrMagnitude < 0.25f) && (follower == null || follower.rigid == null
                 || follower.rigid.velocity.sqrMagnitude < 0.25f))
             {
@@ -269,7 +292,10 @@ namespace BugFablesAP
             bodyTraceLog.Append($"\n  dt {Time.unscaledDeltaTime * 1000f:0.0} a {(Time.time - Time.fixedTime) / Time.fixedDeltaTime:0.00} "
                 + $"step {(stepped ? 1 : 0)} | leader {Place(cam, leader, tracedLeader)}"
                 + $" on {(on != null ? on.name + "/" + on.tag : "none")}{ground} parent {(leader.transform.parent != null ? leader.transform.parent.name : "none")}"
-                + (follower != null ? $" | {follower.name} {Place(cam, follower, tracedFollower)}" : ""));
+                + (follower != null ? $" | {follower.name} {Place(cam, follower, tracedFollower)} parent "
+                    + $"{(follower.transform.parent != null ? follower.transform.parent.name : "none")} interp "
+                    + $"{(follower.rigid != null ? follower.rigid.interpolation + (follower.rigid.isKinematic ? " kinematic" : "") : "none")}"
+                    : ""));
             if (--bodyTraceLeft == 0)
             {
                 log.LogInfo($"[dev] bodytrace (bodylerp {(SmoothBodies ? "on" : "off")}, camlerp {(SmoothCamera ? "on" : "off")}, scenerylerp {(SmoothScenery ? "on" : "off")}): "

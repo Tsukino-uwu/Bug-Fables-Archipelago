@@ -677,6 +677,17 @@ namespace BugFablesAP
             SampleScenery();
         }
 
+        private static Vector3 Kept(Vector3 move, Vector3 now, Vector3 afterStep)
+        {
+            return new Vector3(Kept(move.x, now.x, afterStep.x), Kept(move.y, now.y, afterStep.y),
+                Kept(move.z, now.z, afterStep.z));
+        }
+
+        private static float Kept(float move, float now, float afterStep)
+        {
+            return Mathf.Abs(now - afterStep) > Mathf.Abs(move) * 0.5f ? 0f : move;
+        }
+
         private static void DrawBodies(float alpha)
         {
             foreach (KeyValuePair<int, Body> pair in bodies)
@@ -700,8 +711,11 @@ namespace BugFablesAP
                 if (b.Stepped)
                 {
                     bool sameParent = parent != null && b.DrawParent == parent && b.StepParent == parent;
-                    Vector3 move = sameParent ? parent.TransformVector(b.AfterStepLocal - b.AtDrawLocal)
-                        : b.AfterStep - b.AtDraw;
+                    // An axis the game set again after the step (a carried character held at its height while
+                    // gravity pulls it each step) didn't keep the step's move there.
+                    Vector3 move = sameParent
+                        ? parent.TransformVector(Kept(b.AfterStepLocal - b.AtDrawLocal, t.localPosition, b.AfterStepLocal))
+                        : Kept(b.AfterStep - b.AtDraw, pos, b.AfterStep);
                     if (move.sqrMagnitude > CutDistance * CutDistance)
                     {
                         move = Vector3.zero;

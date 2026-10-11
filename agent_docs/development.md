@@ -421,10 +421,12 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   on|off`: swinging and bobbing scenery drawn the same way (`FrameRate.Scenery.cs`). All three come on with Uncap FPS;
   the console turns one off to compare, until the row is next switched. `fps` is a look at higher frame rates without
   the row; frame-counted logic runs fast meanwhile.
-- `bodytrace [frames]`: from when the leader or a follower starts moving, logs each drawn frame's step share, her last
+- `bodytrace [frames] [name]`: from when the leader or a follower (or the character named, traced in the follower's
+  place: a scene's actor) starts moving, logs each drawn frame's step share, her last
   step's move, the leader's and the first follower's place on screen drawn and true, what she stands on (name/tag),
   its place drawn and true and how much scenery is drawn shifted, and her parent, then the spread of the
-  frame-to-frame change of each (a steady walk, drawn smoothed, holds still).
+  frame-to-frame change of each (a steady walk, drawn smoothed, holds still). It logs screen y, world height and the
+  move and velocity as vectors too.
 - `trace [frames]`: while you move with an NPC's emoticon showing, logs where the player, the NPC and its emoticon land
   on screen each drawn frame, with the camera's and the emoticon's angles. `cams`: every camera, its depth, parent and
   layer mask.

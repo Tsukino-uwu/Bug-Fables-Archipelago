@@ -708,7 +708,7 @@ namespace BugFablesAP
                             + $" ({FrameRate.SceneryCount} swinging or bobbing things tracked)";
                     case "bodytrace":
                         return FrameRate.StartBodyTrace(parts.Length > 1 && int.TryParse(parts[1], out int bodyFrames)
-                            ? bodyFrames : 120);
+                            ? bodyFrames : 120, parts.Length > 2 ? parts[2] : null);
                     case "interp":
                     {
                         bool interpOn = parts.Length > 1 && parts[1] == "on";

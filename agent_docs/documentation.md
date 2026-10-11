@@ -2413,6 +2413,12 @@ jumps not yet seen with it. Followers deciding walk or brake 30 times a second, 
 (2026-10-01): measured and seen on the Rubber Prison's swinging platform, the party standing on it; other bobbing
 scenery (boats, floating things) not yet seen. The mod's own frame counts (hold-ups, auto-save) counted in sixtieths
 (2026-10-01): built, not yet seen.
+A character the game puts back after each physics step (2026-10-11): the Termite Queen, carried into the Colosseum,
+shook with her carriers at 240 fps. `bodytrace 900 queen` (a named character in the follower's place) showed why:
+gravity pulled her about 0.3 a step, the scene set her height back before the draw, and the smoothing drew the
+undone fall, a 7-pixel saw-tooth. Each axis the game set again after the step now keeps no step move. The first try
+missed her (it skipped characters with an unchanged parent, and hers is the map). Seen steady on the second; walking,
+followers, flight and platforms not yet seen again with it.
 
 *Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
 after-physics hooks in `Plugin.cs`, the waits in `HoldUps.cs` and `AutoSave.cs`; the
