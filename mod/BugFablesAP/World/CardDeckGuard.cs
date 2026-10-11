@@ -29,7 +29,7 @@ namespace BugFablesAP
             Hooks.Install(typeof(Judge), "cards", "the judge offers the tournament without a deck");
         }
 
-        // A deck takes a boss card, mini-boss cards and the rest from the cards spied on (librarystuff[1, enemy]).
+        // A deck takes a boss card, two mini-boss cards and the rest from the cards spied on (librarystuff[1, enemy]).
         internal static bool CanBuildDeck(out string why)
         {
             if (cards == null)
@@ -65,7 +65,7 @@ namespace BugFablesAP
                 }
             }
             why = $"{boss} boss, {miniboss} mini-boss and {other} other cards spied";
-            return boss > 0 && miniboss > 0 && other > 0;
+            return boss > 0 && miniboss > 1 && other > 0;
         }
 
         [HarmonyPatch(typeof(EventControl), nameof(EventControl.StartEvent))]

@@ -3543,12 +3543,13 @@ that offers only cards of enemies spied on, and with no boss card spied it throw
 the party is stuck (seen 2026-10-11 on a new file: a restart). In the game nobody gets there without a deck.
 
 So, as B.O.S.S. does with nobody met (step 51): while the cards spied on (`librarystuff[1, enemy]`, against
-`Data/CardData`'s types, as `LoadCardData` reads them) hold no boss, mini-boss or other card, the judge answers
+`Data/CardData`'s types, as `LoadCardData` reads them) hold no boss card, fewer than two mini-boss cards (the builder
+asks for two) or no other card, the judge answers
 "Come back when you have a deck worth playing." in place of his question, so no fee is taken; if the tournament
 starts anyway, the fee goes back and it doesn't start. The log says `[cards] the judge holds the tournament back: 0
 boss, 0 mini-boss and 0 other cards spied`. Only the tournament: the card masters' duels are reached as in vanilla, the
-first a tutorial with a preset hand. Whether one of each is enough for the builder (it asks for two mini-boss cards)
-is not yet measured with a small deck.
+first a tutorial with a preset hand. Whether the builder takes the same mini-boss card twice is unmeasured, so two
+different ones are asked for, the cautious way.
 
 **Status:** built (2026-10-11); seen the same day: the judge's line with no cards spied, no fee taken.
 
