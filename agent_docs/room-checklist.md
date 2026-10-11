@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**201 of 244 done.**
+**202 of 244 done.**
 
 ## Outskirts
 
@@ -468,7 +468,10 @@ as it is, a frozen record.
   the doors to the industrial district and the Royal Chamber, the save crystal, the shop computer (Shop 1-4: Squash,
   Shell Ointment, Mega-Rush, Aphid Shake; locations 262-265), DineMite's Mite Burger (dialogue, repeatable), the poster;
   the worker's request (a Drowsy Cake, then a Shock Candy, flags 626 and 627, for the TP Plus medal) for the quest pass
-- [ ] TermiteRoyalChamber (175)
+- [x] TermiteRoyalChamber (175) — Royal Chamber; the floor free, its scenes (Event152 until 386; the King's reward,
+  Event164, from 409 until 379, location 76, still the later-chapters stand-in for the Colosseum) played there; the
+  Termite Statue (discovery 24, location 266); the thrones' platform by Jump or Bee Fly, Crystal Berry 33 hidden behind
+  the thrones the same way (location 267)
 - [ ] TermiteIndustrial (176)
 - [ ] TermitePier (177)
 - [ ] TermiteColiseum1 (178)

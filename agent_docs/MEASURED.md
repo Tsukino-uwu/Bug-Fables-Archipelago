@@ -3444,6 +3444,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   a Mite Burger (154) for 15 berries by dialogue, each time. `workerguy`: line 49 takes a Drowsy Cake (147, flag
   626), line 56 a Shock Candy (75, flag 627) and gives medal 1 (TP Plus). The poster (line 27) is text. No pickup.
   Used by `termite_capitol.py`.
+- **Royal Chamber** (`TermiteRoyalChamber`, 2026-10-11, seen on screen; EntityDump): the plaza door; the floor
+  free; `event` (until 386) runs `Event152`, `event2` (from 409 until 379) `Event164`, both on the floor (seen); the
+  King and Queen on a platform by Jump or Bee Fly; `statue` (line 32) records discovery 24, "Termite Statue" (the
+  only new one after reading it); `cberry` (#33, data `3 -1 0 33`) at (46.2, 0, 6.0), hidden behind the thrones, by
+  Jump or Bee Fly. Used by `termite_capitol.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

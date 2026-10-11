@@ -3,7 +3,7 @@ what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
-from ..data_types import EntityRef, ItemEntity, ItemShop, Location, Source, Transfer
+from ..data_types import EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
@@ -18,6 +18,13 @@ LOCATIONS = (
                Source(item_shop=ItemShop(map="TermiteMainPlaza", keeper="Fixedshopcomputer", item=item)),
                category="item_shop", no_jump=True)
       for slot, item in enumerate((125, 97, 155, 130), start=1)),
+    # The Royal Chamber (TermiteRoyalChamber; named 2026-10-11): its floor free, the statue in its middle discovery 24;
+    # crystal berry #33 hidden behind the thrones, up by Jump or Bee Fly as the thrones' platform is.
+    Location("Termite Capitol: Royal Chamber, Termite Statue", 266, "TermiteRoyalChamber", Source(discovery=24),
+             category="discovery", no_jump=True),
+    Location("Termite Capitol: Royal Chamber, Behind the Thrones", 267, "TermiteRoyalChamber",
+             Source(berry=33, pickup=Pickup(map="TermiteRoyalChamber", type=3, item=0)),
+             rule=CanUse("Jump") | CanUse("Bee Fly"), category="crystal_berry", no_jump=True),
 )
 TRANSFERS = (
     Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE),
