@@ -541,7 +541,8 @@ as it is, a frozen record.
   wall over that door (`Base/FakeWalls`, a ConditionChecker until 18) off, seen; Astotheles (until 301), his diary and
   note (from 301). The Dig location (flag 18, location 71) moved here from the Cell (build step 90): an item on the
   altar, its collider fitted to its model, by Jump or Bee Fly (seen). For the quest pass: Astotheles' fight at the far
-  right (`event2`, Event109) gives the Earth Key (106), half the Sand Castle Key (seen)
+  right (`event2`, Event109, reached freely, once: its 301 limit kept, seen) gives the Earth Key (106), half the Sand
+  Castle Key (seen)
 - [x] HideoutCell (100) — Cell; the middle (door, save crystal; the crystal's copies swapped by 11) free; the left cell
   dug into (Beetle Dig), its Dig scene's trigger kept away (location 71 is on the Entrance's altar); the right cell dug into, its dig
   spot starting Event217, Cerise with Crystal Berry 19 (674, 682; location 293, seen given); a droplet that only drips
