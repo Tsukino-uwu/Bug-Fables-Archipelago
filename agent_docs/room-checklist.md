@@ -481,7 +481,8 @@ as it is, a frozen record.
   Jump or Bee Fly back up (the submarine leaves and lands there); Crystal Berry 28 on an isolated pillar in the
   water, Bee Fly both ways (location 280)
 - [x] TermiteColiseum1 (178) — Colosseum Lobby; free; the guards' two openings scenery; the receptionist's fights
-  (Event163, the arena transfer) from flag 386 (the King's scene in the Royal Chamber) on; Crickerly's stall kept
+  (Event163, the arena transfer: three fights in a row, the whole party) from flag 386 (the King's scene in the
+  Royal Chamber) on; Crickerly's stall kept
   present (Caravan Shop 1-5, locations 281-285)
 - [ ] TermiteColiseum2 (179)
 

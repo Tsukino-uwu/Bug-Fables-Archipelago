@@ -4,19 +4,17 @@ from __future__ import annotations
 
 from rule_builder.rules import CanReachRegion, Has, True_
 
-from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
+from ..custom_rules import SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY, CanUse
 from ..data_types import Area, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
 
-# The Colosseum beaten: the later chapters' stand-in until the Colosseum is mapped.
-_COLOSSEUM = (CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig") & CanUse("Horn Dash")
-              & CanUse("Bee Fly"))
+# The Colosseum won: its three fights in a row, the arena reached.
+_COLOSSEUM = CanReachRegion("TermiteColiseum2")
 
 LOCATIONS = (
-    # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
-    # chapters' story-order stand-in.
+    # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself.
     Location("Termite Capitol: Termite King's Reward", 76, "TermiteRoyalChamber",
              Source(event=164, flag=379),
-             rule=_COLOSSEUM, reach=LATER_CHAPTERS),
+             rule=_COLOSSEUM),
     # The Main Plaza (TermiteMainPlaza; named 2026-10-11): everything free. Its shop computer (Squash, Shell Ointment, Mega-Rush, Aphid
     # Shake): first purchase a check, then its own item.
     *(Location(f"Termite Capitol: Main Plaza, Shop {slot}", 261 + slot, "TermiteMainPlaza",
@@ -53,7 +51,7 @@ LOCATIONS = (
     # Terrie takes the G-Bug Ranger Plushie once the party are the Colosseum's champions (line 74; flag 410, which
     # adds Logbook entry 11).
     Location("Termite Capitol: Outside the Colosseum, Plushie for Terrie", 279, "TermiteIndustrial", Source(flag=410),
-             rule=_COLOSSEUM & Has("G-Bug Ranger Plushie"), reach=LATER_CHAPTERS, no_jump=True,
+             rule=_COLOSSEUM & Has("G-Bug Ranger Plushie"), no_jump=True,
              area="Outside the Colosseum"),
     # The Pier (TermitePier; named 2026-10-11): crystal berry #28 on a pillar alone in the water, by Bee Fly both ways.
     Location("Termite Capitol: Pier, Isolated Pillar by the Dock", 280, "TermitePier",
@@ -76,8 +74,8 @@ MAP_AREAS = (
 TRANSFERS = (
     Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE, from_area="Dock"),
     # The receptionist offers fights only once the King has met the party (Event152 on entering the Royal Chamber,
-    # flag 386).
-    Transfer("arena", "TermiteColiseum1", "TermiteColiseum2", LATER_CHAPTERS & CanReachRegion("TermiteRoyalChamber")),
+    # flag 386); three fights in a row, the whole party for them (2026-10-11).
+    Transfer("arena", "TermiteColiseum1", "TermiteColiseum2", WHOLE_PARTY & CanReachRegion("TermiteRoyalChamber")),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (379 here).
 PRESENT_WITH_ITEM = (
