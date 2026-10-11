@@ -527,8 +527,8 @@ as it is, a frozen record.
   Wasp Driller and a Wasp Bomber (Event140, until 370; Kabbu for the Driller); the Queen's door beyond, Jump or Bee Fly
   both ways; everyone else here from 555; no pickup
 - [x] WaspKingdomQueen (172) — its door back made only from 555; its scene on entering (Event141, until 555) sends the
-  party to Bugaria's main plaza once Ultimax is beaten (371; before, it walks the party out), every visit; nothing to
-  find; from the code, its exit scene not yet seen
+  party to Bugaria's main plaza once Ultimax is beaten (371), every visit (seen); before 371 the room starts his fight
+  itself, which hangs (seen), so the Throne Room's door to it is held until 371; nothing to find
 - [ ] WaspKingdomDrillRoom (243)
 
 ## Bandit Hideout

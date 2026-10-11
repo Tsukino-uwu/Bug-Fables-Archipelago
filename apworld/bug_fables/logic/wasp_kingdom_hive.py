@@ -4,7 +4,7 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member
-from ..data_types import (Area, DoorRule, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
+from ..data_types import (Area, DoorRule, EntityMove, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
                           Source, Transfer)
 
 LOCATIONS = (
@@ -105,6 +105,11 @@ DOOR_RULES = (
 )
 TRANSFERS = (
     Transfer("scene", "WaspKingdomQueen", "BugariaMainPlaza", two_way=False),
+)
+# Before General Ultimax is beaten (371) the Queen's room starts his fight itself (event2, Event140), which hangs there
+# (seen 2026-10-11): the Throne Room's door to it held until 371, which the fight sets before reloading the room.
+HELD_UNTIL = (
+    FlagEntity("WaspKingdomThrone", "loadzonequeen", 371),
 )
 # WaspKingdom4's twig (its only dig wall) copied across the way to its left barrier, the room's hard floor made ground
 # so it can be dug under there: no way to the top without Beetle Dig, where the barrier shuts behind the party and only
