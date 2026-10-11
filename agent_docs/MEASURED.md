@@ -3466,7 +3466,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   one-way drop from the pier, Jump or Bee Fly back up. No other pickup. Used by `termite_capitol.py`.
 - **The Colosseum Lobby, `TermiteColiseum1` (178)** (2026-10-11, EntityDump, the console's `line`; seen in play): one
   real door (`loadzoneoutside`); the guards (`guardl`, `guardr`, line 13) stand in scenery openings. The
-  receptionist's line 3 ("no fights happening") until flag 386 (`Event152`), then line 4 to the fights (`Event163`,
+  receptionist's line 3 ("no fights happening") until flag 386 (`Event152`, which sets nothing else; seen with 386
+  turned off), then line 4 to the fights (`Event163`,
   which sets 409); 447 (`Event165`) her line 21. `crickerly` (requires 41, sells items 2, 3, 11, 0, 1) was missing
   on a seed's file (41 off) and shows once kept present; `CHusband` and the `CaravanBadge` seller have no condition.
   The arena, `TermiteColiseum2`, has no door. Used by `termite_capitol.py`.
