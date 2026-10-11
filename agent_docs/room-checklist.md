@@ -433,13 +433,13 @@ as it is, a frozen record.
 ## Metal Lake
 
 - [x] MetalLake (183) — Metal Lake, the submarine's lake: no doors, no pickups, six docks (Termite, Metal Island,
-  Bugaria, the prison, the Fishing Village, Mystery Island), each reaching every other by the submarine alone (the
+  Bugaria, the prison, the Fishing Village, Peacock Island), each reaching every other by the submarine alone (the
   later-chapters stand-in dropped from the rides); never a start or shuffled, having no door; for the enemy pass: two
   wasps (until 79) and Striders
-- [x] MysteryIsland (206) — Mystery Island; the dock (the submarine, a save crystal) the map's own region; the door
-  inside and the Venus bud each their own area, by Icicle and Jump or Bee Fly from the dock; the back by Icicle and
-  Jump: the Camp Sign (discovery 46, Jump, location 257) and the Dig Spot (Dark Cherries, Jump, Bee Fly, Beetle Dig,
-  location 256); four grass patches hide nothing
+- [x] MysteryIsland (206) — Peacock Island (the game's name, discovery 46); the dock (the submarine, a save crystal) the
+  map's own region; the door inside and the Venus bud each their own area, by Icicle and Jump or Bee Fly from the dock;
+  the back by Icicle and Jump: the Camp Sign (discovery 46, Jump, location 257) and the Dig Spot (Dark Cherries, Jump,
+  Bee Fly, Beetle Dig, location 256); four grass patches hide nothing
 - [ ] MysteryIslandInside (207)
 
 ## Metal Island

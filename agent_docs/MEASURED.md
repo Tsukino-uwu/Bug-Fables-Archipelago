@@ -3404,7 +3404,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **Metal Lake** (`MetalLake`, 2026-10-11, EntityDump): no door; six docks (`docktermite`, `dockmetal`,
   `dockbugaria`, `dockprison`, `dockvillage`, `dockisland`, each an `Event` interaction); two wasps (until 79) and six
   Striders; no pickup. Used by `metal_lake.py`.
-- **Mystery Island** (`MysteryIsland`, 2026-10-11, seen on screen; EntityDump): the dock (`Fixedsub`) and a save
+- **Peacock Island** (`MysteryIsland`, the game's name in discovery 46; 2026-10-11, seen on screen; EntityDump): the dock (`Fixedsub`) and a save
   crystal; the door (`loadzone`, to `MysteryIslandInside`) and the Venus bud each cut off from the dock (Icicle and
   Jump, or Bee Fly); the back (Icicle and Jump): a camp, its sign (`discovery`, up by Jump) recording discovery 46
   (the only one on a new file after reading it), and a dig spot (data `0 121`, flag 653, Dark Cherries) across by Bee
