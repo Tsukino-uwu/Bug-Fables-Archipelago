@@ -415,7 +415,8 @@ entrance randomizer and a random start stay labelled experimental until their ro
   all at once (each guard's battle data is its catch scene and sight), so only the way across a room is logic; the
   hideout's regular enemies, which the game makes only after the story's capture (flag 11), kept present instead.
   Caught, the game puts the party back, takes the Wasp Key in `WaspKingdom3` (`Event138`) or jails it, Beetle Dig the
-  only way out (`Event108`); and the sneaking slowed the game down. The bandits' story capture (`Event109`, the Cell's check) is decided with its room.
+  only way out (`Event108`); and the sneaking slowed the game down. The bandits' story capture (`Event109`, the Cell's
+  check) is skipped in a seed (2026-10-11): `bandit_hideout.py`.
 
 ## The facts it relies on
 
