@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**213 of 244 done.**
+**214 of 244 done.**
 
 ## Outskirts
 
@@ -515,7 +515,10 @@ as it is, a frozen record.
 - [x] WaspKingdomPrison (168) — Prison; free between its two doors (the bottom right opening scenery); the cells, the
   messenger ant's among them, burrowed into (Beetle Dig); Dark Cherries dug up in the bottom right cell past a boulder
   (Horn Dash, then Dig; flag 369, location 287)
-- [ ] WaspKingdomJayde (169)
+- [x] WaspKingdomJayde (169) — Jayde's Room; free; her meeting on arriving (the room's own scene, Event139, while
+  366 is off) gives the game's second Wasp Key (location 291, Arrival) and sets 366, which swaps her for her shop
+  (Shop 1-3: Jayde's Stew, Magic Seed, Mushroom Salad; 288-290); seen in a seed, walked in. The dev warp marks a
+  room's own scenes seen, so warping straight in skips it
 - [ ] WaspKingdomMainHall (170)
 - [ ] WaspKingdomThrone (171)
 - [ ] WaspKingdomQueen (172)

@@ -4,7 +4,8 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse
-from ..data_types import Area, EntityMove, EntityRef, Location, Pickup, SceneryCopy, SceneryLayer, Source
+from ..data_types import (Area, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
+                          Source)
 
 LOCATIONS = (
     # WaspKingdom3 (2026-10-11): the Wasp Key (key item 119, flag 364), which lay free under the left ledge once the
@@ -18,6 +19,15 @@ LOCATIONS = (
     Location("Wasp Kingdom Hive: Prison, Dig Spot", 287, "WaspKingdomPrison",
              Source(flag=369, pickup=Pickup(map="WaspKingdomPrison", type=0, item=121)),
              rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
+    # Jayde's Room (WaspKingdomJayde; 2026-10-11): everything free. Her meeting, the room's own scene on entering
+    # (Event139, while 366 is off), ends with the game's second Wasp Key (the one for the Food Storage) and sets 366.
+    Location("Wasp Kingdom Hive: Jayde's Room, Arrival", 291, "WaspKingdomJayde",
+             Source(event=139, flag=366, give=Give(map="WaspKingdomJayde", type=1, item=119)), no_jump=True),
+    # Her shop from 366 on (Jayde's Stew, Magic Seed, Mushroom Salad): first purchase a check, then its own item.
+    *(Location(f"Wasp Kingdom Hive: Jayde's Room, Shop {slot}", 287 + slot, "WaspKingdomJayde",
+               Source(item_shop=ItemShop(map="WaspKingdomJayde", keeper="jayde - Duplicate", item=item)),
+               category="item_shop", no_jump=True)
+      for slot, item in enumerate((120, 11, 15), start=1)),
 )
 ENTITIES_MOVED = (
     EntityMove("WaspKingdom3", "key", (-3.4, 6.0, 11.7)),
