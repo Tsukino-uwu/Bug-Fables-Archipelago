@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**206 of 244 done.**
+**207 of 244 done.**
 
 ## Outskirts
 
@@ -489,9 +489,11 @@ as it is, a frozen record.
 
 ## Wasp Kingdom Hive
 
-- [ ] WaspKingdomOutside (147) — to do when mapped (the user, 2026-10-08): rework its bottom door's arrival (the gate
-  from the lake) so a party can enter or start there; today it lands past its gate inside the patrol's see area, a loop
-  (`MEASURED.md`, the lake)
+- [x] WaspKingdomOutside (147) — the top right door free both ways; the left (the cave's) pushes the party past a
+  boulder, Horn Dash back out; the hive's door and the lake's gate behind barriers (the hive's from 555), each putting
+  an arriving party past it; the hive's door one way out, the lake's gate still shut both ways (both ends from 555);
+  the patrol and its see area kept away (they guarded only the barred door, and caught a party arriving from the lake
+  in a loop: arriving there seen free with them away); no pickup
 - [ ] WaspKingdom1 (163)
 - [ ] WaspKingdom2 (164)
 - [ ] WaspKingdom3 (165)
