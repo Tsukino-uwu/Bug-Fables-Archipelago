@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**219 of 244 done.**
+**220 of 244 done.**
 
 ## Outskirts
 
@@ -540,7 +540,9 @@ as it is, a frozen record.
   flag 18's other changes made instead, the door below and Astotheles' fight trigger (`event2`) kept present and the
   wall over that door (`Base/FakeWalls`, a ConditionChecker until 18) off, seen; Astotheles (until 301), his diary and
   note (from 301); nothing to find. The Cell's check (Dig taught after the capture, flag 18) needs a new home
-- [ ] HideoutCell (100)
+- [x] HideoutCell (100) — Cell; the middle (door, save crystal; the crystal's copies swapped by 11) free; the left cell
+  dug into (Beetle Dig) to the Dig scene's trigger (Event109, until 18; location 71); the right cell dug into, its dig
+  spot starting Event217, Cerise with Crystal Berry 19 (674, 682; location 293, seen given); a droplet that only drips
 - [ ] HideoutCentralRoom (101)
 - [ ] HideoutLeftA (102)
 - [ ] HideoutStairsRoom (103)
