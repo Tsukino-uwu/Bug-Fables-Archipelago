@@ -1,11 +1,21 @@
 """Wasp Kingdom Hive (the game's area 19, MapControl.areaid): its spots and what the seed changes there."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, True_
+from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse
-from ..data_types import Area, EntityRef
+from ..data_types import Area, EntityMove, EntityRef, Location, Pickup, Source
 
+LOCATIONS = (
+    # WaspKingdom3 (2026-10-11): the Wasp Key (key item 119, flag 364), which lay free under the left ledge once the
+    # stealth wasps were away, moved up where it takes the Beemerang Halt and Bee Fly (ENTITIES_MOVED).
+    Location("Wasp Kingdom Hive: Fountain Room, On the Roof", 286, "WaspKingdom3",
+             Source(flag=364, pickup=Pickup(map="WaspKingdom3", type=1, item=119)),
+             rule=CanUse("Beemerang Halt") & CanUse("Bee Fly")),
+)
+ENTITIES_MOVED = (
+    EntityMove("WaspKingdom3", "key", (-3.4, 6.0, 11.7)),
+)
 MAP_AREAS = (
     # Outside the hive (WaspKingdomOutside; 2026-10-11): from the cave's door the game pushes the party past a boulder
     # (rock, until 332), so that way in is free; back out to the cave, the boulder broken by Horn Dash (it stays broken).
@@ -24,10 +34,10 @@ MAP_AREAS = (
     # to the top (the save crystal, the upper left and right doors) on the wooden lift, started by a lever in a small
     # house dug into (Beetle Dig, then any attack) and boarded by Jump or Bee Fly; down, a free drop. The right door behind a lock that
     # takes the Wasp Key (Event59, key index 9, used up; gone from 363): arriving through it the game puts the party
-    # past the lock; out through it shut until the key is an item (its room, WaspKingdom3, unmapped).
+    # past the lock; out through it with the key.
     Area("WaspKingdom2", "Top", ("loadzoneleft",),
          CanUse("Beetle Dig") & ANY_ATTACK & (CanUse("Jump") | CanUse("Bee Fly")), out=True_()),
-    Area("WaspKingdom2", "Right Door", ("loadzoneright",), False_(), out=True_(), to="WaspKingdom2 (Top)"),
+    Area("WaspKingdom2", "Right Door", ("loadzoneright",), Has("Wasp Key"), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
 # barrier; caught, the party is put back where it came in, which from the lake's gate is inside the see area, a loop.
