@@ -490,7 +490,8 @@ as it is, a frozen record.
 ## Wasp Kingdom Hive
 
 - [x] WaspKingdomOutside (147) — the top right door free both ways; the left (the cave's) pushes the party past a
-  boulder, Horn Dash back out; the hive's door and the lake's gate behind barriers (the hive's from 555), each putting
+  boulder, Horn Dash back out; the hive's left door (to `WaspKingdom1`, a one-way drop) inside grass that grows back,
+  Horn Slash both ways; the hive's door and the lake's gate behind barriers (the hive's from 555), each putting
   an arriving party past it; the hive's door one way out, the lake's gate still shut both ways (both ends from 555);
   the patrol and its see area kept away (they guarded only the barred door, and caught a party arriving from the lake
   in a loop: arriving there seen free with them away); no pickup

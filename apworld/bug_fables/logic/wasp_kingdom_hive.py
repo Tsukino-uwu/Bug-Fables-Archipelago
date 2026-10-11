@@ -13,6 +13,9 @@ MAP_AREAS = (
     # The hive's door (to the main hall): coming out, the party is put past its barrier; from outside the barrier
     # keeps it shut.
     Area("WaspKingdomOutside", "Hive Door", ("loadzoneinside#16",), False_(), out=True_()),
+    # The hive's left door (to WaspKingdom1, a one-way drop there) inside grass that grows back, cut by Horn Slash both
+    # ways.
+    Area("WaspKingdomOutside", "Grass Door", ("loadzoneinside#14",), CanUse("Horn Slash"), out=CanUse("Horn Slash")),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
 # barrier; caught, the party is put back where it came in, which from the lake's gate is inside the see area, a loop.
