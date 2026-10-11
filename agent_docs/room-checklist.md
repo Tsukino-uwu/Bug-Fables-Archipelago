@@ -536,7 +536,7 @@ as it is, a frozen record.
 
 ## Bandit Hideout
 
-- [x] HideoutEntrance (99) — free throughout; the story's capture skipped (its altar trigger `eventcheck` kept away):
+- [x] HideoutEntrance (99) — Entrance; free throughout; the story's capture skipped (its altar trigger `eventcheck` kept away):
   flag 18's other changes made instead, the door below and Astotheles' fight trigger (`event2`) kept present and the
   wall over that door (`Base/FakeWalls`, a ConditionChecker until 18) off, seen; Astotheles (until 301), his diary and
   note (from 301); nothing to find. The Cell's check (Dig taught after the capture, flag 18) needs a new home
