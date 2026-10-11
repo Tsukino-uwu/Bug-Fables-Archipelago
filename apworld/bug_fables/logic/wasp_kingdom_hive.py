@@ -96,10 +96,12 @@ KEPT_OPEN = (
         ("WaspKingdom3", ("wasp", "waspsleep")),
         ("WaspKingdom4", ("wasp1", "wasp2", "wasp3", "wasp4", "wasp5")),
     ) for e in names),
+    EntityRef("WaspKingdomQueen", "event2"),
 )
 # The Queen's room (WaspKingdomQueen; 2026-10-11): nothing to find. Its door back to the Throne Room is made only from
 # the ending (555); its scene on entering (Event141, until 555) sends the party to Bugaria's main plaza once General
 # Ultimax is beaten (371; before that it walks it back out), on every visit.
+# Its door back is the way out only before the win; after it the scene there sends the party on to Bugaria instead.
 DOOR_RULES = (
     DoorRule("WaspKingdomQueen", "loadzone", False_()),
 )
@@ -107,9 +109,10 @@ TRANSFERS = (
     Transfer("scene", "WaspKingdomQueen", "BugariaMainPlaza", two_way=False),
 )
 # Before General Ultimax is beaten (371) the Queen's room starts his fight itself (event2, Event140), which hangs there
-# (seen 2026-10-11): the Throne Room's door to it held until 371, which the fight sets before reloading the room.
+# (seen 2026-10-11): that trigger kept away (KEPT_OPEN), the Queen's scene held until 371, and the room's door back,
+# made only from 555, kept present so an early visit can walk out.
 HELD_UNTIL = (
-    FlagEntity("WaspKingdomThrone", "loadzonequeen", 371),
+    FlagEntity("WaspKingdomQueen", "event", 371),
 )
 # WaspKingdom4's twig (its only dig wall) copied across the way to its left barrier, the room's hard floor made ground
 # so it can be dug under there: no way to the top without Beetle Dig, where the barrier shuts behind the party and only
@@ -125,6 +128,7 @@ SCENERY_LAYERS = (
 KEPT_PRESENT = (
     EntityRef("WaspKingdomMainHall", "loadzoneoutside"),
     EntityRef("WaspKingdomOutside", "loadzoneinside"),
+    EntityRef("WaspKingdomQueen", "loadzone"),
 )
 SCENERY_OFF = (
     EntityRef("WaspKingdomMainHall", "Base/gate"),
