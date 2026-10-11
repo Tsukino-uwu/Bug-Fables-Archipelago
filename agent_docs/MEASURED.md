@@ -3404,6 +3404,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **Metal Lake** (`MetalLake`, 2026-10-11, EntityDump): no door; six docks (`docktermite`, `dockmetal`,
   `dockbugaria`, `dockprison`, `dockvillage`, `dockisland`, each an `Event` interaction); two wasps (until 79) and six
   Striders; no pickup. Used by `metal_lake.py`.
+- **Mystery Island** (`MysteryIsland`, 2026-10-11, seen on screen; EntityDump): the dock (`Fixedsub`) and a save
+  crystal; the door (`loadzone`, to `MysteryIslandInside`) and the Venus bud each cut off from the dock (Icicle and
+  Jump, or Bee Fly); the back (Icicle and Jump): a camp, its sign (`discovery`, up by Jump) recording discovery 46
+  (the only one on a new file after reading it), and a dig spot (data `0 121`, flag 653, Dark Cherries) across by Bee
+  Fly. Used by `metal_lake.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
