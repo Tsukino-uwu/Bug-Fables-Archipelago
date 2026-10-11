@@ -495,7 +495,7 @@ as it is, a frozen record.
   an arriving party past it; the hive's door one way out, the lake's gate still shut both ways (both ends from 555);
   the patrol and its see area kept away (they guarded only the barred door, and caught a party arriving from the lake
   in a loop: arriving there seen free with them away); no pickup
-- [x] WaspKingdom1 (163) — the grass door's one-way drop lands at its bottom left; up to its one door (to
+- [x] WaspKingdom1 (163) — Pantry; the grass door's one-way drop lands at its bottom left; up to its one door (to
   `WaspKingdom2`) by Jump or Bee Fly, down free; its two stealth wasps kept away; a party talk on entering (until
   367), nothing given; no pickup
 - [ ] WaspKingdom2 (164)
