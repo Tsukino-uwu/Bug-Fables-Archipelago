@@ -887,7 +887,8 @@ be wrong.
     was (every flag its scenes set this visit), so a test never needs a game restart.
 73. **The Final Boss goal** (decided 2026-10-11, mapping the Sapling Plains; its own step): the default goal as vanilla
     plays it: X artifacts open the last fight (its trigger, `Event200`, held until then), and winning it is the goal.
-    The current goal becomes the optional "Artifact Hunt" (sent on X artifacts). Where it sends is not yet decided:
+    The current goal becomes the optional "Artifact Hunt" (sent on X artifacts), where the last fight stays open as in
+    vanilla: after "The End" the game puts the party back in Bugaria, so nothing is lost by playing it. Where it sends is not yet decided:
     "The End" is the lean, the exact moment to be picked in game. A first hold (the trigger switched off) didn't hold;
     a second (a marker limit, as kept_open does) held: seen 2026-10-11, walked up to with 0 of 1 artifacts.
 
