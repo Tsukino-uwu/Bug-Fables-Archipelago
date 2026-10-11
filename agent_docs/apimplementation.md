@@ -891,6 +891,9 @@ be wrong.
     vanilla: after "The End" the game puts the party back in Bugaria, so nothing is lost by playing it. Where it sends is not yet decided:
     "The End" is the lean, the exact moment to be picked in game. A first hold (the trigger switched off) didn't hold;
     a second (a marker limit, as kept_open does) held: seen 2026-10-11, walked up to with 0 of 1 artifacts.
+    A sign showing the artifacts had and needed, at (19.9, 0, 5.2) on the Sapling Plains, by the door and the save
+    crystal (the spot picked in game, 2026-10-11): built and seen the same day, one centred line, "Artifacts required:
+    X" (the count had is in the pause menu); kept uncommitted with the hold until the goal is built.
 
 **Known issues:**
 
