@@ -40,6 +40,8 @@ namespace BugFablesAP
         partial void AddDevSteps(List<(string Name, Action Step)> list);
         partial void DevAfterTick();
         partial void DevDestroy();
+        partial void DevJobStart();
+        partial void DevJobEnd(string name);
 
         private void Awake()
         {
@@ -260,7 +262,9 @@ namespace BugFablesAP
         {
             try
             {
+                DevJobStart();
                 step();
+                DevJobEnd(name);
             }
             catch (Exception e)
             {

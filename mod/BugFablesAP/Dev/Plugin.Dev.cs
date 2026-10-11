@@ -167,8 +167,29 @@ namespace BugFablesAP
             list.Add(("loadtime", LoadTimer.Tick));
         }
 
+        partial void DevJobStart()
+        {
+            if (JobSampler.Active)
+            {
+                JobSampler.JobStart();
+            }
+        }
+
+        partial void DevJobEnd(string name)
+        {
+            if (JobSampler.Active)
+            {
+                JobSampler.JobEnd(name);
+            }
+        }
+
         partial void DevAfterTick()
         {
+            string jobs = JobSampler.FrameEnd();
+            if (jobs != null)
+            {
+                Log.LogInfo("[dev] " + jobs);
+            }
             if (!saveDiffDone && !string.IsNullOrEmpty(saveDiff.Value))
             {
                 saveDiffDone = true;

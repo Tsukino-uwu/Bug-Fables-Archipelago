@@ -666,6 +666,9 @@ namespace BugFablesAP
                     }
                     case "fpsscan":
                         return FrameRate.Scan();
+                    case "jobs":
+                        return JobSampler.Start(parts.Length > 1 && float.TryParse(parts[1], out float jobSecs)
+                            ? jobSecs : 10f);
                     case "rates":
                         return FrameRate.StartRates(parts.Length > 1 && float.TryParse(parts[1], out float rateSecs)
                             ? rateSecs : 5f);

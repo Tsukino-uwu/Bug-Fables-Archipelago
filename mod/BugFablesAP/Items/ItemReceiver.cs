@@ -70,6 +70,8 @@ namespace BugFablesAP
         internal static System.Func<bool> QuietBursts = null;
         private int quietUntil;
 
+        private int membersCountedAt = -1;
+
         internal void Tick(bool randomizerOn)
         {
             MainManager mm = MainManager.instance;
@@ -95,9 +97,15 @@ namespace BugFablesAP
                 log.LogInfo("[recv] " + state);
                 lastState = key;
             }
-            if (matches == true && given >= 0 && given <= received.Count)
+            // Recounted only when the count moves: it reads every received item's game name, too much for each frame.
+            if (matches == true && given >= 0 && given <= received.Count && given != membersCountedAt)
             {
                 PartyMembers.SetReceived(MembersGiven(received, given));
+                membersCountedAt = given;
+            }
+            else if (matches != true)
+            {
+                membersCountedAt = -1;
             }
             if (blocked != null || given == received.Count)
             {

@@ -2431,8 +2431,17 @@ whether a garbage collection ran. Two clocks showed up:
    map still does both, and the runtime collects when memory needs it. 20 s of play
    afterwards: one collection (47 ms) instead of four double stalls.
 
+3. **Grown back (2026-10-11): about 60 ms every 7 s in the Termite Capitol's plaza.** PresentMon, recording from
+   outside the game, showed no hitch in the same spot with no plugin (`copy-dev.ps1 -Layout None`), so it was the mod.
+   The console's `jobs <seconds>` (`Dev/JobSampler.cs`, timing each guarded per-frame job and the managed memory it
+   grows by) found the receiver at 35.7 KB a frame: every frame it worked out the party members received by reading
+   each received item's game name, each a fresh cleaned string. Now only when the received count moves (and again on
+   another save): 0.1 KB a frame, one collection in 20 s where there were three. The dev console still shows 35 KB a
+   frame in `jobs`, unexplained (its per-frame helpers allocate nothing found); dev builds only.
+
 **Status:** works, measured (2026-09-27). The tester's FPS counter dipping to 220 was that stall; confirmation on screen
-that it's gone waived by the user (2026-10-04: assumed fine until an issue shows).
+that it's gone waived by the user (2026-10-04: assumed fine until an issue shows). The receiver's regrowth fixed and
+measured (2026-10-11); not yet confirmed by feel in the plaza.
 
 *Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames`
 (`DevConsole.cs`, `Dev/FrameRate.Dev.cs`).*
