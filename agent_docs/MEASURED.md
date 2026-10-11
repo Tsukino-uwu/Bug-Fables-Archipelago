@@ -3368,6 +3368,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   round the edges. The lift (a ridden lift, a scene at the top) goes to `GiantLairRoachVillage`. One pickup: Crystal
   Berry 48 (`crystalberry`, at (-16.4, 16.0, 10.0)), behind the milk on the 2nd floor's upper left. Used by
   `giants_lair.py`.
+- **Roach Village** (`GiantLairRoachVillage`, 2026-10-11, seen on screen; EntityDump, code read): one door
+  (`loadzoneplains`, to `GiantLairBeforeBoss`) on the left; a trigger in front of it (`block`, `Event12`, limit 595)
+  turns the party back with the gatekeeper's line until 595. A trigger on the right (`event`, limit 586) runs
+  `Event199`, which sets only 586 (`LoadMap()` after). The elder upstairs (`insideid` 2, up by Jump or Bee Fly) runs
+  `Event202` from his line 34, with Maki and the Queen (both from 586), and sets 595. Amber (`amber`, a `Shop`, from
+  586 until 555) sells items 16, 11, 20, 3 (Leaf Salad, Magic Seed, Glazed Honey, Burly Berry). The roach lift
+  (`elevatorroach`, line 16) is free and goes to the Entrance from 586; the fridge's lift (`lift`) needs Jump or Bee
+  Fly up its ledge. A save crystal. Used by `giants_lair.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

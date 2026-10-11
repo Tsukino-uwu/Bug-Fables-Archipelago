@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**190 of 244 done.**
+**191 of 244 done.**
 
 ## Outskirts
 
@@ -412,7 +412,10 @@ as it is, a frozen record.
   at the top, a drop from it; Crystal Berry 48 behind the milk on the 2nd floor (location 250): from the 2nd floor up
   its ice with Freeze, Horn Slash and Jump and a drop to it, or Bee Fly across the gap, never down from the top; for
   the enemy pass: three enemies
-- [ ] GiantLairRoachVillage (237)
+- [x] GiantLairRoachVillage (237) — Roach Village (the game's name); its free ground the map's own region: the
+  scene (Event199, sets 586), Amber's shop (locations 251-254, from 586, kept past 555), the roach lift down to the
+  Entrance (opened by the scene; one way in the logic, its way up needing the scene seen); the left door free in, out
+  only from 595 (the elder upstairs, Event202, Jump or Bee Fly); the fridge's lift up a ledge, Jump or Bee Fly
 - [ ] GiantLairSaplingPlains (238)
 - [ ] GiantLairBeforeBoss (244)
 - [ ] GiantLairBeforeBoss2 (245)

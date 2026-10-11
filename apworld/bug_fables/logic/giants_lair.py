@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import Has, Rule
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, Member, one_way
-from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import ALWAYS_SET, Area, FlagSwap, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
 
 # Up a bounce pad onto a rock, Jump, then the rock knocked with the horn into the hand, which opens the next pad; the
 # hand lets go whenever the room is left.
@@ -19,6 +19,7 @@ _FRIDGE_FIGHT = "Outside the Fridge Fight Won"
 # Each floor's climb inside the fridge: droplets and geysers frozen, ice knocked into place with the horn, Jump onto it,
 # Bee Fly across to the next bounce pad (on the top floor, to the lift and into it).
 _FRIDGE_CLIMB: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump") & CanUse("Bee Fly")
+_UP: Rule = CanUse("Jump") | CanUse("Bee Fly")
 
 LOCATIONS = (
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
@@ -39,6 +40,12 @@ LOCATIONS = (
              Source(berry=48, pickup=Pickup(map="GiantLairFridgeInside", type=3, item=0)),
              rule=(CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")) | CanUse("Bee Fly"),
              category="crystal_berry", no_jump=True, area="Second Floor"),
+    # Amber's shop on the Roach Village's free ground (Leaf Salad, Magic Seed, Glazed Honey, Burly Berry), there from
+    # its scene (586): first purchase a check, then its own item.
+    *(Location(f"Giant's Lair: Roach Village, Item Shop {slot}", 250 + slot, "GiantLairRoachVillage",
+               Source(item_shop=ItemShop(map="GiantLairRoachVillage", keeper="amber", item=item)),
+               category="item_shop", no_jump=True)
+      for slot, item in enumerate((16, 11, 20, 3), start=1)),
 )
 
 STORY_EVENTS = (
@@ -83,11 +90,19 @@ MAP_AREAS = (
          to="GiantLairFridgeInside (Second Floor)"),
     Area("GiantLairFridgeInside", "Lift", (), _FRIDGE_CLIMB, out=one_way(None, _FRIDGE_CLIMB),
          to="GiantLairFridgeInside (Top Floor)"),
+    # The Roach Village (GiantLairRoachVillage; named 2026-10-11): its free ground the map's own region, with its
+    # scene (Event199, setting 586, which opens the roach lift), Amber's shop and the roach lift. The left door (to the
+    # plains) is blocked until 595, set by the elder's talk upstairs (Event202, from 586), up by Jump or Bee Fly; free
+    # in. The fridge's lift up a ledge, Jump or Bee Fly, a drop down from it.
+    Area("GiantLairRoachVillage", "Left Door", ("loadzoneplains",), _UP, out=one_way(None, _UP)),
+    Area("GiantLairRoachVillage", "Fridge Lift", (), _UP, out=one_way(None, _UP)),
 )
 
 TRANSFERS = (
-    Transfer("lift", "GiantLairFridgeInside", "GiantLairRoachVillage", LATER_CHAPTERS, from_area="Lift"),
-    Transfer("lift", "GiantLairRoachVillage", "GiantLairEntrance", LATER_CHAPTERS),
+    Transfer("lift", "GiantLairFridgeInside", "GiantLairRoachVillage", from_area="Lift", to_area="Fridge Lift"),
+    # The roach lift, opened by the village's scene on its free ground: up from the Entrance only once that's seen, so
+    # the logic takes it down only (cautious, without a story event).
+    Transfer("lift", "GiantLairRoachVillage", "GiantLairEntrance", two_way=False),
     # The ending: from the Sapling's plains to the city's end.
     Transfer("story", "GiantLairSaplingPlains", "BugariaEndPlaza", LATER_CHAPTERS, two_way=False),
 )
@@ -96,4 +111,9 @@ TRANSFERS = (
 # vanilla, and it can never set 41 (build step 60).
 ACTIVATION_FLAGS = (
     FlagSwap("GiantLairBeforeBoss2", "platformswitch", 41, ALWAYS_SET),
+)
+
+# Amber's shop leaves the Roach Village at 555 (the ending): kept for good, so its checks never go away.
+LIMIT_FLAGS = (
+    FlagSwap("GiantLairRoachVillage", "amber", 555, -1),
 )
