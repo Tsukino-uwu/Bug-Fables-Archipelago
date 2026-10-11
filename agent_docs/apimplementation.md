@@ -160,6 +160,7 @@ this file and that doc disagree, that doc is right.
 85. [Build step 85: the Giant's Lair Bridge's right side out of order](#build-step-85-the-giants-lair-bridges-right-side-out-of-order)
 86. [Build step 86: the artifacts as items, Artifact Shuffle](#build-step-86-the-artifacts-as-items-artifact-shuffle)
 87. [Build step 87: a ride's way back is never shuffled](#build-step-87-a-rides-way-back-is-never-shuffled)
+88. [Build step 88: the Kitchen Stove and the room above kept together](#build-step-88-the-kitchen-stove-and-the-room-above-kept-together)
 
 **How it works**
 
@@ -6489,6 +6490,28 @@ seen in game.
 
 *Code: `data_tables.py` (`RIDE_RETURNS`, `SHUFFLED_ONE_WAYS`), `entrances.py`, `test/test_doors.py`. The mod:
 unchanged.*
+
+## Build step 88: the Kitchen Stove and the room above kept together
+
+**Found** (2026-10-11, mapping the Kitchen Stove, `GiantLairBeforeBoss`): the game's way across the stove's burners
+from its right is up the right (Bee Fly, Horn Dash, the lever that starts the air pipe) to the bounce pad, through the
+room above (`GiantLairBeforeBoss2`), and its drop into the middle's left, where the two levers turn the heat off. The
+bounce pad is a two-way door and the drop a one-way door, so entrance rando shuffled both.
+
+**Decided** (2026-10-11): kept as the game has them in every mode, "as both rooms are heavily tied together logic
+wise, with how you are expected to cross the fire".
+
+**Built** (the apworld only): `KEPT_DOORS` in `data_tables.py` names the bounce pad (`loadzoneup`); `SHUFFLED_CONNECTIONS`
+is every two-way door but those, what entrance rando splits, replays, plandos (`DOOR_NAMES`) and Room Swap lays out;
+Room Swap moves the two rooms together (`_KEPT_FIXED` in `entrances.py`). The logic keeps the pair as a door, so its
+areas stay (the pad is in the Upper area, behind the air pipe). The drop joins build step 87's `RIDE_RETURNS`. Test:
+`test_the_room_above_the_kitchen_stove_stays`, every mode (fails in all six without it); the door tests count the
+shuffled doors.
+
+**Status:** built (2026-10-11); not seen in game.
+
+*Code: `data_tables.py` (`KEPT_DOORS`, `SHUFFLED_CONNECTIONS`, `RIDE_RETURNS`), `entrances.py`, `options.py`,
+`test/test_doors.py`. The mod: unchanged.*
 
 # How it works
 

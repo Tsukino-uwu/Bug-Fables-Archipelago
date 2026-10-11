@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**192 of 244 done.**
+**193 of 244 done.**
 
 ## Outskirts
 
@@ -419,7 +419,12 @@ as it is, a frozen record.
 - [x] GiantLairSaplingPlains (238) — the Sapling Plains; its door and a save crystal the map's own region; the last
   fight's scene (Event200, until 555; two fights) up by Jump or Bee Fly, where the ending leaves to the city's end
   (seen won); its scene fast-forwarded; no location
-- [ ] GiantLairBeforeBoss (244)
+- [x] GiantLairBeforeBoss (244) — Kitchen Stove; its right (the village's door, the scene, a dig spot: Bee Fly and
+  Beetle Dig, a respawning Magic Seed, location 255) the map's own region; the middle's halves up by Jump or Bee Fly
+  from each side, the burners' fires between them until the two levers below the left (Horn Slash) turn the heat
+  off; the left door (the Sapling Plains) up into the middle's left the same way, its blocker kept away; up the right
+  by Bee Fly, Horn Dash and the lever below the right (the air pipe) to the bounce pad to room 245, whose drop lands
+  in the middle's left; the pad and the drop never shuffled (build step 88)
 - [ ] GiantLairBeforeBoss2 (245)
 
 ## Metal Lake

@@ -14,7 +14,8 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState, Entrance, EntranceType, LocationProgressType, Region
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 
-from .data_tables import DOORS, SHUFFLED_ONE_WAYS, door_name, door_region, landing_region, one_way_landing
+from .data_tables import (DOORS, KEPT_DOORS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name, door_region,
+                          landing_region, one_way_landing)
 from .data_types import DoorConnection, OneWayDoor
 from .options import EntranceRandomizer
 
@@ -96,6 +97,12 @@ def room_pairs(connections: Sequence[DoorConnection], fixed: Sequence[tuple[str,
     return _RoomLayout(connections, fixed, random).pairs()
 
 
+# Room Swap moves rooms joined by a kept door together, as it does rooms joined by fixed doors.
+_KEPT_FIXED = (*DOORS.fixed, *((end.map, other.map) for c in DOORS.connections
+                               for end, other in ((c.a, c.b), (c.b, c.a))
+                               if (c.a.map, c.a.door) in KEPT_DOORS or (c.b.map, c.b.door) in KEPT_DOORS))
+
+
 def door_targets(pairings: Sequence[tuple[Door, Door]], connections: Sequence[DoorConnection],
                  one_ways: Sequence[OneWayDoor] = ()) -> list[dict[str, str]]:
     """Each pairing (x, y) as a door_targets entry. A two-way x leads to y's side: where y's partner leads in the game,
@@ -143,7 +150,7 @@ def _split(world: BugFablesWorld) -> dict[Door, str]:
     """Splits the door entrances the mode shuffles, as Archipelago's randomizer needs them: every two-way door, and the
     one-ways but a ride's way back (SHUFFLED_ONE_WAYS), none with Room Swap; the rest stay as they are. Returns each
     two-way door's entrance name."""
-    names = {(end.map, end.door): door_name(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
+    names = {(end.map, end.door): door_name(end.map, end.door) for c in SHUFFLED_CONNECTIONS for end in (c.a, c.b)}
     for name in names.values():
         entrance = world.get_entrance(name)
         entrance.randomization_type = EntranceType.TWO_WAY
@@ -193,7 +200,7 @@ def replay(world: BugFablesWorld, targets: Sequence[Mapping[str, str]]) -> list[
         return []
     names = _split(world)
     one_ways = SHUFFLED_ONE_WAYS if mode != EntranceRandomizer.option_room_swap else ()
-    pairings = pairings_from_targets(targets, DOORS.connections, one_ways)
+    pairings = pairings_from_targets(targets, SHUFFLED_CONNECTIONS, one_ways)
     landing = {(w.map, w.door): w for w in one_ways}
     for x, y in pairings:
         if x in landing:
@@ -263,7 +270,7 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
     random = world.random
     wiring = _Wiring(world, names)
     measure = _Measure(world)
-    layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
+    layout = _RoomLayout(SHUFFLED_CONNECTIONS, _KEPT_FIXED, random)
     group_of = {slot: slots for slots in layout.groups for slot in slots}
     movable = [g for g in layout.groups if len(g) > 1 or len(layout.by_area[g[0]]) > 1]
     region_of = {door: door_region(*door) for door in layout.partner}
@@ -274,7 +281,7 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
     since_better = 0
     for _ in range(ROOM_SWAP_TRIES):
         if since_better >= _STUCK:
-            layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
+            layout = _RoomLayout(SHUFFLED_CONNECTIONS, _KEPT_FIXED, random)
             pairings = wiring.wire(layout.pairs())
             cut, start, opened = measure()
             since_better = 0

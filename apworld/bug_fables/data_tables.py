@@ -8,7 +8,7 @@ from typing import Any
 
 from rule_builder.rules import False_
 
-from .data_types import Area, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
+from .data_types import Area, DoorConnection, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
 from .logic import (ACTIVATION_FLAGS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS, DOOR_RULES, ENTITIES_MOVED,
                     FLAGS_WITH, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT, LIMIT_FLAGS, LOCATIONS,
@@ -64,17 +64,25 @@ def door_name(map_name: str, door: str) -> str:
     return f"{map_name}: {door}"
 
 
+# Two-way doors kept as the game has them in every mode, by one of their ends: the bounce pad up from the Kitchen Stove
+# to the room above, whose drop back is the only other way across the room's fires (with RIDE_RETURNS' drop).
+KEPT_DOORS: frozenset[tuple[str, str]] = frozenset({("GiantLairBeforeBoss", "loadzoneup")})
+# The two-way doors the entrance randomizer shuffles.
+SHUFFLED_CONNECTIONS: tuple[DoorConnection, ...] = tuple(
+    c for c in DOORS.connections if (c.a.map, c.a.door) not in KEPT_DOORS and (c.b.map, c.b.door) not in KEPT_DOORS)
 # Every two-way door the entrance randomizer shuffles, by its entrance's name.
-DOOR_NAMES: frozenset[str] = frozenset(door_name(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b))
+DOOR_NAMES: frozenset[str] = frozenset(door_name(end.map, end.door) for c in SHUFFLED_CONNECTIONS for end in (c.a, c.b))
 # Maps nothing leads into: an unused room and the debug room (MEASURED.md, "The door graph").
 UNUSED_MAPS = frozenset({"SnakemouthEmpty", "TestRoom"})
 # Every one-way door, those of unused maps left out.
 ONE_WAYS: tuple[OneWayDoor, ...] = tuple(w for w in DOORS.one_way
                                          if w.map not in UNUSED_MAPS and w.to not in UNUSED_MAPS)
 
-# One-way doors that are a ride's way back (the underground bar's door up, after the talk down): kept as the game has
-# them in every mode, so the ride and its return always join the same two rooms, as a lift or a tram does.
-RIDE_RETURNS: frozenset[tuple[str, str]] = frozenset({("UndergroundBar", "LoadZone")})
+# One-way doors kept as the game has them in every mode: a ride's way back (the underground bar's door up, after the
+# talk down), so the ride and its return always join the same two rooms, as a lift or a tram does; and the drop from
+# above the Kitchen Stove into its middle's left (KEPT_DOORS).
+RIDE_RETURNS: frozenset[tuple[str, str]] = frozenset({("UndergroundBar", "LoadZone"),
+                                                      ("GiantLairBeforeBoss2", "loadzoneleft")})
 # The one-ways Coupled and Decoupled shuffle.
 SHUFFLED_ONE_WAYS: tuple[OneWayDoor, ...] = tuple(w for w in ONE_WAYS if (w.map, w.door) not in RIDE_RETURNS)
 

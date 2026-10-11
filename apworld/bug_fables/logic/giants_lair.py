@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import Has, Rule
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, Member, one_way
-from ..data_types import ALWAYS_SET, Area, FlagSwap, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
 
 # Up a bounce pad onto a rock, Jump, then the rock knocked with the horn into the hand, which opens the next pad; the
 # hand lets go whenever the room is left.
@@ -21,6 +21,7 @@ _FRIDGE_FIGHT = "Outside the Fridge Fight Won"
 _FRIDGE_CLIMB: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump") & CanUse("Bee Fly")
 _UP: Rule = CanUse("Jump") | CanUse("Bee Fly")
 _ROACH_SCENE = "Roach Village Scene Seen"
+_LEFT_LEVERS = "Kitchen Stove Levers Hit"
 
 LOCATIONS = (
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
@@ -47,6 +48,10 @@ LOCATIONS = (
                Source(item_shop=ItemShop(map="GiantLairRoachVillage", keeper="amber", item=item)),
                category="item_shop", no_jump=True)
       for slot, item in enumerate((16, 11, 20, 3), start=1)),
+    # A respawning Magic Seed dug up on the right (regional flag 30): Bee Fly up to it, then Beetle Dig.
+    Location("Giant's Lair: Kitchen Stove, Dig Spot", 255, "GiantLairBeforeBoss",
+             Source(regional=30, pickup=Pickup(map="GiantLairBeforeBoss", type=0, item=11)),
+             rule=CanUse("Bee Fly") & CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
 )
 
 STORY_EVENTS = (
@@ -58,6 +63,10 @@ STORY_EVENTS = (
     StoryEvent("Giant's Lair: Outside the Fridge, Dead Lander Fight from the Right", _FRIDGE_FIGHT,
                "GiantLairFridgeOutside", Source(flag=593), rule=Member("Vi"), no_jump=True, area="Right"),
     # The Roach Village's scene on its free ground (Event199, until 586), which opens the roach lift's way up.
+    # The two levers below the middle's left (flags 667, 668, each starting Event216), each putting out one of the two
+    # big fires; Horn Slash only, down from the middle's left and back up by Jump or Bee Fly.
+    StoryEvent("Giant's Lair: Kitchen Stove, Bottom Left Levers", _LEFT_LEVERS, "GiantLairBeforeBoss",
+               Source(flag=668), rule=CanUse("Horn Slash") & _UP, no_jump=True, area="Middle Left"),
     StoryEvent("Giant's Lair: Roach Village, Arrival Scene", _ROACH_SCENE, "GiantLairRoachVillage", Source(flag=586),
                no_jump=True),
 )
@@ -103,6 +112,18 @@ MAP_AREAS = (
     # The Sapling Plains (GiantLairSaplingPlains; named 2026-10-11): its door and a save crystal the map's own region;
     # up by Jump or Bee Fly to the last fight's scene (Event200, until 555), where the ending leaves from.
     Area("GiantLairSaplingPlains", "Last Fight", (), _UP),
+    # The Kitchen Stove (GiantLairBeforeBoss; named 2026-10-11): its right (the village's door, the scene by it, a dig
+    # spot) the map's own region. The middle's two halves each up from their side by Jump or Bee Fly, two burners'
+    # fires between them until the two levers below the left turn the heat off; the left door's side up into the
+    # middle's left the same way. Up on the right by Bee Fly and Horn Dash (platforms, the boulder, 665) and the lever
+    # below the right (666, Horn Slash, Jump or Bee Fly back up), which with the boulder broken starts the air pipe's
+    # wind, to the bounce pad to the room above, whose drop lands in the middle's left.
+    Area("GiantLairBeforeBoss", "Middle Right", (), _UP),
+    Area("GiantLairBeforeBoss", "Middle Left", (), Has(_LEFT_LEVERS),
+         to="GiantLairBeforeBoss (Middle Right)", landings=(("GiantLairBeforeBoss2", "loadzoneleft"),)),
+    Area("GiantLairBeforeBoss", "Left", ("loadzonefinal",), _UP, to="GiantLairBeforeBoss (Middle Left)"),
+    Area("GiantLairBeforeBoss", "Upper", ("loadzoneup",),
+         CanUse("Bee Fly") & CanUse("Horn Dash") & CanUse("Horn Slash") & _UP),
 )
 
 TRANSFERS = (
@@ -124,4 +145,10 @@ ACTIVATION_FLAGS = (
 # Amber's shop leaves the Roach Village at 555 (the ending): kept for good, so its checks never go away.
 LIMIT_FLAGS = (
     FlagSwap("GiantLairRoachVillage", "amber", 555, -1),
+)
+
+# The Kitchen Stove: a trigger by the left door (Event216, until 670) turns the party back right with a line, so the
+# left door's side is never a dead end.
+KEPT_OPEN = (
+    EntityRef("GiantLairBeforeBoss", "event before final"),
 )

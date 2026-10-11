@@ -7,7 +7,7 @@ from worlds.AutoWorld import call_all
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
 from .. import entrances
-from ..data_tables import (DOORS, ONE_WAYS, REGIONS, SHUFFLED_ONE_WAYS, door_name, door_region,
+from ..data_tables import (DOORS, ONE_WAYS, REGIONS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name, door_region,
                            landing_region, one_way_landing)
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
@@ -120,7 +120,7 @@ class DoorPairTests:
 
     def test_door_targets_read_back_into_the_pairings(self) -> None:
         # Universal Tracker rebuilds the doors from door_targets alone, the same table the mod rewrites doors from.
-        read = pairings_from_targets(self.world.door_targets, DOORS.connections, self.shuffled_one_ways)
+        read = pairings_from_targets(self.world.door_targets, SHUFFLED_CONNECTIONS, self.shuffled_one_ways)
         self.assertEqual(set(read), set(self.world.door_pairings))
         self.assertEqual(len(read), len(set(self.world.door_pairings)))
 
@@ -161,6 +161,17 @@ class DoorPairTests:
                 with self.subTest(door=door_name(w.map, name)):
                     self.assertEqual(lands[(w.map, name)], entrance.connected_region.name)
 
+    def test_the_room_above_the_kitchen_stove_stays(self) -> None:
+        # Its bounce pad up and its drop back lead where the game has them in every mode, so the way across the fires
+        # is always up the right and down on the left.
+        kept = {("GiantLairBeforeBoss", "loadzoneup"), ("GiantLairBeforeBoss2", "loadzoneright"),
+                ("GiantLairBeforeBoss2", "loadzoneleft")}
+        self.assertFalse(kept & {x for x, _ in self.world.door_pairings})
+        up = self.multiworld.get_entrance(door_name("GiantLairBeforeBoss", "loadzoneup"), self.player)
+        self.assertEqual(up.connected_region.name, door_region("GiantLairBeforeBoss2", "loadzoneright"))
+        drop = self.multiworld.get_entrance(door_name("GiantLairBeforeBoss2", "loadzoneleft"), self.player)
+        self.assertEqual(drop.connected_region.name, "GiantLairBeforeBoss (Middle Left)")
+
     def test_story_copies_follow_their_door(self) -> None:
         # The fog maze's left edge in BarrenLandsCD leads one place whatever the Termite gate: its copy always has an
         # entry, the same as its door's.
@@ -188,7 +199,7 @@ class CoupledTests(DoorPairTests):
             self.assertEqual(arrive[there], door, f"{door} leads to {there}, which leads to {arrive[there]}")
 
     def test_spoiler_lists_each_pair_once(self) -> None:
-        self.assertEqual(len(self.spoiler_entries()), len(DOORS.connections) + self.one_way_lines)
+        self.assertEqual(len(self.spoiler_entries()), len(SHUFFLED_CONNECTIONS) + self.one_way_lines)
 
 
 class OneWayTests:
@@ -231,7 +242,7 @@ class TestDoorsDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
         self.assertTrue(any(arrive[there] != door for door, there in arrive.items()))
 
     def test_spoiler_lists_every_door(self) -> None:
-        self.assertEqual(len(self.spoiler_entries()), 2 * len(DOORS.connections) + len(SHUFFLED_ONE_WAYS))
+        self.assertEqual(len(self.spoiler_entries()), 2 * len(SHUFFLED_CONNECTIONS) + len(SHUFFLED_ONE_WAYS))
 
 
 class TestRoomSwapRepairs(TestCase):
@@ -486,8 +497,8 @@ class TestDoorPlandoNames(TestCase):
         self.assertIn("antbridge: loadzonepalace", DoorPlando.exits)
         self.assertIn("barrenlandstanks: returnzonenorth", DoorPlando.entrances)
         self.assertIn(ENTRANCE_RIGHT_LANDING.lower(), DoorPlando.exits)
-        self.assertEqual(len(DoorPlando.entrances), 2 * len(DOORS.connections) + len(SHUFFLED_ONE_WAYS))
-        self.assertEqual(len(DoorPlando.exits), 2 * len(DOORS.connections) + len(SHUFFLED_ONE_WAYS))
+        self.assertEqual(len(DoorPlando.entrances), 2 * len(SHUFFLED_CONNECTIONS) + len(SHUFFLED_ONE_WAYS))
+        self.assertEqual(len(DoorPlando.exits), 2 * len(SHUFFLED_CONNECTIONS) + len(SHUFFLED_ONE_WAYS))
         with self.assertRaises(ValueError):
             DoorPlando.from_any([{"entrance": "Nowhere: door", "exit": "AntBridge: loadzonepalace"}])
 

@@ -3383,6 +3383,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   and 586 on; then `Event203` (586 on, 555 and 664 off, `LoadMap(237)`, the Roach Village; then 555 and 664 on) and
   the ending to `BugariaEndPlaza` (seen won with no artifact). From 555 the elder (until 597) and the sapling. No
   pickup. Used by `giants_lair.py`.
+- **Kitchen Stove** (`GiantLairBeforeBoss`, 2026-10-11, seen on screen; EntityDump, code read): doors `loadzonevillage`
+  (right, the Roach Village), `loadzonefinal` (left, the Sapling Plains), `loadzoneup` (the bounce pad up, to
+  `GiantLairBeforeBoss2`), whose one-way `loadzoneleft` drops into the middle's left. `Event216` by caller: the
+  levers `switch1` (entity 6, 666), `- Duplicate` (10, 667), `- Duplicate - Duplicate` (11, 668), Horn Slash only
+  (seen); 667 and 668 each shrink one burner's fire (the mesh's children 1 and 2), both off clears the way; 666 with
+  665 (the boulder, `rock`) set starts the wind pusher (entity 7), else a line. Entity 12 (`event before final`, until
+  670) by the left door: a line and a walk right; entity 23 (until 664): the explorers' scene, sets 664. A dig spot
+  (data `0 0 11`, regional 30): a respawning Magic Seed, Bee Fly then Beetle Dig (seen). Used by `giants_lair.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
