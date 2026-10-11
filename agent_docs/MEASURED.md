@@ -3449,6 +3449,15 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   King and Queen on a platform by Jump or Bee Fly; `statue` (line 32) records discovery 24, "Termite Statue" (the
   only new one after reading it); `cberry` (#33, data `3 -1 0 33`) at (46.2, 0, 6.0), hidden behind the thrones, by
   Jump or Bee Fly. Used by `termite_capitol.py`.
+- **The Industrial District, `TermiteIndustrial` (176)** (2026-10-11, EntityDump, the decompiled `Event226`; seen in
+  play): the elevators in the left building (`HIDEhotelelevator0-2`: floor 1, floor 2, roof) and the right one
+  (`HIDEaprlelv0-2`: floor 1, floor 5, roof) need nothing. `DDISTdiscovery` (line 107: `discovery,43 flag,655`) on the
+  right roof at (23, 36, 20), a vista. `DDISTlorebook apartment` (activation and limit flag 469, set and read by nothing
+  else) on the window apartment's balcony, flown to from the left roof. `bombshop` sells items 30, 172, 31, 44, 45, 46,
+  36; `FIXEDbomb medal` runs `Event226`: 200 berries for medal 89 (Bomb Master), flag 719. `HIDEFixedapartment message`
+  only reads (line 110 has no commands). The street outside the Colosseum is the same map: `loadzonenearcoliseum` and
+  three `NEARloadzoneback` load map 176 itself; `DDISTlorebook` there (flag 381, same) sits between boxes, free. No
+  crystal berry on the map. Used by `termite_capitol.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

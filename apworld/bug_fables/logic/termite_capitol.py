@@ -2,8 +2,10 @@
 what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
+from rule_builder.rules import True_
+
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
-from ..data_types import EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
+from ..data_types import Area, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
@@ -25,6 +27,31 @@ LOCATIONS = (
     Location("Termite Capitol: Royal Chamber, Behind the Thrones", 267, "TermiteRoyalChamber",
              Source(berry=33, pickup=Pickup(map="TermiteRoyalChamber", type=3, item=0)),
              rule=CanUse("Jump") | CanUse("Bee Fly"), category="crystal_berry", no_jump=True),
+    # The Industrial District (TermiteIndustrial; named 2026-10-11): its street, shops and both elevators free. The
+    # vista (discovery 43) on the right building's roof.
+    Location("Termite Capitol: Industrial District, Rooftop Vista", 269, "TermiteIndustrial", Source(discovery=43),
+             category="discovery", no_jump=True),
+    # A Lore Book on the window apartment's balcony, flown to from the left building's roof.
+    Location("Termite Capitol: Industrial District, Apartment Balcony", 270, "TermiteIndustrial",
+             Source(flag=469, pickup=Pickup(map="TermiteIndustrial", type=1, item=52)), rule=CanUse("Bee Fly"),
+             no_jump=True),
+    # The bomb shop (Spicy, Burly, Poison, Frost, Numb, Sleep and Clear Bomb): first purchase a check, then its own item.
+    *(Location(f"Termite Capitol: Industrial District, Bomb Shop {slot}", 270 + slot, "TermiteIndustrial",
+               Source(item_shop=ItemShop(map="TermiteIndustrial", keeper="bombshop", item=item)),
+               category="item_shop", no_jump=True)
+      for slot, item in enumerate((30, 172, 31, 44, 45, 46, 36), start=1)),
+    # Bomb Master on its own stand by the shop, 200 berries (Event226, flag 719).
+    Location("Termite Capitol: Industrial District, Bomb Shop Medal", 278, "TermiteIndustrial",
+             Source(event=226, flag=719), no_jump=True),
+    # A Lore Book between the boxes outside the Colosseum's lobby; free.
+    Location("Termite Capitol: Outside the Colosseum, Between the Boxes", 268, "TermiteIndustrial",
+             Source(flag=381, pickup=Pickup(map="TermiteIndustrial", type=1, item=52)), no_jump=True,
+             area="Outside the Colosseum"),
+)
+# The street outside the Colosseum is the same map, reached through a door pair that reloads it (loadzonenearcoliseum
+# and the three NEARloadzoneback); both ways free.
+MAP_AREAS = (
+    Area("TermiteIndustrial", "Outside the Colosseum", ("NEARloadzonecoliseum",), True_()),
 )
 TRANSFERS = (
     Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE),
