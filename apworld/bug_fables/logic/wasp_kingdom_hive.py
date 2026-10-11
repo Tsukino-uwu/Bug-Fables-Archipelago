@@ -75,9 +75,9 @@ MAP_AREAS = (
     Area("WaspKingdomMainHall", "Top", ("loadzonethrone",), CanUse("Jump") | CanUse("Bee Fly"), out=True_()),
     # The Throne Room (WaspKingdomThrone; named 2026-10-11): its bottom door free; up a ledge (Jump or Bee Fly) General
     # Ultimax, a Wasp Driller and a Wasp Bomber are fought (Event140, until 370): Kabbu for the Driller, nothing for the
-    # others; the Queen's door beyond, Jump or Bee Fly both ways.
+    # others), met going either way; the Queen's door beyond, Jump or Bee Fly both ways.
     Area("WaspKingdomThrone", "Top", ("loadzonequeen",), (CanUse("Jump") | CanUse("Bee Fly")) & Member("Kabbu"),
-         out=CanUse("Jump") | CanUse("Bee Fly")),
+         out=(CanUse("Jump") | CanUse("Bee Fly")) & Member("Kabbu")),
     Area("WaspKingdom2", "Right Door", ("loadzoneright",), Has("Wasp Key"), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
