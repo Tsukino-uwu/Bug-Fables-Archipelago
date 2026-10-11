@@ -72,6 +72,12 @@ UNUSED_MAPS = frozenset({"SnakemouthEmpty", "TestRoom"})
 ONE_WAYS: tuple[OneWayDoor, ...] = tuple(w for w in DOORS.one_way
                                          if w.map not in UNUSED_MAPS and w.to not in UNUSED_MAPS)
 
+# One-way doors that are a ride's way back (the underground bar's door up, after the talk down): kept as the game has
+# them in every mode, so the ride and its return always join the same two rooms, as a lift or a tram does.
+RIDE_RETURNS: frozenset[tuple[str, str]] = frozenset({("UndergroundBar", "LoadZone")})
+# The one-ways Coupled and Decoupled shuffle.
+SHUFFLED_ONE_WAYS: tuple[OneWayDoor, ...] = tuple(w for w in ONE_WAYS if (w.map, w.door) not in RIDE_RETURNS)
+
 
 def one_way_landing(door: OneWayDoor) -> str:
     """A one-way door's landing, the entrance randomizer's target: named apart from the door, so a one-way may keep its
@@ -80,8 +86,8 @@ def one_way_landing(door: OneWayDoor) -> str:
 
 
 # The one-way doors and their landings, by name.
-ONE_WAY_NAMES: frozenset[str] = frozenset(door_name(w.map, w.door) for w in ONE_WAYS)
-ONE_WAY_LANDINGS: frozenset[str] = frozenset(one_way_landing(w) for w in ONE_WAYS)
+ONE_WAY_NAMES: frozenset[str] = frozenset(door_name(w.map, w.door) for w in SHUFFLED_ONE_WAYS)
+ONE_WAY_LANDINGS: frozenset[str] = frozenset(one_way_landing(w) for w in SHUFFLED_ONE_WAYS)
 # Every map a region: the door table's and those only a transfer reaches.
 MAPS: tuple[str, ...] = tuple(sorted(
     ({end.map for c in DOORS.connections for end in (c.a, c.b)} | {m for w in ONE_WAYS for m in (w.map, w.to)}

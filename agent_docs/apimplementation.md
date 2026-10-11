@@ -159,6 +159,7 @@ this file and that doc disagree, that doc is right.
 84. [Build step 84: the Guard Floor pocket's bounce pad](#build-step-84-the-guard-floor-pockets-bounce-pad)
 85. [Build step 85: the Giant's Lair Bridge's right side out of order](#build-step-85-the-giants-lair-bridges-right-side-out-of-order)
 86. [Build step 86: the artifacts as items, Artifact Shuffle](#build-step-86-the-artifacts-as-items-artifact-shuffle)
+87. [Build step 87: a ride's way back is never shuffled](#build-step-87-a-rides-way-back-is-never-shuffled)
 
 **How it works**
 
@@ -884,6 +885,11 @@ be wrong.
 
 **Known issues:**
 
+- **Room Swap's repair runs out of tries on a stuck test seed** (found 2026-10-11, mapping the Giant's Lair):
+  `TestRoomSwapRepairsQuickly.test_stuck_starts_are_repaired` gives up at 1500 tries on seed 334640838 (`STUCK`), on
+  the commits before build step 87 too, so a newly mapped room shifted it, as mapping did before (2026-10-10, the
+  Pier). Not yet narrowed to a room. Options: raise the test's budget, improve the repair's moves, or wait until every
+  room is mapped and tune it once (as decided for mapping-caused breakage).
 - **Coupled door shuffle sometimes runs out of spare doors** (found 2026-10-10 by the fuzzer, 1 seed in 10000 in two
   runs): with Coupled doors every one-door dead end uses up a spare door already reached, and Archipelago's
   `randomize_entrances` gives up when they run out, with no retry of its own (`entrance_rando.py`). Measured with the
@@ -6450,6 +6456,27 @@ are used), and the pool tests (`test_pool.py`, `test_party.py`) skip the locatio
 `data/items.json`, `logic/snakemouth_den.py`, `logic/rubber_prison.py`. The mod: the mod guide, step 57. The
 PopTracker pack: its exporter no longer adds the artifacts as events, now ordinary locations (its `tools/export.py`;
 its tests passed on the current apworld, the regenerated output left for the next release's export).*
+
+## Build step 87: a ride's way back is never shuffled
+
+**Found** (2026-10-11, mapping the Roach Village): lifts, trams, boats and scenes are `Transfer`s, never shuffled, but
+the underground bar's way back up is a real door (`UndergroundBar`'s `LoadZone`), one of the one-way doors Coupled and
+Decoupled shuffle. Down by the talk always reached the bar; up led anywhere.
+
+**Decided** (2026-10-11): a ride and its way back stay as the game has them in every mode, "so all the interactable
+warps, or shortcuts stay as intended".
+
+**Built** (the apworld only): `RIDE_RETURNS` in `data_tables.py` names the bar's door; `SHUFFLED_ONE_WAYS` is every
+one-way but those, and is what entrance rando splits, replays (Universal Tracker), plandos and lists in the spoiler. An
+unshuffled one-way keeps its own landing, as every one-way already does with Room Swap. The roach lift, its other
+instance, is a `Transfer` both ways (the Giant's Lair's logic). Test: `test_a_rides_way_back_stays` (Coupled and
+Decoupled); the door tests count the shuffled one-ways.
+
+**Status:** built (2026-10-11); a Coupled and a Decoupled seed generated with the door absent from their spoilers. Not
+seen in game.
+
+*Code: `data_tables.py` (`RIDE_RETURNS`, `SHUFFLED_ONE_WAYS`), `entrances.py`, `test/test_doors.py`. The mod:
+unchanged.*
 
 # How it works
 
