@@ -7,10 +7,11 @@ from typing import TYPE_CHECKING, Any
 from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS,
                           ENTITIES_MOVED, FLAGS_WITH, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
                           KEPT_PRESENT, LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS,
-                          SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, SCENES_KEPT_AWAY,
-                          STORY_ONLY_MAPS, TIME_SWITCHES)
+                          SCENE_CAMERAS, SCENERY_COPIED, SCENERY_HIDDEN, SCENERY_LAYERS, SCENERY_MOVED, SCENERY_OFF,
+                          SCENERY_PRESENT, SCENES_KEPT_AWAY, STORY_ONLY_MAPS, TIME_SWITCHES)
 from .data_types import (DayNight, DialogueFlag, DoorRow, EntityMove, EntityRef, FlagEntity, FlagSwap, FlagWith,
-                         ItemEntity, MapScene, SceneCamera, SceneryMove, Source, TimeSwitch)
+                         ItemEntity, MapScene, SceneCamera, SceneryCopy, SceneryLayer, SceneryMove, Source,
+                         TimeSwitch)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -77,7 +78,8 @@ def _pickup(source: Source) -> dict[str, Any]:
 
 
 def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FlagSwap | DayNight | TimeSwitch
-                                  | SceneryMove | EntityMove | SceneCamera | MapScene | DoorRow | FlagWith]
+                                  | SceneryMove | SceneryCopy | SceneryLayer | EntityMove | SceneCamera | MapScene | DoorRow
+                                  | FlagWith]
               ) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
@@ -148,6 +150,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "day_night": _entities(DAY_NIGHT),
         "time_switches": _entities(TIME_SWITCHES),
         "scenery_moved": _entities(SCENERY_MOVED),
+        "scenery_copied": _entities(SCENERY_COPIED),
+        "scenery_layers": _entities(SCENERY_LAYERS),
         # Scenery with no flag of its own the client switches off on load ([{"map", "entity"}], by its path).
         "scenery_off": _entities(SCENERY_OFF),
         # Entities standing somewhere else than their own spot ([{"map", "entity", "at"}]).

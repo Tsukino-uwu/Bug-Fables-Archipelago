@@ -959,6 +959,46 @@ namespace BugFablesAP
                         ItemSwap.ClassColors[which] = Convert.ToInt32(parts[2], 16);
                         return $"markcolor: {classes[which]} now {parts[2]}";
                     }
+                    case "tagged":
+                    {
+                        // tagged <tag>: every object on the map with that tag, its path, layer and collider bounds.
+                        if (parts.Length < 2 || MainManager.map == null)
+                        {
+                            return "tagged <tag>";
+                        }
+                        var taggedLog = new System.Text.StringBuilder($"[dev] tagged {parts[1]} on {MainManager.map.mapid}:");
+                        foreach (Transform t in MainManager.map.GetComponentsInChildren<Transform>(true)
+                            .Where(t => t.CompareTag(parts[1])))
+                        {
+                            string path = t.name;
+                            for (Transform up = t.parent; up != null && up != MainManager.map.transform; up = up.parent)
+                            {
+                                path = up.name + "/" + path;
+                            }
+                            Collider c = t.GetComponent<Collider>();
+                            taggedLog.Append($"\n  {path} layer {t.gameObject.layer} pos {t.position} "
+                                + (c != null ? $"{c.GetType().Name} bounds {c.bounds.center} size {c.bounds.size}" : "no collider"));
+                        }
+                        log.LogInfo(taggedLog.ToString());
+                        return "tagged logged";
+                    }
+                    case "layer":
+                    {
+                        // layer <n> <path in the map>: put a map object on another physics layer until the map reloads.
+                        if (parts.Length < 3 || MainManager.map == null || !int.TryParse(parts[1], out int layerTo))
+                        {
+                            return "layer <n> <path in the map>";
+                        }
+                        string layerPath = string.Join(" ", parts.Skip(2).ToArray());
+                        Transform layered = MainManager.map.transform.Find(layerPath);
+                        if (layered == null)
+                        {
+                            return "layer: no " + layerPath + " on this map";
+                        }
+                        int was = layered.gameObject.layer;
+                        layered.gameObject.layer = layerTo;
+                        return $"layer: {layerPath} {was} -> {layerTo} until the map reloads";
+                    }
                     case "hide":
                     {
                         // hide <entity name | path in the map>: switch an entity, or any map object by its path ("Base/

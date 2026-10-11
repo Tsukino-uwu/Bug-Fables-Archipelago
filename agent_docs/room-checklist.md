@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**210 of 244 done.**
+**211 of 244 done.**
 
 ## Outskirts
 
@@ -506,7 +506,9 @@ as it is, a frozen record.
   away; the Wasp Key (key item 119, flag 364), which then lay free under the left ledge, moved on the roof: Beemerang
   Halt and Bee Fly (location 286; seen reached so; may go back to the floor, free, later); the Wasp Key opens the
   Central Hall's lock
-- [ ] WaspKingdom4 (166)
+- [x] WaspKingdom4 (166) — the left door's area; a lever (any attack) and a copied twig dug under (Beetle Dig, build
+  step 89) to the top, both ways; across the top under its own twig (Dig) to a lever (any attack) opening the right
+  door's barrier; no way back from the right; its five stealth wasps kept away; no pickup
 - [ ] WaspKingdom5 (167)
 - [ ] WaspKingdomPrison (168)
 - [ ] WaspKingdomJayde (169)

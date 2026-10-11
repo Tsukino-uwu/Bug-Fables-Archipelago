@@ -161,6 +161,7 @@ this file and that doc disagree, that doc is right.
 86. [Build step 86: the artifacts as items, Artifact Shuffle](#build-step-86-the-artifacts-as-items-artifact-shuffle)
 87. [Build step 87: a ride's way back is never shuffled](#build-step-87-a-rides-way-back-is-never-shuffled)
 88. [Build step 88: the Kitchen Stove and the room above kept together](#build-step-88-the-kitchen-stove-and-the-room-above-kept-together)
+89. [Build step 89: a twig copied before the hive's barrier](#build-step-89-a-twig-copied-before-the-hives-barrier)
 
 **How it works**
 
@@ -6516,6 +6517,20 @@ shuffled doors.
 
 *Code: `data_tables.py` (`KEPT_DOORS`, `SHUFFLED_CONNECTIONS`, `RIDE_RETURNS`), `entrances.py`, `options.py`,
 `test/test_doors.py`. The mod: unchanged.*
+
+## Build step 89: a twig copied before the hive's barrier
+
+**Found** (2026-10-11, mapping `WaspKingdom4`): the left barrier shuts behind a party reaching the top, where only
+Beetle Dig leads on, so a party without Dig was trapped. **Decided** (the same day): a copy of the room's own twig before
+the barrier, dug under, so the top takes Dig both ways (the user's idea).
+
+**Built:** `SceneryCopy` and `SceneryLayer` in `data_types.py`, each area's `SCENERY_COPIED` and `SCENERY_LAYERS`,
+sent as `scenery_copied` and `scenery_layers` (the mod: `documentation.md`, step 59). The room's logic: the top by any
+attack and Dig both ways, the right door from it by Dig and any attack, no way back from the right.
+
+**Status:** built (2026-10-11); seen through the dev `liveslot` the same day; not yet in a generated seed.
+
+*Code: `data_types.py`, `logic/__init__.py`, `data_tables.py`, `slot_data.py`, `logic/wasp_kingdom_hive.py`.*
 
 # How it works
 

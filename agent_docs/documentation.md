@@ -111,6 +111,7 @@ anyone curious about the process, or thinking of doing the same for another game
 56. [An entity copied into a map: the Guard Floor's pocket pad](#56-an-entity-copied-into-a-map-the-guard-floors-pocket-pad)
 57. [The goal's artifacts as items: received, drawn and counted](#57-the-goals-artifacts-as-items-received-drawn-and-counted)
 58. [The Spy Cards tournament held back without a deck](#58-the-spy-cards-tournament-held-back-without-a-deck)
+59. [Scenery copied and made diggable: a twig before the hive's barrier](#59-scenery-copied-and-made-diggable-a-twig-before-the-hives-barrier)
 
 ## Where it stands
 
@@ -3579,3 +3580,28 @@ different ones are asked for, the cautious way.
 **Status:** built (2026-10-11); seen the same day: the judge's line with no cards spied, no fee taken.
 
 *Code: `World/CardDeckGuard.cs`, `Core/Plugin.cs`.*
+
+## 59. Scenery copied and made diggable: a twig before the hive's barrier
+
+Found 2026-10-11, mapping the Wasp Kingdom's `WaspKingdom4`: a lever opens a barrier from the left door to the top, the
+barrier shuts behind the party (a floor trigger), and only Beetle Dig, under a twig, leads on. Without Dig the top was a
+trap. Taking the trigger away kept the barrier open but its lever toggles it shut from inside; taking the camera trigger
+away too stopped the camera following; nothing digs under the barrier or the planks beside it.
+
+How digging passes: a collider tagged `DigWall` is switched off while the player digs (`MapControl`, every frame), and
+the map gathers its dig walls once, after it makes its entities (`GetDigWalls`). Digging starts only on ground that isn't
+layer 13 (`GroundDetector`); this room's `Base/hardfloor` is 13 everywhere but its dirt patches.
+
+Built: `scenery_copied` (`[{"map", "entity", "at", "turn"}]`) instantiates a map object beside its original as the map
+makes its entities (so a copied dig wall is gathered too), turned `turn` degrees and centred by its colliders on `at`
+(x, z); `scenery_layers` (`[{"map", "entity", "layer"}]`) puts a map object on another layer. The room got a copy of its
+own twig (`Base/Twig3`, its only dig wall) at (0, 16.8), turned 105, before the left barrier, placed on screen in four
+tries, and its hard floor on layer 8. The log says `[night] <map>: <entity> copied, centred on (x, z), turned <deg>`
+and `<entity> on layer <n>`. The console's new `tagged <tag>` lists a map's objects with a tag, and `layer <n> <path>`
+changes one's layer until the map reloads (`development.md`).
+
+**Status:** built (2026-10-11); seen the same day through the dev `liveslot`: no way past the twig without digging,
+dug under both ways, the lever and Dig in and out of the top (the user).
+
+*Code: `World/DayNight.cs` (`Copy`, `Layer`), `Core/SeedData.cs` (`SceneryCopied`, `SceneryLayers`), `Dev/DevConsole.cs`
+(`tagged`, `layer`).*

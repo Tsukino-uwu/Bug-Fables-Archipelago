@@ -63,6 +63,21 @@ namespace BugFablesAP
             internal Vector3 Local;
         }
 
+        internal sealed class Copy
+        {
+            internal string Map;
+            internal string Entity;
+            internal Vector2 At;
+            internal float Turn;
+        }
+
+        internal sealed class Layer
+        {
+            internal string Map;
+            internal string Entity;
+            internal int To;
+        }
+
         private static ManualLogSource log;
         private static Func<SeedData> seed;
         private static Func<bool> randomizerOn;
@@ -302,6 +317,42 @@ namespace BugFablesAP
                     t.localPosition = move.Local;
                 }
                 log.LogInfo($"[night] {map}: {move.Entity} {(t != null ? "set to " + move.Local : "NOT FOUND")}");
+            }
+            // Made here, before the map gathers its dig walls (GetDigWalls), so a copied one is dug under too.
+            foreach (Copy copy in (seed?.Invoke()?.SceneryCopied ?? new List<Copy>()).Where(c => c.Map == map))
+            {
+                Transform t = __instance.transform.Find(copy.Entity);
+                if (t == null)
+                {
+                    log.LogWarning($"[night] {map}: {copy.Entity} NOT FOUND: no copy made");
+                    continue;
+                }
+                GameObject made = UnityEngine.Object.Instantiate(t.gameObject, t.parent);
+                made.name = t.name + " (copy)";
+                made.transform.Rotate(0f, copy.Turn, 0f, Space.World);
+                // Centred by its colliders: a model's pivot can sit anywhere.
+                Collider[] solids = made.GetComponentsInChildren<Collider>();
+                Vector3 centre = made.transform.position;
+                if (solids.Length > 0)
+                {
+                    Bounds bounds = solids[0].bounds;
+                    foreach (Collider c in solids)
+                    {
+                        bounds.Encapsulate(c.bounds);
+                    }
+                    centre = bounds.center;
+                }
+                made.transform.position += new Vector3(copy.At.x - centre.x, 0f, copy.At.y - centre.z);
+                log.LogInfo($"[night] {map}: {copy.Entity} copied, centred on ({copy.At.x}, {copy.At.y}), turned {copy.Turn}");
+            }
+            foreach (Layer layer in (seed?.Invoke()?.SceneryLayers ?? new List<Layer>()).Where(l => l.Map == map))
+            {
+                Transform t = __instance.transform.Find(layer.Entity);
+                if (t != null)
+                {
+                    t.gameObject.layer = layer.To;
+                }
+                log.LogInfo($"[night] {map}: {layer.Entity} {(t != null ? "on layer " + layer.To : "NOT FOUND")}");
             }
             string entityMap = EntityMap(map);
             foreach (Switch moved in (seed?.Invoke()?.EntitiesMoved ?? new List<Switch>()).Where(m => m.Map == entityMap))

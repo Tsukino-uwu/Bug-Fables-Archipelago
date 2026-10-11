@@ -449,6 +449,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   from the map's entity table. `prices <medal id...>`: log each medal's price columns (berries and crystal berries).
 - `markcolor <progression|useful|trap|filler> <hex>`: a class's starburst colour, live (a design test).
   `markclass <entity> <class>` draws one slot's backdrop as that class; `markclass off` puts them back.
+- `tagged <tag>`: logs every object on the map with that tag (`DigWall`, say), its path, layer and collider bounds.
+- `layer <n> <path>`: puts a map object on another physics layer until the map reloads (13 is ground digging can't
+  start on, 8 plain ground).
 - `hide <entity | path>`: switch an entity, or any map object by its path inside the map (`Base/fence/fence (2)`,
   as `solids` lists them), off until the map reloads (nothing saved).
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.

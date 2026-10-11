@@ -264,6 +264,34 @@ class SceneryMove:
 
 
 @dataclass(frozen=True, slots=True)
+class SceneryCopy:
+    """A copy of a map's scenery (by its path inside the map) added to the same map on load, its colliders centred on
+    `at` (x, z; its own height kept) and turned `turn` degrees about the vertical: an obstacle the game has elsewhere.
+    Made before the map gathers its dig walls, so a copied one is dug under like its original."""
+
+    map: str
+    entity: str
+    at: tuple[float, float]
+    turn: float = 0.0
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "at": list(self.at), "turn": self.turn}
+
+
+@dataclass(frozen=True, slots=True)
+class SceneryLayer:
+    """Scenery (by its path inside the map) put on another physics layer on load: a map's hard floor (13, where digging
+    can't start) made ground (8)."""
+
+    map: str
+    entity: str
+    layer: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "layer": self.layer}
+
+
+@dataclass(frozen=True, slots=True)
 class FlagEntity:
     """A map entity tied to a story flag instead of, or on top of, its own requirements; in its area's module.
 

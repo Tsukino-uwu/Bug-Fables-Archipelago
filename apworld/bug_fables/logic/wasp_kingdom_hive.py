@@ -4,7 +4,7 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse
-from ..data_types import Area, EntityMove, EntityRef, Location, Pickup, Source
+from ..data_types import Area, EntityMove, EntityRef, Location, Pickup, SceneryCopy, SceneryLayer, Source
 
 LOCATIONS = (
     # WaspKingdom3 (2026-10-11): the Wasp Key (key item 119, flag 364), which lay free under the left ledge once the
@@ -38,6 +38,13 @@ MAP_AREAS = (
     # past the lock; out through it with the key.
     Area("WaspKingdom2", "Top", ("loadzoneleft",),
          CanUse("Beetle Dig") & ANY_ATTACK & (CanUse("Jump") | CanUse("Bee Fly")), out=True_()),
+    # WaspKingdom4 (2026-10-11): from its left door (the map's own region) a lever (any attack) opens a barrier to the
+    # top, which shuts behind the party; a copied twig before it (SCENERY_COPIED) is dug under (Beetle Dig) both ways,
+    # so the top is never a trap. Across the top under its own twig (Dig) to a lever (any attack) that opens the right
+    # door's barrier, again on each visit; no way back from the right.
+    Area("WaspKingdom4", "Top", (), ANY_ATTACK & CanUse("Beetle Dig"), out=ANY_ATTACK & CanUse("Beetle Dig")),
+    Area("WaspKingdom4", "Right", ("loadzonenext",), ANY_ATTACK & CanUse("Beetle Dig"), out=False_(),
+         to="WaspKingdom4 (Top)"),
     Area("WaspKingdom2", "Right Door", ("loadzoneright",), Has("Wasp Key"), out=True_(), to="WaspKingdom2 (Top)"),
 )
 # The two wasp troopers on patrol and their see area (Event138, until 347) guard only the hive's door, shut by its own
@@ -56,4 +63,13 @@ KEPT_OPEN = (
         ("WaspKingdom3", ("wasp", "waspsleep")),
         ("WaspKingdom4", ("wasp1", "wasp2", "wasp3", "wasp4", "wasp5")),
     ) for e in names),
+)
+# WaspKingdom4's twig (its only dig wall) copied across the way to its left barrier, the room's hard floor made ground
+# so it can be dug under there: no way to the top without Beetle Dig, where the barrier shuts behind the party and only
+# Dig leads on (2026-10-11, placed and seen).
+SCENERY_COPIED = (
+    SceneryCopy("WaspKingdom4", "Base/Twig3", (0.0, 16.8), 105.0),
+)
+SCENERY_LAYERS = (
+    SceneryLayer("WaspKingdom4", "Base/hardfloor", 8),
 )
