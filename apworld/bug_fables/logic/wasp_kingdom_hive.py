@@ -24,4 +24,13 @@ KEPT_OPEN = (
     EntityRef("WaspKingdomOutside", "trooper"),
     EntityRef("WaspKingdomOutside", "trooper - Duplicate"),
     EntityRef("WaspKingdomOutside", "see area"),
+    # Inside, the stealth wasps (each NPC's battle data is the catch, Event138, and its sight): kept away like the
+    # Bandit Hideout's, so only the way across a room is logic (2026-10-11). Caught in WaspKingdom3 the game also takes
+    # the Wasp Key.
+    *(EntityRef(m, e) for m, names in (
+        ("WaspKingdom1", ("wasp", "wasp - Duplicate")),
+        ("WaspKingdom2", ("wasp - Duplicate", "wasp - Duplicate - Duplicate")),
+        ("WaspKingdom3", ("wasp", "waspsleep")),
+        ("WaspKingdom4", ("wasp1", "wasp2", "wasp3", "wasp4", "wasp5")),
+    ) for e in names),
 )
