@@ -42,8 +42,15 @@ MAP_AREAS = (
     Area("MetalIsland1", "Chef's House", (), _UP),
 )
 
-# The log house's door on the left, made in the game only after the ending (555): open from the start; inside only a
-# ladybug, there from 555 too, so nothing changes but the room's look (decided 2026-10-11).
+# The log house's door on the left, made in the game only after the ending (555): open from the start, with its two
+# ladybugs (inside and by the door, also from 555; post-story chatter, no quest), for the room's look (decided
+# 2026-10-11).
 KEPT_PRESENT = (
     EntityRef("MetalIsland1", "doorloghouse"),
+    EntityRef("MetalIsland1", "ladybugorange"),
+    EntityRef("MetalIsland1", "FxdColladybugred"),
+)
+# Its closed door, shown until 555: hidden with it.
+SCENERY_HIDDEN = (
+    EntityRef("MetalIsland1", "Log House/Door"),
 )

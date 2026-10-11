@@ -3420,7 +3420,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   Master Slice, `slice`, who ignores you while cooking; the inn's lobby says sleeping there gets one of his dishes)
   up by Jump or Bee Fly; `crystalberry` (#36, data `3 -1 0 36`) on its roof by a ledge, a dig under a fence and a
   bounce pad; the log house (`doorloghouse`, from 555) holds only `ladybugorange` (from 555, line 78: "Elizant II's
-  lifting the ban soon!"). Used by `metal_island.py`.
+  lifting the ban soon!"); its closed door is scenery (`Log House/Door`, a `ConditionChecker` hiding it from 555, the
+  map flags dump); `FxdColladybugred` stands by it (from 555). In a seed all three kept as from 555 (seen). Used by
+  `metal_island.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

@@ -450,8 +450,8 @@ as it is, a frozen record.
   save crystal, the tea seller (Tea Shop 1 and 2, Burly and Spicy Tea, locations 260-261), the Mothington X Statue
   (discovery 44, location 259), the quest board; the dock below (the boat, the submarine) a drop, back up by Jump or
   Bee Fly; Master Slice's house (the Chef's) up by Jump or Bee Fly; the Chef's Roof (crystal berry #36, location 258)
-  by Jump or Bee Fly and Beetle Dig under a fence to a bounce pad; the left log house kept open (from 555 in the game;
-  inside only a ladybug, from 555 too); quests for the quest pass
+  by Jump or Bee Fly and Beetle Dig under a fence to a bounce pad; the left log house kept open (from 555 in the game:
+  the door, its closed-door scenery hidden, and its two ladybugs kept present; seen); quests for the quest pass
 - [ ] MetalIsland2 (131)
 - [ ] MetalIslandAuditorium (228)
 
