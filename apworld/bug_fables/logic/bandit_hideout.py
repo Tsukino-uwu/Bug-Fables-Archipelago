@@ -55,6 +55,9 @@ PICKUPS_PLACED = (
 PRESENT_FROM = (
     FlagEntity("HideoutEntrance", "loadzone below", ALWAYS_SET),
     FlagEntity("HideoutEntrance", "event2", ALWAYS_SET),
+    # The stairs room's door up to the Entrance, made only from the escape (11): from the start, so the way down from
+    # the Entrance has its way back.
+    FlagEntity("HideoutStairsRoom", "loadzoneup", ALWAYS_SET),
 )
 MAP_AREAS = (
     # HideoutLeftA (2026-10-12): its right door's lower area the map's own region; the upper left (the garden door) up a
@@ -62,4 +65,9 @@ MAP_AREAS = (
     # steps there from the escape on (11, ConditionCheckers) are left out: the droplet keeps the room's own puzzle.
     Area("HideoutLeftA", "Upper Left", ("loadzone garden",), CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump"),
          out=True_()),
+    # The stairs room (HideoutStairsRoom; 2026-10-12): its north door and a crank the map's own region; the bottom
+    # across a platform flipped by the cranks on each side (Beemerang Halt) or flown over (Bee Fly), both ways, with the
+    # door up to the Entrance and the other crank.
+    Area("HideoutStairsRoom", "Bottom", ("loadzoneup",), CanUse("Beemerang Halt") | CanUse("Bee Fly"),
+         out=CanUse("Beemerang Halt") | CanUse("Bee Fly")),
 )
