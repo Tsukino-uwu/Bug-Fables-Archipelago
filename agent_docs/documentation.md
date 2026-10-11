@@ -1089,6 +1089,12 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    talks, fights, talks, fights again, talks, then the ending's scenes (`Event203` among them); `Event200`
    fast-forwarded (a `Scenes` row), the fights at the game's own speed. Not yet seen sped up: the one run so far
    played before the plugin reloaded.
+   **The Colosseum** (2026-10-11, mapping its lobby: "can we speedup all these cutscenes ?"): `Event163` talks, then
+   three fights with talk between, then the win's scenes, all on `TermiteColiseum2`; fast-forwarded once its first
+   fight is over (a `Scenes` row's `AfterFights`, counted as each fight starts and reset when a scene starts), so its
+   first talk, the Queen carried in, plays at normal speed while her shaking at high frame rates is looked into.
+   **Seen (2026-10-11):** the talk after the first fight sped up. Two earlier runs tested nothing: the build was never
+   staged (`stage-dev.ps1` between the build and `copy-dev.ps1`).
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
