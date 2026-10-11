@@ -106,6 +106,9 @@ namespace BugFablesAP
             // The Colosseum: talk, three fights (at normal speed) with talk between, then the win's scenes, so
             // fast-forwarded.
             new Scene { Map = "TermiteColiseum2", Event = 163, Flags = null },
+            // Jayde's meeting in her room: talk, her Wasp Key (a check in a seed), flag 366 and the room reloaded, so
+            // fast-forwarded.
+            new Scene { Map = "WaspKingdomJayde", Event = 139, Flags = null },
         };
 
         // A talk trigger that starts by itself on entering (a DialogueTrigger with data[2] 1) opens its line with no

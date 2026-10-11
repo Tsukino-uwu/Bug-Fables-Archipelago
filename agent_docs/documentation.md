@@ -1096,6 +1096,9 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    (step 24). **Seen (2026-10-11):** the talk after the first fight sped up. Two earlier runs tested nothing: the
    build was never staged (`stage-dev.ps1` between the build and `copy-dev.ps1`). The whole scene, the carry included,
    seen sped up once the fix was in.
+   **Jayde's meeting** (2026-10-11, mapping her room: "lets speed this one up"): `Event139`, the room's own scene,
+   talks, gives (a check in a seed), sets 366 and reloads the room; fast-forwarded (a `Scenes` row). Not yet seen sped
+   up: both tries started it with the party already in the room, which hangs it.
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
