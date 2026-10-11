@@ -526,7 +526,7 @@ as it is, a frozen record.
 - [x] WaspKingdomThrone (171) — Throne Room; its bottom door free; up a ledge (Jump or Bee Fly) the fight with General Ultimax, a
   Wasp Driller and a Wasp Bomber (Event140, until 370; Kabbu for the Driller); the Queen's door beyond, Jump or Bee Fly
   both ways; everyone else here from 555; no pickup
-- [x] WaspKingdomQueen (172) — its door back made only from 555; its scene on entering (Event141, until 555) sends the
+- [x] WaspKingdomQueen (172) — Queen's Chamber; its door back made only from 555; its scene on entering (Event141, until 555) sends the
   party to Bugaria's main plaza once Ultimax is beaten (371), every visit (seen); before 371 the room started his fight
   itself, which hangs (seen): that trigger (`event2`) kept away, the scene held until 371, the door back kept present,
   so an early visit is quiet and walks out (seen); nothing to find

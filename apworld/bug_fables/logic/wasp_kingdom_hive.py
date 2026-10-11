@@ -98,7 +98,7 @@ KEPT_OPEN = (
     ) for e in names),
     EntityRef("WaspKingdomQueen", "event2"),
 )
-# The Queen's room (WaspKingdomQueen; 2026-10-11): nothing to find. Its door back to the Throne Room is made only from
+# The Queen's Chamber (WaspKingdomQueen; named 2026-10-11): nothing to find. Its door back to the Throne Room is made only from
 # the ending (555); its scene on entering (Event141, until 555) sends the party to Bugaria's main plaza once General
 # Ultimax is beaten (371; before that it walks it back out), on every visit.
 # Its door back is the way out only before the win; after it the scene there sends the party on to Bugaria instead.
