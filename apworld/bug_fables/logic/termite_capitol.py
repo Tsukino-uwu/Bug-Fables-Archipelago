@@ -60,9 +60,11 @@ LOCATIONS = (
 # and the three NEARloadzoneback); both ways free.
 MAP_AREAS = (
     Area("TermiteIndustrial", "Outside the Colosseum", ("NEARloadzonecoliseum",), True_()),
+    # The Pier (TermitePier; 2026-10-11): the submarine's dock below it, a one-way drop down; Jump or Bee Fly back up.
+    Area("TermitePier", "Dock", (), True_(), out=CanUse("Jump") | CanUse("Bee Fly")),
 )
 TRANSFERS = (
-    Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE),
+    Transfer("submarine", "TermitePier", "MetalLake", SUBMARINE, from_area="Dock"),
     Transfer("arena", "TermiteColiseum1", "TermiteColiseum2", LATER_CHAPTERS),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (379 here).
