@@ -476,7 +476,7 @@ as it is, a frozen record.
   Rooftop Vista on the right roof (discovery 43, location 269); the Apartment Balcony's Lore Book by Bee Fly from the
   left roof (270); the bomb shop (Bomb Shop 1-7, 271-277) and Bomb Master on its stand (Bomb Shop Medal, 278). Outside
   the Colosseum, an area of the same map behind its in-map door pair, free both ways: the Lore Book Between the Boxes
-  (268)
+  (268) and the Plushie for Terrie (279: the plushie, once the Colosseum is beaten; the beggar's berry not a check)
 - [ ] TermitePier (177)
 - [ ] TermiteColiseum1 (178)
 - [ ] TermiteColiseum2 (179)

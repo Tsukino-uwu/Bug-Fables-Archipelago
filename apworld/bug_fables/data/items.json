@@ -15,7 +15,7 @@
     {"name": "Bee Fly", "game_id": 5, "kind": 6, "classification": "progression", "move": true},
     {"name": "Beetle Dig", "game_id": 6, "kind": 6, "classification": "progression", "move": true},
     {"name": "Shield", "game_id": 7, "kind": 6, "classification": "progression", "move": true},
-    {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "useful"},
+    {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "progression"},
     {"name": "Heart Berry", "game_id": 83, "kind": 1, "classification": "useful"},
     {"name": "Sun Offering", "game_id": 55, "kind": 1, "classification": "progression"},
     {"name": "Moon Offering", "game_id": 56, "kind": 1, "classification": "progression"},

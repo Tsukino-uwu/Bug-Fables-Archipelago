@@ -3457,7 +3457,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   36; `FIXEDbomb medal` runs `Event226`: 200 berries for medal 89 (Bomb Master), flag 719. `HIDEFixedapartment message`
   only reads (line 110 has no commands). The street outside the Colosseum is the same map: `loadzonenearcoliseum` and
   three `NEARloadzoneback` load map 176 itself; `DDISTlorebook` there (flag 381, same) sits between boxes, free. No
-  crystal berry on the map. Used by `termite_capitol.py`.
+  crystal berry on the map. Terrie (`NEARpoorkid`; her sister's line 66 names her) takes the G-Bug Ranger Plushie
+  from the champions on (line 72 `pickitem`, 74 `removeitem,1,25 flag,410`); 410 adds Logbook entry 11
+  (`MainManager`'s journal check). The beggar (`sittingtermite`, line 104) takes 1 berry and sets 649, read by
+  nothing. Used by `termite_capitol.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

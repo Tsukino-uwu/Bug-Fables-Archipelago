@@ -2,18 +2,21 @@
 what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
-from rule_builder.rules import True_
+from rule_builder.rules import Has, True_
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
 from ..data_types import Area, EntityRef, ItemEntity, ItemShop, Location, Pickup, Source, Transfer
+
+# The Colosseum beaten: the later chapters' stand-in until the Colosseum is mapped.
+_COLOSSEUM = (CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig") & CanUse("Horn Dash")
+              & CanUse("Bee Fly"))
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
     # chapters' story-order stand-in.
     Location("Termite Capitol: Termite King's Reward", 76, "TermiteRoyalChamber",
              Source(event=164, flag=379),
-             rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
-             & CanUse("Horn Dash") & CanUse("Bee Fly"), reach=LATER_CHAPTERS),
+             rule=_COLOSSEUM, reach=LATER_CHAPTERS),
     # The Main Plaza (TermiteMainPlaza; named 2026-10-11): everything free. Its shop computer (Squash, Shell Ointment, Mega-Rush, Aphid
     # Shake): first purchase a check, then its own item.
     *(Location(f"Termite Capitol: Main Plaza, Shop {slot}", 261 + slot, "TermiteMainPlaza",
@@ -46,6 +49,11 @@ LOCATIONS = (
     # A Lore Book between the boxes outside the Colosseum's lobby; free.
     Location("Termite Capitol: Outside the Colosseum, Between the Boxes", 268, "TermiteIndustrial",
              Source(flag=381, pickup=Pickup(map="TermiteIndustrial", type=1, item=52)), no_jump=True,
+             area="Outside the Colosseum"),
+    # Terrie takes the G-Bug Ranger Plushie once the party are the Colosseum's champions (line 74; flag 410, which
+    # adds Logbook entry 11).
+    Location("Termite Capitol: Outside the Colosseum, Plushie for Terrie", 279, "TermiteIndustrial", Source(flag=410),
+             rule=_COLOSSEUM & Has("G-Bug Ranger Plushie"), reach=LATER_CHAPTERS, no_jump=True,
              area="Outside the Colosseum"),
 )
 # The street outside the Colosseum is the same map, reached through a door pair that reloads it (loadzonenearcoliseum
