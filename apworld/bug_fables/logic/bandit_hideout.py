@@ -3,8 +3,9 @@ from __future__ import annotations
 
 from rule_builder.rules import True_
 
-from ..custom_rules import CanUse
-from ..data_types import ALWAYS_SET, Area, EntityRef, FlagEntity, Give, Location, Pickup, PlacedPickup, SceneryFit, Source
+from ..custom_rules import CanUse, one_way
+from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagEntity, Give, Location, Pickup, PlacedPickup, SceneryFit,
+                          Source, Transfer)
 
 LOCATIONS = (
     # Where the story teaches Dig (flag 18), moved from the Cell's scene to an item lying on the Entrance's altar
@@ -14,6 +15,9 @@ LOCATIONS = (
              rule=CanUse("Jump") | CanUse("Bee Fly")),
     # The Cell (HideoutCell; 2026-10-12): its middle (the door, the save crystal) free; the left and right cells dug
     # into (Beetle Dig).
+    # The Stolen Silk (key item 108, flag 270) by a box on the right of the Garden's upper area.
+    Location("Bandit Hideout: Garden, By the Box", 294, "HideoutGarden",
+             Source(flag=270, pickup=Pickup(map="HideoutGarden", type=1, item=108)), area="Upper", no_jump=True),
     # The right cell, dug into (Beetle Dig): its dig spot starts Event217, Cerise appearing with Crystal Berry 19.
     Location("Bandit Hideout: Cell, Dig Spot", 293, "HideoutCell",
              Source(event=217, flag=674, berry=19, give=Give(map="HideoutCell", type=3, item=19)),
@@ -61,6 +65,9 @@ PRESENT_FROM = (
     # Its save crystal and Venus healer, also only from 11 (2026-10-12).
     FlagEntity("HideoutStairsRoom", "save", ALWAYS_SET),
     FlagEntity("HideoutStairsRoom", "venushealer - Duplicate - Duplicate", ALWAYS_SET),
+    # The Garden's well door (to the Defiant Root's well), made only from the escape (11): from the start, a second way
+    # out (2026-10-12).
+    FlagEntity("HideoutGarden", "loadzone well", ALWAYS_SET),
 )
 MAP_AREAS = (
     # HideoutLeftA (2026-10-12): its right door's lower area the map's own region; the upper left (the garden door) up a
@@ -73,4 +80,14 @@ MAP_AREAS = (
     # door up to the Entrance and the other crank.
     Area("HideoutStairsRoom", "Bottom", ("loadzoneup",), CanUse("Beemerang Halt") | CanUse("Bee Fly"),
          out=CanUse("Beemerang Halt") | CanUse("Bee Fly")),
+    # The Garden (HideoutGarden; 2026-10-12): its right door's bottom right the map's own region; the bottom left (the
+    # well door) dug to (Beetle Dig) both ways; the upper area (the storage door, the Stolen Silk) up from the bottom left
+    # by Jump or Bee Fly, a drop back to either side (TRANSFERS for the right one).
+    Area("HideoutGarden", "Bottom Left", ("loadzone well",), CanUse("Beetle Dig"), out=CanUse("Beetle Dig")),
+    Area("HideoutGarden", "Upper", ("loadzonestorage",), CanUse("Jump") | CanUse("Bee Fly"),
+         out=one_way(None, CanUse("Jump") | CanUse("Bee Fly")), to="HideoutGarden (Bottom Left)"),
+)
+TRANSFERS = (
+    Transfer("drop", "HideoutGarden", "HideoutGarden", two_way=False,
+             way_back=CanUse("Beetle Dig") & (CanUse("Jump") | CanUse("Bee Fly")), from_area="Upper"),
 )

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**223 of 244 done.**
+**224 of 244 done.**
 
 ## Outskirts
 
@@ -557,7 +557,10 @@ as it is, a frozen record.
   Entrance, another crank) across a platform the cranks flip (Beemerang Halt) or flown over (Bee Fly), both ways; that
   door, made only from 11, made from the start (seen), and its save crystal and Venus healer (from 11) too; no
   flag-driven scenery; no pickup
-- [ ] HideoutGarden (104)
+- [x] HideoutGarden (104) — its right door's bottom right; the bottom left (the well door, made only from 11, made from
+  the start) dug to (Beetle Dig) both ways; the upper area (the storage door, the Stolen Silk by a box, location 294)
+  up from the bottom left by Jump or Bee Fly, a one-way drop to either side; its stealth bandits away, three regular
+  enemies kept; no flag-driven scenery
 - [ ] HideoutWestStorage (105)
 - [ ] HideoutRightA (106)
 
