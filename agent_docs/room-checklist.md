@@ -549,7 +549,7 @@ as it is, a frozen record.
 - [x] HideoutCentralRoom (101) — Central Room; free between its four doors (the Cell's, left, bottom, right); a talk in the middle on
   the first visit (Event109's part here, until 259; sets 259 and 401, nothing given) from any door; its stealth bandits
   away, two regular enemies kept; no flag-driven scenery; no pickup
-- [x] HideoutLeftA (102) — its right door's lower area; up to the upper left (the garden door) by a frozen droplet
+- [x] HideoutLeftA (102) — West Passage; its right door's lower area; up to the upper left (the garden door) by a frozen droplet
   knocked over and jumped onto (Freeze, Horn Slash, Jump), a free drop back; the crates that make steps from the
   escape on (11, ConditionCheckers) left hidden on purpose (2026-10-12, seen both ways); its stealth bandits away, a
   regular burglar kept; no pickup
