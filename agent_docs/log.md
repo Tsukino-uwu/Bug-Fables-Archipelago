@@ -102,6 +102,7 @@ said them.
 - [2026-10-10: the Pier mapped, the Factory Pass never used up, an accidental goal and its fix](#2026-10-10-the-pier-mapped-the-factory-pass-never-used-up-an-accidental-goal-and-its-fix)
 - [2026-10-11: the Rubber Prison finished, the artifacts as items, the Giant's Lair begun](#2026-10-11-the-rubber-prison-finished-the-artifacts-as-items-the-giants-lair-begun)
 - [2026-10-11: the Giant's Lair, Metal Lake and Metal Island finished, the plaza's hitches found](#2026-10-11-the-giants-lair-metal-lake-and-metal-island-finished-the-plazas-hitches-found)
+- [2026-10-12: the Termite Capitol, the Wasp Kingdom, the Bandit Hideout, Stream Mountain and the Chomper Caves](#2026-10-12-the-termite-capitol-the-wasp-kingdom-the-bandit-hideout-stream-mountain-and-the-chomper-caves)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4133,3 +4134,35 @@ said them.
 - **Handoff:** the server left running; the game open on the test file in the Royal Chamber; `GcWatch` on. Next room:
   `TermiteIndustrial` (176). Uncommitted on purpose: `KeptOpen.cs` (the artifact sign). Open: Room Swap's stuck test
   seed (Known issues); the Final Boss goal's build; the goal's send point; a re-run of every test before a push.
+
+## 2026-10-12: the Termite Capitol, the Wasp Kingdom, the Bandit Hideout, Stream Mountain and the Chomper Caves
+
+- **Rooms mapped** (202 to 235 of 244): the Termite Capitol's Industrial District, Pier, Colosseum Lobby and Arena;
+  the Wasp Kingdom from Outside the Hive to the Queen's Chamber (Pantry, Central Hall, Fountain Room, Barrier Room,
+  Food Storage, Prison, Jayde's Room, Main Hall, Throne Room, Drill Room); the Bandit Hideout (Entrance, Cell, Central
+  Room, West Passage, Crank Room, Garden, Treasury, Dining Hall); Stream Mountain (Water Crossing, Water Switch Room,
+  Climb, Bridge Puzzle, Wyrm's Den); the Chomper Caves (Cave Entrance, Droplet Room, Chomper Nest); the Fishing Village.
+  Left: Upper Snakemouth's nine rooms.
+- **Decided:** stealth guards kept away in the hive and the hideout; the bandits' capture skipped (it hides every item
+  in a string), its flag 18 changes made instead and the Dig location an item placed on the altar; the hive's front
+  door one way out; the Wasp Key kept (one key, two locks); Crickerly's Colosseum stall kept present; Terrie's plushie
+  and the Tidal Wyrm's bounty locations (their items useful until the quest pass).
+- **Built:** `scenery_copied` and `scenery_layers` (a twig copied before WaspKingdom4's barrier, its hard floor made
+  diggable: build step 89), `pickups_placed`, `scenery_fitted`, `scenery_sprite_off` (step 90), `float_flags`; console
+  `tagged`, `layer`, `conditions`, `floats`, `restorestolen`, `bodytrace <frames> <name>`; Jayde's and the Colosseum's
+  scenes sped up.
+- **The Queen's shaking at 240 fps** (found how): `bodytrace` could only follow the party, so it took a named target.
+  Its x showed nothing; its height showed gravity pulling her ~0.3 a physics step while the scene set her height back
+  before the draw, and the smoothing drawing the undone fall (a 7-pixel saw-tooth). The first fix skipped any body with
+  an unchanged parent, which hers (the map) is; the second compares per axis in the parent's space. Seen steady.
+- **Digging under things** (found how): two guesses (gaps under obstacles, the hard floor) failed before reading the
+  code: colliders tagged `DigWall` switch off while digging, gathered once after the map's entities are made; digging
+  starts only off layer 13.
+- **Hidden flags the entity dump misses:** `ConditionChecker` scenery (the hideout entrance's door wall, from 18) and
+  a water's `flagfloats` (Stream Mountain's logs waited on chapter 1's end, 41). Both now have console listings and a
+  line in `room-logic.md`'s draft step. **Kept present overrides `limit` too:** Astotheles' fight replayed until it
+  became `PRESENT_FROM`.
+- **Lessons the user gave:** the dev `warp` marks a room's own scenes seen (it set Jayde's 366 and her check); never
+  clear a room's scene flag with the user in it; never nudge (memory updated).
+- **Handoff:** a new seed `AP_70706732892901769436` (in `stage/handoff/`), the server stopped. Uncommitted on purpose:
+  `KeptOpen.cs` (the artifact sign). Next room: `UpperSnekTransition`.
