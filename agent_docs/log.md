@@ -104,6 +104,7 @@ said them.
 - [2026-10-11: the Giant's Lair, Metal Lake and Metal Island finished, the plaza's hitches found](#2026-10-11-the-giants-lair-metal-lake-and-metal-island-finished-the-plazas-hitches-found)
 - [2026-10-12: the Termite Capitol, the Wasp Kingdom, the Bandit Hideout, Stream Mountain and the Chomper Caves](#2026-10-12-the-termite-capitol-the-wasp-kingdom-the-bandit-hideout-stream-mountain-and-the-chomper-caves)
 - [2026-10-12: Upper Snakemouth, the last nine rooms; every room mapped](#2026-10-12-upper-snakemouth-the-last-nine-rooms-every-room-mapped)
+- [2026-10-12: the artifacts as locations, the Sand Castle Key whole](#2026-10-12-the-artifacts-as-locations-the-sand-castle-key-whole)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4190,3 +4191,30 @@ said them.
   mapping to find ways the hand-mapped logic missed.
 - **Handoff:** the server still hosting on 38281; the game capped at 60 fps by `fps 60` this session. Uncommitted, not
   this session's: `KeptOpen.cs`.
+
+## 2026-10-12: the artifacts as locations, the Sand Castle Key whole
+
+- **Artifacts:** six of seven are locations (build steps 86, 91, 92 and the notes in step 91): the Ancient Mask
+  (renamed from Snakemouth Treasure), Ancient Tablet (Summit, 314), Ancient Key (Core, 315, after the escort), Queen's
+  Mask (palace, 318), Flame Brooch, Wasp King's Crown (Sapling Plains, 319). The game counts seven, one per chapter;
+  only four are objects in the story, and chapters 5 and 7 have no name in the game (their icons are `gui_123`,
+  `gui_125`). The castle's Small Ancient Key 114 was renamed for the artifact's name.
+- **Artifact scenes show their location's item** (mod guide 61): seen at Snakemouth in all three moments. The Summit's
+  model was first swapped in the flower the scene destroys (fixed, not yet seen). Left for later: the starburst outside
+  the cave, the Core's battle stage background, Stratos and Delilah during Zasp's scene.
+- **The Sand Castle Key whole** (build step 92, mod 62): the hawk and the Scorpion present from the start, both halves'
+  spots locations, the game's flag-based join kept away; all seen.
+- **A freeze found and fixed:** chapter 5's palace scene waited forever on Neolith (there only from 88). Found with a
+  new console command, `actors` (the walk that never ran: `forcemove` on an inactive entity); `unstick` first missed
+  because a hot reload waits for the scene to end. Neolith kept present; seen playing through. `scene-actors.py` lists
+  the other scenes grabbing characters their start doesn't make: leads `Event164` (Elizant, 386) and `Event120`.
+- **The Final Boss goal's cap** with chapter 7's artifact at the last fight: Next 73.
+- **Open:** the castle (the Small Ancient Key kept? the Big Ancient Key an item? names "Ancient Castle: Treasure Room,
+  Treasure Pedestal" and "Ancient Castle: Boss Room, Boss Fight", the Peculiar Gem as an item for Upper Snakemouth's
+  slot); chapters 3 and 7 not yet seen in a seed.
+- **Handoff:** seed `AP_78577825385807634508` (session 170e3ad8's scratchpad `out2/`, player file `players2/
+  BugTester.yaml`, Artifact Shuffle This World) hosted on 38281, left running; the game running with the current
+  build, capped at 60 fps by `fps 60`; the console's command file still session bed6439d's `cmds.txt`. Uncommitted,
+  not this session's: `KeptOpen.cs` (the Final Boss goal's hold and sign) and `docs/reviewing.md` (a placeholder, left
+  alone as asked).
+
