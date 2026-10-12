@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**238 of 244 done.**
+**239 of 244 done.**
 
 ## Outskirts
 
@@ -616,7 +616,9 @@ as it is, a frozen record.
 - [x] UpperSnekSwitchPuzzle (210) — the Pipe Puzzle; one free room, its one door on the right; switches 2, 4, 5 and 7
   lit, then the wood lever (a basic attack) open the round door (`Base/CircleDoor`, 519) to the gear (key item 158,
   520; "Puzzle Reward", location 306); for the gears' room: the three gears as items (pending)
-- [ ] UpperSnekBeforeBoss (211)
+- [x] UpperSnekBeforeBoss (211) — the Gear Machine; its bottom (both doors' side, the Venus bud) free; the Mushroom
+  on top of the machine (respawning, regional 0; Jump or Bee Fly; location 307); the three gears in their slots (529-531)
+  open the boss door's round door (528), pushed past on arrival (seen); for the gears' rooms: the gears as items
 - [ ] UpperSnekPressurePlateRoom (212)
 - [ ] UpperSnekBossRoom (213)
 - [x] UpperSnekMiddleRoom (214) — the Flooded Hall, a hub of platforms in water (Icicle and Jump, or Bee Fly); the

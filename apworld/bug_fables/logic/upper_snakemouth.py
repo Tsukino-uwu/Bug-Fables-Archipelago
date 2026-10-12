@@ -29,6 +29,10 @@ LOCATIONS = (
     Location("Upper Snakemouth: Pipe Puzzle, Puzzle Reward", 306, "UpperSnekSwitchPuzzle",
              Source(flag=520, pickup=Pickup(map="UpperSnekSwitchPuzzle", type=1, item=158)), rule=ANY_ATTACK,
              no_jump=True),
+    # The Gear Machine (UpperSnekBeforeBoss; named 2026-10-12): a respawning Mushroom (regional flag 0) on top of the
+    # machine, by Jump or Bee Fly.
+    Location("Upper Snakemouth: Gear Machine, On Top of the Machine", 307, "UpperSnekBeforeBoss",
+             Source(regional=0, pickup=Pickup(map="UpperSnekBeforeBoss", type=0, item=13)), rule=_UP),
 )
 MAP_AREAS = (
     # Icicle Pond (UpperSnekTransition; named 2026-10-12): its right door (from the entrance) the map's own region;
@@ -53,6 +57,11 @@ MAP_AREAS = (
     Area(_MIDDLE, "Upper Top Right", (), _UP, to=f"{_MIDDLE} (Lower Top Left)"),
     Area(_MIDDLE, "Upper Top Right Door", ("loadzonepressure",), Has("Lab Card"), out=True_(),
          to=f"{_MIDDLE} (Upper Top Right)"),
+    # The Gear Machine: its bottom (the right door, the Venus bud, the machine) the map's own region. The three gears
+    # in their slots (Event59 indices 13-15; 529-531) open the round door (528) to the boss room; arriving by it pushes
+    # the party past, so without them that door is a one-way in.
+    Area("UpperSnekBeforeBoss", "Left Door", ("loadzoneboss",),
+         Has("Small Gear") & Has("Medium Gear") & Has("Big Gear"), out=True_()),
 )
 TRANSFERS = (
     # The Flooded Hall's hanging bridge, a drop from the upper top right to the middle; back over the water, up the
