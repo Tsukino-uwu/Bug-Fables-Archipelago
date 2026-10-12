@@ -3632,3 +3632,9 @@ the table food group's own sprite (`Base/items0_84`, the food stands its childre
 
 *Code: `World/DayNight.cs` (`Placed`, `PlaceWhenReady`, `ScenerySpriteOff`), `Core/SeedData.cs` (`SceneryFitted`,
 `PickupsPlaced`, `ScenerySpriteOff`).*
+
+Also found 2026-10-12, Stream Mountain's Bridge Puzzle: a water (`Hazards`) lifts its floating objects only once each
+one's own flag (`flagfloats`) is set, and the logs there wait on flag 41, chapter 1's end, which a seed never sets: the
+room couldn't be crossed. `float_flags` (`[{"map", "entity", "flag", "to"}]`, the entity the water's path) repoints those
+flags as the room loads; the log says `<water> <n> floats on flag <a> now on <b>`. The console's `floats` lists every
+water's floating objects and flags (neither the entity dump nor `conditions` shows them). Seen: the logs rise.

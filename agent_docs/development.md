@@ -449,6 +449,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   from the map's entity table. `prices <medal id...>`: log each medal's price columns (berries and crystal berries).
 - `markcolor <progression|useful|trap|filler> <hex>`: a class's starburst colour, live (a design test).
   `markclass <entity> <class>` draws one slot's backdrop as that class; `markclass off` puts them back.
+- `floats`: logs every water (`Hazards`) on the map with the objects it lifts and the flag each floats on.
 - `conditions`: logs every map object with a `ConditionChecker` (scenery the game shows or hides by flags: its
   `requires`, `limit`, region) and whether it is shown. The entity dump doesn't list these.
 - `restorestolen`: puts back what the Bandit Hideout's capture (Event109) saved in `flagstring[8]`, as its West

@@ -959,6 +959,33 @@ namespace BugFablesAP
                         ItemSwap.ClassColors[which] = Convert.ToInt32(parts[2], 16);
                         return $"markcolor: {classes[which]} now {parts[2]}";
                     }
+                    case "floats":
+                    {
+                        // floats: every water (Hazards) on the map and the objects it lifts, each with the flag it
+                        // floats on (-1: always).
+                        if (MainManager.map == null)
+                        {
+                            return "floats: no map";
+                        }
+                        var floatLog = new System.Text.StringBuilder($"[dev] floats on {MainManager.map.mapid}:");
+                        foreach (Hazards water in MainManager.map.GetComponentsInChildren<Hazards>(true))
+                        {
+                            if (water.waterfloats == null || water.waterfloats.Length == 0)
+                            {
+                                continue;
+                            }
+                            floatLog.Append("|  ").Append(water.name).Append(":");
+                            for (int i = 0; i < water.waterfloats.Length; i++)
+                            {
+                                int needs = water.flagfloats != null && i < water.flagfloats.Length ? water.flagfloats[i] : -1;
+                                string name = water.waterfloats[i] != null ? water.waterfloats[i].name : "none";
+                                floatLog.Append("|    ").Append(name).Append(" flag ").Append(needs)
+                                    .Append(needs > -1 && MainManager.instance.flags[needs] ? " (set)" : needs > -1 ? " (not set)" : "");
+                            }
+                        }
+                        log.LogInfo(floatLog.ToString().Replace("|", System.Environment.NewLine));
+                        return "floats logged";
+                    }
                     case "conditions":
                     {
                         // conditions: every map object with a ConditionChecker (scenery shown or hidden by flags), its

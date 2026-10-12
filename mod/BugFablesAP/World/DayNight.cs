@@ -78,6 +78,14 @@ namespace BugFablesAP
             internal int To;
         }
 
+        internal sealed class Repoint
+        {
+            internal string Map;
+            internal string Entity;
+            internal int Flag;
+            internal int To;
+        }
+
         internal sealed class Placed
         {
             internal string Map;
@@ -428,6 +436,21 @@ namespace BugFablesAP
                     t.gameObject.SetActive(false);
                 }
                 log.LogInfo($"[night] {map}: {off.Entity} {(t != null ? "switched off" : "NOT FOUND")}");
+            }
+            foreach (Repoint floats in (seed?.Invoke()?.FloatFlags ?? new List<Repoint>()).Where(f => f.Map == map))
+            {
+                Hazards water = __instance.transform.Find(floats.Entity)?.GetComponent<Hazards>();
+                int changed = 0;
+                for (int i = 0; water != null && water.flagfloats != null && i < water.flagfloats.Length; i++)
+                {
+                    if (water.flagfloats[i] == floats.Flag)
+                    {
+                        water.flagfloats[i] = floats.To;
+                        changed++;
+                    }
+                }
+                log.LogInfo($"[night] {map}: {floats.Entity} "
+                    + (water != null ? $"{changed} floats on flag {floats.Flag} now on {floats.To}" : "NOT FOUND"));
             }
             foreach (EntityName off in (seed?.Invoke()?.ScenerySpriteOff ?? new List<EntityName>()).Where(o => o.Map == map))
             {

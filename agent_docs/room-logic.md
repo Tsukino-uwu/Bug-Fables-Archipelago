@@ -326,7 +326,9 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
    `RotatingPlatform`, `PathPlatform`, `TempPlatform`. It leaves out scenery that flags show or hide: the console's
    `conditions`, run in the room, lists each `ConditionChecker` with its `requires` and `limit` (2026-10-12: the Bandit
-   Hideout entrance's door was behind `Base/FakeWalls`, hidden from flag 18, which the dump never showed). Then the
+   Hideout entrance's door was behind `Base/FakeWalls`, hidden from flag 18, which the dump never showed). Waters keep
+   flags of their own too: the console's `floats` lists what each lifts and on which flag (2026-10-12: Stream
+   Mountain's logs waited on chapter 1's end). Then the
    doors (`door-graph.py`), the flag-gated doors
    (`gate-table.py`), the transfers scenes make (`event-transfers.py`), the flag cross-reference (planned, see
    Chains), each spawn's spot, and, still to script, the scenes that move the party within a map (story events that

@@ -97,6 +97,7 @@ namespace BugFablesAP
         internal readonly List<DayNight.Placed> PickupsPlaced;
         internal readonly List<DayNight.EntityName> SceneryOff;
         internal readonly List<DayNight.EntityName> ScenerySpriteOff;
+        internal readonly List<DayNight.Repoint> FloatFlags;
         internal readonly List<DayNight.Switch> EntitiesMoved;
         // Doors the seed adds to a map or sends elsewhere; null for a seed from an older apworld.
         internal readonly List<DoorRows.Row> DoorRows;
@@ -275,6 +276,13 @@ namespace BugFablesAP
             {
                 Map = e.Value<string>("map"),
                 Entity = e.Value<string>("entity"),
+            });
+            FloatFlags = SlotData.List(data, "float_flags", e => new DayNight.Repoint
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+                Flag = e.Value<int>("flag"),
+                To = e.Value<int>("to"),
             });
             SceneryMoved = SlotData.List(data, "scenery_moved", e => new DayNight.Move
             {

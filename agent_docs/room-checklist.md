@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**229 of 244 done.**
+**230 of 244 done.**
 
 ## Outskirts
 
@@ -585,7 +585,10 @@ as it is, a frozen record.
 - [x] StreamMountain3 (134) — Climb; its right door at the bottom; up its bounce pads to the upper part (the exit to
   the Desert Oasis) by Jump or Bee Fly, a free drop back; the Antlion Jaws medal (flag 418, location 299) at the top
   by frozen geysers (Freeze and Jump); three regular enemies
-- [ ] StreamMountain4 (202)
+- [x] StreamMountain4 (202) — Bridge Puzzle; the right door and crystal switch (any attack); the middle (the Clear Water
+  among the logs, location 300; a bounce pad up) dropped into with the water lowered; the left (the boss door) by the
+  bridge (Jump or Bee Fly, Horn Slash; 491) and the logs held up by Beemerang Halt, then Jump; a one-way drop back.
+  Its logs floated only from chapter 1's end (41): repointed to an always-set flag (`float_flags`, seen)
 - [ ] StreamMountain5 (204)
 
 ## Chomper Caves
