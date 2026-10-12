@@ -4,7 +4,6 @@ BOAT = "Progressive Boat"
 TICKET = "Boat Ticket"
 SUBMARINE = "Subaquatic Maritime Neotransport"
 THRONE_ROOM = "Termite Capitol: Termite King's Reward"
-ICICLE = "Upper Snakemouth: Entrance"
 # collect_all_but takes every placed item, story events too; this one opens the ant tunnel's door to the bridge, which in
 # play needs the bridge reached first, so it stays out.
 BRIDGE_FIGHT = "Giant's Lair Bridge Fight Won"
@@ -63,12 +62,6 @@ class TestProgressiveBoat(BugFablesTestBase):
         # Where the king hands the submarine over.
         self._first_copy_only()
         self.assertTrue(self.can_reach_location(THRONE_ROOM))
-
-    def test_icicle_comes_after_the_submarine(self) -> None:
-        self._first_copy_only()
-        self.assertFalse(self.can_reach_location(ICICLE))
-        self.collect(self.get_items_by_name(BOAT)[1])
-        self.assertTrue(self.can_reach_location(ICICLE))
 
     def test_the_throne_room_is_the_one_check_on_flag_379(self) -> None:
         from ..data_tables import LOCATIONS

@@ -1,18 +1,30 @@
-"""Upper Snakemouth (the game's area 24, MapControl.areaid): its spots, and what the seed changes there. Its
-rooms aren't mapped yet."""
+"""Upper Snakemouth (the game's area 24, MapControl.areaid): its spots, and what the seed changes there."""
 from __future__ import annotations
 
-from ..custom_rules import LATER_CHAPTERS, SUBMARINE, CanUse
-from ..data_types import ALWAYS_SET, FlagSwap, Location, Source
+from rule_builder.rules import True_
+
+from ..custom_rules import ANY_ATTACK, CanUse
+from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Source
+
+_ACROSS = CanUse("Icicle") & CanUse("Jump")
+# Icicle Pond's switch, hit with the Icicle, or flown up to with Bee Fly and an attack.
+_SWITCH = CanUse("Icicle") | (CanUse("Bee Fly") & ANY_ATTACK)
 
 LOCATIONS = (
-    # Where the game teaches the Icicle (flag 171); the later chapters' story-order stand-in, every ability taught
-    # before it. The story reaches it after the submarine; its path reads no submarine flag, so the sub is this
-    # stand-in's caution, not a gate.
-    Location("Upper Snakemouth: Entrance", 74, "UpperSnekTransition",
-             Source(event=180, flag=171),
-             rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
-             & CanUse("Horn Dash") & CanUse("Bee Fly") & SUBMARINE, reach=LATER_CHAPTERS),
+    # Where the game teaches the Icicle (Event180, until flag 171): its scene and fight on entering by either door. From
+    # the left door it also moves the party to the right side, once; not a way across in the logic.
+    Location("Upper Snakemouth: Icicle Pond, Fight", 74, "UpperSnekTransition", Source(event=180, flag=171),
+             no_jump=True),
+)
+MAP_AREAS = (
+    # Icicle Pond (UpperSnekTransition; named 2026-10-12): its right door (from the entrance) the map's own region;
+    # water in the middle, crossed both ways by Icicle and Jump, to an empty platform on the left; from there a dig
+    # barrier (Beetle Dig, both ways) to the left door and its switch. The switch (flag 518, for good) opens the left
+    # door; arriving by it pushes the party past, so without the switch that door is a one-way in.
+    Area("UpperSnekTransition", "Left Platform", (), _ACROSS),
+    Area("UpperSnekTransition", "Left", (), CanUse("Beetle Dig"), to="UpperSnekTransition (Left Platform)"),
+    Area("UpperSnekTransition", "Left Door", ("loadzoneforward",), _SWITCH, out=True_(),
+         to="UpperSnekTransition (Left)"),
 )
 
 # The lights-out switches that start lit once flag 41 (the first boss) is set, and the plate room's hidden switch, hit

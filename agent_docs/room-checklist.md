@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**235 of 244 done.**
+**236 of 244 done.**
 
 ## Outskirts
 
@@ -609,7 +609,10 @@ as it is, a frozen record.
 
 ## Upper Snakemouth
 
-- [ ] UpperSnekTransition (209)
+- [x] UpperSnekTransition (209) — Icicle Pond; its right door the map's own region; the water (Icicle and Jump)
+  to the left platform, a dig barrier (Beetle Dig) to the left door and its switch (Icicle, or Bee Fly and an attack;
+  518, for good), which opens that door, a one-way in until then; its scene (Event180, until 171; "Fight", location 74)
+  from either door, moving a party from the left to the right once (not in the logic)
 - [ ] UpperSnekSwitchPuzzle (210)
 - [ ] UpperSnekBeforeBoss (211)
 - [ ] UpperSnekPressurePlateRoom (212)
