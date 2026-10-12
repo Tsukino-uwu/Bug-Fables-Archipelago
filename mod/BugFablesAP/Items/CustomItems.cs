@@ -42,6 +42,12 @@ namespace BugFablesAP
         internal const int FirstMove = 201;
         internal static int MoveKeyItem(int move) => FirstMove + move;
 
+        // The castle's key (114) shares "Ancient Key" with chapter 3's artifact in a seed: English text only, so another
+        // language's name is left as the game has it.
+        private const int SmallAncientKey = 114;
+        private const string AncientKeyName = "Ancient Key";
+        private const string SmallAncientKeyName = "Small Ancient Key";
+
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
 
@@ -82,8 +88,13 @@ namespace BugFablesAP
 
         internal static void Tick()
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.itemdata == null
-                || MainManager.itemsprites == null)
+            if (MainManager.itemdata == null || MainManager.itemsprites == null)
+            {
+                return;
+            }
+            bool on = randomizerOn != null && randomizerOn();
+            RenameSmallKey(on);
+            if (!on)
             {
                 return;
             }
@@ -91,6 +102,24 @@ namespace BugFablesAP
             Add(BoatTicket, TicketName, TicketDescription, TicketLooksLike);
             Add(Submarine, SubmarineName, SubmarineDescription, SubmarineLooksLike);
             Add(ProgressiveBoat, ProgressiveName, ProgressiveDescription, TicketLooksLike);
+        }
+
+        private static void RenameSmallKey(bool on)
+        {
+            string now = MainManager.itemdata[0, SmallAncientKey, 0];
+            string want = on ? SmallAncientKeyName : AncientKeyName;
+            if (now == want || now != (on ? AncientKeyName : SmallAncientKeyName))
+            {
+                return;
+            }
+            MainManager.itemdata[0, SmallAncientKey, 0] = want;
+            // Its article (field 3) with it: "an Ancient Key", "a Small Ancient Key".
+            string article = MainManager.itemdata[0, SmallAncientKey, 3];
+            if (article == (on ? "an" : "a"))
+            {
+                MainManager.itemdata[0, SmallAncientKey, 3] = on ? "a" : "an";
+            }
+            log.LogInfo($"[items] key item {SmallAncientKey} named '{want}'");
         }
 
         private static void Add(int id, string name, string description, int looksLike)

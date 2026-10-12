@@ -3706,5 +3706,10 @@ the install line showed and the hook worked.
 the key items (the fight reset by flag 38 from the Roof); the pedestal showing a Chomper Seed through its scene; after the line fix, its banner "You found a Chomper Seed!" (seen, the pedestal reset by
 flag 345 from the boss room).
 
-*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row, `AddedSprite`).*
+**The key's name (2026-10-13):** a received Small Ancient Key's box said "an Ancient Key", the game's name for key
+item 114 and chapter 3's artifact's in a seed. While Archipelago is enabled the game's English name becomes "Small
+Ancient Key" and its article (field 3) "a"; off, both go back (`CustomItems.RenameSmallKey`, each tick; another
+language's name is left alone). Read back with dev `articles 114`: `Small Ancient Key: 'a'`.
+
+*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row, `AddedSprite`); `Items/CustomItems.cs` (the key's name).*
 

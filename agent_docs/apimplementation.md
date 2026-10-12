@@ -911,9 +911,6 @@ be wrong.
 
 **Known issues:**
 
-- **A received Small Ancient Key's box says "Ancient Key"** (found 2026-10-13, build step 93): the box shows the
-  game's own name for key item 114, which is chapter 3's artifact item's name in a seed. Not decided: rename it in the
-  game's text, or pick other names.
 - **No starburst at a crystal berry spot's pickup** (found 2026-10-13, Upper Snakemouth's Piano Puzzle): a key item
   on a berry spot showed its starburst on the ground but not while held up; an ordinary spot's pickup (the Peculiar
   Gem's) showed it. Not yet traced.
@@ -6657,7 +6654,7 @@ run (at push time).
 slot, the Sand Castle Key making the castle appear, the one Small Ancient Key opening both main-room locks and kept,
 the Big Ancient Key opening the boss door (used up, its only lock), the Watcher sending its item, the pedestal showing
 and sending its item, its banner naming it. **Found on the way:** the received Small Ancient Key's box names it "Ancient Key", the game's
-own name for item 114, the same as chapter 3's artifact (Known issues).
+own name for item 114, the same as chapter 3's artifact: renamed in the game's text (the mod guide, step 63).
 
 *Code: `data/items.json`, `logic/ancient_castle.py`, `logic/snakemouth_den.py` (the gem's slot).*
 
