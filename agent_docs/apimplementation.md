@@ -6599,8 +6599,8 @@ the other scenes that grab a character their start doesn't make (the Termite Kin
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen. In seed
 `AP_33232363850621305804` (2026-10-13): chapter 3's Core, a Secure Pouch in the window through the scene and sent
 after it (the fight's stage background still the artifact, left for later); chapter 4's pedestal (build step 93);
-chapter 7's final fight, its item (Spicy Fries) arriving once the ending reached Bugaria. With chapters 1, 2, 5 and 6
-seen before, every artifact scene has now worked in a seed.
+chapter 7's final fight, its item (Spicy Fries) arriving once the ending reached Bugaria. Still not seen since their swap
+was built: chapter 2's Summit (its model fixed after the first try) and chapter 6's Wasp Queen's gift.
 
 *Code: `slot_data.py`.*
 
