@@ -913,7 +913,8 @@ be wrong.
   runs): with Coupled doors every one-door dead end uses up a spare door already reached, and Archipelago's
   `randomize_entrances` gives up when they run out, with no retry of its own (`entrance_rando.py`). Measured with the
   failing yaml: 2 in 2000 seeds before the Pier was mapped, 17 after (its cut-off floors and shut right doors add dead
-  ends until the Office, the bridge and the rooms behind are mapped); Decoupled never fails. Decided (the user): after
+  ends until the Office, the bridge and the rooms behind are mapped); 7 in 10000 on 2026-10-12, after the hive's and
+  the hideout's one-way areas (the tracker's fuzz shows the same 8 as ignored); Decoupled never fails. Decided (the user): after
   every room is mapped, the doors that cause it are gone through one at a time, each opened, made two-way or whatever
   it needs, "judged on a per door/entrance case by case" (Next 2's door pass). Until then the fuzzer may show it.
   **What others do** (a research workflow, 2026-10-10): Archipelago never retries ("Unlike fill, there is no attempt
