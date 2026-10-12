@@ -3646,7 +3646,8 @@ Decided 2026-10-12 (`apimplementation.md`, build step 91): an artifact's scene h
 sprite, as a crystal berry's model is. The scenes show their artifact in two ways (code read): Snakemouth's pedestal
 (`Event26`) holds up a model, the map's child 1, and shows its banner from the map's line 7; the Wasp Queen's gift
 (`Event194`) makes a sprite from `Sprites/Objects/artifacts` (index 5), its banner line 15. The Golden Hills' Summit
-(`Event73`, chapter 2, added the same day) drops a tablet model from the boss's flower (`mainmesh`, child 1's child 0),
+(`Event73`, chapter 2, added the same day) drops a tablet model from the boss's flower (`mainmesh`, child 2's child 0 as the map loads: the scene destroys child 1
+before the fight, then reads the tablet's flower as child 1; seen swapped in the wrong flower first, 2026-10-12),
 its banner line 11. The castle's treasure room (`Event118`) and the Honey Factory Core (`Event99`) use the game's
 `ArtifactGet`, a model; they join as their artifacts come into seeds.
 

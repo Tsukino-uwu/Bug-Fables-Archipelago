@@ -20,8 +20,8 @@ namespace BugFablesAP
             ArtifactScenes =
         {
             ("SnakemouthTreasureRoom", 1, m => Child(m.transform, 1), 7),
-            // The tablet inside the Venus' Guardian's flower.
-            ("GoldenHillsDungeonBoss", 2, m => Child(Child(m.mainmesh, 1), 0), 11),
+            // The tablet inside the second flower: the scene destroys the first before the fight, then reads child 1.
+            ("GoldenHillsDungeonBoss", 2, m => Child(Child(m.mainmesh, 2), 0), 11),
             ("RubberPrisonGiantLairBridge", 6, null, 15),
         };
 
