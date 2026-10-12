@@ -6587,7 +6587,11 @@ though only four are objects in the story; chapters 5 and 7 are counted at a sce
 names only icons. Kept as seven (decided 2026-10-12): *Queen's Mask* (5), counted at *Bugaria City: Throne Room,
 Queen's Audience* (location 318, `Event142` in the palace hall once General Ultimax's fight is won, flag 347) and
 *Wasp King's Crown* (7) at *Giant's Lair: Sapling Plains, Final Fight* (location 319, `Event200`, flag 555, up by Jump
-or Bee Fly); the names describe their icons. Neither scene shows an object, so the mod has nothing to swap.
+or Bee Fly); the names describe their icons. Neither scene shows an object, so the mod has nothing to swap. Chapter
+5's scene froze out of order (seen 2026-10-12): it walks Neolith, in the throne room only from chapter 2's end (88);
+he is kept present from the start (`logic/bugaria_city.py`), then seen in seed `AP_78577825385807634508`: the scene
+played to its end on a new file with only 370 set, and sent its item (a Bad Book). `dev-scripts/scene-actors.py` lists
+the other scenes that grab a character their start doesn't make (the Termite King's reward, `Event164`, a lead).
 
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen.
