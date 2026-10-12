@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**227 of 244 done.**
+**228 of 244 done.**
 
 ## Outskirts
 
@@ -577,7 +577,11 @@ as it is, a frozen record.
 
 - [x] StreamMountain1 (132) — Water Crossing; its right door (from the desert, pressed to enter); water in the middle crossed both ways
   by Icicle and Jump, Bee Fly, or a tunnel dug through (Beetle Dig), to the left door; a regular enemy; no pickup
-- [ ] StreamMountain2 (133)
+- [x] StreamMountain2 (133) — the upper right (right door, crystal switch: Beemerang Toss, or Bee Fly and an attack,
+  raises or lowers the bottom's water, which stays); the bottom (its door, bridges 317/318 knocked down by Horn Slash,
+  which stay; a bounce pad up) dropped into with the water lowered; the upper left (left door) by Bee Fly or the
+  bridges with the water raised (no ice here), back free (a drop, then the pad or the water's respawn); arriving by
+  the bottom door into raised water puts the party at the upper right (the game's own respawn, seen); no pickup
 - [ ] StreamMountain3 (134)
 - [ ] StreamMountain4 (202)
 - [ ] StreamMountain5 (204)
