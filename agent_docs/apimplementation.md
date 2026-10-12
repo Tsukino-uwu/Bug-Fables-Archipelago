@@ -6567,7 +6567,8 @@ weighed and left out.
 **Built:** `location_artifacts` in slot_data, `{location id: chapter}` for each artifact scene in the seed (from
 `Source.artifact`); the mod's side is `documentation.md`, step 61.
 
-**Status:** built (2026-10-12); not yet seen in game, which needs a new seed.
+**Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
+sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen.
 
 *Code: `slot_data.py`.*
 
