@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**226 of 244 done.**
+**227 of 244 done.**
 
 ## Outskirts
 
@@ -575,7 +575,8 @@ as it is, a frozen record.
 
 ## Stream Mountain
 
-- [ ] StreamMountain1 (132)
+- [x] StreamMountain1 (132) — its right door (from the desert, pressed to enter); water in the middle crossed both ways
+  by Icicle and Jump, Bee Fly, or a tunnel dug through (Beetle Dig), to the left door; a regular enemy; no pickup
 - [ ] StreamMountain2 (133)
 - [ ] StreamMountain3 (134)
 - [ ] StreamMountain4 (202)
