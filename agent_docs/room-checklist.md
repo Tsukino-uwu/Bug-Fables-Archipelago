@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**239 of 244 done.**
+**241 of 244 done.**
 
 ## Outskirts
 
@@ -621,14 +621,20 @@ as it is, a frozen record.
   open the boss door's round door (528), pushed past on arrival (seen); a hidden computer room at the top right (Bee
   Fly from the machine's top, then Beetle Dig through a crack), only three monitors' text; for the discovery sweep:
   the monitors; for the gears' rooms: the gears as items
-- [ ] UpperSnekPressurePlateRoom (212)
+- [x] UpperSnekPressurePlateRoom (212) — the Piano Puzzle; one free floor, its one door at the bottom; the Extra
+  Freeze medal in a broken test tube (522, free, location 308); its plates held by enemies frozen and knocked onto them
+  (Freeze, Horn Slash), raising piano keys (Jump), the ice lasting long enough only with Extra Freeze (seen; the medal
+  progression): the Small Gear behind the plate door (521, location 309; the door stays open while inside) and Crystal
+  Berry #42 by the wind pipe (location 310)
 - [ ] UpperSnekBossRoom (213)
 - [x] UpperSnekMiddleRoom (214) — the Flooded Hall, a hub of platforms in water (Icicle and Jump, or Bee Fly); the
   middle (save crystal, bottom door) the map's own region; the lower top left up to both upper doors (Jump or Bee Fly),
   the upper top right's hanging bridge a drop to the middle; both upper doors behind Lab Card locks (Event59 index 12;
   524, 525), pushed past on arrival (seen); the Sleep Bomb behind the waterfall (740, Icicle and Jump, location 305);
   for the Lab Card's rooms: two cards (523, 526), two locks, a kept key like the Factory Pass (pending)
-- [ ] UpperSnekPlatformRoom (215)
+- [x] UpperSnekPlatformRoom (215) — the Icicle Climb; its bottom floor (the door, two switches, a bounce pad) free;
+  moving platforms up to the top, their switches hit from above and below by the Icicle (Jump or Bee Fly between
+  them), to a Lab Card in a broken test tube (523, location 311); the Lab Card kept, one in a seed (2026-10-12)
 - [ ] UpperSnekRiverPuzzle (216)
 - [ ] UpperSnekGeizerRoom (217)
 

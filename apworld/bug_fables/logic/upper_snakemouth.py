@@ -13,6 +13,10 @@ _SWITCH = CanUse("Icicle") | (CanUse("Bee Fly") & ANY_ATTACK)
 _WATER = (CanUse("Icicle") & CanUse("Jump")) | CanUse("Bee Fly")
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 _MIDDLE = "UpperSnekMiddleRoom"
+# The Piano Puzzle's plates, held down by enemies frozen and knocked onto them (Freeze, Horn Slash), raise its piano
+# keys (Jump between them); without the Extra Freeze medal the ice melts too soon (seen).
+_PLATES = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump") & Has("Extra Freeze")
+_PIANO = "UpperSnekPressurePlateRoom"
 
 LOCATIONS = (
     # Where the game teaches the Icicle (Event180, until flag 171): its scene and fight on entering by either door. From
@@ -33,6 +37,22 @@ LOCATIONS = (
     # machine, by Jump or Bee Fly.
     Location("Upper Snakemouth: Gear Machine, On Top of the Machine", 307, "UpperSnekBeforeBoss",
              Source(regional=0, pickup=Pickup(map="UpperSnekBeforeBoss", type=0, item=13)), rule=_UP),
+    # The Piano Puzzle (UpperSnekPressurePlateRoom; named 2026-10-12): one free floor, its one door at the bottom. The
+    # Extra Freeze medal (flag 522) in a broken test tube, free. The Small Gear (521) behind the right door, which the
+    # middle and right plates open (it stays open while the party is inside). Crystal Berry #42 up on the left by the
+    # wind pipe, the way up opened by the upper right and left plates.
+    Location("Upper Snakemouth: Piano Puzzle, Broken Test Tube", 308, _PIANO,
+             Source(flag=522, pickup=Pickup(map=_PIANO, type=2, item=59)), no_jump=True),
+    Location("Upper Snakemouth: Piano Puzzle, Pressure Plate Door", 309, _PIANO,
+             Source(flag=521, pickup=Pickup(map=_PIANO, type=1, item=157)), rule=_PLATES),
+    Location("Upper Snakemouth: Piano Puzzle, By the Wind Pipe", 310, _PIANO,
+             Source(berry=42, pickup=Pickup(map=_PIANO, type=3, item=0)), rule=_PLATES),
+    # The Icicle Climb (UpperSnekPlatformRoom; named 2026-10-12): its bottom floor (the door, two switches, a bounce pad
+    # up) free; moving platforms climbed to the top, their switches hit from above and below by the Icicle, Jump or Bee
+    # Fly between them, to a Lab Card (flag 523) in a broken test tube.
+    Location("Upper Snakemouth: Icicle Climb, Broken Test Tube", 311, "UpperSnekPlatformRoom",
+             Source(flag=523, pickup=Pickup(map="UpperSnekPlatformRoom", type=1, item=160)),
+             rule=CanUse("Icicle") & _UP),
 )
 MAP_AREAS = (
     # Icicle Pond (UpperSnekTransition; named 2026-10-12): its right door (from the entrance) the map's own region;
