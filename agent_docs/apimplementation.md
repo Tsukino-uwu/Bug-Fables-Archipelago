@@ -6582,6 +6582,13 @@ Boss Fight* (location 315, `Event99`, flag 299), left to the story: the Core rea
 escort (flag 218: Jump, Beemerang Halt and Freeze, or Bee Fly). The castle's own Ancient Key (key item 114) became
 *Small Ancient Key*, beside the *Big Ancient Key*. The castle's artifact will be *Ancient Half*.
 
+**Chapters 5 and 7, the same day:** the game counts seven artifacts, one per chapter (its pause menu and save file),
+though only four are objects in the story; chapters 5 and 7 are counted at a scene with nothing handed over, their
+names only icons. Kept as seven (decided 2026-10-12): *Queen's Mask* (5), counted at *Bugaria City: Throne Room,
+Queen's Audience* (location 318, `Event142` in the palace hall once General Ultimax's fight is won, flag 347) and
+*Wasp King's Crown* (7) at *Giant's Lair: Sapling Plains, Final Fight* (location 319, `Event200`, flag 555, up by Jump
+or Bee Fly); the names describe their icons. Neither scene shows an object, so the mod has nothing to swap.
+
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen.
 

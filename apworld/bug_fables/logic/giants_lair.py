@@ -24,6 +24,10 @@ _ROACH_SCENE = "Roach Village Scene Seen"
 _LEFT_LEVERS = "Kitchen Stove Levers Hit"
 
 LOCATIONS = (
+    # Chapter 7's end: the Sapling Plains' last fight (Event200, until 555), up by Jump or Bee Fly; the Wasp King's
+    # Crown counted, no object shown.
+    Location("Giant's Lair: Sapling Plains, Final Fight", 319, "GiantLairSaplingPlains",
+             Source(event=200, flag=555, artifact=7), area="Last Fight"),
     Location("Giant's Lair: Giant's Hand, Dig Spot", 247, "GiantLairDeadLands1",
              Source(berry=49, pickup=Pickup(map="GiantLairDeadLands1", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),

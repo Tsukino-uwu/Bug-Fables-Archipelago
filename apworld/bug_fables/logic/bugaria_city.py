@@ -2,7 +2,7 @@
 until the rooms are mapped, and what the seed changes there."""
 from __future__ import annotations
 
-from rule_builder.rules import Has
+from rule_builder.rules import CanReachRegion, Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse
 from ..data_types import (Area, DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
@@ -35,6 +35,10 @@ TRANSFERS = (
     Transfer("story", "BugariaEndThrone", "BugariaMainPlaza", LATER_CHAPTERS, two_way=False),
 )
 LOCATIONS = (
+    # Chapter 5's end (Event142, its trigger in the palace hall, from General Ultimax's fight, 370, until 347): the
+    # party before the queen in the throne room, the Queen's Mask counted; no object shown.
+    Location("Bugaria City: Throne Room, Queen's Audience", 318, "AntPalace1", Source(event=142, flag=347, artifact=5),
+             rule=CanReachRegion("WaspKingdomThrone (Top)")),
     # The Termacade greeter's first talk (lines 92-93): 15 tokens, its Game Tokens item adding them; the arcade's score
     # rewards give the same item, so only hers. Always in, kept to filler (the user, 2026-10-06).
     Location("Bugaria City: Termacade, Arcade Gift", 97, "BugariaCommercial",
