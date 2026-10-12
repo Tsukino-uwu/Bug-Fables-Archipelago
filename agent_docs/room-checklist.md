@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**237 of 244 done.**
+**238 of 244 done.**
 
 ## Outskirts
 
@@ -613,7 +613,9 @@ as it is, a frozen record.
   to the left platform, a dig barrier (Beetle Dig) to the left door and its switch (Icicle, or Bee Fly and an attack;
   518, for good), which opens that door, a one-way in until then; its scene (Event180, until 171; "Fight", location 74)
   from either door, moving a party from the left to the right once (not in the logic)
-- [ ] UpperSnekSwitchPuzzle (210)
+- [x] UpperSnekSwitchPuzzle (210) — the Pipe Puzzle; one free room, its one door on the right; switches 2, 4, 5 and 7
+  lit, then the wood lever (a basic attack) open the round door (`Base/CircleDoor`, 519) to the gear (key item 158,
+  520; "Puzzle Reward", location 306); for the gears' room: the three gears as items (pending)
 - [ ] UpperSnekBeforeBoss (211)
 - [ ] UpperSnekPressurePlateRoom (212)
 - [ ] UpperSnekBossRoom (213)

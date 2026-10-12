@@ -23,6 +23,12 @@ LOCATIONS = (
     # Bee Fly from the upper top right also lands there, a dead end with no way off: left out.
     Location("Upper Snakemouth: Flooded Hall, Behind the Waterfall", 305, _MIDDLE,
              Source(flag=740, pickup=Pickup(map=_MIDDLE, type=0, item=46)), rule=_ACROSS),
+    # The Pipe Puzzle (UpperSnekSwitchPuzzle; named 2026-10-12): one free room, its one door on the right. Switches 2,
+    # 4, 5 and 7 lit, then the wood lever (a basic attack each) open the round door on the left (flag 519) to a gear
+    # (key item 158, flag 520).
+    Location("Upper Snakemouth: Pipe Puzzle, Puzzle Reward", 306, "UpperSnekSwitchPuzzle",
+             Source(flag=520, pickup=Pickup(map="UpperSnekSwitchPuzzle", type=1, item=158)), rule=ANY_ATTACK,
+             no_jump=True),
 )
 MAP_AREAS = (
     # Icicle Pond (UpperSnekTransition; named 2026-10-12): its right door (from the entrance) the map's own region;
