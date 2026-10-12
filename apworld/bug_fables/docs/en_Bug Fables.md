@@ -72,12 +72,12 @@ Each option's description in the yaml says what it does in full and how many che
 
 ## Room Swap
 
-Set *Entrance Randomizer* to `room_swap` (experimental, new in 0.3.0). Whole rooms trade places with rooms that
-have as many doors, in the same part of the world, so the map keeps the game's shape: only which room sits where
-changes. Turning round always takes you back where you came from. It is gentler than Coupled, where any door may lead
-to any other. One-way doors, like the fog maze's wrong turns, still lead where they do in the game. As with Coupled, the
-logic follows the doors but not yet what each room needs inside, so a seed may not be finishable; the pause menu's Warp
-gets you out of a dead end.
+Set *Entrance Randomizer* to `room_swap` (experimental, new in 0.3.0). Each room trades places with a room anywhere in
+the game that has as many doors (rooms reached only by a ride or a scene swap among themselves), so the map keeps the
+game's shape: only which room sits where changes. Turning round always takes you back where you came from. It is gentler
+than Coupled, where any door may lead to any other. One-way doors, like the fog maze's wrong turns, still lead where
+they do in the game. As with Coupled, the logic follows the doors but not yet what each room needs inside, so a seed may
+not be finishable; the pause menu's Warp gets you out of a dead end.
 
 ## Plando: choosing where doors lead
 

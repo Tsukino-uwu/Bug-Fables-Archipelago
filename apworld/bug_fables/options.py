@@ -196,8 +196,8 @@ class EntranceRandomizer(Choice):
     """
     EXPERIMENTAL. Doors between areas lead somewhere else, and every room stays reachable.
 
-    Room Swap: whole rooms trade places with rooms that have as many doors, in the same part of the world. The map
-    keeps the game's shape; only which room sits where changes. Turning round takes you back where you came from.
+    Room Swap: each room trades places with a room anywhere in the game that has as many doors (rooms reached only by
+    a ride or a scene swap among themselves). The map keeps the game's shape; only which room sits where changes. Turning round takes you back where you came from.
     Coupled: any door may lead to any other; a door and its way back stay a pair, so turning round takes you back.
     Decoupled: any door may lead to any other, and the way back is shuffled too: turning round can take you somewhere
     else.
