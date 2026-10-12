@@ -273,7 +273,10 @@ throttled to changes.
   (`StartMenu.cs:792`). **Having an artifact = its flag being set**: usable as checks, or as a "collect N"
   goal. The quests page also goes by the count: a chapter's main quest (11 + its index) shows its artifact black while
   `SaveProgressIcons() < index + 1` (`PauseMenu.UpdateText`). Out of story order both are wrong: with only 345 set,
-  the pause menu showed the first chapter's icon (seen 2026-10-09). Used by `ArtifactIcons.cs`.
+  the pause menu showed the first chapter's icon (seen 2026-10-09). Used by `ArtifactIcons.cs`. Only four are objects
+  in the story, each named in its banner (Ancient Mask, Ancient Tablet, Ancient Key, Ancient Half), plus the Flame
+  Brooch's gift line; chapters 5 and 7 have no name anywhere: their icons' sprites are `gui_123` and `gui_125` (the
+  seven `gui_99`, `gui_112`, `gui_114`, `gui_115`, `gui_123`, `gui_124`, `gui_125`; read in game 2026-10-12).
 - **The save file's layout, as far as seen:** 18 lines, where line 6 is the three item lists joined by `@`,
   line 10 is `librarystuff` (5 rows), line 11 the 750 `flags`, and line 14 the 100 `regionalflags`. Other
   lines changed with ordinary play (position, stats, counters) and aren't identified yet.
