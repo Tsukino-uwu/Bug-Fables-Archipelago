@@ -903,7 +903,8 @@ be wrong.
     **Decided 2026-10-13: the only goal for now.** *Artifacts Required* artifacts open the last fight, and the goal is
     sent when the credits start (`Event204`, after the ceremony): the win is settled there, nothing can skip it, and
     the release runs while the credits play. X is 1 to 7 with artifacts shuffled, 1 to 6 under Artifact Shuffle's
-    Vanilla (chapter 7's artifact sits behind that fight). Artifact Hunt, and a warp to the end plaza so other goals walk into the ceremony, wait
+    Vanilla (chapter 7's artifact sits behind that fight). The default is 6 with Artifact Shuffle's default, Vanilla:
+    the six chapters' artifacts open the fight, and the seventh comes from winning it, as in the game. Artifact Hunt, and a warp to the end plaza so other goals walk into the ceremony, wait
     until the user decides how goals should work. `Event204` started off its own map softlocks (`MEASURED.md`, the
     Sapling Plains), so any other way into the credits goes through the ending's own maps.
 74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
