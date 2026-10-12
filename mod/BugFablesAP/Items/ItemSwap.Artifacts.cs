@@ -14,13 +14,19 @@ namespace BugFablesAP
     // sprite the scene makes swapped, and its banner naming the item unless the location holds its own artifact.
     internal static partial class ItemSwap
     {
-        // Each scene: its map, its chapter (slot_data's location_artifacts), the map's child holding the artifact's
-        // model (-1: none; the scene makes a sprite instead), and the map's dialogue line its banner shows.
-        private static readonly (string Map, int Chapter, int Child, int Line)[] ArtifactScenes =
+        // Each scene: its map, its chapter (slot_data's location_artifacts), the artifact's model (null: none; the
+        // scene makes a sprite instead), and the map's dialogue line its banner shows.
+        private static readonly (string Map, int Chapter, Func<MapControl, Transform> Model, int Line)[]
+            ArtifactScenes =
         {
-            ("SnakemouthTreasureRoom", 1, 1, 7),
-            ("RubberPrisonGiantLairBridge", 6, -1, 15),
+            ("SnakemouthTreasureRoom", 1, m => Child(m.transform, 1), 7),
+            // The tablet inside the Venus' Guardian's flower.
+            ("GoldenHillsDungeonBoss", 2, m => Child(Child(m.mainmesh, 1), 0), 11),
+            ("RubberPrisonGiantLairBridge", 6, null, 15),
         };
+
+        private static Transform Child(Transform parent, int index) =>
+            parent != null && index < parent.childCount ? parent.GetChild(index) : null;
         private const string ArtifactLookName = "apartifactlook";
 
         private static class Artifacts
@@ -126,9 +132,14 @@ namespace BugFablesAP
                     map.dialogues[scene.Line] = BannerText(info, name);
                 }
                 // A sprite scene's sprite is swapped as the scene makes it (HeldArtifact).
-                if (scene.Child >= 0 && scene.Child < map.transform.childCount)
+                Transform model = scene.Model?.Invoke(map);
+                if (model != null)
                 {
-                    HideModel(map.transform.GetChild(scene.Child), sprite, color);
+                    HideModel(model, sprite, color);
+                }
+                else if (scene.Model != null)
+                {
+                    log.LogInfo($"[artifact] {mapName}: the artifact's model isn't where it was read: left as it is");
                 }
                 log.LogInfo($"[artifact] {mapName}: location {at} shows '{TextFit.Joined(name)}'"
                     + (own ? ", its own artifact: the game's banner" : ", the banner names it")

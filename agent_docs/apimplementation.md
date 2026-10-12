@@ -6567,6 +6567,12 @@ weighed and left out.
 **Built:** `location_artifacts` in slot_data, `{location id: chapter}` for each artifact scene in the seed (from
 `Source.artifact`); the mod's side is `documentation.md`, step 61.
 
+**Chapter 2's artifact, the same day:** *Ancient Tablet* (game id 2, the game's name from its banner), the third
+artifact item; its scene *Golden Hills: Summit, Boss Fight* (location 314, `Event73`, flag 88, Jump; the room and spot
+named 2026-10-12), the fight's own needs left for the enemy pass. The banners name all four artifacts the world knows:
+the Ancient Mask (chapter 1, our *Snakemouth Treasure*), the Ancient Tablet, the castle's Ancient Half, the Flame
+Brooch.
+
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen.
 

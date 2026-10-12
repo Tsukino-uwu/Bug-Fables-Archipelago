@@ -18,6 +18,11 @@ RIGHT_CRANK_ROOM = (CanUse("Shield") & CanUse("Freeze") & CanUse("Horn Slash") &
                     & CanUse("Beemerang Toss") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")
 
 LOCATIONS = (
+    # The Summit (GoldenHillsDungeonBoss; named 2026-10-12): the Venus' Guardian's fight up two ledges (Jump), then the
+    # Ancient Tablet, chapter 2's artifact, dropped from its flower (Event73, flag 88). The fight's own needs wait for
+    # the enemy pass.
+    Location("Golden Hills: Summit, Boss Fight", 314, "GoldenHillsDungeonBoss",
+             Source(event=73, flag=88, artifact=2), rule=CanUse("Jump")),
     # Crystal berry #9, high over the left hall's flytraps by its right door: Jump.
     Location("Golden Hills: Left Hall, above the Flytraps", 127, "GoldenHillsDungeonLeftMain",
              Source(berry=9, pickup=Pickup(map="GoldenHillsDungeonLeftMain", type=3, item=0)), rule=CanUse("Jump"),

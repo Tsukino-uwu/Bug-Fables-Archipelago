@@ -75,6 +75,7 @@ class TestArtifactsCapped(BugFablesTestBase):
 
     def test_needs_every_artifact(self) -> None:
         self.collect_by_name("Snakemouth Treasure")
+        self.collect_by_name("Ancient Tablet")
         self.assertBeatable(False)
         self.collect_by_name("Flame Brooch")
         self.assertBeatable(True)
@@ -90,8 +91,10 @@ class TestArtifactShuffleVanilla(BugFablesTestBase):
         self.assertFalse(pool & self.world.item_name_groups["Artifacts"])
 
     def test_hint_groups(self) -> None:
-        self.assertEqual(self.world.item_name_groups["Artifacts"], {"Snakemouth Treasure", "Flame Brooch"})
+        self.assertEqual(self.world.item_name_groups["Artifacts"], {"Snakemouth Treasure", "Ancient Tablet",
+                                                                      "Flame Brooch"})
         self.assertEqual(self.world.item_name_groups["Artifact 1"], {"Snakemouth Treasure"})
+        self.assertEqual(self.world.item_name_groups["Artifact 2"], {"Ancient Tablet"})
         self.assertEqual(self.world.item_name_groups["Artifact 6"], {"Flame Brooch"})
 
 

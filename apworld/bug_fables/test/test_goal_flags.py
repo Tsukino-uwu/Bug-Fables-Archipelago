@@ -7,7 +7,8 @@ class TestGoalFlags(BugFablesTestBase):
     # be checked by anything borrowing its flag.
     def test_goal_flags_are_the_artifacts_with_their_events(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["goal_flags"],
-                         [{"flag": 41, "events": [26]}, {"flag": 346, "events": [194]}])
+                         [{"flag": 41, "events": [26]}, {"flag": 88, "events": [73]},
+                          {"flag": 346, "events": [194]}])
 
     def test_each_artifact_set_by_its_own_event(self) -> None:
         for artifact in ARTIFACTS:
@@ -17,7 +18,8 @@ class TestGoalFlags(BugFablesTestBase):
         for swap in (*ACTIVATION_FLAGS, *LIMIT_FLAGS, *DIALOGUE_FLAGS):
             self.assertNotIn(swap.to, ARTIFACT_WRITERS, swap)
 
-    # Cutting it set flag 41 and sent the goal (seen 2026-10-08); its drop also carried 41, so location 182 never matched.
+    # Cutting it set flag 41 and sent the goal (seen 2026-10-08); its drop also carried 41, so location 182 never
+    # matched.
     def test_swamp_grass_sets_nothing(self) -> None:
         swaps = self.world.fill_slot_data()["activation_flags"]
         self.assertIn({"map": "Swamplands2", "entity": "blockgrass", "flag": 41, "to": -1}, swaps)
