@@ -14,7 +14,7 @@ Beetle Dig's, held out for now) and the one where the Termite King hands over th
 
 ## Options
 
-- **Artifacts Required** (1 to 7): the goal, see below.
+- **Artifacts Required** (0 to 7, default 6): how many artifacts open the last fight, see below.
 - **Artifact Shuffle** (Vanilla): where the artifacts may be. Vanilla: each at its own story scene. This World: anywhere
   in your game. Anywhere: anywhere in the multiworld, another player's game included.
 - **Shuffle Quests** (on): quest rewards are locations.
@@ -140,10 +140,12 @@ where both copies are, since a hint can't tell the two apart.
 
 ## What is the goal?
 
-Collect a number of artifacts (the option *Artifacts Required*). The game has 7, one per chapter milestone, and each is
-an item: the scene that hands it over or counts it in the story is a location, and *Artifact Shuffle* decides where
-the item goes. This version includes six: the Ancient Mask (chapter 1), the Ancient Tablet (chapter 2), the Ancient Key
-(chapter 3), the Queen's Mask (chapter 5), the Flame Brooch (chapter 6) and the Wasp King's Crown (chapter 7), so the
-goal is capped at 6. Hint one by its name or by its chapter (`!hint Artifact 6`), or all of them with `!hint
-Artifacts`. The pause menu shows the artifacts you have received. Once you have that
-many, the mod tells the server, which marks your game finished.
+Beat the last fight, at the Giant's Lair's Sapling Plains. It opens once you have collected a number of artifacts
+(the option *Artifacts Required*, 6 by default; 0 leaves it open from the start); a sign by its door says how many.
+The game has 7, one per chapter milestone: the Ancient Mask (chapter 1), the Ancient Tablet (chapter 2), the Ancient
+Key (chapter 3), the Ancient Half (chapter 4), the Queen's Mask (chapter 5), the Flame Brooch (chapter 6) and the Wasp
+King's Crown (chapter 7). Each is an item: the scene that hands it over or counts it in the story is a location, and
+*Artifact Shuffle* decides where the item goes. With *Artifact Shuffle* on Vanilla the 7th is the last fight's own
+reward, so at most 6 can open it. Hint one by its name or by its chapter (`!hint Artifact 6`), or all of them with
+`!hint Artifacts`. The pause menu shows the artifacts you have received. Win the fight and watch the ending: as the
+credits start, the mod tells the server, which marks your game finished.
