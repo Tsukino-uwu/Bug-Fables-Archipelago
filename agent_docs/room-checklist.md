@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**241 of 244 done.**
+**242 of 244 done.**
 
 ## Outskirts
 
@@ -635,7 +635,9 @@ as it is, a frozen record.
 - [x] UpperSnekPlatformRoom (215) — the Icicle Climb; its bottom floor (the door, two switches, a bounce pad) free;
   moving platforms up to the top, their switches hit from above and below by the Icicle (Jump or Bee Fly between
   them), to a Lab Card in a broken test tube (523, location 311); the Lab Card kept, one in a seed (2026-10-12)
-- [ ] UpperSnekRiverPuzzle (216)
+- [x] UpperSnekRiverPuzzle (216) — the River Puzzle; its door at the bottom free; a Zombeetle carrying a Lab Card
+  (`ShwKEYZombeetle`, 526) behind a barrier, reached by Jump, the Icicle and the Beemerang Halt, back out with Beetle
+  Dig (location 312, the Lab Card kept: a random item in a seed); for the enemy pass: the Zombeetle
 - [ ] UpperSnekGeizerRoom (217)
 
 ## Not rooms

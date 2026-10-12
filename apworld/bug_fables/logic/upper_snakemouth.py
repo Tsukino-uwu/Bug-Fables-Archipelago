@@ -53,6 +53,12 @@ LOCATIONS = (
     Location("Upper Snakemouth: Icicle Climb, Broken Test Tube", 311, "UpperSnekPlatformRoom",
              Source(flag=523, pickup=Pickup(map="UpperSnekPlatformRoom", type=1, item=160)),
              rule=CanUse("Icicle") & _UP),
+    # The River Puzzle (UpperSnekRiverPuzzle; named 2026-10-12): its door at the bottom free; a Zombeetle carrying a
+    # Lab Card (`ShwKEYZombeetle`, the card's flag 526) behind a barrier, reached by Jump, the Icicle and the Beemerang
+    # Halt; back out with Beetle Dig (and Jump or Bee Fly).
+    Location("Upper Snakemouth: River Puzzle, Fight Behind the Barrier", 312, "UpperSnekRiverPuzzle",
+             Source(flag=526, pickup=Pickup(map="UpperSnekRiverPuzzle", type=1, item=160)),
+             rule=CanUse("Jump") & CanUse("Icicle") & CanUse("Beemerang Halt") & CanUse("Beetle Dig")),
 )
 MAP_AREAS = (
     # Icicle Pond (UpperSnekTransition; named 2026-10-12): its right door (from the entrance) the map's own region;
