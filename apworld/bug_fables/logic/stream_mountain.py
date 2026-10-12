@@ -4,7 +4,7 @@ from __future__ import annotations
 from rule_builder.rules import True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, one_way
-from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Pickup, Source
+from ..data_types import ALWAYS_SET, Area, FlagSwap, Give, Location, Pickup, Source
 
 # Across the water: Icicle platforms and Jump, Bee Fly, or the tunnel under it (Beetle Dig).
 _ACROSS = (CanUse("Icicle") & CanUse("Jump")) | CanUse("Bee Fly") | CanUse("Beetle Dig")
@@ -17,6 +17,10 @@ LOCATIONS = (
     Location("Stream Mountain: Climb, Above the Geysers", 299, "StreamMountain3",
              Source(flag=418, pickup=Pickup(map="StreamMountain3", type=2, item=63)),
              rule=CanUse("Freeze") & CanUse("Jump"), area="Upper", no_jump=True),
+    # Wyrm's Den (StreamMountain5; named 2026-10-12): its bounty fight in the middle (Event124, the Tidal Wyrm, until
+    # 496) gives a Coal Crystal (key item 29); free to reach.
+    Location("Stream Mountain: Wyrm's Den, Boss Fight", 301, "StreamMountain5",
+             Source(event=124, flag=496, give=Give(map="StreamMountain5", type=1, item=29)), no_jump=True),
     # StreamMountain4's Clear Water (item 12, flag 493), lying in its middle once there.
     Location("Stream Mountain: Bridge Puzzle, Among the Logs", 300, "StreamMountain4",
              Source(flag=493, pickup=Pickup(map="StreamMountain4", type=0, item=12)), area="Middle", no_jump=True),

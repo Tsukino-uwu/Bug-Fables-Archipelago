@@ -590,11 +590,11 @@ as it is, a frozen record.
   bridge (Jump or Bee Fly, Horn Slash; 491) and the logs held up by Beemerang Halt, then Jump; a one-way drop back.
   Its logs floated only from chapter 1's end (41): repointed to an always-set flag (`float_flags`, seen)
 - [x] StreamMountain5 (204) — Wyrm's Den; free (its shallow water walked through): its door, a save crystal, a Venus healer; no flag-driven scenery or floats; for the
-  quest pass: the Tidal Wyrm's bounty fight in the middle (Event124, until 496; a Coal Crystal, key item 29; seen won)
+  quest pass: the Tidal Wyrm's bounty fight in the middle (Event124, until 496; a Coal Crystal, key item 29; seen won): location 301, Boss Fight, the Coal Crystal an item
 
 ## Chomper Caves
 
-- [x] ChomperCave1 (155) — the bottom (the door out, the low door, the save crystal) and the upper area (the high door,
+- [x] ChomperCave1 (155) — Cave Entrance; the bottom (the door out, the low door, the save crystal) and the upper area (the high door,
   the boss door, the Venus healer) joined by a bridge knocked down from above (Horn Slash; 689, it stays); no pickup
 - [ ] ChomperCaves2 (156)
 - [ ] ChomperCaves3 (157)
