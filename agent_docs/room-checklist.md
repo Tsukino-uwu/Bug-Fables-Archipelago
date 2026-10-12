@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**232 of 244 done.**
+**233 of 244 done.**
 
 ## Outskirts
 
@@ -596,7 +596,9 @@ as it is, a frozen record.
 
 - [x] ChomperCave1 (155) — Cave Entrance; the bottom (the door out, the low door, the save crystal) and the upper area (the high door,
   the boss door, the Venus healer) joined by a bridge knocked down from above (Horn Slash; 689, it stays); no pickup
-- [ ] ChomperCaves2 (156)
+- [x] ChomperCaves2 (156) — Droplet Room; its bottom (the low door; the Berserker medal behind a crack at the far left,
+  dug to and from, Beetle Dig, flag 338, location 302); up to the high door by frozen droplets knocked down and
+  climbed (Freeze, Horn Slash, Jump), a one-way drop back; five regular enemies
 - [ ] ChomperCaves3 (157)
 
 ## Fishing Village
