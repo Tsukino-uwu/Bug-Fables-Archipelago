@@ -22,6 +22,8 @@ namespace BugFablesAP
             ("SnakemouthTreasureRoom", 1, m => Child(m.transform, 1), 7),
             // The tablet inside the second flower: the scene destroys the first before the fight, then reads child 1.
             ("GoldenHillsDungeonBoss", 2, m => Child(Child(m.mainmesh, 2), 0), 11),
+            // The finale clones the window's artifact and hands the copy over (ArtifactGet).
+            ("HoneyFactoryCore", 3, m => Child(m.mainmesh, 2), 24),
             ("RubberPrisonGiantLairBridge", 6, null, 15),
         };
 

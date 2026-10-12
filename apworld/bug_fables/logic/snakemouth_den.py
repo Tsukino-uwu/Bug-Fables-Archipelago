@@ -81,8 +81,8 @@ LOCATIONS = (
     # Where the mod has Leif join (the spider scene over, flag 27), whoever starts.
     Location("Snakemouth Den: Fall Room, After the Spider", 67, "SnakemouthFallRoom",
              Source(event=6, flag=27), category="party_member", no_jump=True),
-    # Chapter 1's artifact, "Snakemouth Treasure" (the game names none: "we got the treasure"), on its pedestal once the
-    # Spider's fight is won (Event26, flag 41): a location, its artifact an item (build step 86; the user's names).
+    # Chapter 1's artifact, the Ancient Mask (the game's name, from its banner; renamed 2026-10-12), on its pedestal
+    # once the Spider's fight is won (Event26, flag 41): a location, its artifact an item (build step 86).
     Location("Snakemouth Den: Treasure Room, Treasure Pedestal", 245, "SnakemouthTreasureRoom",
              Source(event=26, flag=41, artifact=1), rule=Member("Vi")),
 )

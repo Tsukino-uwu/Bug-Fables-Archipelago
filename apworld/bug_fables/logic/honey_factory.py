@@ -2,7 +2,7 @@
 room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has, True_
+from rule_builder.rules import CanReachRegion, False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
 from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Give, ItemShop, Location, Pickup, Source,
@@ -26,6 +26,12 @@ _PUMP_LOOP = CanUse("Jump") & CanUse("Shield")
 _PUMP_UP = CanUse("Beemerang Halt") & _PUMP_LOOP
 
 LOCATIONS = (
+    # The Core's finale (HoneyFactoryCore; Event99, from the escort's flag 218, sets 299): its fight, then the Ancient
+    # Key, chapter 3's artifact. The escort is the Storage Overseer Room's (Event102): Jump, Beemerang Halt and Freeze,
+    # or Bee Fly. The fight's own needs wait for the enemy pass.
+    Location("Honey Factory: Core, Boss Fight", 315, "HoneyFactoryCore", Source(event=99, flag=299, artifact=3),
+             rule=CanReachRegion("FactoryStorageOverseer")
+             & ((CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Freeze")) | CanUse("Bee Fly"))),
     # The First Room's switch (FactoryProcessingFirstRoom; the user, 2026-10-10), on its right side, hit with a basic
     # attack: the scene where the game teaches the Shield (Event95, flag 20).
     Location("Honey Factory: First Room, Switch", 70, "FactoryProcessingFirstRoom", Source(event=95, flag=20),
@@ -180,8 +186,8 @@ MAP_AREAS = (
     # crystal free; its left side, the Ahoneynation fight (Event101) and the Factory Pass it gives, location 239.
     # The Storage Overseer Room (FactoryStorageOverseer; named by the user, 2026-10-10): one region, its one door free,
     # nothing to collect. Its overseer's escort (Event102, flag 218), back to the door past the bees: Jump, Beemerang
-    # Halt and Freeze (the vanilla party has it, and without it is "pretty hard", the user), or Bee Fly alone; nothing
-    # in the logic needs 218 yet (the Core's finale, the user's pick pending).
+    # Halt and Freeze (the vanilla party has it, and without it is "pretty hard", the user), or Bee Fly alone; the
+    # Core's finale, location 315, needs it (left to the story, 2026-10-12).
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )

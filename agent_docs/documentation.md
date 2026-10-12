@@ -3648,8 +3648,10 @@ sprite, as a crystal berry's model is. The scenes show their artifact in two way
 (`Event194`) makes a sprite from `Sprites/Objects/artifacts` (index 5), its banner line 15. The Golden Hills' Summit
 (`Event73`, chapter 2, added the same day) drops a tablet model from the boss's flower (`mainmesh`, child 2's child 0 as the map loads: the scene destroys child 1
 before the fight, then reads the tablet's flower as child 1; seen swapped in the wrong flower first, 2026-10-12),
-its banner line 11. The castle's treasure room (`Event118`) and the Honey Factory Core (`Event99`) use the game's
-`ArtifactGet`, a model; they join as their artifacts come into seeds.
+its banner line 11. The Honey Factory Core (`Event99`, chapter 3, added the same day) clones the window's artifact (`mainmesh`
+child 2) and hands the copy to the game's `ArtifactGet`, banner line 24: the swap is on the original, so the copy and
+the window both show the item. The castle's treasure room (`Event118`, also `ArtifactGet`) joins when its artifact
+comes into seeds. Left for later: the Core's battle stage shows the artifact in its background too.
 
 Built: as each scene's map is built (a postfix on `MapControl.CreateEntities`), its location comes from
 `location_artifacts`. A model scene's model keeps its place and its moves, its renderers switched off, the item's sprite

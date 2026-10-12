@@ -74,8 +74,9 @@ class TestArtifactsCapped(BugFablesTestBase):
         self.assertEqual(self.world.fill_slot_data()["options"]["artifacts_required"], len(ARTIFACTS))
 
     def test_needs_every_artifact(self) -> None:
-        self.collect_by_name("Snakemouth Treasure")
+        self.collect_by_name("Ancient Mask")
         self.collect_by_name("Ancient Tablet")
+        self.collect_by_name("Ancient Key")
         self.assertBeatable(False)
         self.collect_by_name("Flame Brooch")
         self.assertBeatable(True)
@@ -91,10 +92,11 @@ class TestArtifactShuffleVanilla(BugFablesTestBase):
         self.assertFalse(pool & self.world.item_name_groups["Artifacts"])
 
     def test_hint_groups(self) -> None:
-        self.assertEqual(self.world.item_name_groups["Artifacts"], {"Snakemouth Treasure", "Ancient Tablet",
-                                                                      "Flame Brooch"})
-        self.assertEqual(self.world.item_name_groups["Artifact 1"], {"Snakemouth Treasure"})
+        self.assertEqual(self.world.item_name_groups["Artifacts"], {"Ancient Mask", "Ancient Tablet",
+                                                                      "Ancient Key", "Flame Brooch"})
+        self.assertEqual(self.world.item_name_groups["Artifact 1"], {"Ancient Mask"})
         self.assertEqual(self.world.item_name_groups["Artifact 2"], {"Ancient Tablet"})
+        self.assertEqual(self.world.item_name_groups["Artifact 3"], {"Ancient Key"})
         self.assertEqual(self.world.item_name_groups["Artifact 6"], {"Flame Brooch"})
 
 
@@ -103,7 +105,7 @@ class TestArtifactShuffleThisWorld(BugFablesTestBase):
 
     def test_in_the_pool_and_local(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        for name in ("Snakemouth Treasure", "Flame Brooch"):
+        for name in ("Ancient Mask", "Ancient Tablet", "Ancient Key", "Flame Brooch"):
             with self.subTest(item=name):
                 self.assertEqual(pool.count(name), 1)
                 self.assertIn(name, self.world.options.local_items.value)
@@ -114,7 +116,7 @@ class TestArtifactShuffleAnywhere(BugFablesTestBase):
 
     def test_in_the_pool_not_local(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        for name in ("Snakemouth Treasure", "Flame Brooch"):
+        for name in ("Ancient Mask", "Ancient Tablet", "Ancient Key", "Flame Brooch"):
             with self.subTest(item=name):
                 self.assertEqual(pool.count(name), 1)
                 self.assertNotIn(name, self.world.options.local_items.value)

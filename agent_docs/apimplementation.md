@@ -6573,6 +6573,12 @@ named 2026-10-12), the fight's own needs left for the enemy pass. The banners na
 the Ancient Mask (chapter 1, our *Snakemouth Treasure*), the Ancient Tablet, the castle's Ancient Half, the Flame
 Brooch.
 
+**Chapter 3's artifact and the game's names, the same day:** every artifact item takes the game's name: chapter 1's
+*Snakemouth Treasure* became *Ancient Mask*; chapter 3's *Ancient Key* (game id 3), its scene *Honey Factory: Core,
+Boss Fight* (location 315, `Event99`, flag 299), left to the story: the Core reached and the Storage Overseer Room's
+escort (flag 218: Jump, Beemerang Halt and Freeze, or Bee Fly). The castle's own Ancient Key (key item 114) became
+*Small Ancient Key*, beside the *Big Ancient Key*. The castle's artifact will be *Ancient Half*.
+
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen.
 
