@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**233 of 244 done.**
+**234 of 244 done.**
 
 ## Outskirts
 
@@ -599,7 +599,8 @@ as it is, a frozen record.
 - [x] ChomperCaves2 (156) — Droplet Room; its bottom (the low door; the Berserker medal behind a crack at the far left,
   dug to and from, Beetle Dig, flag 338, location 302); up to the high door by frozen droplets knocked down and
   climbed (Freeze, Horn Slash, Jump), a one-way drop back; five regular enemies
-- [ ] ChomperCaves3 (157)
+- [x] ChomperCaves3 (157) — Chomper Nest; free in and out; walking up starts the Mother Chomper's fight (Event132,
+  two Chompers with her, until 339), then the Chomper Seed lies where she sat (flag 340, location 303, an item now)
 
 ## Fishing Village
 

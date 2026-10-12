@@ -12,6 +12,10 @@ LOCATIONS = (
     Location("Chomper Caves: Droplet Room, Behind the Crack", 302, "ChomperCaves2",
              Source(flag=338, pickup=Pickup(map="ChomperCaves2", type=2, item=8)), rule=CanUse("Beetle Dig"),
              no_jump=True),
+    # The Chomper Nest (ChomperCaves3; named 2026-10-12): free in and out; walking up starts the Mother Chomper's fight
+    # (Event132, with two Chompers, until 339), then the Chomper Seed (key item 38, flag 340) lies where she sat.
+    Location("Chomper Caves: Chomper Nest, Fight", 303, "ChomperCaves3",
+             Source(flag=340, pickup=Pickup(map="ChomperCaves3", type=1, item=38)), no_jump=True),
 )
 # ChomperCave1's bridge, knocked down from its upper area (Horn Slash), stays: the only way up from the bottom.
 _BRIDGE = CanReachRegion("ChomperCave1 (Upper)") & CanUse("Horn Slash")

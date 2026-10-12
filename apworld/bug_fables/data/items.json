@@ -20,6 +20,7 @@
     {"name": "Heart Berry", "game_id": 83, "kind": 1, "classification": "useful"},
     {"name": "Sun Offering", "game_id": 55, "kind": 1, "classification": "progression"},
     {"name": "Moon Offering", "game_id": 56, "kind": 1, "classification": "progression"},
+    {"name": "Chomper Seed", "game_id": 38, "kind": 1, "classification": "useful", "_comment": "Left where the Mother Chomper sat in the Chomper Nest; brought to a scientist in a quest: progression once that is a location (the quest pass)."},
     {"name": "Coal Crystal", "game_id": 29, "kind": 1, "classification": "useful", "_comment": "The Tidal Wyrm's bounty reward in Wyrm's Den; turned in at the bar's bounty board: progression once that is a location (the bounty pass)."},
     {"name": "Bond Berry", "game_id": 84, "kind": 1, "classification": "useful", "_comment": "Raises the party's TP by 1 when used; one lies in the Bandit Hideout's Dining Hall."},
     {"name": "Stolen Silk", "game_id": 108, "kind": 1, "classification": "useful", "_comment": "Lies in the Bandit Hideout's Garden; returned to its owner in a quest: progression once that is a location (the quest pass)."},
