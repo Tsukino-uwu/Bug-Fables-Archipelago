@@ -66,9 +66,9 @@ namespace BugFablesAP
         public static bool JoinAllowed(bool earthKeyDone)
         {
             SeedData data = randomizerOn != null && randomizerOn() ? seed?.Invoke() : null;
-            if (data == null || !data.SandCastleKeyItem)
+            if (data == null || !data.SandCastleKeyItem || !earthKeyDone)
             {
-                return earthKeyDone;
+                return data != null && data.SandCastleKeyItem ? false : earthKeyDone;
             }
             log?.LogInfo("[keys] the Heaven and Earth Keys' join kept away: the Sand Castle Key comes from the server");
             return false;

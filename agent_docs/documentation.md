@@ -3677,9 +3677,11 @@ Decided 2026-10-12 (`apimplementation.md`, build step 92): a seed has the Sand C
 its halves must not run. `Event109` joins them once flags 301 and 302 are both set (code read: its one read of 301).
 With `sand_castle_key_item`, a transpiler makes that read answer false (`KeptKeys.JoinAllowed`): the halves are never
 taken or the key given by the game. The log says `[keys] installed in EventControl.Event109 (the Sand Castle Key's
-join)` and, when it decides, `the Heaven and Earth Keys' join kept away`.
+join)` and, when both spots are done, `the Heaven and Earth Keys' join kept away` (first written on every read, a
+misleading line with one half's spot only; seen 2026-10-12, fixed the same day).
 
-**Status:** built (2026-10-12); not yet seen in game.
+**Status:** built (2026-10-12); the hook seen installed and the hawk's talk ending without a key; the join with both
+halves' spots done not yet seen.
 
 *Code: `World/KeptKeys.cs` (`KeyJoin`, `JoinAllowed`), `Core/SeedData.cs` (`SandCastleKeyItem`).*
 

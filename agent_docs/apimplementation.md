@@ -6606,7 +6606,9 @@ the later chapters' stand-in; `sand_castle_key_item` in slot_data, the mod's sid
 Scorpion's trigger stands between the room's bottom doors and its top one, a fight without fleeing: for the enemy
 pass. The castle's own spots stay pending (build step 67) until its keys are written.
 
-**Status:** built (2026-10-12); not yet seen in game.
+**Status:** built (2026-10-12); seen in seed `AP_17798847575175281667` on a new file: the hawk there before chapter 4,
+his talk showing and sending its location's item (Hard Hits) instead of the Heaven Key. Astotheles' half and a join
+with both halves' spots done not yet seen.
 
 *Code: `data/items.json`, `data_tables.py`, `logic/lost_sands.py`, `logic/bandit_hideout.py`, `slot_data.py`.*
 
