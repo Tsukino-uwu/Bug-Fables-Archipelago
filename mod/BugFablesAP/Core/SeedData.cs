@@ -10,6 +10,8 @@ namespace BugFablesAP
     internal sealed class SeedData
     {
         internal readonly Dictionary<long, int> LocationFlags;
+        // Each artifact scene's location and the chapter whose artifact it hands over.
+        internal readonly Dictionary<long, int> LocationArtifacts;
         internal readonly Dictionary<long, ApConnection.Give> LocationGives;
         // Items the story puts straight into the bag at a location: {type, item}; left out while in a seed.
         internal readonly Dictionary<long, int[]> LocationAdded;
@@ -153,6 +155,7 @@ namespace BugFablesAP
             LocationAdded = SlotData.ByLocation(data, "location_added",
                 v => new[] { v.Value<int>("type"), v.Value<int>("item") });
             LocationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
+            LocationArtifacts = SlotData.ByLocation(data, "location_artifacts", v => v.Value<int>());
             LocationEnemies = SlotData.ByLocation(data, "location_enemies", v => v.Value<string>());
             List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
             SilentLocations = silent != null ? new HashSet<long>(silent) : null;

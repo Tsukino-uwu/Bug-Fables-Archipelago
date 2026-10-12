@@ -100,6 +100,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "location_flags": _by_location(world, "flag"),
         "location_berries": _by_location(world, "berry"),
         "location_discoveries": _by_location(world, "discovery"),
+        # {location id: chapter}, each artifact's own scene: the client shows the seed's item in the artifact's place.
+        "location_artifacts": _by_location(world, "artifact"),
         # Enemysanity: {location id: "map:entity"}, the map enemy whose won fight drops the check; empty when it's off.
         # The client keeps each one present whatever the story's flags.
         "location_enemies": _by_location(world, "enemy"),

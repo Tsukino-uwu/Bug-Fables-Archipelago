@@ -113,6 +113,7 @@ anyone curious about the process, or thinking of doing the same for another game
 58. [The Spy Cards tournament held back without a deck](#58-the-spy-cards-tournament-held-back-without-a-deck)
 59. [Scenery copied and made diggable: a twig before the hive's barrier](#59-scenery-copied-and-made-diggable-a-twig-before-the-hives-barrier)
 60. [A pickup placed on an altar: where the hideout teaches Dig](#60-a-pickup-placed-on-an-altar-where-the-hideout-teaches-dig)
+61. [An artifact's scene shows its location's item](#61-an-artifacts-scene-shows-its-locations-item)
 
 ## Where it stands
 
@@ -3638,3 +3639,24 @@ one's own flag (`flagfloats`) is set, and the logs there wait on flag 41, chapte
 room couldn't be crossed. `float_flags` (`[{"map", "entity", "flag", "to"}]`, the entity the water's path) repoints those
 flags as the room loads; the log says `<water> <n> floats on flag <a> now on <b>`. The console's `floats` lists every
 water's floating objects and flags (neither the entity dump nor `conditions` shows them). Seen: the logs rise.
+
+## 61. An artifact's scene shows its location's item
+
+Decided 2026-10-12 (`apimplementation.md`, build step 91): an artifact's scene holds its location's item, shown as a
+sprite, as a crystal berry's model is. The scenes show their artifact in two ways (code read): Snakemouth's pedestal
+(`Event26`) holds up a model, the map's child 1, and shows its banner from the map's line 7; the Wasp Queen's gift
+(`Event194`) makes a sprite from `Sprites/Objects/artifacts` (index 5), its banner line 15. The castle's treasure room
+(`Event118`) and the Honey Factory Core (`Event99`) use the game's `ArtifactGet`, a model; they join as their artifacts
+come into seeds.
+
+Built: as each scene's map is built (a postfix on `MapControl.CreateEntities`), its location comes from
+`location_artifacts`. A model scene's model keeps its place and its moves, its renderers switched off, the item's sprite
+a child drawn upright, at item size and on the model's layer (the hold-up draws it above the fade), its class colour
+behind it. A sprite scene's sprite read becomes `ItemSwap.HeldArtifact` (a transpiler on `Event194`). Unless the
+location holds its own artifact, the banner line becomes "You found <item>!". The log says `[artifact] <map>: location
+<id> shows '<item>'` and whether the banner names it.
+
+**Status:** built (2026-10-12); not yet seen in game, which needs a new seed.
+
+*Code: `Items/ItemSwap.Artifacts.cs`, `Core/SeedData.cs` (`LocationArtifacts`).*
+

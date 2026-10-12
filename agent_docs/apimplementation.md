@@ -163,6 +163,7 @@ this file and that doc disagree, that doc is right.
 88. [Build step 88: the Kitchen Stove and the room above kept together](#build-step-88-the-kitchen-stove-and-the-room-above-kept-together)
 89. [Build step 89: a twig copied before the hive's barrier](#build-step-89-a-twig-copied-before-the-hives-barrier)
 90. [Build step 90: the Dig location on the hideout's altar](#build-step-90-the-dig-location-on-the-hideouts-altar)
+91. [Build step 91: an artifact's scene shows its location's item](#build-step-91-an-artifacts-scene-shows-its-locations-item)
 
 **How it works**
 
@@ -6553,6 +6554,23 @@ Entrance, Altar`) is a pickup on flag 18 by Jump or Bee Fly; it shows the seed's
 
 *Code: `data_types.py`, `logic/__init__.py`, `data_tables.py`, `slot_data.py`, `logic/bandit_hideout.py`.*
 
+## Build step 91: an artifact's scene shows its location's item
+
+**Found** (2026-10-12): with *Artifact Shuffle* on This World or Anywhere, an artifact's scene can hold any item, yet
+it still floated the artifact and named it in its banner while sending a check for something else.
+
+**Decided** (2026-10-12): every artifact scene shows its location's item as a sprite, as crystal berries are shown
+(the artifact's own pause-menu icon when it holds its own artifact); the banner names the item, and stays the game's
+own when the location holds its own artifact. A received artifact stays an ordinary item; a grand banner for it was
+weighed and left out.
+
+**Built:** `location_artifacts` in slot_data, `{location id: chapter}` for each artifact scene in the seed (from
+`Source.artifact`); the mod's side is `documentation.md`, step 61.
+
+**Status:** built (2026-10-12); not yet seen in game, which needs a new seed.
+
+*Code: `slot_data.py`.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -6652,7 +6670,8 @@ only way a setting chosen at generation (an option, a version number) reaches th
   takes the seed's rolls from the keys below as they are: `door_targets`, `enemy_swaps`, `start`, `starting_member`,
   `music_map`, `jingle_map` and `shop_inventories`;
 - how each location is done: `location_flags` (a game flag), `location_berries` (a crystal berry),
-  `location_discoveries` (a journal discovery), `location_shops` and `location_item_shops` (a shop's copy or first
+  `location_discoveries` (a journal discovery), `location_artifacts` (an artifact's scene, its chapter; build step
+  91), `location_shops` and `location_item_shops` (a shop's copy or first
   purchase), `location_vars` (a number reaching a value, a boss prize);
 - `location_gives`, the `giveitem` that hands out a gift location's vanilla item;
 - `location_added`, an item the story puts straight into the bag at a location (build step 26);

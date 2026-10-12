@@ -168,6 +168,7 @@ namespace BugFablesAP
         internal void UseSeed(SeedData seed) => seedData = seed;
 
         internal Dictionary<long, int> LocationFlags => seedData?.LocationFlags;
+        internal Dictionary<long, int> LocationArtifacts => seedData?.LocationArtifacts;
         internal Dictionary<long, Give> LocationGives => seedData?.LocationGives;
         internal Dictionary<long, int[]> LocationAdded => seedData?.LocationAdded;
         internal Dictionary<long, Pickup> LocationPickups => seedData?.LocationPickups;

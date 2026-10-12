@@ -97,6 +97,7 @@ namespace BugFablesAP
             Hooks.Install(typeof(Redraws), "swap",
                 "a pickup the game redraws shows its own item until the ground swap");
             Hooks.Install(typeof(MarkSort), "swap", "a location's starburst can vanish against the sky behind it");
+            Hooks.Install(typeof(Artifacts), "swap", "an artifact's scene would show its artifact, whatever it holds");
         }
 
         // The one place the game redraws an item entity's own sprite: put the seed's item, its lift and its backdrop
