@@ -141,8 +141,9 @@ where both copies are, since a hint can't tell the two apart.
 ## What is the goal?
 
 Collect a number of artifacts (the option *Artifacts Required*). The game has 7, one per chapter milestone, and each is
-an item: the scene that hands it over in the story is a location, and *Artifact Shuffle* decides where the item goes.
-This version includes four, the Ancient Mask (chapter 1), the Ancient Tablet (chapter 2), the Ancient Key (chapter 3)
-and the Flame Brooch (chapter 6), so the goal is capped at 4. Hint one by its name or by its chapter (`!hint Artifact
-6`), or all of them with `!hint Artifacts`. The pause menu shows the artifacts you have received. Once you have that
+an item: the scene that hands it over or counts it in the story is a location, and *Artifact Shuffle* decides where
+the item goes. This version includes six: the Ancient Mask (chapter 1), the Ancient Tablet (chapter 2), the Ancient Key
+(chapter 3), the Queen's Mask (chapter 5), the Flame Brooch (chapter 6) and the Wasp King's Crown (chapter 7), so the
+goal is capped at 6. Hint one by its name or by its chapter (`!hint Artifact 6`), or all of them with `!hint
+Artifacts`. The pause menu shows the artifacts you have received. Once you have that
 many, the mod tells the server, which marks your game finished.
