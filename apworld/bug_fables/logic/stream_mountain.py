@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from rule_builder.rules import True_
 
-from ..custom_rules import ANY_ATTACK, CanUse
+from ..custom_rules import ANY_ATTACK, CanUse, one_way
 from ..data_types import Area
 
 # Across the water: Icicle platforms and Jump, Bee Fly, or the tunnel under it (Beetle Dig).
@@ -20,7 +20,7 @@ MAP_AREAS = (
     # The upper left (its door) by Bee Fly, or over the two bridges knocked down at the bottom (Horn Slash; they stay)
     # with the water raised (no Icicle on this water); back by a drop, then the pad, or into the water, which the game
     # answers by putting the party at the upper right. Arriving by the bottom door with the water raised does the same.
-    Area("StreamMountain2", "Bottom", ("loadzonebottom",), _WATER, out=True_()),
+    Area("StreamMountain2", "Bottom", ("loadzonebottom",), _WATER, out=one_way(None, _WATER)),
     Area("StreamMountain2", "Upper Left", ("loadzoneleft",), CanUse("Bee Fly") | (CanUse("Horn Slash") & _WATER),
          out=True_()),
 )
