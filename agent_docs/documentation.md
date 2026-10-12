@@ -116,6 +116,7 @@ anyone curious about the process, or thinking of doing the same for another game
 61. [An artifact's scene shows its location's item](#61-an-artifacts-scene-shows-its-locations-item)
 62. [The Sand Castle Key's join kept away](#62-the-sand-castle-keys-join-kept-away)
 63. [The Ancient Castle's story add and its artifact scene](#63-the-ancient-castles-story-add-and-its-artifact-scene)
+64. [The last fight held, and the goal at the credits](#64-the-last-fight-held-and-the-goal-at-the-credits)
 
 ## Where it stands
 
@@ -3713,3 +3714,26 @@ language's name is left alone). Read back with dev `articles 114`: `Small Ancien
 
 *Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row, `AddedSprite`); `Items/CustomItems.cs` (the key's name).*
 
+## 64. The last fight held, and the goal at the credits
+
+Decided 2026-10-13 (`apimplementation.md`, build step 94). **The hold:** on `GiantLairSaplingPlains` the fight's
+trigger (`eventtrigger`, `Event200`) gets a marker `requires`; `CheckIfCanExist` answers "away" for it until
+`ArtifactIcons.ReceivedCount` reaches `artifacts_required`, then checks the trigger's own requires. It's decided as the
+map is built, so artifacts arriving inside the map open it on the next entry (seen). A first try that switched the
+trigger off didn't hold; the marker did (2026-10-11). Log: `[open] GiantLairSaplingPlains: the last fight's trigger
+held: 0 of 6 artifacts received`. **The sign:** a Check NPC built by the door at (19.9, 0, 5.2), copying the sapling's
+settings, its one line "Artifacts required: X", rewritten each read (the spot picked in game, 2026-10-11).
+
+**The goal:** a `StartEvent` prefix notes `Event204` (the credits); `CheckGoal` sends the goal then. At a later login
+it's sent from the fight's flag 555 (kept to its own events by the goal guard), except on the ending's maps (the
+Sapling Plains, the Roach Village, the end plaza, bridge and throne), where 555 is set before the credits: `Event203`
+turns it off and back on. Log: `[goal] the last fight won: waiting for the credits`, then `reached: the credits
+started` and `sent`.
+
+**Found:** `Event204` started anywhere else softlocks (`MEASURED.md`, the Sapling Plains); dev `event <n>` and
+`uncredits` came from that.
+
+**Status:** works, seen 2026-10-13 (build step 94's seed): held, opened, the goal and release at the credits.
+
+*Code: `World/KeptOpen.cs` (`HoldLastFight`, `PlaceArtifactSign`), `Items/LocationChecks.cs` (`Credits`, `CheckGoal`);
+`Dev/DevConsole.cs` (`event`, `uncredits`).*

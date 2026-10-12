@@ -20,6 +20,9 @@ namespace BugFablesAP
         // checks once it is in the bag (none, or the entity's own).
         private static readonly Dictionary<int[], KeyValuePair<int, int[]>> itemMarkers =
             new Dictionary<int[], KeyValuePair<int, int[]>>();
+        // Marker `requires` of the last fight's trigger, held until the goal's artifacts have arrived: its own
+        // requires, checked once they have.
+        private static readonly Dictionary<int[], int[]> artifactMarkers = new Dictionary<int[], int[]>();
 
         internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
@@ -284,6 +287,98 @@ namespace BugFablesAP
             {
                 TieToItem(__instance, map, until, true);
             }
+            if (map == "GiantLairSaplingPlains")
+            {
+                HoldLastFight(__instance);
+                PlaceArtifactSign(__instance);
+            }
+        }
+
+        // The trigger of the last fight (Event200), kept away until the goal's artifacts have arrived.
+        private static void HoldLastFight(MapControl map)
+        {
+            foreach (NPCControl npc in map.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == "eventtrigger"))
+            {
+                var marker = new[] { -1 };
+                artifactMarkers[marker] = npc.requires ?? new int[0];
+                npc.requires = marker;
+                bool held = MainManager.CheckIfCanExist(marker, npc.limit, npc.regionalflag);
+                if (npc.entity != null && held)
+                {
+                    npc.entity.iskill = true;
+                }
+                log.LogInfo($"[open] GiantLairSaplingPlains: the last fight's trigger {(held ? "held" : "open")}: "
+                    + $"{ArtifactIcons.ReceivedCount} of {connection?.ArtifactsRequired ?? 0} artifacts received");
+            }
+        }
+
+        private static bool ArtifactsIn() =>
+            ArtifactIcons.ReceivedCount >= (connection?.ArtifactsRequired ?? 0);
+
+        private const string ArtifactSignName = "apartifactsign";
+        private static int signLine = -1;
+
+        // A sign by the Sapling Plains' door, built as CreateEntities builds a Check NPC (the sapling's own settings),
+        // its line a new one at the end of the map's dialogues, rewritten each time it's read.
+        private static void PlaceArtifactSign(MapControl map)
+        {
+            NPCControl like = map.GetComponentsInChildren<NPCControl>(true).FirstOrDefault(n => n.name == "sapling");
+            if (map.entities != null && map.entities.Any(e => e != null && e.name == ArtifactSignName))
+            {
+                return;
+            }
+            if (like == null || like.entity == null || map.entities == null)
+            {
+                log.LogInfo("[sign] GiantLairSaplingPlains: no sapling to copy: no sign");
+                return;
+            }
+            var position = new UnityEngine.Vector3(19.9f, 0f, 5.2f);
+            EntityControl entity = EntityControl.CreateNewEntity(ArtifactSignName, 23, position);
+            entity.name = ArtifactSignName;
+            NPCControl npc = entity.gameObject.AddComponent<NPCControl>();
+            // Every setting the sapling has, then the sign's own.
+            foreach (System.Reflection.FieldInfo field in typeof(NPCControl).GetFields(
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.NonPublic))
+            {
+                field.SetValue(npc, field.GetValue(like));
+            }
+            entity.npcdata = npc;
+            npc.entity = entity;
+            entity.ccol.height = like.entity.ccol.height;
+            entity.ccol.radius = like.entity.ccol.radius;
+            npc.requires = new[] { -1 };
+            npc.limit = new[] { -1 };
+            npc.regionalflag = -1;
+            npc.insideid = -1;
+            map.dialogues = map.dialogues.Concat(new[] { ArtifactSignText() }).ToArray();
+            signLine = map.dialogues.Length - 1;
+            npc.overridediag = -1;
+            npc.dialogues = new[] { new UnityEngine.Vector3(-1f, signLine, 0f) };
+            npc.currentdialogueindex = -1;
+            entity.startpos = position;
+            entity.transform.position = position;
+            entity.transform.parent = map.transform;
+            entity.iskill = false;
+            map.entities = map.entities.Concat(new[] { entity }).ToArray();
+            log.LogInfo($"[sign] GiantLairSaplingPlains: the artifact sign placed at {position}, line {signLine}");
+        }
+
+        private static string ArtifactSignText()
+        {
+            int required = connection?.ArtifactsRequired ?? 0;
+            return $"|center||size,1.5|Artifacts required: {required}";
+        }
+
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.GetDialogue))]
+        [HarmonyPrefix]
+        private static void BeforeSignRead(NPCControl __instance)
+        {
+            if (__instance.name == ArtifactSignName && MainManager.map != null && signLine > -1
+                && signLine < MainManager.map.dialogues.Length)
+            {
+                MainManager.map.dialogues[signLine] = ArtifactSignText();
+            }
         }
 
         private static void TieToItem(MapControl map, string mapName, ApConnection.Blocker tie, bool keepOwn)
@@ -442,6 +537,16 @@ namespace BugFablesAP
         [HarmonyPrefix]
         private static bool BeforeCheck(ref int[] requires, int[] limit, ref bool __result)
         {
+            if (requires != null && artifactMarkers.TryGetValue(requires, out int[] own))
+            {
+                if (randomizerOn != null && randomizerOn() && !ArtifactsIn())
+                {
+                    __result = true;
+                    return false;
+                }
+                requires = own;
+                return true;
+            }
             if (requires != null && itemMarkers.TryGetValue(requires, out KeyValuePair<int, int[]> tied))
             {
                 if (randomizerOn == null || !randomizerOn() || !HasKeyItem(tied.Key))

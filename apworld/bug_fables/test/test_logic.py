@@ -1,7 +1,8 @@
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, ItemClassification
 
 from . import BugFablesTestBase
 from ..data_tables import ARTIFACTS, STORY_EVENTS, vanilla_item
+from ..rules import FINAL_FIGHT
 
 
 class TestPermitGate(BugFablesTestBase):
@@ -74,14 +75,47 @@ class TestArtifactsCapped(BugFablesTestBase):
         self.assertEqual(self.world.fill_slot_data()["options"]["artifacts_required"], len(ARTIFACTS))
 
     def test_needs_every_artifact(self) -> None:
-        self.collect_by_name("Ancient Mask")
-        self.collect_by_name("Ancient Tablet")
-        self.collect_by_name("Ancient Key")
-        self.collect_by_name("Queen's Mask")
-        self.collect_by_name("Wasp King's Crown")
-        self.assertBeatable(False)
-        self.collect_by_name("Flame Brooch")
-        self.assertBeatable(True)
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(["Flame Brooch"], state)
+        self.assertFalse(self.multiworld.completion_condition[self.player](state))
+        self.assertFalse(state.can_reach_location(FINAL_FIGHT, self.player))
+        state.collect(self.get_item_by_name("Flame Brooch"))
+        self.assertTrue(self.multiworld.completion_condition[self.player](state))
+        self.assertTrue(state.can_reach_location(FINAL_FIGHT, self.player))
+
+
+class TestArtifactsCappedUnshuffled(BugFablesTestBase):
+    # Unshuffled, chapter 7's artifact is the last fight's own reward: at most 6 can open it.
+    options = {"artifacts_required": 7}
+
+    def test_goal_lowered_to_six(self) -> None:
+        self.assertEqual(self.world.artifacts_required, 6)
+        self.assertEqual(self.world.fill_slot_data()["options"]["artifacts_required"], 6)
+
+
+class TestNoArtifactsRequired(BugFablesTestBase):
+    # 0: the last fight open from the start, and the artifacts open nothing, so they're useful.
+    options = {"artifacts_required": 0, "artifact_shuffle": "anywhere"}
+
+    def test_artifacts_useful(self) -> None:
+        for name in self.world.item_name_groups["Artifacts"]:
+            with self.subTest(item=name):
+                self.assertEqual(self.world.create_item(name).classification, ItemClassification.useful)
+
+    def test_goal_without_artifacts(self) -> None:
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(sorted(self.world.item_name_groups["Artifacts"]), state)
+        self.assertTrue(self.multiworld.completion_condition[self.player](state))
+
+
+class TestArtifactsProgression(BugFablesTestBase):
+    # Any number from 1 needs them: every artifact is progression, even those beyond the count.
+    options = {"artifacts_required": 1}
+
+    def test_artifacts_progression(self) -> None:
+        for name in self.world.item_name_groups["Artifacts"]:
+            with self.subTest(item=name):
+                self.assertTrue(self.world.create_item(name).advancement)
 
 
 class TestArtifactShuffleVanilla(BugFablesTestBase):
@@ -95,11 +129,12 @@ class TestArtifactShuffleVanilla(BugFablesTestBase):
 
     def test_hint_groups(self) -> None:
         self.assertEqual(self.world.item_name_groups["Artifacts"], {"Ancient Mask", "Ancient Tablet",
-                                                                      "Ancient Key", "Queen's Mask", "Flame Brooch",
-                                                                      "Wasp King's Crown"})
+                                                                      "Ancient Key", "Ancient Half", "Queen's Mask",
+                                                                      "Flame Brooch", "Wasp King's Crown"})
         self.assertEqual(self.world.item_name_groups["Artifact 1"], {"Ancient Mask"})
         self.assertEqual(self.world.item_name_groups["Artifact 2"], {"Ancient Tablet"})
         self.assertEqual(self.world.item_name_groups["Artifact 3"], {"Ancient Key"})
+        self.assertEqual(self.world.item_name_groups["Artifact 4"], {"Ancient Half"})
         self.assertEqual(self.world.item_name_groups["Artifact 5"], {"Queen's Mask"})
         self.assertEqual(self.world.item_name_groups["Artifact 6"], {"Flame Brooch"})
         self.assertEqual(self.world.item_name_groups["Artifact 7"], {"Wasp King's Crown"})
@@ -110,7 +145,7 @@ class TestArtifactShuffleThisWorld(BugFablesTestBase):
 
     def test_in_the_pool_and_local(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        for name in ("Ancient Mask", "Ancient Tablet", "Ancient Key", "Queen's Mask", "Flame Brooch",
+        for name in ("Ancient Mask", "Ancient Tablet", "Ancient Key", "Ancient Half", "Queen's Mask", "Flame Brooch",
                      "Wasp King's Crown"):
             with self.subTest(item=name):
                 self.assertEqual(pool.count(name), 1)
@@ -122,7 +157,7 @@ class TestArtifactShuffleAnywhere(BugFablesTestBase):
 
     def test_in_the_pool_not_local(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        for name in ("Ancient Mask", "Ancient Tablet", "Ancient Key", "Queen's Mask", "Flame Brooch",
+        for name in ("Ancient Mask", "Ancient Tablet", "Ancient Key", "Ancient Half", "Queen's Mask", "Flame Brooch",
                      "Wasp King's Crown"):
             with self.subTest(item=name):
                 self.assertEqual(pool.count(name), 1)

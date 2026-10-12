@@ -73,10 +73,11 @@ class BugFablesWorld(World):
         if self.passthrough is not None:
             universal_tracker.apply_options(self, self.passthrough)
         wanted = self.options.artifacts_required.value
-        available = len(ARTIFACTS)
+        # Unshuffled, chapter 7's artifact is the last fight's own: behind the goal, so never one of its keys.
+        available = len(ARTIFACTS) - (self.options.artifact_shuffle == ArtifactShuffle.option_vanilla)
         if wanted > available:
             logging.warning(
-                "Bug Fables: player %s (%s) asked for %d artifacts, but this version of the world includes %d; "
+                "Bug Fables: player %s (%s) asked for %d artifacts, but this seed can hold %d before the last fight; "
                 "the goal is lowered to %d.",
                 self.player, self.player_name, wanted, available, available,
             )

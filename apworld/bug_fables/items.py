@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import Item, ItemClassification
 
 from .abilities import item_copies
-from .data_tables import ITEM_KIND, ITEM_NAME_TO_ID, ITEMS, MONEY_KIND, vanilla_item
+from .data_tables import ARTIFACT_KIND, ITEM_KIND, ITEM_NAME_TO_ID, ITEMS, MONEY_KIND, vanilla_item
 from .data_types import GAME
 from .options import ArtifactShuffle
 
@@ -31,7 +31,12 @@ class BugFablesItem(Item):
 
 
 def create_item(world: BugFablesWorld, name: str) -> BugFablesItem:
-    return BugFablesItem(name, CLASSIFICATIONS[ITEMS_BY_NAME[name].classification], ITEM_NAME_TO_ID[name], world.player)
+    item = ITEMS_BY_NAME[name]
+    classification = CLASSIFICATIONS[item.classification]
+    if item.kind == ARTIFACT_KIND and world.artifacts_required == 0:
+        # No artifacts needed: they open nothing.
+        classification = ItemClassification.useful
+    return BugFablesItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 
 def random_filler_name(world: BugFablesWorld) -> str:

@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
 from rule_builder.options import OptionFilter
-from rule_builder.rules import Has, HasFromListUnique, Rule
+from rule_builder.rules import CanReachRegion, Has, HasFromListUnique, Rule
 from worlds.generic.Rules import add_item_rule
 
-from .data_tables import ARTIFACTS, vanilla_item
+from .data_tables import ARTIFACTS, LOCATIONS, vanilla_item
 from .data_types import Location, StoryEvent
 from .options import ShopContents, ShuffleJump
 
@@ -17,6 +17,8 @@ if TYPE_CHECKING:
     from .world import BugFablesWorld
 
 SHOP_CATEGORIES = ("shop", "item_shop")
+# The last fight (chapter 7's artifact scene): the goal, and held by the client until the artifacts are in.
+FINAL_FIGHT = "Giant's Lair: Sapling Plains, Final Fight"
 # Jump's blanket rule: with Shuffle Jump on, a spot needs Jump unless it was seen reachable without (no_jump).
 JUMP = Has("Jump", options=[OptionFilter(ShuffleJump, 1)], filtered_resolution=True)
 
@@ -55,13 +57,16 @@ def set_all_rules(world: BugFablesWorld) -> None:
             location.progress_type = LocationProgressType.EXCLUDED
         elif world.options.shop_contents == ShopContents.option_no_progression:
             location.item_rule = _no_progression
+    # The last fight, held by the client until that many artifact items have arrived (none needed at 0).
+    artifacts = (HasFromListUnique(*(vanilla_item(loc) for loc in ARTIFACTS), count=world.artifacts_required)
+                 if world.artifacts_required > 0 else None)
     for spot in (*world.included_locations, *world.included_events):
-        rule = spot_rule(spot)
+        rule = _joined(spot_rule(spot), artifacts if spot.name == FINAL_FIGHT else None)
         if rule is not None:
             world.set_rule(world.get_location(spot.name), rule)
-    # The goal: that many of the artifact items, wherever Artifact Shuffle put them.
-    world.set_completion_rule(HasFromListUnique(*(vanilla_item(loc) for loc in ARTIFACTS),
-                                                count=world.artifacts_required))
+    # The goal: the last fight won, its artifacts in hand: its region, its own rule and theirs.
+    fight = next(loc for loc in LOCATIONS if loc.name == FINAL_FIGHT)
+    world.set_completion_rule(_joined(CanReachRegion(f"{fight.region} ({fight.area})"), spot_rule(fight), artifacts))
 
 
 def spot_rule(spot: Location | StoryEvent) -> Rule | None:

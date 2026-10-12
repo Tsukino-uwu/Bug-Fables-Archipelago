@@ -10,16 +10,16 @@ from .shop_inventories import SPOTS
 
 class ArtifactsRequired(Range):
     """
-    How many artifacts you need to collect to win. The game has 7, one per chapter's milestone.
+    How many artifacts open the last fight. Winning it is the goal. The game has 7, one per chapter's milestone.
 
-    Asking for more than this version of the world includes lowers the goal to what it includes, with a
-    warning, so a seed can always be finished.
+    0 leaves the last fight open from the start. With Artifact Shuffle on Vanilla the 7th artifact is the last
+    fight's own reward, so at most 6 count: asking for 7 lowers it to 6, with a warning.
     """
 
     display_name = "Artifacts Required"
-    range_start = 1
+    range_start = 0
     range_end = 7
-    default = 1
+    default = 6
 
 
 class ArtifactShuffle(Choice):

@@ -166,6 +166,7 @@ this file and that doc disagree, that doc is right.
 91. [Build step 91: an artifact's scene shows its location's item](#build-step-91-an-artifacts-scene-shows-its-locations-item)
 92. [Build step 92: the Sand Castle Key whole, its halves' spots locations](#build-step-92-the-sand-castle-key-whole-its-halves-spots-locations)
 93. [Build step 93: the Ancient Castle's spots back, its keys and the Peculiar Gem as items](#build-step-93-the-ancient-castles-spots-back-its-keys-and-the-peculiar-gem-as-items)
+94. [Build step 94: the Final Boss goal](#build-step-94-the-final-boss-goal)
 
 **How it works**
 
@@ -223,9 +224,8 @@ be wrong.
    Progression* holding up only progression items: seen 2026-10-04.
 6. **A full bag:** never holds up the queue; a bag item that doesn't fit drops at the party's feet (build step 7):
    built, not yet seen.
-7. **Goal:** the mod counts the artifact items received (since build step 86; before, the seed's goal flags) and sends
-   "goal reached" at the required number: the flag count done and seen (build step 3); the item count built, not yet
-   seen.
+7. **Goal:** the last fight won, opened by *Artifacts Required* artifact items, sent as the credits start (build step
+   94, seen 2026-10-13); before, the artifact items' count (build step 86) and the seed's goal flags (build step 3).
 8. **A release: three separate downloads** (2026-09-25): built, see build step 17; v0.1.0 out
    (2026-09-26), v0.2.0 (2026-09-27), v0.3.0 (2026-10-04). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z`
    after bumping both versions. **When (the user, 2026-10-08):** once every room's logic is mapped, which makes the
@@ -907,6 +907,7 @@ be wrong.
     the six chapters' artifacts open the fight, and the seventh comes from winning it, as in the game. Artifact Hunt, and a warp to the end plaza so other goals walk into the ceremony, wait
     until the user decides how goals should work. `Event204` started off its own map softlocks (`MEASURED.md`, the
     Sapling Plains), so any other way into the credits goes through the ending's own maps.
+    **Built 2026-10-13: build step 94** (the hold and the sign included, taken over from the chat that began them).
 74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
     after sleeping (the hotel's Tangy Jam from Master Slice, the Bugaria inn's Honey Drop) comes every stay, made fresh
     by the sleep scene with no flag, so it's no location today. It could be one: the first food after sleeping at each
@@ -6668,6 +6669,29 @@ and sending its item, its banner naming it. **Found on the way:** the received S
 own name for item 114, the same as chapter 3's artifact: renamed in the game's text (the mod guide, step 63).
 
 *Code: `data/items.json`, `logic/ancient_castle.py`, `logic/snakemouth_den.py` (the gem's slot).*
+
+## Build step 94: the Final Boss goal
+
+**Decided** (2026-10-11 and 2026-10-13, Next 73): the one goal for now is the game's own: *Artifacts Required*
+artifacts open the last fight (the Sapling Plains', `Event200`), and winning it wins. 0 to 7, 6 by default; with
+Artifact Shuffle's Vanilla (the default) at most 6, since chapter 7's artifact is that fight's own. 0 leaves the fight
+open from the start, and then the artifacts open nothing, so they're useful; from 1 every artifact is progression,
+even past the count. The goal is sent when the credits start (`Event204`, after the ceremony): the win is settled
+there, nothing can skip it, and the release runs while the credits play.
+
+**Built:** `ArtifactsRequired` 0-7, default 6, capped at 6 unshuffled (`generate_early`); the last fight's location
+(319) needs that many artifact items, and the completion rule is its region, its rule and them (`FINAL_FIGHT`,
+`rules.py`; no event location of its own); artifacts `useful` at 0 (`items.create_item`; each player's world classes
+its own, so another player's artifacts are untouched). The mod's side is `documentation.md`, step 64. **Tests:**
+`TestArtifactsCapped` (7 shuffled, every one needed for the fight and the goal), `TestArtifactsCappedUnshuffled`,
+`TestNoArtifactsRequired`, `TestArtifactsProgression`; not yet run (at push time). A seed generated with the default
+options.
+
+**Status:** works, seen in seed `AP_27984714237781193432` (2026-10-13, the defaults): the fight held with 0 of 6, open
+once the six arrived and the map was entered again, then won; the Wasp King's Crown arriving in Bugaria; the goal sent
+and the world released as the credits started.
+
+*Code: `options.py` (`ArtifactsRequired`), `world.py` (the cap), `rules.py` (`FINAL_FIGHT`), `items.py`.*
 
 # How it works
 

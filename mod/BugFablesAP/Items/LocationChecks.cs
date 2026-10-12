@@ -33,6 +33,29 @@ namespace BugFablesAP
         {
             this.log = log;
             this.connection = connection;
+            Hooks.Install(typeof(Credits), "goal", "the goal would wait for the next login instead of the credits");
+        }
+
+        // The last fight won (its own events only: the goal guard) and the credits begun: the goal's moment.
+        private const int FightWon = 555;
+        private const int CreditsScene = 204;
+        // The ending's maps, where the fight's flag is already set but the credits are still to come.
+        private static readonly string[] EndingMaps =
+            { "GiantLairSaplingPlains", "GiantLairRoachVillage", "BugariaEndPlaza", "BugariaEndBridge", "BugariaEndThrone" };
+        private static bool creditsStarted;
+
+        private static class Credits
+        {
+            [HarmonyLib.HarmonyPatch(typeof(EventControl), nameof(EventControl.StartEvent), typeof(int),
+                typeof(NPCControl))]
+            [HarmonyLib.HarmonyPrefix]
+            private static void BeforeScene(int id)
+            {
+                if (id == CreditsScene)
+                {
+                    creditsStarted = true;
+                }
+            }
         }
 
         internal void Tick(bool randomizerOn)
@@ -197,23 +220,25 @@ namespace BugFablesAP
         }
 
         // Sent once per login while reached: the server keeps it, and a send lost with the connection goes again. The
-        // artifact items given to this file count (ItemReceiver), never the story's artifact flags.
+        // last fight is held until its artifacts arrive (KeptOpen), so its win is the goal: sent as the credits start,
+        // or at a later login from the fight's flag, once past the ending's maps.
         private void CheckGoal(ArchipelagoSession session)
         {
-            int required = connection.ArtifactsRequired;
-            int have = ArtifactIcons.ReceivedCount;
-            string state = required <= 0 ? "slot_data's options have no artifacts_required: never sent"
-                : have < required ? $"{have} of {required} artifacts received"
-                : $"reached, {have} of {required} artifacts received";
+            bool[] flags = MainManager.instance?.flags;
+            bool won = flags != null && flags.Length > FightWon && flags[FightWon];
+            string map = MainManager.map?.mapid.ToString();
+            bool reached = creditsStarted || (won && map != null && !EndingMaps.Contains(map));
+            string state = reached ? (creditsStarted ? "reached: the credits started" : "reached: the last fight won")
+                : won ? "the last fight won: waiting for the credits" : "the last fight not won yet";
             if (state != lastGoalState)
             {
                 log.LogInfo("[goal] " + state);
                 lastGoalState = state;
             }
-            if (required > 0 && have >= required && !ReferenceEquals(goalSentFor, session))
+            if (reached && !ReferenceEquals(goalSentFor, session))
             {
                 goalSentFor = session;
-                connection.SendGoal(session, $"{have} of {required} artifacts received on {Where()}");
+                connection.SendGoal(session, $"{state} on {Where()}");
             }
         }
 
