@@ -577,7 +577,7 @@ as it is, a frozen record.
 
 - [x] StreamMountain1 (132) — Water Crossing; its right door (from the desert, pressed to enter); water in the middle crossed both ways
   by Icicle and Jump, Bee Fly, or a tunnel dug through (Beetle Dig), to the left door; a regular enemy; no pickup
-- [x] StreamMountain2 (133) — the upper right (right door, crystal switch: Beemerang Toss, or Bee Fly and an attack,
+- [x] StreamMountain2 (133) — Water Switch Room; the upper right (right door, crystal switch: Beemerang Toss, or Bee Fly and an attack,
   raises or lowers the bottom's water, which stays); the bottom (its door, bridges 317/318 knocked down by Horn Slash,
   which stay; a bounce pad up) dropped into with the water lowered; the upper left (left door) by Bee Fly or the
   bridges with the water raised (no ice here), back free (a drop, then the pad or the water's respawn); arriving by
