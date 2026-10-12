@@ -15,16 +15,13 @@ namespace BugFablesAP
     internal static partial class ItemSwap
     {
         // Each scene: its map, its chapter (slot_data's location_artifacts), the map's child holding the artifact's
-        // model (-1: the scene makes a sprite instead), and the map's dialogue line its banner shows.
+        // model (-1: none; the scene makes a sprite instead), and the map's dialogue line its banner shows.
         private static readonly (string Map, int Chapter, int Child, int Line)[] ArtifactScenes =
         {
             ("SnakemouthTreasureRoom", 1, 1, 7),
             ("RubberPrisonGiantLairBridge", 6, -1, 15),
         };
         private const string ArtifactLookName = "apartifactlook";
-        // The sprite a sprite scene shows instead of its artifact, for the map it was set on.
-        private static Sprite artifactSprite;
-        private static string artifactSpriteMap;
 
         private static class Artifacts
         {
@@ -32,14 +29,21 @@ namespace BugFablesAP
             [HarmonyPostfix]
             private static void AfterCreate(MapControl __instance) => ShowArtifactScene(__instance);
 
+            // Snakemouth's artifact lying outside the cave, after the pedestal (its sprite 0).
+            [HarmonyPatch(typeof(EventControl), "Event26", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Snakemouth(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => Edit(code, "Event26", nameof(HeldArtifact1)), "swap");
+
+            // The Wasp Queen's gift (its sprite 5).
             [HarmonyPatch(typeof(EventControl), "Event194", MethodType.Enumerator)]
             [HarmonyTranspiler]
-            private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
-                Hooks.Safe(instructions, Edit, "swap");
+            private static IEnumerable<CodeInstruction> Queen(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => Edit(code, "Event194", nameof(HeldArtifact6)), "swap");
 
-            // The Wasp Queen's `Resources.LoadAll<Sprite>("Sprites/Objects/artifacts")[5]`: the element read becomes
-            // HeldArtifact(sheet, 5), the same stack in and out.
-            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
+            // The scene's one `Resources.LoadAll<Sprite>("Sprites/Objects/artifacts")[n]`: the element read becomes
+            // the chapter's HeldArtifact(sheet, n), the same stack in and out.
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code, string scene, string held)
             {
                 MethodInfo loadAll = typeof(Resources).GetMethods()
                     .First(m => m.Name == nameof(Resources.LoadAll) && m.IsGenericMethodDefinition
@@ -51,43 +55,60 @@ namespace BugFablesAP
                     .ToArray();
                 if (reads.Length != 1)
                 {
-                    throw new InvalidOperationException($"Event194 has {reads.Length} artifact sprite reads where 1 "
+                    throw new InvalidOperationException($"{scene} has {reads.Length} artifact sprite reads where 1 "
                         + "was measured");
                 }
                 code[reads[0] + 2].opcode = OpCodes.Call;
-                code[reads[0] + 2].operand = AccessTools.Method(typeof(ItemSwap), nameof(HeldArtifact));
-                log.LogInfo("[artifact] installed in EventControl.Event194");
+                code[reads[0] + 2].operand = AccessTools.Method(typeof(ItemSwap), held);
+                log.LogInfo($"[artifact] installed in EventControl.{scene}");
                 return code;
             }
         }
 
-        public static Sprite HeldArtifact(Sprite[] sheet, int index)
+        public static Sprite HeldArtifact1(Sprite[] sheet, int index) => HeldArtifact(sheet, index, 1);
+
+        public static Sprite HeldArtifact6(Sprite[] sheet, int index) => HeldArtifact(sheet, index, 6);
+
+        // The chapter's location's item, unless the scene isn't a location or holds its own artifact.
+        private static Sprite HeldArtifact(Sprite[] sheet, int index, int chapter)
         {
-            string map = MainManager.map != null ? MainManager.map.mapid.ToString() : null;
-            if (artifactSprite != null && map == artifactSpriteMap)
+            long at = ArtifactLocation(chapter);
+            if (at < 0)
             {
-                log.LogInfo($"[artifact] {map}: the scene holds up its location's item, not artifact sprite {index}");
-                return artifactSprite;
+                return sheet[index];
             }
-            return sheet[index];
+            string article = shownArticle;
+            ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out _);
+            shownArticle = article;
+            if (OwnArtifact(info, chapter))
+            {
+                return sheet[index];
+            }
+            log.LogInfo($"[artifact] chapter {chapter}'s scene shows '{TextFit.Joined(name)}', "
+                + $"not artifact sprite {index}");
+            return sprite ?? ApIcon.Get();
         }
+
+        private static long ArtifactLocation(int chapter)
+        {
+            Dictionary<long, int> artifacts = connection?.LocationArtifacts;
+            if (randomizerOn == null || !randomizerOn() || artifacts == null)
+            {
+                return -1;
+            }
+            return artifacts.Where(a => a.Value == chapter).Select(a => a.Key).DefaultIfEmpty(-1).First();
+        }
+
+        private static bool OwnArtifact(ScoutedItemInfo info, int chapter) =>
+            info != null && IsOurs(info) && KindOf(info) == ItemIds.ArtifactKind
+            && ItemIds.GameId(info.ItemId, ItemIds.ArtifactKind) == chapter;
 
         private static void ShowArtifactScene(MapControl map)
         {
             string mapName = map.mapid.ToString();
-            if (mapName != artifactSpriteMap)
-            {
-                artifactSprite = null;
-                artifactSpriteMap = null;
-            }
-            Dictionary<long, int> artifacts = connection?.LocationArtifacts;
-            if (randomizerOn == null || !randomizerOn() || artifacts == null)
-            {
-                return;
-            }
             foreach (var scene in ArtifactScenes.Where(s => s.Map == mapName))
             {
-                long at = artifacts.Where(a => a.Value == scene.Chapter).Select(a => a.Key).DefaultIfEmpty(-1).First();
+                long at = ArtifactLocation(scene.Chapter);
                 if (at < 0)
                 {
                     log.LogInfo($"[artifact] {mapName}: chapter {scene.Chapter}'s scene isn't a location in this seed: "
@@ -99,18 +120,13 @@ namespace BugFablesAP
                 ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
                 shownArticle = article;
                 sprite = sprite ?? ApIcon.Get();
-                bool own = info != null && IsOurs(info) && KindOf(info) == ItemIds.ArtifactKind
-                    && ItemIds.GameId(info.ItemId, ItemIds.ArtifactKind) == scene.Chapter;
+                bool own = OwnArtifact(info, scene.Chapter);
                 if (!own && map.dialogues != null && scene.Line < map.dialogues.Length)
                 {
                     map.dialogues[scene.Line] = BannerText(info, name);
                 }
-                if (scene.Child < 0)
-                {
-                    artifactSprite = sprite;
-                    artifactSpriteMap = mapName;
-                }
-                else if (scene.Child < map.transform.childCount)
+                // A sprite scene's sprite is swapped as the scene makes it (HeldArtifact).
+                if (scene.Child >= 0 && scene.Child < map.transform.childCount)
                 {
                     HideModel(map.transform.GetChild(scene.Child), sprite, color);
                 }
@@ -154,8 +170,8 @@ namespace BugFablesAP
             Transform back = look.Find(MarkName);
             if (color.HasValue && back == null)
             {
-                SpriteRenderer mark = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, MarkBehind), Vector3.zero,
-                    look, MainManager.guisprites[85], MainManager.spritedefaultunity);
+                SpriteRenderer mark = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, MarkBehind),
+                    Vector3.zero, look, MainManager.guisprites[85], MainManager.spritedefaultunity);
                 mark.transform.localScale = Vector3.one * MarkScale;
                 back = mark.transform;
             }

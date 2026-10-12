@@ -3652,7 +3652,9 @@ come into seeds.
 Built: as each scene's map is built (a postfix on `MapControl.CreateEntities`), its location comes from
 `location_artifacts`. A model scene's model keeps its place and its moves, its renderers switched off, the item's sprite
 a child drawn upright, at item size and on the model's layer (the hold-up draws it above the fade), its class colour
-behind it. A sprite scene's sprite read becomes `ItemSwap.HeldArtifact` (a transpiler on `Event194`). Unless the
+behind it. A scene's artifact sprite read becomes its chapter's `ItemSwap.HeldArtifact` (a transpiler each: `Event194`, the
+Queen's gift; and `Event26`, whose artifact also lies outside the cave after the pedestal, a sprite there; seen
+unswapped there first, 2026-10-12). Unless the
 location holds its own artifact, the banner line becomes "You found <item>!". The log says `[artifact] <map>: location
 <id> shows '<item>'` and whether the banner names it.
 
