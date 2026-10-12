@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**230 of 244 done.**
+**231 of 244 done.**
 
 ## Outskirts
 
@@ -589,7 +589,8 @@ as it is, a frozen record.
   among the logs, location 300; a bounce pad up) dropped into with the water lowered; the left (the boss door) by the
   bridge (Jump or Bee Fly, Horn Slash; 491) and the logs held up by Beemerang Halt, then Jump; a one-way drop back.
   Its logs floated only from chapter 1's end (41): repointed to an always-set flag (`float_flags`, seen)
-- [ ] StreamMountain5 (204)
+- [x] StreamMountain5 (204) — free: its door, a save crystal, a Venus healer; no flag-driven scenery or floats; for the
+  quest pass: the Tidal Wyrm's bounty fight in the middle (Event124, until 496; a Coal Crystal, key item 29)
 
 ## Chomper Caves
 
