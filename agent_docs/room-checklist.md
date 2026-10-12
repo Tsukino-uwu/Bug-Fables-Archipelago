@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**231 of 244 done.**
+**232 of 244 done.**
 
 ## Outskirts
 
@@ -594,7 +594,8 @@ as it is, a frozen record.
 
 ## Chomper Caves
 
-- [ ] ChomperCave1 (155)
+- [x] ChomperCave1 (155) — the bottom (the door out, the low door, the save crystal) and the upper area (the high door,
+  the boss door, the Venus healer) joined by a bridge knocked down from above (Horn Slash; 689, it stays); no pickup
 - [ ] ChomperCaves2 (156)
 - [ ] ChomperCaves3 (157)
 
