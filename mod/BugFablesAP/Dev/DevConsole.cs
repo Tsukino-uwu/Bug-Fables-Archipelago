@@ -357,6 +357,26 @@ namespace BugFablesAP
                     case "discovery": return Discovery(parts);
                     case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
+                    case "uncredits":
+                    {
+                        // Undoes what a dead Event204 left: its scene, the map switched off, the party hidden.
+                        int removed = 0;
+                        foreach (UnityEngine.GameObject root in UnityEngine.SceneManagement.SceneManager
+                            .GetActiveScene().GetRootGameObjects())
+                        {
+                            if (root.name.StartsWith("CreditsModels"))
+                            {
+                                UnityEngine.Object.Destroy(root);
+                                removed++;
+                            }
+                        }
+                        MainManager.map?.gameObject.SetActive(true);
+                        foreach (var shown in MainManager.instance.playerdata)
+                        {
+                            shown.entity?.gameObject.SetActive(true);
+                        }
+                        return $"uncredits: {removed} credits scene(s) removed, the map and party shown";
+                    }
                     case "event":
                         // Starts a scene as a trigger does (MainManager.events.StartEvent). Test files only.
                         if (parts.Length < 2 || !int.TryParse(parts[1], out int eventId))

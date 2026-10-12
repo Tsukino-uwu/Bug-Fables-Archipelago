@@ -900,6 +900,12 @@ be wrong.
     X" (the count had is in the pause menu); kept uncommitted with the hold until the goal is built. With chapter 7's
     artifact a location at that same fight (2026-10-12): under Artifact Shuffle's Vanilla it sits behind the fight it
     would open, so this goal caps X at 6 there; shuffled, the fill keeps it off the fight; Artifact Hunt reaches all 7.
+    **Decided 2026-10-13: the only goal for now.** *Artifacts Required* artifacts open the last fight, and the goal is
+    sent when the credits start (`Event204`, after the ceremony): the win is settled there, nothing can skip it, and
+    the release runs while the credits play. X is capped at 6 under Artifact Shuffle's Vanilla (chapter 7's artifact
+    sits behind that fight). Artifact Hunt, and a warp to the end plaza so other goals walk into the ceremony, wait
+    until the user decides how goals should work. `Event204` started off its own map softlocks (`MEASURED.md`, the
+    Sapling Plains), so any other way into the credits goes through the ending's own maps.
 74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
     after sleeping (the hotel's Tangy Jam from Master Slice, the Bugaria inn's Honey Drop) comes every stay, made fresh
     by the sleep scene with no flag, so it's no location today. It could be one: the first food after sleeping at each
