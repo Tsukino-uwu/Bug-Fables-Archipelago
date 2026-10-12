@@ -898,7 +898,9 @@ be wrong.
     a second (a marker limit, as kept_open does) held: seen 2026-10-11, walked up to with 0 of 1 artifacts.
     A sign showing the artifacts had and needed, at (19.9, 0, 5.2) on the Sapling Plains, by the door and the save
     crystal (the spot picked in game, 2026-10-11): built and seen the same day, one centred line, "Artifacts required:
-    X" (the count had is in the pause menu); kept uncommitted with the hold until the goal is built.
+    X" (the count had is in the pause menu); kept uncommitted with the hold until the goal is built. With chapter 7's
+    artifact a location at that same fight (2026-10-12): under Artifact Shuffle's Vanilla it sits behind the fight it
+    would open, so this goal caps X at 6 there; shuffled, the fill keeps it off the fight; Artifact Hunt reaches all 7.
 74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
     after sleeping (the hotel's Tangy Jam from Master Slice, the Bugaria inn's Honey Drop) comes every stay, made fresh
     by the sleep scene with no flag, so it's no location today. It could be one: the first food after sleeping at each
