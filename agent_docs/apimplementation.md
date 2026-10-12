@@ -6596,7 +6596,11 @@ played to its end on a new file with only 370 set, and sent its item (a Bad Book
 the other scenes that grab a character their start doesn't make (the Termite King's reward, `Event164`, a lead).
 
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
-sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen.
+sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the Wasp Queen's gift not yet seen. In seed
+`AP_33232363850621305804` (2026-10-13): chapter 3's Core, a Secure Pouch in the window through the scene and sent
+after it (the fight's stage background still the artifact, left for later); chapter 4's pedestal (build step 93);
+chapter 7's final fight, its item (Spicy Fries) arriving once the ending reached Bugaria. With chapters 1, 2, 5 and 6
+seen before, every artifact scene has now worked in a seed.
 
 *Code: `slot_data.py`.*
 
