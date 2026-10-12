@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**228 of 244 done.**
+**229 of 244 done.**
 
 ## Outskirts
 
@@ -582,7 +582,9 @@ as it is, a frozen record.
   which stay; a bounce pad up) dropped into with the water lowered; the upper left (left door) by Bee Fly or the
   bridges with the water raised (no ice here), back free (a drop, then the pad or the water's respawn); arriving by
   the bottom door into raised water puts the party at the upper right (the game's own respawn, seen); no pickup
-- [ ] StreamMountain3 (134)
+- [x] StreamMountain3 (134) — Climb; its right door at the bottom; up its bounce pads to the upper part (the exit to
+  the Desert Oasis) by Jump or Bee Fly, a free drop back; the Antlion Jaws medal (flag 418, location 299) at the top
+  by frozen geysers (Freeze and Jump); three regular enemies
 - [ ] StreamMountain4 (202)
 - [ ] StreamMountain5 (204)
 
