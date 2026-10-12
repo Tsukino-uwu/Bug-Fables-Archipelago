@@ -4,12 +4,16 @@ from BaseClasses import LocationProgressType
 from worlds.generic.Rules import add_item_rule
 
 from . import BugFablesTestBase, generate_like_main
+from ..data_tables import LOCATIONS
 from ..rules import fall_back_from_filler_only
 
 # Party members, field moves and Jump as items take filler's place: a solo seed is short of filler (68 filler items for
 # 73 excluded spots, 2026-10-10; a default seed holds, 74 for 73), so Filler Only falls back.
+# Filler Only needs as much filler as excluded spots; the pool's padding keeps the two close, so a dozen ordinary
+# locations excluded on top leave it short whatever the room's checks add (2026-10-12: new useful items had closed it).
+SHORT_EXCLUSIONS = [loc.name for loc in LOCATIONS if loc.category is None and not loc.pending and loc.reach is None][:12]
 SHORT_OF_FILLER = {"shop_contents": "filler_only", "starting_party_member": "random_member",
-                   "shuffle_field_moves": True, "shuffle_jump": True}
+                   "shuffle_field_moves": True, "shuffle_jump": True, "exclude_locations": SHORT_EXCLUSIONS}
 
 
 class TestMedalShop(BugFablesTestBase):
@@ -112,9 +116,12 @@ class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
         self.assertEqual(gift.progress_type, LocationProgressType.EXCLUDED)
 
 
-class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
-    # A seed short of filler: shops fall back to No Progression and still generate.
-    options = SHORT_OF_FILLER
+class TestShopContentsFillerOnlyFallsBack(TestCase):
+    # A seed short of filler: shops fall back to No Progression and still generate. Built as Main.py builds it, since
+    # the shortage comes from the player's exclusions, which WorldTestBase never applies.
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.world = generate_like_main(SHORT_OF_FILLER, seed=1)
 
     def test_shops_fall_back_to_no_progression(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
@@ -133,7 +140,7 @@ class TestShopFallbackKeepsThePlayersRules(TestCase):
     # must leave both in place.
     def test_an_excluded_shop_stays_excluded(self) -> None:
         excluded = "Bugaria City: Commercial District, Medal Shop 2"
-        world = generate_like_main({**SHORT_OF_FILLER, "exclude_locations": [excluded]}, seed=1)
+        world = generate_like_main({**SHORT_OF_FILLER, "exclude_locations": [*SHORT_EXCLUSIONS, excluded]}, seed=1)
         self.assertTrue(world.shops_fell_back)
         self.assertEqual(world.get_location(excluded).progress_type, LocationProgressType.EXCLUDED)
         other = world.get_location("Bugaria City: Commercial District, Medal Shop 1")

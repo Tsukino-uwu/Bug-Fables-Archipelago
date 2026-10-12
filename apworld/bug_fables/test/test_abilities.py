@@ -26,13 +26,18 @@ class TestLearnedAbilities(BugFablesTestBase):
                 self.assertEqual(len(spots), 1, spots)
 
     def test_unlock_spots_are_silent(self) -> None:
-        # A scene teaches, it shows no item: the client shows the player's own item arriving there.
+        # A scene teaches, it shows no item: the client shows the player's own item arriving there. A spot moved to an
+        # item lying in the world (Dig's, on the Bandit Hideout's altar) shows the seed's item like any pickup.
         from ..data_tables import LOCATIONS
         silent = self.world.fill_slot_data()["silent_locations"]
         flags = {ability.flag for ability in ABILITIES.values() if ability.flag is not None}
         for loc in LOCATIONS:
             if loc.source.flag in flags and not loc.pending:
-                self.assertIn(self.world.location_name_to_id[loc.name], silent)
+                with self.subTest(location=loc.name):
+                    if loc.source.pickup is None:
+                        self.assertIn(self.world.location_name_to_id[loc.name], silent)
+                    else:
+                        self.assertNotIn(self.world.location_name_to_id[loc.name], silent)
 
     def test_the_horn_dash_is_the_second_copy(self) -> None:
         # Bee Fly's spot comes after the Horn Dash's: it takes both copies of the Progressive Dash.

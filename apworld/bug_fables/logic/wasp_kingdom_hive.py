@@ -4,7 +4,7 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member
-from ..data_types import (Area, DoorRule, EntityMove, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
+from ..data_types import (Area, EntityMove, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
                           Source, Transfer)
 
 LOCATIONS = (
@@ -103,13 +103,9 @@ KEPT_OPEN = (
     ) for e in names),
     EntityRef("WaspKingdomQueen", "event2"),
 )
-# The Queen's Chamber (WaspKingdomQueen; named 2026-10-11): nothing to find. Its door back to the Throne Room is made only from
-# the ending (555); its scene on entering (Event141, until 555) sends the party to Bugaria's main plaza once General
-# Ultimax is beaten (371; before that it walks it back out), on every visit.
-# Its door back is the way out only before the win; after it the scene there sends the party on to Bugaria instead.
-DOOR_RULES = (
-    DoorRule("WaspKingdomQueen", "loadzone", False_()),
-)
+# The Queen's Chamber (WaspKingdomQueen; named 2026-10-11): nothing to find. Its door back to the Throne Room, made
+# only from the ending (555), kept present (KEPT_PRESENT); its scene on entering (Event141, until 555) sends the party
+# to Bugaria's main plaza once General Ultimax is beaten (371), on every visit.
 TRANSFERS = (
     Transfer("scene", "WaspKingdomQueen", "BugariaMainPlaza", two_way=False),
 )

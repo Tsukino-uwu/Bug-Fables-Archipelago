@@ -57,9 +57,38 @@ def shuffle(spots: tuple[Spot, ...], random: Random) -> list[dict[str, Any]]:
     items = [spot.item for spot in spots]
     for _ in range(TRIES):
         random.shuffle(items)
-        if not _sells_twice(spots, items):
+        if not _sells_twice(spots, items) or _repair(spots, items, random):
             break
     else:
         logging.warning("Bug Fables: no shop inventory shuffle without a repeat in %d tries; one shop sells an item "
                         "twice.", TRIES)
     return [spot.to_slot(to) for spot, to in zip(spots, items)]
+
+
+def _shop(spot: Spot) -> tuple[str, str] | None:
+    return (spot.map, spot.keeper) if spot.keeper is not None else None
+
+
+def _repair(spots: tuple[Spot, ...], items: list[int], random: Random) -> bool:
+    """Swaps each item a shop sells twice with one from elsewhere that neither shop already sells; True once no shop
+    repeats. Still a permutation of the same items."""
+    for _ in range(len(items)):
+        stock: dict[tuple[str, str], list[int]] = {}
+        for index, spot in enumerate(spots):
+            if _shop(spot) is not None:
+                stock.setdefault(_shop(spot), []).append(index)
+        repeat = next((i for slots in stock.values() for n, i in enumerate(slots)
+                       if items[i] in (items[j] for j in slots[:n])), None)
+        if repeat is None:
+            return True
+        here = _shop(spots[repeat])
+        sells = {items[j] for j in stock[here] if j != repeat}
+        partners = [j for j in range(len(items)) if j != repeat and _shop(spots[j]) != here
+                    and items[j] not in sells
+                    and (_shop(spots[j]) is None
+                         or items[repeat] not in {items[k] for k in stock[_shop(spots[j])] if k != j})]
+        if not partners:
+            return False
+        j = random.choice(partners)
+        items[repeat], items[j] = items[j], items[repeat]
+    return not _sells_twice(spots, items)

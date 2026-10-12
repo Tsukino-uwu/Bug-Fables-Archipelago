@@ -5,7 +5,8 @@ from ..data_tables import door_name
 
 PINK_SPIDER = "Forsaken Lands: Pink Spider, First Trade"
 ITEM_SHOP_ROOMS = {"GoldenSettlement1", "GoldenSettlementEntrance", "BugariaCommercial", "BugariaOutskirtsOutsideCity",
-                   "HoneyFactoryEntrance (Bottom)", "DefiantRoot3"}
+                   "HoneyFactoryEntrance (Bottom)", "DefiantRoot3", "GiantLairRoachVillage", "MetalIsland1",
+                   "TermiteMainPlaza", "TermiteIndustrial", "TermiteColiseum1", "WaspKingdomJayde"}
 
 
 class TestItemOnHand(BugFablesTestBase):

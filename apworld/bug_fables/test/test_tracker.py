@@ -15,7 +15,7 @@ from worlds.generic.Rules import exclusion_rules
 
 from . import entrance_graph, generate_like_main
 from .test_doors import PLANDO
-from .test_shops import SHORT_OF_FILLER
+from .test_shops import SHORT_EXCLUSIONS, SHORT_OF_FILLER
 from ..data_tables import TRACKER_ORDER
 from ..world import BugFablesWorld
 
@@ -37,7 +37,7 @@ CASES: dict[str, dict[str, Any]] = {
     # Discoveries and hidden items with the story's party hold (95 filler items for 70 excluded spots, 2026-10-10).
     "filler only, held": {"shop_contents": "filler_only", "shuffle_discoveries": True, "shuffle_hidden_items": True,
                           "starting_party_member": "off", "filler_starting_checks": False},
-    "fallback and exclusions": {**SHORT_OF_FILLER, "exclude_locations": [SHOP, OPENING, PIER]},
+    "fallback and exclusions": {**SHORT_OF_FILLER, "exclude_locations": [*SHORT_EXCLUSIONS, SHOP, OPENING, PIER]},
     "random member, moves, jump": {"starting_party_member": "random_member", "shuffle_field_moves": True,
                                    "shuffle_jump": True},
     "vi": {"starting_party_member": "vi"},

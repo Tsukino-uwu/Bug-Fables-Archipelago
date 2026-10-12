@@ -189,6 +189,9 @@ if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
 
 # A give or pickup's type: the item kinds, except these two.
 MONEY_TYPE = -1
+# The game's money drops are items too (MoneySmall, MoneyMedium, MoneyBig: NPCControl, what touching one adds): a dug-up
+# or dropped one stands for that many berries.
+MONEY_DROPS = {6: 1, 7: 5, 186: 20}
 CRYSTAL_TYPE = 3
 
 
@@ -208,6 +211,8 @@ def vanilla_item(location: Location) -> str | None:
         return None
     if give_type == CRYSTAL_TYPE:
         kind, game_id = CRYSTAL_KIND, 0
+    elif give_type == ITEM_KIND and give_item in MONEY_DROPS:
+        kind, game_id = MONEY_KIND, MONEY_DROPS[give_item]
     else:
         kind, game_id = (MONEY_KIND if give_type == MONEY_TYPE else give_type), give_item
     for item in ITEMS:

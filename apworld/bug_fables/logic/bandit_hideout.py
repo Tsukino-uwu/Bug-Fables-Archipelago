@@ -39,7 +39,7 @@ LOCATIONS = (
              Source(regional=6, pickup=Pickup(map="HideoutRightA", type=0, item=125)), area="Kitchen", no_jump=True),
     # The right cell, dug into (Beetle Dig): its dig spot starts Event217, Cerise appearing with Crystal Berry 19.
     Location("Bandit Hideout: Cell, Dig Spot", 293, "HideoutCell",
-             Source(event=217, flag=674, berry=19, give=Give(map="HideoutCell", type=3, item=19)),
+             Source(event=217, flag=674, give=Give(map="HideoutCell", type=3, item=19)),
              rule=CanUse("Beetle Dig"), category="crystal_berry", no_jump=True),
 )
 # The stealth bandits (each NPC's battle data is the catch, Event108, to the cell, and its sight) and the catch triggers
