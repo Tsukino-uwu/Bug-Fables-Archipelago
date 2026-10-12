@@ -103,6 +103,7 @@ said them.
 - [2026-10-11: the Rubber Prison finished, the artifacts as items, the Giant's Lair begun](#2026-10-11-the-rubber-prison-finished-the-artifacts-as-items-the-giants-lair-begun)
 - [2026-10-11: the Giant's Lair, Metal Lake and Metal Island finished, the plaza's hitches found](#2026-10-11-the-giants-lair-metal-lake-and-metal-island-finished-the-plazas-hitches-found)
 - [2026-10-12: the Termite Capitol, the Wasp Kingdom, the Bandit Hideout, Stream Mountain and the Chomper Caves](#2026-10-12-the-termite-capitol-the-wasp-kingdom-the-bandit-hideout-stream-mountain-and-the-chomper-caves)
+- [2026-10-12: Upper Snakemouth, the last nine rooms; every room mapped](#2026-10-12-upper-snakemouth-the-last-nine-rooms-every-room-mapped)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4166,3 +4167,26 @@ said them.
   clear a room's scene flag with the user in it; never nudge (memory updated).
 - **Handoff:** a new seed `AP_70706732892901769436` (in `stage/handoff/`), the server stopped. Uncommitted on purpose:
   `KeptOpen.cs` (the artifact sign). Next room: `UpperSnekTransition`.
+
+## 2026-10-12: Upper Snakemouth, the last nine rooms; every room mapped
+
+- **Setup:** a new seed, `AP_14750350767516030008` (session 170e3ad8's scratchpad `out/`, the player file every
+  ability), hosted on 38281; the console's command file still session bed6439d's `cmds.txt`.
+- **Mapped, all named on the way:** Icicle Pond, the Flooded Hall, the Pipe Puzzle, the Gear Machine, the Piano
+  Puzzle, the Icicle Climb, the River Puzzle, the Geyser Room and the Laboratory; locations 74 (renamed "Icicle Pond,
+  Fight") and 305-313. 244 of 244 rooms mapped; the checklist is now a frozen record.
+- **Pushed past, every lock here:** each Lab Card door, Icicle Pond's switch door and the Gear Machine's boss door put
+  an arriving party past the lock (seen), so each is a one-way in without its key.
+- **The Extra Freeze medal is progression:** the Piano Puzzle's plates are held by frozen enemies; without the medal
+  the ice lasts 300 frames, with it 600 or more (`NPCControl.cs`, the Icicle's hit). Suspected first as the frame
+  rate: the countdown uses `TieFramerate` (`Time.smoothDeltaTime` x 60), so 60 and 240 fps last the same; the medal
+  settled it (seen: too short without, done with).
+- **New items:** Extra Freeze, the Small, Medium and Big Gears (progression), the Lab Card (progression, kept: one in
+  a seed opens both locks, like the Wasp Key). A location whose item isn't in `items.json` gets filler, found when
+  the Piano Puzzle's spots were unreachable behind the Lab Card doors (the tests).
+- **Left out of the logic, on purpose:** one-time moves (Icicle Pond's scene moving a party right, the Laboratory's
+  choice to Bugaria), and Bee Fly onto the Flooded Hall's island (a dead end).
+- **Other:** Room Swap's option text now says it swaps across the whole game; Next 75, a geometry pass after the
+  mapping to find ways the hand-mapped logic missed.
+- **Handoff:** the server still hosting on 38281; the game capped at 60 fps by `fps 60` this session. Uncommitted, not
+  this session's: `KeptOpen.cs`.
