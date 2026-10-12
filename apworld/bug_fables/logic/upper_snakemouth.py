@@ -59,6 +59,12 @@ LOCATIONS = (
     Location("Upper Snakemouth: River Puzzle, Fight Behind the Barrier", 312, "UpperSnekRiverPuzzle",
              Source(flag=526, pickup=Pickup(map="UpperSnekRiverPuzzle", type=1, item=160)),
              rule=CanUse("Jump") & CanUse("Icicle") & CanUse("Beemerang Halt") & CanUse("Beetle Dig")),
+    # The Geyser Room (UpperSnekGeizerRoom; named 2026-10-12): its door on the right free; the Big Gear (527) at the
+    # far left below the pump. Bee Fly reaches it alone; otherwise the Icicle and Jump to the wooden lever (a basic
+    # attack), which starts the geysers, frozen and jumped across (Freeze). Back by a shortcut and a drop by the lever.
+    Location("Upper Snakemouth: Geyser Room, Below the Pump", 313, "UpperSnekGeizerRoom",
+             Source(flag=527, pickup=Pickup(map="UpperSnekGeizerRoom", type=1, item=159)),
+             rule=CanUse("Bee Fly") | (_ACROSS & ANY_ATTACK & CanUse("Freeze"))),
 )
 MAP_AREAS = (
     # Icicle Pond (UpperSnekTransition; named 2026-10-12): its right door (from the entrance) the map's own region;

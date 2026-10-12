@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**242 of 244 done.**
+**243 of 244 done.**
 
 ## Outskirts
 
@@ -638,7 +638,9 @@ as it is, a frozen record.
 - [x] UpperSnekRiverPuzzle (216) — the River Puzzle; its door at the bottom free; a Zombeetle carrying a Lab Card
   (`ShwKEYZombeetle`, 526) behind a barrier, reached by Jump, the Icicle and the Beemerang Halt, back out with Beetle
   Dig (location 312, the Lab Card kept: a random item in a seed); for the enemy pass: the Zombeetle
-- [ ] UpperSnekGeizerRoom (217)
+- [x] UpperSnekGeizerRoom (217) — the Geyser Room; its door on the right free; the Big Gear below the pump at the
+  far left (527, location 313): Bee Fly alone, or the Icicle and Jump to the wooden lever (a basic attack) and the
+  geysers frozen and jumped across (Freeze); back by a shortcut and a drop by the lever
 
 ## Not rooms
 
