@@ -3694,9 +3694,17 @@ give-swap never sees it. A transpiler (`StoryAdds`) turns that one add into `Key
 `location_added` lists it as a key item for this seed; the check goes by flag 38 like any scene's. The log says
 `[adds] installed: a scene's key item add` and, after the fight, `key item 116 is a location's in this seed: left out
 of the bag`. The treasure room joins the artifact scenes (step 61): its model is the map's child 2 and its banner line
-3 (`Event118`, code read).
+2 (`ArtifactGet`'s message id in `Event118`, code read; line 3, the one after it, was first taken: found on screen,
+the game's banner shown and the next line rewritten). The Watcher's scene also lays the gem on the floor
+(`itemsprites[0, 116]`): that read becomes `AddedSprite`, the sprite of the item the fight's location holds (log: `the scene's key item 116 shows ...`).
 
-**Status:** built (2026-10-13), not yet seen in game.
+**Found:** the first try gave the gem anyway, with no `[adds]` line in the log: the build in the game predated the
+hook, since `copy-dev.ps1` copies what `stage-dev.ps1` staged, and the stage step was skipped. Staged, then copied,
+the install line showed and the hook worked.
 
-*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row).*
+**Status:** works, seen 2026-10-13: after the Watcher, the fight's item (a Crunchy Leaf) on the floor and no gem in
+the key items (the fight reset by flag 38 from the Roof); the pedestal showing a Chomper Seed through its scene; after the line fix, its banner "You found a Chomper Seed!" (seen, the pedestal reset by
+flag 345 from the boss room).
+
+*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row, `AddedSprite`).*
 

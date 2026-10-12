@@ -24,7 +24,7 @@ namespace BugFablesAP
             ("GoldenHillsDungeonBoss", 2, m => Child(Child(m.mainmesh, 2), 0), 11),
             // The finale clones the window's artifact and hands the copy over (ArtifactGet).
             ("HoneyFactoryCore", 3, m => Child(m.mainmesh, 2), 24),
-            ("SandCastleTreasureRoom", 4, m => Child(m.transform, 2), 3),
+            ("SandCastleTreasureRoom", 4, m => Child(m.transform, 2), 2),
             ("RubberPrisonGiantLairBridge", 6, null, 15),
         };
 
@@ -49,6 +49,27 @@ namespace BugFablesAP
             [HarmonyTranspiler]
             private static IEnumerable<CodeInstruction> Queen(IEnumerable<CodeInstruction> instructions) =>
                 Hooks.Safe(instructions, code => Edit(code, "Event194", nameof(HeldArtifact6)), "swap");
+
+            // The Watcher's gem lying on the floor (key item 116's sprite): the item its fight's location holds.
+            [HarmonyPatch(typeof(EventControl), "Event117", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Watcher(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code =>
+                {
+                    MethodInfo get = AccessTools.Method(typeof(Sprite[,]), "Get");
+                    int[] reads = Enumerable.Range(1, Math.Max(0, code.Count - 1))
+                        .Where(i => code[i].Calls(get) && code[i - 1].LoadsConstant(116))
+                        .ToArray();
+                    if (reads.Length != 1)
+                    {
+                        throw new InvalidOperationException($"Event117 has {reads.Length} gem sprite reads where 1 "
+                            + "was measured");
+                    }
+                    code[reads[0]].opcode = OpCodes.Call;
+                    code[reads[0]].operand = AccessTools.Method(typeof(ItemSwap), nameof(AddedSprite));
+                    log.LogInfo("[artifact] installed in EventControl.Event117 (the gem's sprite)");
+                    return code;
+                }, "swap");
 
             // The scene's one `Resources.LoadAll<Sprite>("Sprites/Objects/artifacts")[n]`: the element read becomes
             // the chapter's HeldArtifact(sheet, n), the same stack in and out.
@@ -75,6 +96,23 @@ namespace BugFablesAP
         }
 
         public static Sprite HeldArtifact1(Sprite[] sheet, int index) => HeldArtifact(sheet, index, 1);
+
+        // A key item a scene adds straight to the bag, shown as the item its location holds (location_added).
+        public static Sprite AddedSprite(Sprite[,] sheet, int kind, int item)
+        {
+            Dictionary<long, int[]> added = connection?.LocationAdded;
+            long at = randomizerOn == null || !randomizerOn() || added == null ? -1
+                : added.Where(a => a.Value[0] == 1 && a.Value[1] == item).Select(a => a.Key).DefaultIfEmpty(-1).First();
+            if (at < 0)
+            {
+                return sheet[kind, item];
+            }
+            string article = shownArticle;
+            Describe(at, out string name, out Sprite sprite, out _);
+            shownArticle = article;
+            log.LogInfo($"[artifact] the scene's key item {item} shows '{TextFit.Joined(name)}'");
+            return sprite ?? ApIcon.Get();
+        }
 
         public static Sprite HeldArtifact6(Sprite[] sheet, int index) => HeldArtifact(sheet, index, 6);
 

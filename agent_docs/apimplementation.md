@@ -911,6 +911,12 @@ be wrong.
 
 **Known issues:**
 
+- **A received Small Ancient Key's box says "Ancient Key"** (found 2026-10-13, build step 93): the box shows the
+  game's own name for key item 114, which is chapter 3's artifact item's name in a seed. Not decided: rename it in the
+  game's text, or pick other names.
+- **No starburst at a crystal berry spot's pickup** (found 2026-10-13, Upper Snakemouth's Piano Puzzle): a key item
+  on a berry spot showed its starburst on the ground but not while held up; an ordinary spot's pickup (the Peculiar
+  Gem's) showed it. Not yet traced.
 - **Room Swap's repair runs out of tries on a stuck test seed** (found 2026-10-11, mapping the Giant's Lair):
   `TestRoomSwapRepairsQuickly.test_stuck_starts_are_repaired` gives up at 1500 tries on seed 334640838 (`STUCK`), on
   the commits before build step 87 too, so a newly mapped room shifted it, as mapping did before (2026-10-10, the
@@ -6647,7 +6653,11 @@ later chapters' stand-in. The mod's side is `documentation.md`, step 63. **Tests
 check each spot is a location, `test_artifact_is_a_location`, and the Roof's door needs the Big Ancient Key; not yet
 run (at push time).
 
-**Status:** built (2026-10-13), not yet seen in game.
+**Status:** works, seen in seed `AP_33232363850621305804` (2026-10-13): the Peculiar Gem opening Upper Snakemouth's
+slot, the Sand Castle Key making the castle appear, the one Small Ancient Key opening both main-room locks and kept,
+the Big Ancient Key opening the boss door (used up, its only lock), the Watcher sending its item, the pedestal showing
+and sending its item, its banner naming it. **Found on the way:** the received Small Ancient Key's box names it "Ancient Key", the game's
+own name for item 114, the same as chapter 3's artifact (Known issues).
 
 *Code: `data/items.json`, `logic/ancient_castle.py`, `logic/snakemouth_den.py` (the gem's slot).*
 
