@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**236 of 244 done.**
+**237 of 244 done.**
 
 ## Outskirts
 
@@ -617,7 +617,11 @@ as it is, a frozen record.
 - [ ] UpperSnekBeforeBoss (211)
 - [ ] UpperSnekPressurePlateRoom (212)
 - [ ] UpperSnekBossRoom (213)
-- [ ] UpperSnekMiddleRoom (214)
+- [x] UpperSnekMiddleRoom (214) — the Flooded Hall, a hub of platforms in water (Icicle and Jump, or Bee Fly); the
+  middle (save crystal, bottom door) the map's own region; the lower top left up to both upper doors (Jump or Bee Fly),
+  the upper top right's hanging bridge a drop to the middle; both upper doors behind Lab Card locks (Event59 index 12;
+  524, 525), pushed past on arrival (seen); the Sleep Bomb behind the waterfall (740, Icicle and Jump, location 305);
+  for the Lab Card's rooms: two cards (523, 526), two locks, a kept key like the Factory Pass (pending)
 - [ ] UpperSnekPlatformRoom (215)
 - [ ] UpperSnekRiverPuzzle (216)
 - [ ] UpperSnekGeizerRoom (217)
