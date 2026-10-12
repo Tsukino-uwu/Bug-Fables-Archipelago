@@ -19,7 +19,7 @@ LOCATIONS = (
              rule=CanUse("Freeze") & CanUse("Jump"), area="Upper", no_jump=True),
     # Wyrm's Den (StreamMountain5; named 2026-10-12): its bounty fight in the middle (Event124, the Tidal Wyrm, until
     # 496) gives a Coal Crystal (key item 29); free to reach.
-    Location("Stream Mountain: Wyrm's Den, Boss Fight", 301, "StreamMountain5",
+    Location("Stream Mountain: Wyrm's Den, Bounty Fight", 301, "StreamMountain5",
              Source(event=124, flag=496, give=Give(map="StreamMountain5", type=1, item=29)), no_jump=True),
     # StreamMountain4's Clear Water (item 12, flag 493), lying in its middle once there.
     Location("Stream Mountain: Bridge Puzzle, Among the Logs", 300, "StreamMountain4",
