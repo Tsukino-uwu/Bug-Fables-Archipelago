@@ -3680,8 +3680,8 @@ taken or the key given by the game. The log says `[keys] installed in EventContr
 join)` and, when both spots are done, `the Heaven and Earth Keys' join kept away` (first written on every read, a
 misleading line with one half's spot only; seen 2026-10-12, fixed the same day).
 
-**Status:** built (2026-10-12); the hook seen installed and the hawk's talk ending without a key; the join with both
-halves' spots done not yet seen.
+**Status:** built (2026-10-12); seen in seed `AP_17798847575175281667`: with both halves' spots done (the hawk, then
+Astotheles), no Sand Castle Key given, the log saying the join was kept away.
 
 *Code: `World/KeptKeys.cs` (`KeyJoin`, `JoinAllowed`), `Core/SeedData.cs` (`SandCastleKeyItem`).*
 
