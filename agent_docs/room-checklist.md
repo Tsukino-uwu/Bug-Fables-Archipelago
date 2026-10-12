@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**234 of 244 done.**
+**235 of 244 done.**
 
 ## Outskirts
 
@@ -604,7 +604,8 @@ as it is, a frozen record.
 
 ## Fishing Village
 
-- [ ] FishingVillage (144)
+- [x] FishingVillage (144) — the village and its dock, one free area; a Lore Book behind a plant (flag 331, location
+  304); the submarine's dock with its key item; Riz and the messenger ant from 509 (the story); no flag-driven scenery
 
 ## Upper Snakemouth
 
