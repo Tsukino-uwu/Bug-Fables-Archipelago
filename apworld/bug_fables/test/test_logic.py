@@ -1412,10 +1412,9 @@ class TestSlidePuzzle(BugFablesTestBase):
         self.assertFalse(puzzle.access_rule(self.state_with()))
         self.assertTrue(puzzle.access_rule(self.state_with("Horn Slash")))
 
-    # The castle's spots wait until the Sand Castle Key's chain is in the logic (build step 67).
-    def test_the_medal_waits(self) -> None:
+    def test_the_medal_is_a_location(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Ancient Castle: Slide Puzzle, Behind the Cracked Wall", names)
+        self.assertIn("Ancient Castle: Slide Puzzle, Behind the Cracked Wall", names)
 
 
 class TestStatueRoom(BugFablesTestBase):
@@ -1451,7 +1450,7 @@ class TestDashScene(BugFablesTestBase):
 
 class TestCastleBasement(BugFablesTestBase):
     # SandCastleBasement (the user, 2026-10-09): its door on an isolated ledge, the middle across with Jump or Bee Fly;
-    # its three spots wait with the rest of the castle (build step 67).
+    # its three spots locations (build step 93).
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
 
     def test_middle_needs_jump_or_bee_fly(self) -> None:
@@ -1462,10 +1461,10 @@ class TestCastleBasement(BugFablesTestBase):
             self.assertTrue(way.access_rule(self.state_with("Jump")), entrance)
             self.assertTrue(way.access_rule(self.state_with("Bee Fly")), entrance)
 
-    def test_spots_wait(self) -> None:
+    def test_spots_are_locations(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
         for spot in ("Switch Puzzle", "Tiny Platform", "Behind the Barrier"):
-            self.assertNotIn(f"Ancient Castle: Basement, {spot}", names)
+            self.assertIn(f"Ancient Castle: Basement, {spot}", names)
 
 
 class TestCastleMainRoom(BugFablesTestBase):
@@ -1536,9 +1535,9 @@ class TestPressurePuzzle(BugFablesTestBase):
         self.assertFalse(door.access_rule(self.state_with("Jump", "Progressive Freeze", "Horn Slash")))
         self.assertTrue(door.access_rule(self.state_with("Sand Castle Pressure Puzzle Door Open")))
 
-    def test_key_waits(self) -> None:
+    def test_key_is_a_location(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Ancient Castle: Pressure Puzzle, By the Statue", names)
+        self.assertIn("Ancient Castle: Pressure Puzzle, By the Statue", names)
 
 
 class TestRockRoom(BugFablesTestBase):
@@ -1589,29 +1588,28 @@ class TestRockRoom(BugFablesTestBase):
         self.assertFalse(back.access_rule(self.state_with("Progressive Beemerang", "Jump",
                                                           "Sand Castle Rock Room Boulder Broken")))
 
-    def test_berry_waits(self) -> None:
+    def test_berry_is_a_location(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Ancient Castle: Rock Room, Alcove between the Rocks", names)
+        self.assertIn("Ancient Castle: Rock Room, Alcove between the Rocks", names)
 
 
 class TestCastleRoof(BugFablesTestBase):
     # SandCastleRoof (the user, 2026-10-09): both doors and the save crystal free; the boss door locked from the roof
-    # until the Big Ancient Key, still the game's own pickup in the Boss Key Room, taken past a fight that needs Vi
-    # (build step 67).
-    options = {"starting_party_member": "kabbu"}
+    # until the Big Ancient Key (build step 93).
 
-    def test_boss_door_needs_the_key_and_its_fight(self) -> None:
+    def test_boss_door_needs_the_key(self) -> None:
         door = self.multiworld.get_entrance(
             next(e.name for e in self.multiworld.get_region("SandCastleRoof", self.player).exits
                  if "SandCastleBossRoom" in e.connected_region.name), self.player)
         self.assertFalse(door.access_rule(self.state_with()))
         state = CollectionState(self.multiworld)
-        self.collect_all_but(["Vi"], state)
+        self.collect_all_but(["Big Ancient Key"], state)
         self.assertFalse(door.access_rule(state))
+        self.assertTrue(door.access_rule(self.state_with("Big Ancient Key")))
 
-    def test_frost_bomb_waits(self) -> None:
+    def test_frost_bomb_is_a_location(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Ancient Castle: Roof, Behind the Left Statue", names)
+        self.assertIn("Ancient Castle: Roof, Behind the Left Statue", names)
 
 
 class TestCastleBossRoom(BugFablesTestBase):
@@ -1633,8 +1631,8 @@ class TestCastleBossRoom(BugFablesTestBase):
 
 
 class TestCastleTreasureRoom(BugFablesTestBase):
-    # SandCastleTreasureRoom (the user, 2026-10-09): one region, its door free; the artifact on its platform (Jump or
-    # Bee Fly) held out with the castle (build step 67), so it never counts toward the goal.
+    # SandCastleTreasureRoom (2026-10-09): one region, its door free; chapter 4's artifact on its platform, Jump or
+    # Bee Fly (build step 93).
 
     def test_one_region_door_free(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player)
@@ -1644,8 +1642,8 @@ class TestCastleTreasureRoom(BugFablesTestBase):
         self.assertIn("SandCastleBossRoom",
                       {e.connected_region.name for e in exits if e.access_rule(self.state_with())})
 
-    def test_artifact_waits(self) -> None:
-        self.assertNotIn(345, {artifact.source.flag for artifact in ARTIFACTS})
+    def test_artifact_is_a_location(self) -> None:
+        self.assertIn(345, {artifact.source.flag for artifact in ARTIFACTS})
 
 
 class TestOutsideTheBeehive(BugFablesTestBase):

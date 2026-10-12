@@ -24,6 +24,7 @@ namespace BugFablesAP
             ("GoldenHillsDungeonBoss", 2, m => Child(Child(m.mainmesh, 2), 0), 11),
             // The finale clones the window's artifact and hands the copy over (ArtifactGet).
             ("HoneyFactoryCore", 3, m => Child(m.mainmesh, 2), 24),
+            ("SandCastleTreasureRoom", 4, m => Child(m.transform, 2), 3),
             ("RubberPrisonGiantLairBridge", 6, null, 15),
         };
 

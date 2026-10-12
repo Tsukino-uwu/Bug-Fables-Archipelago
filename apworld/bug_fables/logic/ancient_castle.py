@@ -2,10 +2,10 @@
 mapped room by room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import CanReachRegion, False_, Has
+from rule_builder.rules import False_, Has
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
+from ..data_types import (ALWAYS_SET, Added, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
                           Transfer)
 
 _SLIDE_SOLVED = "Sand Castle Slide Puzzle Solved"
@@ -30,22 +30,13 @@ _PRESSURE_SOLVED = "Sand Castle Pressure Puzzle Door Open"
 # platforms.
 _ROCK_PLATFORM = "Sand Castle Rock Room Platform Running"
 _ROCK_BOULDER = "Sand Castle Rock Room Boulder Broken"
-# The two Ancient Keys (114), each used up by one of the main room's two locks; while the castle's spots are pending
-# both are the game's own pickups. The statue room's lock is always the first a party reaches with a key in hand:
-# nothing above it is reached from the bottom without it, so the Basement's key (behind its barrier) opens it, and
-# the boss key room's lock then takes the other, the Pressure Puzzle's (past its plates).
-_BASEMENT_KEY = (CanReachRegion("SandCastleBasement (Middle)")
-                 & ((CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")))
-_ANCIENT_KEYS = _BASEMENT_KEY & CanReachRegion("SandCastlePressurePuzzle") & _PRESSURE_KEY
 
 LOCATIONS = (
-    # Every spot in the castle is pending (the user, 2026-10-09; build step 67): its door needs the Sand Castle Key,
-    # whose chain (chapters 2 to 4, the bandit hideout, the roach village's hawk) the stand-in doesn't hold yet.
     # The Slide Puzzle (SandCastleSlidePuzzle; named by the user, 2026-10-09): the medal Frostbite in a small space
     # behind its bottom's top left corner, below the upper left door, burrowed into and out of, Beetle Dig.
     Location("Ancient Castle: Slide Puzzle, Behind the Cracked Wall", 198, "SandCastleSlidePuzzle",
              Source(flag=285, pickup=Pickup(map="SandCastleSlidePuzzle", type=2, item=46)), rule=CanUse("Beetle Dig"),
-             no_jump=True, pending=True, area="Bottom"),
+             no_jump=True, area="Bottom"),
     # The Basement (SandCastleBasement; named by the user, 2026-10-09), from its middle: crystal berry #23 on a
     # platform off the moving ones and a Shaved Ice on a tiny platform, each reached on the small platforms (the big
     # crystal lit by the Beemerang Toss, then Jump, their switches hit by any attack) or by Bee Fly; the Ancient Key
@@ -53,35 +44,42 @@ LOCATIONS = (
     # out of, Bee Fly.
     Location("Ancient Castle: Basement, Switch Puzzle", 199, "SandCastleBasement",
              Source(berry=23, pickup=Pickup(map="SandCastleBasement", type=3, item=0)), rule=_SMALL_PLATFORMS,
-             category="crystal_berry", no_jump=True, pending=True, area="Middle"),
+             category="crystal_berry", no_jump=True, area="Middle"),
     Location("Ancient Castle: Basement, Tiny Platform", 200, "SandCastleBasement",
              Source(flag=731, pickup=Pickup(map="SandCastleBasement", type=0, item=47)), rule=_SMALL_PLATFORMS,
-             no_jump=True, pending=True, area="Middle"),
+             no_jump=True, area="Middle"),
     Location("Ancient Castle: Basement, Behind the Barrier", 201, "SandCastleBasement",
              Source(flag=288, pickup=Pickup(map="SandCastleBasement", type=1, item=114)),
-             rule=(CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"), no_jump=True, pending=True,
+             rule=(CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"), no_jump=True,
              area="Middle"),
     # The Roof (SandCastleRoof; named by the user, 2026-10-09): a Frost Bomb behind the left statue, nothing needed.
     Location("Ancient Castle: Roof, Behind the Left Statue", 202, "SandCastleRoof",
-             Source(flag=732, pickup=Pickup(map="SandCastleRoof", type=0, item=44)), no_jump=True, pending=True),
+             Source(flag=732, pickup=Pickup(map="SandCastleRoof", type=0, item=44)), no_jump=True),
     # The Boss Key Room (SandCastleBossKeyRoom; named by the user, 2026-10-09): a Cold Salad behind a block, round the
     # room's edge, nothing needed; the Big Ancient Key on its right side, by the three statues whose Wardens (flying)
     # fight the party as it's taken (Event115).
     Location("Ancient Castle: Boss Key Room, Behind the Block", 203, "SandCastleBossKeyRoom",
-             Source(flag=641, pickup=Pickup(map="SandCastleBossKeyRoom", type=0, item=53)), no_jump=True, pending=True),
+             Source(flag=641, pickup=Pickup(map="SandCastleBossKeyRoom", type=0, item=53)), no_jump=True),
     Location("Ancient Castle: Boss Key Room, By the Three Statues", 204, "SandCastleBossKeyRoom",
              Source(flag=294, pickup=Pickup(map="SandCastleBossKeyRoom", type=1, item=115)), rule=Member("Vi"),
-             no_jump=True, pending=True, area="Right"),
+             no_jump=True, area="Right"),
     # The Pressure Puzzle (SandCastlePressurePuzzle; named by the user, 2026-10-09): an Ancient Key on a ledge by a
     # statue in its top right, reached only on the platforms its plates raise (too far to fly to without them).
     Location("Ancient Castle: Pressure Puzzle, By the Statue", 205, "SandCastlePressurePuzzle",
-             Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE_KEY,
-             pending=True),
+             Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE_KEY),
     # The Rock Room (named by the user, 2026-10-09): crystal berry #24 in a hidden alcove off its top right, in and out
     # with Shield, then Jump or Bee Fly up to it.
+    # The boss room (SandCastleBossRoom): one region, both doors free; the Watcher's fight (Event117) starts a little
+    # way in from either side and needs nothing, a ground enemy. The scene puts the Peculiar Gem straight in the bag.
+    Location("Ancient Castle: Boss Room, Boss Fight", 320, "SandCastleBossRoom",
+             Source(event=117, flag=38, added=Added(type=1, item=116)), no_jump=True),
+    # The treasure room (SandCastleTreasureRoom): one region, its door free; chapter 4's artifact (Event118) on a
+    # platform, Jump or Bee Fly.
+    Location("Ancient Castle: Treasure Room, Treasure Pedestal", 321, "SandCastleTreasureRoom",
+             Source(event=118, flag=345, artifact=4), rule=_UP),
     Location("Ancient Castle: Rock Room, Alcove between the Rocks", 206, "SandCastleRockRoom",
              Source(berry=24, pickup=Pickup(map="SandCastleRockRoom", type=3, item=0)),
-             rule=CanUse("Shield") & _UP, category="crystal_berry", no_jump=True, pending=True, area="Top Right"),
+             rule=CanUse("Shield") & _UP, category="crystal_berry", no_jump=True, area="Top Right"),
 )
 STORY_EVENTS = (
     # The Slide Puzzle's block (`icepillar`), knocked by the horn onto the plate on its bottom (Event113 sets 284 for
@@ -162,10 +160,6 @@ MAP_AREAS = (
     Area("SandCastleRockRoom", "Top Right", (),
          CanUse("Bee Fly") | ((CanUse("Beetle Dig") | CanUse("Dash")) & CanUse("Shield")),
          out=CanUse("Shield") | CanUse("Bee Fly"), to="SandCastleRockRoom (Bottom Right)"),
-    # The boss room (SandCastleBossRoom): one region, both doors free; the Watcher's fight (Event117) starts a little
-    # way in from either side and needs nothing, a ground enemy.
-    # The treasure room (SandCastleTreasureRoom): one region, its door free. The castle's artifact (flag 345, Event118),
-    # on a platform, Jump or Bee Fly, isn't in ARTIFACTS: held out with the castle's spots (build step 67).
 )
 TRANSFERS = (
     # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the room
@@ -195,15 +189,13 @@ DOOR_RULES = (
     # through it before then, the game pushes the party past it.
     DoorRule("SandCastleSlidePuzzle", "loadzonepressure", Has(_SLIDE_SOLVED)),
     # The Roof's (SandCastleRoof; the user, 2026-10-09) boss door, locked from its side until the Big Ancient Key (115)
-    # is used; arriving from the boss room, the game pushes the party past the lock. While the castle's spots are
-    # pending the key is the game's own pickup, so its rule is: the Boss Key Room's right side reached and its fight
-    # won, Vi for the flying Wardens (the key's item once the spots come back, build step 67).
-    DoorRule("SandCastleRoof", "loadzoneboss", CanReachRegion("SandCastleBossKeyRoom (Right)") & Member("Vi")),
-    # The main room's two locks (`key1`, `key2`, Event59 key index 7, each using up an Ancient Key): the statue room's
-    # door on its bottom, the boss key room's on its top right. Arriving through either, the game pushes the party
-    # past the lock.
-    DoorRule("SandCastleMainRoom", "loadzone statue", _BASEMENT_KEY),
-    DoorRule("SandCastleMainRoom", "loadzonebosskey", _ANCIENT_KEYS),
+    # is used; arriving from the boss room, the game pushes the party past the lock.
+    DoorRule("SandCastleRoof", "loadzoneboss", Has("Big Ancient Key")),
+    # The main room's two locks (`key1`, `key2`, Event59 key index 7): the statue room's door on its bottom, the boss
+    # key room's on its top right, both opened by a seed's one Small Ancient Key. Arriving through either, the game
+    # pushes the party past the lock.
+    DoorRule("SandCastleMainRoom", "loadzone statue", Has("Small Ancient Key")),
+    DoorRule("SandCastleMainRoom", "loadzonebosskey", Has("Small Ancient Key")),
     # The Pressure Puzzle (the user, 2026-10-09): its door to the main room shut from inside until its plates are
     # played for it; arriving through it before then, the game pushes the party past it. Its other door is free.
     DoorRule("SandCastlePressurePuzzle", "loadzonemain", Has(_PRESSURE_SOLVED)),

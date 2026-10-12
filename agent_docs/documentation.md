@@ -115,6 +115,7 @@ anyone curious about the process, or thinking of doing the same for another game
 60. [A pickup placed on an altar: where the hideout teaches Dig](#60-a-pickup-placed-on-an-altar-where-the-hideout-teaches-dig)
 61. [An artifact's scene shows its location's item](#61-an-artifacts-scene-shows-its-locations-item)
 62. [The Sand Castle Key's join kept away](#62-the-sand-castle-keys-join-kept-away)
+63. [The Ancient Castle's story add and its artifact scene](#63-the-ancient-castles-story-add-and-its-artifact-scene)
 
 ## Where it stands
 
@@ -3684,4 +3685,18 @@ misleading line with one half's spot only; seen 2026-10-12, fixed the same day).
 Astotheles), no Sand Castle Key given, the log saying the join was kept away.
 
 *Code: `World/KeptKeys.cs` (`KeyJoin`, `JoinAllowed`), `Core/SeedData.cs` (`SandCastleKeyItem`).*
+
+## 63. The Ancient Castle's story add and its artifact scene
+
+Decided 2026-10-13 (`apimplementation.md`, build step 93): the Watcher's fight is a location whose vanilla item, the
+Peculiar Gem, `Event117` adds straight to the bag (`items[1].Add(116)`, code read), not through `Giveitem`, so the
+give-swap never sees it. A transpiler (`StoryAdds`) turns that one add into `KeyAdd`, which leaves the item out when
+`location_added` lists it as a key item for this seed; the check goes by flag 38 like any scene's. The log says
+`[adds] installed: a scene's key item add` and, after the fight, `key item 116 is a location's in this seed: left out
+of the bag`. The treasure room joins the artifact scenes (step 61): its model is the map's child 2 and its banner line
+3 (`Event118`, code read).
+
+**Status:** built (2026-10-13), not yet seen in game.
+
+*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row).*
 

@@ -125,6 +125,7 @@ namespace BugFablesAP
             BoatTicket.Enable(Log, () => randomizerEnabled.Value);
             PlatinumCard.Enable(Log, () => randomizerEnabled.Value);
             ChapterQuests.Enable(Log, () => randomizerEnabled.Value);
+            StoryAdds.Enable(Log, () => randomizerEnabled.Value ? connection?.LocationAdded : null);
             ArtifactIcons.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, () => randomizerEnabled.Value);

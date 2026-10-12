@@ -165,6 +165,7 @@ this file and that doc disagree, that doc is right.
 90. [Build step 90: the Dig location on the hideout's altar](#build-step-90-the-dig-location-on-the-hideouts-altar)
 91. [Build step 91: an artifact's scene shows its location's item](#build-step-91-an-artifacts-scene-shows-its-locations-item)
 92. [Build step 92: the Sand Castle Key whole, its halves' spots locations](#build-step-92-the-sand-castle-key-whole-its-halves-spots-locations)
+93. [Build step 93: the Ancient Castle's spots back, its keys and the Peculiar Gem as items](#build-step-93-the-ancient-castles-spots-back-its-keys-and-the-peculiar-gem-as-items)
 
 **How it works**
 
@@ -409,8 +410,8 @@ be wrong.
     alike, tested one by one.
 28. **The other five artifacts as items** (built for chapters 1 and 6 in build step 86, 2026-10-11): each joins
     when its chapter is mapped, its scene a location named after its place and its item the game's own name, each the
-    user's yes (`textsearch`). **Names so far:** chapter 4's location, in the castle's treasure room on the central
-    pedestal of a shrine between three statues, "Ancient Castle: Treasure Room, Shrine" (2026-10-09). The pool stays at
+    user's yes (`textsearch`). Chapter 4's built in build step 93 (*Ancient Castle: Treasure Room, Treasure Pedestal*,
+    2026-10-13, replacing 2026-10-09's "Shrine"). The pool stays at
     one per chapter, *Artifacts Required* 1-7 capped at what the world holds; a bigger pool breaks nothing in
     Archipelago but needs a display past 7 icons, so later if asked. **Icons:** the received ones only (the mod guide,
     step 57); all 7 with the missing ones faded is worth a look on screen, kept only if it looks good. No mode shuffling
@@ -803,11 +804,9 @@ be wrong.
     (`dashevent`, waiting for 88 and 138), and whatever else a key or an ability's scene waits for in the story; the
     keys then depend only on items and rooms. Where a piece can't be opened, a stand-in that holds its whole chain
     (the rooms and flags build step 67 lists), never "later chapters" alone. **First, the capture** (Known issues).
-    Then 30 berries for the Rusty Key with Next 63, and the castle's own keys (two Ancient Keys, each used up by one of
-    the main room's locks, and the boss key): key logic when the main room is mapped. Location 69's reach (build step
-    67) is the stopgap until its trigger is opened. The Peculiar Gem (Upper Snakemouth's slot, "later chapters" now)
-    comes from the castle boss room's fight, added outright, not through `Giveitem` (`MEASURED.md`, the boss room): its
-    stand-in becomes that room once the castle's door opens.
+    Then 30 berries for the Rusty Key with Next 63. The Sand Castle Key's side is done (build steps 92 and 93: the
+    castle's keys, its spots and the Peculiar Gem as items); its Enemysanity spots (area 11 in `KEY_CHAIN_AREAS`) still
+    wait for the enemy pass. Location 69's reach (build step 67) is the stopgap until its trigger is opened.
 65. **The file select's artifact icons, each one's own** (the user, 2026-10-09: "something we could log/maybe attempt
     later on. not a high prio"): the pause menu shows each artifact the file has (the mod guide, steps 48 and 57), but
     the file select draws the first N from the count each save's summary line stores (`LoadData.progression`), which
@@ -6625,6 +6624,32 @@ fight showing and sending a Bad Book instead of the Earth Key, gone after, and w
 log: the join kept away).
 
 *Code: `data/items.json`, `data_tables.py`, `logic/lost_sands.py`, `logic/bandit_hideout.py`, `slot_data.py`.*
+
+## Build step 93: the Ancient Castle's spots back, its keys and the Peculiar Gem as items
+
+**Found** (2026-10-12): with the Sand Castle Key whole (build step 92), the castle's door has a real rule, so its
+spots, held out since build step 67, can come back once its own keys are written. The game has two Small Ancient Keys
+(114: the Basement, the Pressure Puzzle), each used up by one of the main room's two locks; the Big Ancient Key (115,
+the Boss Key Room) for the Roof's boss door; the Watcher's fight (`Event117`) puts the Peculiar Gem (116) straight into
+the bag (`items[1].Add`), the key to Upper Snakemouth's slot; the treasure room's scene (`Event118`, flag 345) is
+chapter 4's artifact.
+
+**Decided** (2026-10-13): one Small Ancient Key in a seed, never used up (kept, like the Lab Card), so either lock can
+come first; the Big Ancient Key and the Peculiar Gem progression items, each its one lock's rule. Names: *Ancient
+Castle: Treasure Room, Treasure Pedestal* and *Ancient Castle: Boss Room, Boss Fight*. The artifact item takes the
+game's name from its banner, *Ancient Half*.
+
+**Built:** every castle location (198 to 206) no longer pending; the main room's two locks need the Small Ancient Key,
+the Roof's boss door the Big Ancient Key (both progression, the small one `kept`); locations 320 (the Watcher, its
+vanilla item the gem through `source.added`, type 1) and 321 (chapter 4's artifact, Jump or Bee Fly); *Ancient Half*
+(artifact 4) and *Peculiar Gem* (key item 116) in `items.json`; Upper Snakemouth's slot needs the gem instead of the
+later chapters' stand-in. The mod's side is `documentation.md`, step 63. **Tests:** the castle's "waits" tests now
+check each spot is a location, `test_artifact_is_a_location`, and the Roof's door needs the Big Ancient Key; not yet
+run (at push time).
+
+**Status:** built (2026-10-13), not yet seen in game.
+
+*Code: `data/items.json`, `logic/ancient_castle.py`, `logic/snakemouth_den.py` (the gem's slot).*
 
 # How it works
 

@@ -50,7 +50,7 @@ namespace BugFablesAP
         internal static bool SpyFree => SpySpecs != null && (SpySpecs.Value == "Free" || SpySpecs.Value == "Both");
         // Tenths of the normal price: 10 normal, 5 half, 0 free. A dev cheat: bound only in the dev build ([Debug]).
         internal const int FullPrice = 10;
-        internal static ConfigEntry<int> MedalPrices;
+        internal static ConfigEntry<int> MedalPrices = null;
         internal static ConfigEntry<string> EnemyScalingMode;
         // Ten pips, like the volume rows: Off, eight caps, and the monitor's own refresh rate.
         internal static readonly string[] UncapValues = { "Off", "90", "100", "120", "144", "165", "180", "240", "360",
