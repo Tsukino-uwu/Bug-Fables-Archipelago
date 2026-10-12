@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**243 of 244 done.**
+**244 of 244 done.**
 
 ## Outskirts
 
@@ -626,7 +626,9 @@ as it is, a frozen record.
   (Freeze, Horn Slash), raising piano keys (Jump), the ice lasting long enough only with Extra Freeze (seen; the medal
   progression): the Small Gear behind the plate door (521, location 309; the door stays open while inside) and Crystal
   Berry #42 by the wind pipe (location 310)
-- [ ] UpperSnekBossRoom (213)
+- [x] UpperSnekBossRoom (213) — the Laboratory; one free area, its door on the right; no item; the Zommoth fight
+  (`Event182`, started at the far left, fought on the way back; until 532), its closing choice sending the party to
+  Bugaria's main plaza once (not in the logic); for the enemy pass: the fight
 - [x] UpperSnekMiddleRoom (214) — the Flooded Hall, a hub of platforms in water (Icicle and Jump, or Bee Fly); the
   middle (save crystal, bottom door) the map's own region; the lower top left up to both upper doors (Jump or Bee Fly),
   the upper top right's hanging bridge a drop to the middle; both upper doors behind Lab Card locks (Event59 index 12;
