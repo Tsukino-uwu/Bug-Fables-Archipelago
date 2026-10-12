@@ -12,8 +12,10 @@ class ArtifactsRequired(Range):
     """
     How many artifacts open the last fight. Winning it is the goal. The game has 7, one per chapter's milestone.
 
-    0 leaves the last fight open from the start. With Artifact Shuffle on Vanilla the 7th artifact is the last
-    fight's own reward, so at most 6 count: asking for 7 lowers it to 6, with a warning.
+    0: the last fight is open from the start, whatever Artifact Shuffle is set to.
+
+    With Artifact Shuffle on Vanilla, the 7th artifact is the last fight's own reward, so at most 6 count: asking for
+    7 lowers it to 6, with a warning.
     """
 
     display_name = "Artifacts Required"
