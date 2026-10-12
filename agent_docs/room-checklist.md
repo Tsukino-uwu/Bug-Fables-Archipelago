@@ -618,7 +618,9 @@ as it is, a frozen record.
   520; "Puzzle Reward", location 306); for the gears' room: the three gears as items (pending)
 - [x] UpperSnekBeforeBoss (211) — the Gear Machine; its bottom (both doors' side, the Venus bud) free; the Mushroom
   on top of the machine (respawning, regional 0; Jump or Bee Fly; location 307); the three gears in their slots (529-531)
-  open the boss door's round door (528), pushed past on arrival (seen); for the gears' rooms: the gears as items
+  open the boss door's round door (528), pushed past on arrival (seen); a hidden computer room at the top right (Bee
+  Fly from the machine's top, then Beetle Dig through a crack), only three monitors' text; for the discovery sweep:
+  the monitors; for the gears' rooms: the gears as items
 - [ ] UpperSnekPressurePlateRoom (212)
 - [ ] UpperSnekBossRoom (213)
 - [x] UpperSnekMiddleRoom (214) — the Flooded Hall, a hub of platforms in water (Icicle and Jump, or Bee Fly); the
