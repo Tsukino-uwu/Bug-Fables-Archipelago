@@ -901,6 +901,10 @@ be wrong.
     after sleeping (the hotel's Tangy Jam from Master Slice, the Bugaria inn's Honey Drop) comes every stay, made fresh
     by the sleep scene with no flag, so it's no location today. It could be one: the first food after sleeping at each
     inn the check, later stays the game's own. It needs a mod hook (no flag to read), every inn at once.
+75. **A "did I miss anything" pass from the rooms' geometry** (decided 2026-10-12, mapping the Flooded Hall; after every
+    room is mapped): the ground sampler planned in `room-logic.md` ("How a room gets mapped", step 1) run on each room,
+    its draft (walks, jumps, drops between spots) compared with the hand-mapped logic, room by room. A way it finds that
+    the logic lacks is shown to the user, who decides; the hand-mapped logic stays the truth (stricter, more correct).
 
 **Known issues:**
 

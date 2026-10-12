@@ -36,8 +36,8 @@ MAP_AREAS = (
     # The Flooded Hall (UpperSnekMiddleRoom; named 2026-10-12): the middle (the save crystal, the bottom door) the map's
     # own region; the right, bottom left, left and lower top left doors each on a platform across the water (_WATER,
     # both ways). From the lower top left, a tilted bridge to the upper top left (Jump or Bee Fly up, a free drop down)
-    # and stairs of platforms to the upper top right (Jump or Bee Fly, both ways). Each upper door behind a Lab Card lock
-    # (Event59 index 12; 525, 524); arriving by one pushes the party past, so without the card it is a one-way in.
+    # and stairs of platforms to the upper top right (Jump or Bee Fly, both ways). Each upper door behind a Lab Card
+    # lock (Event59 index 12; 525, 524); arriving by one pushes the party past, so without the card it is a one-way in.
     *(Area(_MIDDLE, name, (door,), _WATER) for name, door in (
         ("Right", "loadzoneentrance"), ("Bottom Left", "loadzoneriverorom"), ("Left", "loadzoneboss"),
         ("Lower Top Left", "loadzone switch"))),
