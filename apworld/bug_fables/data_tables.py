@@ -195,6 +195,11 @@ MONEY_DROPS = {6: 1, 7: 5, 186: 20}
 CRYSTAL_TYPE = 3
 
 
+# Key items a seed has whole instead of in halves (the Heaven and Earth Keys, the Sand Castle Key's): their spots are
+# ordinary locations holding padding, the whole key an item of its own (2026-10-12).
+JOINED_HALVES = frozenset({105, 106})
+
+
 def vanilla_item(location: Location) -> str | None:
     """The name of the item the game hands out at a location, or None."""
     source = location.source
@@ -204,6 +209,8 @@ def vanilla_item(location: Location) -> str | None:
     if source.tokens is not None:
         return next(item.name for item in ITEMS if item.kind == TOKEN_KIND and item.game_id == source.tokens)
     if handed is not None:
+        if handed.type == 1 and handed.item in JOINED_HALVES:
+            return None
         give_type, give_item = handed.type, handed.item
     elif source.item_shop is not None:
         give_type, give_item = ITEM_KIND, source.item_shop.item

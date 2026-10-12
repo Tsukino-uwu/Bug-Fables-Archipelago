@@ -95,7 +95,8 @@ as it is, a frozen record.
   needing logic once bosses and enemies are shuffled
 - [x] DesertSandPitArea (81)
 - [x] DesertBeforeGH (82)
-- [x] DesertRoachVillage (95) — for the quest pass: the hawk (flags 300-302), key item 105 (line 1)
+- [x] DesertRoachVillage (95) — the hawk present from the start (until 302), his half of the Sand Castle Key a location
+  (316, build step 92)
 - [x] DesertOasis (96) — for the quest pass: Stratos and Delilah (until flag 496)
 - [x] DesertOasisEntrance (97)
 - [x] DesertWestDunes (98)
@@ -104,7 +105,8 @@ as it is, a frozen record.
 - [x] DesertTrenchMiddle (109)
 - [x] DesertJumpPuzzle (110)
 - [x] DesertSouthern (111)
-- [x] DesertScorpion (112) — for the enemy pass: the Scorpion fight (Event111, flags 303 to 298)
+- [x] DesertScorpion (112) — for the enemy pass: the Scorpion fight (Event111, until 298; present from the start since
+  2026-10-12, build step 92), its trigger between the bottom doors and the top one, no fleeing
 - [x] DesertEastmost (113)
 
 ## Golden Hills

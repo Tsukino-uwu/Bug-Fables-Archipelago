@@ -5,17 +5,22 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
-                          Transfer)
+from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagEntity, FlagSwap, Give, Location, Pickup,
+                          Source, StoryEvent, Transfer)
 
 # The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
 # item yet, so the later chapters' stand-in until its sale is a location.
 RUSTY_KEY = LATER_CHAPTERS
-# The Sand Castle Key (113), made from the Heaven Key (105, the roach village) and the Earth Key (106, Astotheles) in
-# Event109: not items yet, so the later chapters' stand-in until the chain is gone through in the quest pass.
-SAND_CASTLE_KEY = LATER_CHAPTERS
+# The Sand Castle Key (113): in the game the Heaven Key (105, the roach village's hawk) and the Earth Key (106,
+# Astotheles) joined in Event109; in a seed one item, the halves' spots ordinary locations and the join kept away by
+# the client (sand_castle_key_item, 2026-10-12).
+SAND_CASTLE_KEY = Has("Sand Castle Key")
 
 LOCATIONS = (
+    # The Roach Village's hawk (`hawk`, present from the start, below): his talk (Event109) gives the Heaven Key, half
+    # the Sand Castle Key (flag 302).
+    Location("Lost Sands: Roach Village, Hawk's Gift", 316, "DesertRoachVillage",
+             Source(event=109, flag=302, give=Give(map="DesertRoachVillage", type=1, item=105)), no_jump=True),
     # Where the game teaches the Dash (flag 699); the later chapters' story-order stand-in. Its map is the Outskirts'
     # (BOLostSandsEntrance, area 0) at the desert's border; it stays with the area its name gives. Its trigger
     # (`dashevent`) needs 88 (chapter 2's boss, behind both offerings) and 138 (Gen and Eri's scene by the second East
@@ -194,4 +199,14 @@ ACTIVATION_FLAGS = (
 )
 LIMIT_FLAGS = (
     FlagSwap("DesertBookArea", "eventtrigger", 41, ALWAYS_SET),
+)
+PRESENT_FROM = (
+    # The Roach Village's hawk, there in the game only from chapter 4's start (300): from the start, his own limit (302)
+    # ending him once his half is given (2026-10-12; flag 300 itself left alone).
+    FlagEntity("DesertRoachVillage", "hawk", ALWAYS_SET),
+    # The Scorpion fight (Event111) and its Venus healer, there in the game only once the halves are joined (303),
+    # which a seed never does: from the start, the fight's own limit (298) ending them. Its trigger stands between
+    # the bottom doors and the top one (no fleeing): for the enemy pass.
+    FlagEntity("DesertScorpion", "event", ALWAYS_SET),
+    FlagEntity("DesertScorpion", "venushealer - Duplicate", ALWAYS_SET),
 )

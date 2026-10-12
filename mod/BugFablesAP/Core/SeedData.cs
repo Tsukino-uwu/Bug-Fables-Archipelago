@@ -77,6 +77,8 @@ namespace BugFablesAP
         internal readonly bool JumpShuffled;
         internal readonly bool AbilityItems;
         internal readonly bool SubmarineItem;
+        // The Sand Castle Key is an item: Event109's join of its halves is kept away (KeptKeys).
+        internal readonly bool SandCastleKeyItem;
         // Key items a lock (Event59) leaves in the bag; null for a seed without kept_keys: every lock takes its key.
         internal readonly HashSet<int> KeptKeys;
         // The ant tunnels' miners dig for free.
@@ -215,6 +217,8 @@ namespace BugFablesAP
                 && abilities is bool abilitiesOn && abilitiesOn;
             SubmarineItem = data != null && data.TryGetValue("submarine_item", out object submarine)
                 && submarine is bool submarineOn && submarineOn;
+            SandCastleKeyItem = data != null && data.TryGetValue("sand_castle_key_item", out object castleKey)
+                && castleKey is bool castleKeyOn && castleKeyOn;
             FreeSales = SlotData.List(data, "free_sales", e => e)?.GroupBy(e => e.Value<string>("map"))
                 .ToDictionary(g => g.Key, g => g.SelectMany(e => e["lines"].Values<int>()).ToArray());
             DayNightMaps = SlotData.List(data, "day_night", e => new DayNight.Pair

@@ -184,6 +184,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # The submarine is an item (its key item, whichever item gives it): the mod answers the docks' story checks from
         # the bag.
         "submarine_item": True,
+        # The Sand Castle Key is an item: the client keeps the game's join of its halves (Event109) away.
+        "sand_castle_key_item": True,
         # Key items never used up (the Factory Pass): the mod leaves each in the bag at its locks (Event59), so the pool
         # holds one.
         "kept_keys": sorted(item.game_id for item in ITEMS if item.kept),

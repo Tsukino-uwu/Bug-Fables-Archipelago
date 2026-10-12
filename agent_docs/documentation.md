@@ -114,6 +114,7 @@ anyone curious about the process, or thinking of doing the same for another game
 59. [Scenery copied and made diggable: a twig before the hive's barrier](#59-scenery-copied-and-made-diggable-a-twig-before-the-hives-barrier)
 60. [A pickup placed on an altar: where the hideout teaches Dig](#60-a-pickup-placed-on-an-altar-where-the-hideout-teaches-dig)
 61. [An artifact's scene shows its location's item](#61-an-artifacts-scene-shows-its-locations-item)
+62. [The Sand Castle Key's join kept away](#62-the-sand-castle-keys-join-kept-away)
 
 ## Where it stands
 
@@ -3669,4 +3670,16 @@ for later (seen): outside the cave the sprite has no starburst; it sits a little
 there, so a starburst would clip with it.
 
 *Code: `Items/ItemSwap.Artifacts.cs`, `Core/SeedData.cs` (`LocationArtifacts`).*
+
+## 62. The Sand Castle Key's join kept away
+
+Decided 2026-10-12 (`apimplementation.md`, build step 92): a seed has the Sand Castle Key whole, so the game's join of
+its halves must not run. `Event109` joins them once flags 301 and 302 are both set (code read: its one read of 301).
+With `sand_castle_key_item`, a transpiler makes that read answer false (`KeptKeys.JoinAllowed`): the halves are never
+taken or the key given by the game. The log says `[keys] installed in EventControl.Event109 (the Sand Castle Key's
+join)` and, when it decides, `the Heaven and Earth Keys' join kept away`.
+
+**Status:** built (2026-10-12); not yet seen in game.
+
+*Code: `World/KeptKeys.cs` (`KeyJoin`, `JoinAllowed`), `Core/SeedData.cs` (`SandCastleKeyItem`).*
 

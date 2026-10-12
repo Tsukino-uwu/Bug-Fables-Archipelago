@@ -164,6 +164,7 @@ this file and that doc disagree, that doc is right.
 89. [Build step 89: a twig copied before the hive's barrier](#build-step-89-a-twig-copied-before-the-hives-barrier)
 90. [Build step 90: the Dig location on the hideout's altar](#build-step-90-the-dig-location-on-the-hideouts-altar)
 91. [Build step 91: an artifact's scene shows its location's item](#build-step-91-an-artifacts-scene-shows-its-locations-item)
+92. [Build step 92: the Sand Castle Key whole, its halves' spots locations](#build-step-92-the-sand-castle-key-whole-its-halves-spots-locations)
 
 **How it works**
 
@@ -6584,6 +6585,31 @@ sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!"; the 
 
 *Code: `slot_data.py`.*
 
+## Build step 92: the Sand Castle Key whole, its halves' spots locations
+
+**Found** (2026-10-12, Next 64): the castle's door needs the Sand Castle Key (113), which the game joins from the
+Heaven Key (105, the Roach Village's hawk, flag 302) and the Earth Key (106, Astotheles' fight at the Bandit Hideout's
+Entrance, flag 301) at the end of either part of `Event109`, by flags: once 301 and 302 are both set it takes both
+halves and gives the key, setting 303. In a seed those flags mean the spots were checked, not that the halves are
+held. The hawk is there only from chapter 4's start (300); 303 alone brings the Lost Sands' Scorpion fight.
+
+**Decided** (2026-10-12): the key whole in the pool (one item, simpler for the logic and the fill; two halves would
+need a join of our own, by the bag), the halves' spots ordinary locations, the join kept away; only the hawk made
+present early (flag 300 left alone: it changes much of the world); the Scorpion present from the start rather than
+from the key, so the logic always counts it there. Names: *Lost Sands: Roach Village, Hawk's Gift* and *Bandit
+Hideout: Entrance, Astotheles' Fight*.
+
+**Built:** *Sand Castle Key* (key item 113, progression, `always` once: no location holds it in vanilla);
+`JOINED_HALVES` (`data_tables.py`) makes the halves' spots hold padding; locations 316 and 317; `PRESENT_FROM` for the
+hawk and for the Scorpion's trigger and Venus healer; the castle door's `DoorRule` needs the key (and Jump), no longer
+the later chapters' stand-in; `sand_castle_key_item` in slot_data, the mod's side `documentation.md`, step 62. The
+Scorpion's trigger stands between the room's bottom doors and its top one, a fight without fleeing: for the enemy
+pass. The castle's own spots stay pending (build step 67) until its keys are written.
+
+**Status:** built (2026-10-12); not yet seen in game.
+
+*Code: `data/items.json`, `data_tables.py`, `logic/lost_sands.py`, `logic/bandit_hideout.py`, `slot_data.py`.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -6698,6 +6724,7 @@ only way a setting chosen at generation (an option, a version number) reaches th
   and `limit_flags`, entities that borrow a goal flag repointed (and, build step 64, a pickup the story would take
   away);
 - `scenes_kept_away` (build step 62): maps' own start-up scenes never played, their flag set as the map is built;
+- `sand_castle_key_item` (build step 92): the game's join of the Sand Castle Key's halves kept away;
 - `submarine_item`, `present_with_item` and `held_until_item`: the submarine is an item, and its docks are made, and
   who shows them off kept away, by its key item in the bag (build step 36);
 - `kept_keys`, the key items a lock leaves in the bag, never used up (build step 79: the Factory Pass, 95);

@@ -32,6 +32,46 @@ namespace BugFablesAP
                 "every lock takes its key: a seed's one Factory Pass is gone at the first lock");
             Hooks.Install(typeof(BridgeScene), "keys",
                 "the bridge scene takes the seed's one Prison Key and marks three of its spots taken unchecked");
+            Hooks.Install(typeof(KeyJoin), "keys",
+                "both Sand Castle Key halves' spots done would give the key from the game, not the server");
+        }
+
+        // Event109 joins the Heaven and Earth Keys into the Sand Castle Key once both their spots' flags (301, 302)
+        // are set; with the key an item, the read of 301 answers false, so the join never runs.
+        private static class KeyJoin
+        {
+            [HarmonyPatch(typeof(EventControl), "Event109", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, Edit, "keys");
+
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
+            {
+                int[] reads = Enumerable.Range(0, code.Count - 1)
+                    .Where(i => code[i].LoadsConstant(301) && code[i + 1].opcode == OpCodes.Ldelem_U1)
+                    .ToArray();
+                if (reads.Length != 1)
+                {
+                    throw new InvalidOperationException($"Event109 has {reads.Length} reads of flag 301 where 1 was "
+                        + "measured");
+                }
+                code.Insert(reads[0] + 2, new CodeInstruction(OpCodes.Call,
+                    AccessTools.Method(typeof(KeptKeys), nameof(JoinAllowed))));
+                log.LogInfo("[keys] installed in EventControl.Event109 (the Sand Castle Key's join)");
+                return code;
+            }
+        }
+
+        // The game's flags[301], unless the seed has the Sand Castle Key as an item.
+        public static bool JoinAllowed(bool earthKeyDone)
+        {
+            SeedData data = randomizerOn != null && randomizerOn() ? seed?.Invoke() : null;
+            if (data == null || !data.SandCastleKeyItem)
+            {
+                return earthKeyDone;
+            }
+            log?.LogInfo("[keys] the Heaven and Earth Keys' join kept away: the Sand Castle Key comes from the server");
+            return false;
         }
 
         private static bool Kept(int item)

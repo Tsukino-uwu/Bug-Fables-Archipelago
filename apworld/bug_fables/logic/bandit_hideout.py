@@ -8,6 +8,10 @@ from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagEntity, Give, Locatio
                           Source, Transfer)
 
 LOCATIONS = (
+    # Astotheles' fight at the Entrance's far right (`event2`, Event109, once: until 301) gives the Earth Key, half the
+    # Sand Castle Key.
+    Location("Bandit Hideout: Entrance, Astotheles' Fight", 317, "HideoutEntrance",
+             Source(event=109, flag=301, give=Give(map="HideoutEntrance", type=1, item=106)), no_jump=True),
     # Where the story teaches Dig (flag 18), moved from the Cell's scene to an item lying on the Entrance's altar
     # (2026-10-12): the capture that led to the cell is skipped, and the cell's own teaching trigger kept away.
     Location("Bandit Hideout: Entrance, Altar", 71, "HideoutEntrance",
@@ -18,8 +22,8 @@ LOCATIONS = (
     # The Stolen Silk (key item 108, flag 270) by a box on the right of the Garden's upper area.
     Location("Bandit Hideout: Garden, By the Box", 294, "HideoutGarden",
              Source(flag=270, pickup=Pickup(map="HideoutGarden", type=1, item=108)), area="Upper", no_jump=True),
-    # The Treasury (HideoutWestStorage; named 2026-10-12): under a barrier (Beetle Dig) and up on boxes (Jump or Bee Fly)
-    # to the story's scene there (Event109, until 260: talk only, it sets 260 and its wasps and bandits leave), then its
+    # The Treasury (HideoutWestStorage; named 2026-10-12): under a barrier (Beetle Dig) and up on boxes (Jump or Bee
+    # Fly) to the story's scene there (Event109, until 260: talk only, it sets 260 and its wasps and bandits leave), then its
     # Lore Book (flag 271).
     Location("Bandit Hideout: Treasury, By the Chest", 295, "HideoutWestStorage",
              Source(flag=271, pickup=Pickup(map="HideoutWestStorage", type=1, item=52)),
@@ -57,8 +61,8 @@ KEPT_OPEN = tuple(EntityRef(m, e) for m, names in (
     ("HideoutWestStorage", ("chest",)),
     ("HideoutCentralRoom", ("bandit1", "bandit2", "bandit2 - Duplicate")),
     ("HideoutLeftA", ("burglar", "bandit1 - Duplicate")),
-    ("HideoutGarden", ("burglar - Duplicate", "bandit1 - Duplicate - Duplicate", "thief", "burglar - Duplicate - Duplicate",
-                       "bandit1 - Duplicate - Duplicate - Duplicate")),
+    ("HideoutGarden", ("burglar - Duplicate", "bandit1 - Duplicate - Duplicate", "thief",
+                       "burglar - Duplicate - Duplicate", "bandit1 - Duplicate - Duplicate - Duplicate")),
     ("HideoutRightA", ("burglarpatrol", "bandittrigger", "tabletrigger", "tabletrigger - Duplicate")),
 ) for e in names)
 KEPT_PRESENT = tuple(EntityRef(m, e) for m, names in (
@@ -104,8 +108,8 @@ MAP_AREAS = (
     Area("HideoutStairsRoom", "Bottom", ("loadzoneup",), CanUse("Beemerang Halt") | CanUse("Bee Fly"),
          out=CanUse("Beemerang Halt") | CanUse("Bee Fly")),
     # The Garden (HideoutGarden; 2026-10-12): its right door's bottom right the map's own region; the bottom left (the
-    # well door) dug to (Beetle Dig) both ways; the upper area (the storage door, the Stolen Silk) up from the bottom left
-    # by Jump or Bee Fly, a drop back to either side (TRANSFERS for the right one).
+    # well door) dug to (Beetle Dig) both ways; the upper area (the storage door, the Stolen Silk) up from the bottom
+    # left by Jump or Bee Fly, a drop back to either side (TRANSFERS for the right one).
     # The Dining Hall: up to the green bounce pad at the top left (Jump or Bee Fly), across the platforms and down into
     # the kitchen on the right; back by the kitchen's own pad and the platforms.
     Area("HideoutRightA", "Kitchen", (), CanUse("Jump") | CanUse("Bee Fly"), out=CanUse("Jump") | CanUse("Bee Fly")),

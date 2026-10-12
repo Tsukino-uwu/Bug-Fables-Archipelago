@@ -21,9 +21,10 @@ class TestMedals(BugFablesTestBase):
 class TestPool(BugFablesTestBase):
     # An item at two spots is in the pool twice; one missing from items.json would be lost.
     def test_every_location_item_is_known(self) -> None:
-        from ..data_tables import LOCATIONS, vanilla_item
+        from ..data_tables import JOINED_HALVES, LOCATIONS, vanilla_item
         for loc in LOCATIONS:
-            if loc.source.give or loc.source.pickup:
+            handed = loc.source.give or loc.source.pickup
+            if handed and not (handed.type == 1 and handed.item in JOINED_HALVES):
                 with self.subTest(location=loc.name):
                     self.assertIsNotNone(vanilla_item(loc))
 
