@@ -575,7 +575,7 @@ as it is, a frozen record.
 
 ## Stream Mountain
 
-- [x] StreamMountain1 (132) — its right door (from the desert, pressed to enter); water in the middle crossed both ways
+- [x] StreamMountain1 (132) — Water Crossing; its right door (from the desert, pressed to enter); water in the middle crossed both ways
   by Icicle and Jump, Bee Fly, or a tunnel dug through (Beetle Dig), to the left door; a regular enemy; no pickup
 - [ ] StreamMountain2 (133)
 - [ ] StreamMountain3 (134)
