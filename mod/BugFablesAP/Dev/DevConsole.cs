@@ -1182,6 +1182,21 @@ namespace BugFablesAP
                         log.LogInfo("[dev] menuinfo: " + menu);
                         return "menuinfo logged";
                     }
+                    case "actors":
+                    {
+                        // What a stuck scene may wait on: each map entity's and party member's walk, ground and place.
+                        System.Reflection.FieldInfo timer = HarmonyLib.AccessTools.Field(typeof(EntityControl),
+                            "forcetimer");
+                        string Of(EntityControl e, string slot) => e == null ? slot + " (none)"
+                            : $"{slot} {e.name}: active {e.gameObject.activeInHierarchy}, forcemove {e.forcemove}, "
+                              + $"onground {e.onground}, at {e.transform.position}, to {e.forcetarget}, "
+                              + $"timer {timer?.GetValue(e)}";
+                        var lines = (MainManager.map?.entities ?? new EntityControl[0])
+                            .Select((e, i) => Of(e, "#" + i)).ToList();
+                        lines.AddRange(MainManager.GetPartyEntities(idorder: true).Select((e, i) => Of(e, "p" + i)));
+                        log.LogInfo("[dev] actors:\n  " + string.Join("\n  ", lines.ToArray()));
+                        return $"actors logged ({lines.Count})";
+                    }
                     case "palette":
                         log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors
                             .Select((c, i) => i + " " + ColorUtility.ToHtmlStringRGB(c)).ToArray()));

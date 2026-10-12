@@ -394,6 +394,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   visual test for enemy shuffle's map look; the fights stay the seed's); with `move`, they also move like a map enemy
   whose fight starts with that enemy. Puzzle enemies keep their own look.
 - `enemyfight <enemy id> [id...] | off`: every map fight starts with those enemy ids instead of the seed's (a test).
+- `actors`: logs every map entity and party member: active or not, still walking (`forcemove`), on the ground, its
+  place, where it walks to and its walk timer. A scene frozen with no error is usually waiting on one of these
+  (2026-10-12: chapter 5's palace scene waited on Neolith, not in the room without flag 88).
 - `unstick`: stops the last scene's coroutine (`Event<n>`: a stuck scene left running threw once the cleanup removed
   its stand-ins, 2026-09-26), runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and
   ends a map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on

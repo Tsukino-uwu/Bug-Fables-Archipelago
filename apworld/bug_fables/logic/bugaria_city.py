@@ -5,8 +5,8 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse
-from ..data_types import (Area, DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
-                          StoryEvent, Transfer)
+from ..data_types import (ALWAYS_SET, Area, DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup,
+                          Source, StoryEvent, Transfer)
 
 DOOR_RULES = (
     # The palace hall's doors (the plaza's, the mine's, the library's and the war room's) are all kept present by the
@@ -315,6 +315,11 @@ HELD_UNTIL = (
     FlagEntity("AntBridge", "makiautoevent", 114),
     # Chapter 2's briefing waits for Maki's swap, whatever the way into the palace.
     FlagEntity("AntPalace1", "Chapter1StartEvent", 66),
+)
+PRESENT_FROM = (
+    # Neolith in the throne room, there in the game from chapter 2's end (88): chapter 5's scene there (Event142) walks
+    # him and waits for him, so without 88 it froze (seen 2026-10-12, the console's `actors`); from the start.
+    FlagEntity("AntPalace2", "neolith", ALWAYS_SET),
 )
 DIALOGUE_FLAGS = (
     # Lets the inn be used before chapter 2 (691 is set by every new game).
