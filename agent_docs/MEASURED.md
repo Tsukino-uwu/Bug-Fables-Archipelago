@@ -3388,6 +3388,13 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   and 586 on; then `Event203` (586 on, 555 and 664 off, `LoadMap(237)`, the Roach Village; then 555 and 664 on) and
   the ending to `BugariaEndPlaza` (seen won with no artifact). From 555 the elder (until 597) and the sapling. No
   pickup. Used by `giants_lair.py`.
+  **The ending's order (2026-10-13, the log and code read):** `Event203` loads the Roach Village, then
+  `BugariaEndPlaza` (240); the end bridge's `final loadzone` runs `Event205`, the ceremony (`LoadMap(242)`,
+  `BugariaEndThrone`), which ends with `StartEvent(204)`: the credits, then "THE END", then `LoadMap(9)`, Bugaria's
+  main plaza. `Event204` sets no flags. **Started elsewhere it fails** (seen 2026-10-13, dev `event 204` on
+  `BugariaOutskirtsOutsideCity`): the title, the walking party and Chompy shown, then a `NullReferenceException` in
+  its `MoveNext` before `ChangeMusic("Credits")`; the map already switched off and the party hidden, so a softlock
+  (a save reloaded). The null not yet located.
 - **Kitchen Stove** (`GiantLairBeforeBoss`, 2026-10-11, seen on screen; EntityDump, code read): doors `loadzonevillage`
   (right, the Roach Village), `loadzonefinal` (left, the Sapling Plains), `loadzoneup` (the bounce pad up, to
   `GiantLairBeforeBoss2`), whose one-way `loadzoneleft` drops into the middle's left. `Event216` by caller: the

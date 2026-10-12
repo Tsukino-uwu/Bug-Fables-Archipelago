@@ -357,6 +357,14 @@ namespace BugFablesAP
                     case "discovery": return Discovery(parts);
                     case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
+                    case "event":
+                        // Starts a scene as a trigger does (MainManager.events.StartEvent). Test files only.
+                        if (parts.Length < 2 || !int.TryParse(parts[1], out int eventId))
+                        {
+                            return "event <n>";
+                        }
+                        MainManager.events.StartEvent(eventId, null);
+                        return $"started Event{eventId} on {MainManager.map?.mapid}";
                     case "hazardloop": return HazardLoop();
                     case "oldtravel": return OldTravel(parts);
                     case "travel":
