@@ -3661,7 +3661,8 @@ location holds its own artifact, the banner line becomes "You found <item>!". Th
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!", the leaf again after the fight and, after
 the `Event26` fix, lying outside the cave, the check sent at the scene's end; the Wasp Queen's gift not yet seen. Left
-for later (seen): outside the cave the sprite has no starburst and sits a little into the ground.
+for later (seen): outside the cave the sprite has no starburst; it sits a little into the ground as the artifact does
+there, so a starburst would clip with it.
 
 *Code: `Items/ItemSwap.Artifacts.cs`, `Core/SeedData.cs` (`LocationArtifacts`).*
 
