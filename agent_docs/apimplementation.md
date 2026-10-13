@@ -2934,7 +2934,8 @@ BepInEx is not bundled; the player installs it first.
    in Debug), so the download has no console, cheats, probes or dumps, and no `[Debug]` settings. The same run
    refuses a release otherwise:
    - a `Config.Bind("Debug", ...)` outside `Dev/`;
-   - a `[Debug]` setting on by default, for dev installs;
+   - a `[Debug]` setting on by default, for dev installs (an off value is `false`, `0`, `""`, `-1`, or since
+     2026-10-13 `QualityOfLife.FullPrice`, the `MedalPrices` cheat's normal prices, first met by v0.4.0's run);
    - one of `Dev/`'s own types, or a "Dev only" text, found in the built DLL. `-Check` repeats that last check on the
      committed DLL. Since 2026-09-29 preflight's DLL sections do it, refusing any of `Dev/`'s types and any name or
      string the source lacks, on the fresh build and in `-Check`.

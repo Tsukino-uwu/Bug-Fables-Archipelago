@@ -38,7 +38,8 @@ function Get-DllLines {
 }
 
 # The dev tools live in Dev/, which the Release build leaves out: every [Debug] setting must be bound there, and each
-# still defaults to off (-1 is TestStartMember's off) for dev installs.
+# still defaults to off (-1 is TestStartMember's off, QualityOfLife.FullPrice MedalPrices', normal prices) for dev
+# installs.
 function Assert-DevToolsApart([string]$root) {
     $sources = Get-ChildItem (Join-Path $root 'mod/BugFablesAP') -Filter *.cs -Recurse |
         Where-Object { $_.FullName -notmatch '[\\/](bin|obj)[\\/]' }
@@ -51,7 +52,7 @@ function Assert-DevToolsApart([string]$root) {
     if (-not $binds) { throw 'no [Debug] settings found: the check is reading the wrong pattern' }
     $outside = @($binds | Where-Object { -not $_.Dev })
     if ($outside) { throw "[Debug] settings outside Dev/, so in the release build: $(($outside | ForEach-Object { "$($_.Key) ($($_.File))" }) -join ', ')" }
-    $on = @($binds | Where-Object { $_.Default -notin @('false', '0', '""', '-1') })
+    $on = @($binds | Where-Object { $_.Default -notin @('false', '0', '""', '-1', 'QualityOfLife.FullPrice') })
     if ($on) { throw "[Debug] settings on by default: $(($on | ForEach-Object { "$($_.Key) = $($_.Default)" }) -join ', ')" }
     Write-Output "all $(@($binds).Count) [Debug] settings in Dev/, off by default"
 }
