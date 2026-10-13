@@ -5930,8 +5930,8 @@ the attack: a short tap's refused attack then makes no sound either, a fair trad
 first press still stops Kabbu for the game's own double-tap window (15 frames, then 0.15 s); left as the game has it.
 
 **Status:** works, seen in seeds `AP_29838564452193402645` and `AP_13327170896682920080` (2026-10-13): the Dash
-without the Horn Slash, and Bee Fly and the Shield without their attacks, none of them buzzing. The Horn Dash on a
-boulder without the Horn Slash not yet seen.
+without the Horn Slash, and Bee Fly and the Shield without their attacks, none of them buzzing; the Horn Dash
+breaking Chuck's Abode's big rock without the Horn Slash. Grass on Horn Dash routes waits for its recheck (above).
 
 *Code: the mod `World/FieldMoves.cs` (`HornLock`, `HornTag`, `SlashAnim`, `SlashSound`); `logic/forsaken_lands.py`,
 `options.py`; tests `test_moves.py` (`TestDashWithoutTheHorn`).*
