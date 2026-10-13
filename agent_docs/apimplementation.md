@@ -968,6 +968,23 @@ be wrong.
     since it reads positions and pictures from files at connect (`TrackerClient.load_pack`, read 2026-10-13). The
     internal approach (the JSON and the diagrams inside the apworld) needs no host.yaml setting; the diagrams as image
     files need the preflight widened for them (the maintainer's call). Researched first, then built in steps.
+    **Researched 2026-10-13** (Universal Tracker v0.3.4, CI's pinned commit, its docs and source read): the core is
+    built (the rebuild from slot_data, the deferred doors, the list order, go mode, the fuzzer hook); one bug found,
+    the Enemysanity locations missing from the list's order (fixed in build step 41). **Decided the same day:**
+    - **The diagrams as PNG files in the apworld:** the preflight widened for exactly the generator's format (a
+      16-colour palette, at most 2048 px and 64 KB, valid chunks and nothing after the image), and CI redrawing every
+      diagram to compare it pixel for pixel. Drawn with no library: PNG written with `zlib`, text from the script's
+      own glyph table (no font file, no Pillow). A tab per room, per game area and the world; doors as diamonds whose
+      colour and destination follow the rebuilt seed; the tab following the player (the mod's map key).
+    - **Glitched logic:** supported; which harder ways count is the maintainer's pick, the logic's own "harder, left
+      out" notes the starting list. Universal Tracker's copy of the seed only, so real seeds never change.
+    - **Story events on the map as deferred events:** their own step, a new mod key for the events done.
+    - **`TrackerException`** for a seed of another version: used, for completeness, though Universal Tracker then
+      also logs that the world asked to be disabled; its import allowed in the preflight.
+    - **Readable door labels:** "Room: Door to" and the room the door leads to in the unshuffled game, generated
+      from the approved room names, the whole list reviewed before use; in the door list, the map's tooltips and `/get_logical_path`.
+    - **Enemysanity's alias under Enemy Shuffle:** the real fight shown after the location's name; the names never
+      change.
 
 **Known issues:**
 
@@ -5004,14 +5021,20 @@ left as a gap.
 1. **`custom_ut_sort`** (`world.py`), used when Universal Tracker's `sorting_method` is `apworld`, its default:
    `TRACKER_ORDER` (`logic/__init__.py`) ranks each location by its area in `AREAS`' order (the Outskirts, Snakemouth
    Den, Bugaria City, Metal Island, the later chapters) and by name within the area, so a room's spots sit together.
-   Anything else Universal Tracker passes, such as an unconnected entrance's line, goes last.
+   Anything else Universal Tracker passes, such as an unconnected entrance's line, goes last. **Fixed 2026-10-13**
+   (found by Next 79's research): Enemysanity's spots, added after the logic's tables, were in none of it, so every
+   one ranked last, in no order. `data_tables.py` now builds `TRACKER_ORDER` over every location: each by its name's
+   "Area: " in the story's order (from the logic's own order of its areas), then by name, so the hand-written spots
+   keep their order and Enemysanity's sit with their area's.
 2. **What `/explain` and `/get_logical_path` print** (read in its `TrackerClient.py`, v0.3.4): each spot's and door's
    `access_rule.explain_json(state)`, the built-ins' own lines, e.g. "Missing some of (Missing: Kabbu x1, Horn Slash
    x1)"; a spot with no rule prints "Location has a default access rule"; a door with none prints `True` or `False`.
    Both commands need its client, so the test does what they do instead (`TestTrackerExplains`, on a Coupled seed with
    plando rebuilt from its slot_data): every rule explains itself, with a state and without, and each reachable
    location's path, walked from `state.path` as `/get_logical_path` walks it, names real entrances.
-3. **The rest of its docs, each decided:**
+3. **The rest of its docs, each decided** (as of 2026-10-03; **revisited 2026-10-13, Next 79**: every feature, the
+   map tab as our own diagrams inside the apworld, which replaces the external pack below, glitched logic, the alias
+   under Enemy Shuffle, readable door labels and deferred events, each its own step):
    - `location_id_to_alias`, for "a generically named location": our names are fixed and never change meaning per
      seed (a shop's numbered copies are always the same copies), so there is nothing to alias.
    - `glitches_item_name`, for spots reachable in the game though not in logic ("glitched" logic): our logic has no
@@ -5050,10 +5073,12 @@ left as a gap.
        or `""` before it's read (`None` when the server holds none; its `TrackerClient.py`, v0.3.4): an unknown value
        keeps the tab (`-1`) and hides the icon (`None`).
 4. **Tests** (`test_tracker.py`): the list starts with the Outskirts, sorted by name within it, the Outskirts before
-   Bugaria City, an entrance last; and the explanations above.
+   Bugaria City, an entrance last; with Enemysanity on, no spot ranked last and each area's spots one block
+   (`test_enemysanity_with_its_area`, which fails on the old order); and the explanations above.
 
-**Status:** built (2026-10-03), the tests pass; not yet seen in Universal Tracker (the list's order, `/explain` on a few
-spots and `/get_logical_path` through shuffled doors).
+**Status:** built (2026-10-03), the tests pass; Enemysanity's order fixed 2026-10-13, its test written, run with the
+next full suite. Not yet seen in Universal Tracker (the list's order, `/explain` on a few spots and
+`/get_logical_path` through shuffled doors).
 
 *Code: `world.py` (`custom_ut_sort`), `logic/__init__.py` (`TRACKER_ORDER`), `data_tables.py`; tests
 `test_tracker.py` (`TestTrackerExplains`, `test_the_list_in_story_order`).*

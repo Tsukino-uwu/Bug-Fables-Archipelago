@@ -77,7 +77,8 @@ ROADBLOCKS: tuple[Roadblock, ...] = tuple(r for area in AREAS for r in getattr(a
 # By id, so moving a spot from one module to another never changes a seed.
 LOCATIONS: tuple[Location, ...] = tuple(sorted(
     (loc for area in AREAS for loc in getattr(area, "LOCATIONS", ())), key=lambda loc: loc.id))
-# Universal Tracker's list order (custom_ut_sort): the areas as the story reaches them, each one's spots by name.
+# The areas as the story reaches them, each one's spots by name: data_tables.py builds Universal Tracker's list order
+# from it, Enemysanity's spots included.
 TRACKER_ORDER: dict[str, int] = {loc.name: rank for rank, loc in enumerate(
     loc for area in AREAS for loc in sorted(getattr(area, "LOCATIONS", ()), key=lambda loc: loc.name))}
 STORY_EVENTS: tuple[StoryEvent, ...] = tuple(e for area in AREAS for e in getattr(area, "STORY_EVENTS", ()))

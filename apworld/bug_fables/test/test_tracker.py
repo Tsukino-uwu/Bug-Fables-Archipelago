@@ -175,6 +175,17 @@ class TestTrackerHooks(TestCase):
                         order.index("Bugaria City: Commercial District, Medal Shop 1"))
         self.assertEqual(world.custom_ut_sort("BugariaPier", "BugariaPier: loadzone"), len(TRACKER_ORDER))
 
+    def test_enemysanity_with_its_area(self) -> None:
+        # Enemysanity's spots ranked among their area's own, each area one block, not all after every other spot.
+        world = generate_like_main({"enemy_sanity": True}, 1)
+        names = [loc.name for loc in world.get_locations() if loc.address is not None]
+        self.assertTrue(any(", Enemy " in name for name in names))
+        ranks = {name: world.custom_ut_sort("", name) for name in names}
+        self.assertNotIn(len(TRACKER_ORDER), ranks.values())
+        areas = [name.split(": ", 1)[0] for name in sorted(names, key=ranks.get)]
+        blocks = [area for i, area in enumerate(areas) if i == 0 or areas[i - 1] != area]
+        self.assertEqual(len(blocks), len(set(blocks)), "an area's spots split into more than one block")
+
     def test_another_game_s_passthrough_is_not_read(self) -> None:
         multiworld = setup_multiworld(BugFablesWorld, steps=(), seed=4, options={"entrance_randomizer": "coupled"})
         multiworld.re_gen_passthrough = {"Another Game": {"options": {}}}

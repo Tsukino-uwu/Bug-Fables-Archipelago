@@ -45,9 +45,9 @@ from .logic import (  # noqa: F401
     SCENES_KEPT_AWAY,
     STORY_EVENTS,
     TIME_SWITCHES,
-    TRACKER_ORDER,
     TRANSFERS,
 )
+from .logic import TRACKER_ORDER as STORY_ORDER
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -185,6 +185,12 @@ ENCOUNTERS: tuple[Encounter, ...] = tuple(Encounter.from_json(e) for e in _load(
 # Enemysanity's spots join the hand-written ones (by id, as the logic orders them).
 ENEMY_LOCATIONS: tuple[Location, ...] = enemy_locations(ENCOUNTERS, LOCATIONS, MAPS)
 LOCATIONS = tuple(sorted(LOCATIONS + ENEMY_LOCATIONS, key=lambda loc: loc.id))
+# Universal Tracker's list order (custom_ut_sort): the areas as the story reaches them (by the "Area: " each spot's
+# name begins with), each one's spots by name, Enemysanity's among their area's own.
+_AREA_RANK: dict[str, int] = {area: rank for rank, area in enumerate(
+    dict.fromkeys(name.split(": ", 1)[0] for name in STORY_ORDER))}
+TRACKER_ORDER: dict[str, int] = {loc.name: rank for rank, loc in enumerate(sorted(
+    LOCATIONS, key=lambda loc: (_AREA_RANK.get(loc.name.split(": ", 1)[0], len(_AREA_RANK)), loc.name)))}
 
 # An item's kind: where the game puts it. Ordinary items and key items share the base range.
 ITEM_KIND = 0
