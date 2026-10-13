@@ -1,5 +1,4 @@
-"""Golden Settlement (the game's area 6, MapControl.areaid): its spots, and what the seed changes there. Its rooms
-aren't mapped yet."""
+"""Golden Settlement (the game's area 6, MapControl.areaid): its spots, and what the seed changes there."""
 from __future__ import annotations
 
 from rule_builder.rules import Has

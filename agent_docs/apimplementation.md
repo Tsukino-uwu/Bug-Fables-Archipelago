@@ -2994,6 +2994,9 @@ BepInEx is not bundled; the player installs it first.
 **Versions.** The mod's `Plugin.Version` and the apworld's `world_version` both equal the tag without its `v`.
 v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before). v0.2.0 is the second (2026-09-27), cut from `main`
 as it stood before the tester played chapters 5 to 7, with highlights written from the commits since v0.1.0.
+v0.4.0 (2026-10-13) is the fourth, every room mapped, both versions bumped together and the player docs' changes
+since v0.3.0 labelled "New in 0.4.0"; the PopTracker pack's first release follows it under the same version (build
+step 106).
 
 **Status:** works: v0.1.0 published by `release.ps1` (2026-09-26), every job green, then remade the same day from
 a later `main` for the zip's top-level README and switched from pre-release to a full release (a pre-release

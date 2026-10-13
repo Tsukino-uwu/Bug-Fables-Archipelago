@@ -39,8 +39,8 @@ On the game's main menu, choose **Archipelago**. The panel has:
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **DeathLink**: Off (the default). On, when your party is defeated in a battle, everyone in the room with DeathLink
   on is too, and their deaths reach you: in a battle, the game's Game Over menu; on the map, a Game Over and back to
-  your last save. A death waits for a free moment, never striking in a cutscene or a text box. From 0.4.0 the yaml's
-  `death_link` sets this row when you first connect to a seed; you can still switch it here afterwards.
+  your last save. A death waits for a free moment, never striking in a cutscene or a text box. The yaml's
+  `death_link` sets this row when you first connect to a seed (new in 0.4.0); you can still switch it here afterwards.
 - **Achievements**: Off (the default) holds Steam achievements back while the Archipelago mod is enabled, as
   normal saves are kept apart. It only concerns Steam, never Archipelago.
 - **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life and Gameplay settings
@@ -76,10 +76,14 @@ shuffled doors included, and shows every location your items reach.
 4. Its **Map** tab shows a plain diagram of each room: its parts as boxes, a square per location coloured by whether
    it's in logic, and a diamond per door, which shows where it led once you've taken it. It follows you to the room
    you're in, with a marker by it; the menu above the map also has a diagram per area and one of the whole world.
+   New in 0.4.0.
+5. Locations it shows as **Glitched** (yellow) can be reached by a harder way the logic leaves out, such as Bee Fly
+   alone across a gap the logic crosses with a switch's platform too. Take them if you like; the seed never counts on
+   them. New in 0.4.0.
 
 With the doors shuffled, it counts a door only once you've been through it, so it never gives the layout away; the
 game tells the room each door you take, and the tracker remembers them. To have it count every door from the start,
-set `enforce_deferred_entrances: off` under `universal_tracker:` in your Archipelago's `host.yaml`.
+set `enforce_deferred_entrances: off` under `universal_tracker:` in your Archipelago's `host.yaml`. New in 0.4.0.
 
 It uses the `bug_fables.apworld` installed next to it, which must be the release the room was generated with: with
 another, it shows an error instead of a list.

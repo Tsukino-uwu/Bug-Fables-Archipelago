@@ -1,4 +1,4 @@
-"""Bandit Hideout (the game's area 20, MapControl.areaid): its spots. Its rooms aren't mapped yet."""
+"""Bandit Hideout (the game's area 20, MapControl.areaid): its spots."""
 from __future__ import annotations
 
 from rule_builder.rules import True_

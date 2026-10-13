@@ -290,8 +290,9 @@ class StartingPartyMember(Choice):
     member is an item. With any of these, the two places where the story adds a member (the opening outside the city,
     and the fall room after the spider) become locations, whoever starts.
 
-    The logic is cautious for now: with one member, everything past the Outskirts gate needs all three members, and a
-    few spots before it need Kabbu's horn or Leif's ice. All Three by default.
+    The logic follows what each room needs. A few places still ask for all three members, more than the game does: a
+    few spots past the Outskirts gate, the story's own transfers, and the slots of the cranks and keys that aren't
+    items yet. All Three by default.
     """
 
     display_name = "Starting Party Member"
@@ -312,8 +313,8 @@ class FillerStartingChecks(DefaultOnToggle):
     progression, useful or trap item, so a seed doesn't open with its good items before you've played. Nothing else
     changes, the spot in the fall room after the spider included. Turn it off to plando an item there.
 
-    With the Entrance Randomizer on Coupled or Room Swap it doesn't apply, and the generator says so: the doors can
-    leave the start with only these spots, too few to begin a seed. On by default.
+    With the Entrance Randomizer on Coupled, Map Shuffle or Room Swap it doesn't apply, and the generator says so: the
+    doors can leave the start with only these spots, too few to begin a seed. On by default.
     """
 
     display_name = "Filler Starting Checks"
@@ -327,8 +328,9 @@ class ShuffleFieldMoves(Toggle):
     story teaches later (the Beemerang Halt, Bee Fly, the Dash and Horn Dash, Beetle Dig, the Icicle, the Shield) are
     items in every seed. Without the Horn Slash, Kabbu's Dash only moves and the Horn Dash only breaks boulders.
 
-    The logic is cautious for now: everything past the Outskirts gate needs all three moves, and a few spots before it
-    need the one they were seen to need. Off by default.
+    The logic follows what each room needs. A few places still ask for all three moves, more than the game does: a few
+    spots past the Outskirts gate, the story's own transfers, and the slots of the cranks and keys that aren't items
+    yet. Off by default.
     """
 
     display_name = "Shuffle Field Moves"
@@ -339,8 +341,8 @@ class ShuffleJump(Toggle):
     Jump is an item, for the whole party: until it arrives, the jump button does nothing but a short "can't" sound.
     The pause menu's Warp is always there with it on, the way out of a spot you can't jump out of.
 
-    The logic is cautious for now: every check needs Jump except the few seen reachable without it (the opening, the
-    ladybug siblings' house, the caravan and the town's shops). Off by default.
+    The logic is cautious: every check needs Jump except those seen reachable without it, room by room. Off by
+    default.
     """
 
     display_name = "Shuffle Jump"
@@ -354,8 +356,8 @@ class PointsOfNoReturn(Toggle):
     transfer with no way back), so items can land in more places, and you're expected to warp back to the start. The
     Warp is always there with it on.
 
-    It matters in the rooms mapped so far: their one-ways (drops, doors that push you past a lock) count with it on
-    even where getting back would take what you don't have yet, or isn't in the logic at all. Off by default.
+    It matters wherever a room has a one-way (a drop, a door that pushes you past a lock): it counts with this on even
+    where getting back would take what you don't have yet, or isn't in the logic at all. Off by default.
     """
 
     display_name = "Points of No Return"
@@ -387,11 +389,12 @@ class MusicShuffle(Toggle):
 
 class DoorPlando(PlandoConnections):
     """
-    Which door leads where, with the Entrance Randomizer on Coupled or Decoupled (ignored when it's off or on Room
-    Swap). Each door is named where it is, "<Area>: <Room>, Door to <the room it leads to in the game>", as the spoiler
-    log's Entrances section lists them; the older "<map>: <door>" names still work. entrance is the door you go
+    Which door leads where, with the Entrance Randomizer on Coupled, Decoupled or Map Shuffle (ignored when it's off or
+    on Room Swap). Each door is named where it is, "<Area>: <Room>, Door to <the room it leads to in the game>", as the
+    spoiler log's Entrances section lists them; the older "<map>: <door>" names still work. entrance is the door you go
     through, exit the door you arrive next to. direction: both (the default), entrance (only the entrance door leads to
-    the exit door) or exit (only the exit door leads back to the entrance door); Coupled always joins both ways. A
+    the exit door) or exit (only the exit door leads back to the entrance door); Coupled and Map Shuffle always join
+    both ways. A
     one-way door (a fog maze's wrong turn, a drop) takes another one-way's landing instead, named "<where it lands> as
     from <its door>" as the spoiler lists it, and only goes one way, whatever the direction. The seed's host must have
     plando's "connections" turned on.

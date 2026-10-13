@@ -1,5 +1,5 @@
 """Termite Capitol (the game's area 18, MapControl.areaid): its spots, dock and ways between maps that aren't doors, and
-what the seed changes there. Its rooms aren't mapped yet."""
+what the seed changes there."""
 from __future__ import annotations
 
 from rule_builder.rules import CanReachRegion, Has, True_

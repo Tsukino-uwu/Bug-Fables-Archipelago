@@ -1,5 +1,5 @@
 """Forsaken Lands, the Barren Lands (the game's area 7, MapControl.areaid): its spots and ways between maps that aren't
-doors. Its rooms aren't mapped yet."""
+doors."""
 from __future__ import annotations
 
 from rule_builder.rules import False_, Has
