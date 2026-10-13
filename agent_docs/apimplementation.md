@@ -3756,11 +3756,11 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 **The apworld's rules (2026-09-29).** The apworld is Python that runs on whichever machine generates a seed, the
 archipelago.gg website's included, and Archipelago imports it on every start, even when nobody plays Bug Fables.
 So it gets the strictest rules, read from its syntax tree, not by searching text:
-- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (54 names
-  from 18 modules on 2026-10-13, Universal Tracker's `TrackerException` among them, build step 102; 30 from 12 when it was switched on), and a plain `import` only for `json`, `logging`
-  and `pkgutil`, each with the few functions it may use (`json.loads`, `pkgutil.get_data`). Listing names matters
-  because a module hands on everything it imported: Archipelago's `BaseClasses` can pass along a helper that runs
-  programs.
+- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (54 names from 18
+  modules on 2026-10-13, Universal Tracker's `TrackerException` among them, build step 102; 30 from 12 when it was
+  switched on), and a plain `import` only for `json`, `logging` and `pkgutil`, each with the few functions it may use
+  (`json.loads`, `pkgutil.get_data`). Listing names matters because a module hands on everything it imported:
+  Archipelago's `BaseClasses` can pass along a helper that runs programs.
 - **Apworld runs nothing unexpected:**
   - Only listed builtins, so no `open`, `eval`, `exec` or `__import__`.
   - No hidden attributes (`__class__`, `__globals__`), not even named in a string.
