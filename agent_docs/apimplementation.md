@@ -5327,9 +5327,17 @@ later chapters (`LATER_CHAPTERS`) until its room is mapped (`room-logic.md`), th
 **slot_data:** `location_enemies`, `{location id: "map:entity"}` (the key Enemy Shuffle uses); the mod guide's step
 44 does the rest.
 
-**Tests:** `test_enemysanity.py` (off: none; on: every map enemy, the names, the ids).
+**Tests:** `test_enemysanity.py` (off: none; on: every map enemy, the names, the ids, an unnamed room under its own
+area).
 
-**Status:** built (2026-10-04), not yet seen in game.
+**Fixed 2026-10-13** (found reading the game's `MainManager.Areas` for Next 79's area tabs): `AREA_NAMES` had areas 1
+and 2 swapped against the game's numbering, which `data/enemies.json` uses (1 Bugaria City, 2 Snakemouth). Only rooms
+no spot names take their area's name, so 9 locations were misnamed: the 6 on the Bugaria attack maps read "Snakemouth
+Den: BugariaBridgeAttack, …" and the 3 in Snakemouth's unnamed underground side rooms "Bugaria City: …". Their area
+part corrected (approved 2026-10-13); the ids are unchanged.
+
+**Status:** built (2026-10-04), not yet seen in game; the area fix 2026-10-13, its test written, run with the next
+full suite.
 
 *Code: `enemysanity.py`, `data_types.py` (`Encounter`, `Source.enemy`), `options.py` (`EnemySanity`), `slot_data.py`
 (`location_enemies`), `dev-scripts/enemy-table.py`, `data/enemies.json`; tests `test_enemysanity.py`.*

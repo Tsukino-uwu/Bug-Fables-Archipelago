@@ -28,6 +28,13 @@ class TestEnemysanityOn(BugFablesTestBase):
         self.assertIn("Outskirts: Golden Path, Seedling 1", names)
         self.assertIn("Outskirts: Golden Path, Flying Seedling 2", names)
 
+    def test_an_unnamed_room_under_its_own_area(self) -> None:
+        # A room no spot names falls back to its map, under its area in the game's own numbering (MainManager.Areas:
+        # 1 Bugaria City, 2 Snakemouth); the two were once swapped.
+        names = {loc.name for loc in ENEMY_LOCATIONS}
+        self.assertIn("Bugaria City: BugariaBridgeAttack, Wasp Scout 1", names)
+        self.assertIn("Snakemouth Den: SnakemouthUndergroundLeftA, Zombiant 1", names)
+
     def test_ids_fixed_and_apart(self) -> None:
         # From the data, never reused, clear of the hand-written spots.
         self.assertTrue(all(loc.id >= 1000 for loc in ENEMY_LOCATIONS))

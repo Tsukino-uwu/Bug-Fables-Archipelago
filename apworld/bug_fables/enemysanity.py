@@ -12,9 +12,9 @@ from collections import Counter
 from .custom_rules import LATER_CHAPTERS
 from .data_types import Encounter, Location, Source
 
-# MapControl.areaid's names, as the area modules (logic/) call them.
+# MapControl.areaid's names in the game's own order (MainManager.Areas), as the area modules (logic/) call them.
 AREA_NAMES: dict[int, str] = {
-    0: "Outskirts", 1: "Snakemouth Den", 2: "Bugaria City", 3: "Lost Sands", 4: "Golden Hills", 5: "Golden Path",
+    0: "Outskirts", 1: "Bugaria City", 2: "Snakemouth Den", 3: "Lost Sands", 4: "Golden Hills", 5: "Golden Path",
     6: "Golden Settlement", 7: "Forsaken Lands", 8: "Far Grasslands", 9: "Wild Swamplands", 10: "Defiant Root",
     11: "Ancient Castle", 12: "Bee Kingdom Hive", 13: "Honey Factory", 14: "Rubber Prison", 15: "Giant's Lair",
     16: "Metal Lake", 17: "Metal Island", 18: "Termite Capitol", 19: "Wasp Kingdom Hive", 20: "Bandit Hideout",
