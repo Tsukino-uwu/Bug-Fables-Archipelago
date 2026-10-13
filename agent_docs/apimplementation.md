@@ -986,6 +986,7 @@ be wrong.
       from the approved room names, the whole list reviewed before use; in the door list, the map's tooltips and `/get_logical_path`.
     - **Enemysanity's alias under Enemy Shuffle:** the real fight shown after the location's name; the names never
       change.
+    **The map tab built 2026-10-13** (build step 101); the rest above to come, each its own step.
 
 **Known issues:**
 

@@ -73,6 +73,9 @@ shuffled doors included, and shows every location your items reach.
 2. Open **Universal Tracker** from the Archipelago Launcher and connect to the room with your slot name.
 3. Its tab lists the locations in logic. `/explain` followed by a location's name says what it needs, and
    `/get_logical_path` with a location's name which way leads there.
+4. Its **Map** tab shows a plain diagram of each room: its parts as boxes, a square per location coloured by whether
+   it's in logic, and a diamond per door, which shows where it led once you've taken it. It follows you to the room
+   you're in, with a marker by it; the menu above the map also has a diagram per area and one of the whole world.
 
 With the doors shuffled, it counts a door only once you've been through it, so it never gives the layout away; the
 game tells the room each door you take, and the tracker remembers them. To have it count every door from the start,

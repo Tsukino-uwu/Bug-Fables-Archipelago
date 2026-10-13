@@ -180,6 +180,8 @@ def start_region(start: Mapping[str, str]) -> str:
 # Every save point (map, entity index). Unused today (a random start picks from ROOM_STARTS); kept for named start
 # spots, a planned option.
 STARTS: tuple[SavePoint, ...] = tuple(SavePoint.from_json(s) for s in _load("starts.json")["starts"])
+# Each map's game area (MapControl.areaid, numbered as enemysanity.AREA_NAMES): Universal Tracker's area tabs.
+MAP_AREA_IDS: dict[str, int] = _load("map_areas.json")["maps"]
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.
 ENCOUNTERS: tuple[Encounter, ...] = tuple(Encounter.from_json(e) for e in _load("enemies.json")["encounters"])
 # Enemysanity's spots join the hand-written ones (by id, as the logic orders them).

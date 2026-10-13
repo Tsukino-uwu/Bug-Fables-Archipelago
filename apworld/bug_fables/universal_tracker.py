@@ -1,8 +1,11 @@
 """Universal Tracker: a seed rebuilt from its slot_data, with no yaml. Universal Tracker regenerates this world on its
 own with re_gen_passthrough["Bug Fables"] holding the seed's slot_data, and every roll then comes from that instead of
-the random (its docs/apworld-integration.md, "Generating without a YAML")."""
+the random (its docs/apworld-integration.md, "Generating without a YAML"). Its map tab: the plain diagrams in ut_map/,
+drawn by dev-scripts/ut-map.py (its docs/map-integration.md, the internal approach)."""
 from __future__ import annotations
 
+import json
+import pkgutil
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
@@ -15,6 +18,59 @@ if TYPE_CHECKING:
 # The doors the player has gone through: the mod adds each door's entrance name to this data storage key, and the
 # PopTracker pack reads it too. Universal Tracker fills in {team} and {player} (its TrackerClient's key.format).
 DOORS_TAKEN_KEY = "bug_fables_doors_{team}_{player}"
+# The map the player is on, its MapControl.mapid's name, written by the mod at each map load (build step 57).
+MAP_KEY = "bug_fables_map_{team}_{player}"
+# The map tab's files, read the first time Universal Tracker asks: the tabs in maps.json's order, and follow.json's
+# marker point on each tab for each map the player can be on.
+_TABS: dict[str, Any] = {}
+
+
+def map_file(path: str):
+    """A file of the map tab (ut_map/), its bytes, read from the world's package as Universal Tracker reads it."""
+    raw = pkgutil.get_data(__name__, f"ut_map/{path}")
+    if raw is None:
+        raise FileNotFoundError(f"bug_fables: ut_map/{path} is missing from the world package")
+    return raw
+
+
+def _tab_data() -> tuple[list[str], dict[str, dict[str, list[int]]]]:
+    if not _TABS:
+        for name in ("maps", "follow"):
+            _TABS[name] = json.loads(map_file(f"{name}.json").decode("utf-8"))
+        _TABS["names"] = [tab["name"] for tab in _TABS["maps"]]
+    return _TABS["names"], _TABS["follow"]
+
+
+def map_page_index(value: Any) -> int:
+    """The tab for the player's map: its room's own. The World before the mod has said (an empty or missing key),
+    and -1, keeping the tab, for a map with no tab (the title screen)."""
+    names, _ = _tab_data()
+    if not value:
+        return 0
+    return names.index(value) if isinstance(value, str) and value in names else -1
+
+
+def location_icon_coords(index: Any, value: Any) -> tuple[int, int, str] | None:
+    """The marker on the shown tab: by the player's area on the World, their room on its area's tab, its title on
+    the room's own; none on other tabs, before a tab is shown or before the mod has said."""
+    names, follow = _tab_data()
+    if not isinstance(index, int) or not isinstance(value, str) or not 0 <= index < len(names):
+        return None
+    point = follow.get(names[index], {}).get(value)
+    return (point[0], point[1], "images/you.png") if point else None
+
+
+# Universal Tracker's map tab (tracker_world on the world class).
+TRACKER_WORLD: dict[str, Any] = {
+    "map_page_folder": "ut_map",
+    "map_page_maps": "maps.json",
+    "map_page_locations": "locations.json",
+    "map_page_layouts": "layout.json",
+    "map_page_setting_key": MAP_KEY,
+    "map_page_index": map_page_index,
+    "location_setting_key": MAP_KEY,
+    "location_icon_coords": location_icon_coords,
+}
 # A one-way door's story copies are other doors in the game but one entrance here.
 _COPY_OF = {door_name(w.map, copy): door_name(w.map, w.door) for w in ONE_WAYS for copy in w.copies}
 _ONE_WAYS = {(w.map, w.door) for w in ONE_WAYS}

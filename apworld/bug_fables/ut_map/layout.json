@@ -1,0 +1,2628 @@
+{
+ "tracker_map": {
+  "type": "tabbed",
+  "tabs": [
+   {
+    "title": "World",
+    "content": {
+     "type": "map",
+     "maps": [
+      "World"
+     ]
+    }
+   },
+   {
+    "title": "Outskirts",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Outskirts"
+        ]
+       }
+      },
+      {
+       "title": "BOLostSandsEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BOLostSandsEntrance"
+        ]
+       }
+      },
+      {
+       "title": "BugariaAssociationAttack",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaAssociationAttack"
+        ]
+       }
+      },
+      {
+       "title": "CaveOfTrials",
+       "content": {
+        "type": "map",
+        "maps": [
+         "CaveOfTrials"
+        ]
+       }
+      },
+      {
+       "title": "HermitCave",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HermitCave"
+        ]
+       }
+      },
+      {
+       "title": "BugariaOutskitsSnakemouthCorridor1",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaOutskitsSnakemouthCorridor1"
+        ]
+       }
+      },
+      {
+       "title": "Chuck's Abode",
+       "content": {
+        "type": "map",
+        "maps": [
+         "ChucksAbode"
+        ]
+       }
+      },
+      {
+       "title": "East Road",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaOutskirtsEast1"
+        ]
+       }
+      },
+      {
+       "title": "East Road to the Pier",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaOutskirtsEast2"
+        ]
+       }
+      },
+      {
+       "title": "Golden Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BOGoldenPath"
+        ]
+       }
+      },
+      {
+       "title": "Golden Path Tunnel",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenPathTunnel"
+        ]
+       }
+      },
+      {
+       "title": "GoldenPathTunnel2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenPathTunnel2"
+        ]
+       }
+      },
+      {
+       "title": "Near Snakemouth Den",
+       "content": {
+        "type": "map",
+        "maps": [
+         "NearSnakemouth"
+        ]
+       }
+      },
+      {
+       "title": "Outside the City",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaOutskirtsOutsideCity"
+        ]
+       }
+      },
+      {
+       "title": "Pier",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaPier"
+        ]
+       }
+      },
+      {
+       "title": "SeedlingHaven",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SeedlingHaven"
+        ]
+       }
+      },
+      {
+       "title": "Snakemouth Den Entrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "OutsideSnakemouth"
+        ]
+       }
+      },
+      {
+       "title": "Snakemouth Den Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaOutskirtsSnakemouthCorridor2"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Bugaria City",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Bugaria City"
+        ]
+       }
+      },
+      {
+       "title": "Library",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntPalaceLibrary"
+        ]
+       }
+      },
+      {
+       "title": "War Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntPalaceWarRoom"
+        ]
+       }
+      },
+      {
+       "title": "AntBridge",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntBridge"
+        ]
+       }
+      },
+      {
+       "title": "AntPalace2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntPalace2"
+        ]
+       }
+      },
+      {
+       "title": "AntTunnels",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntTunnels"
+        ]
+       }
+      },
+      {
+       "title": "Ant Tunnels",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntMinesBreakRoom"
+        ]
+       }
+      },
+      {
+       "title": "BugariaBridgeAttack",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaBridgeAttack"
+        ]
+       }
+      },
+      {
+       "title": "BugariaCastleAttack",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaCastleAttack"
+        ]
+       }
+      },
+      {
+       "title": "BugariaPlazaAttack",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaPlazaAttack"
+        ]
+       }
+      },
+      {
+       "title": "Commercial District",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaCommercial"
+        ]
+       }
+      },
+      {
+       "title": "Main Plaza",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaMainPlaza"
+        ]
+       }
+      },
+      {
+       "title": "Residential District",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaResidential"
+        ]
+       }
+      },
+      {
+       "title": "Theater",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaTheater"
+        ]
+       }
+      },
+      {
+       "title": "Throne Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntPalace1"
+        ]
+       }
+      },
+      {
+       "title": "BugariaEndBridge",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaEndBridge"
+        ]
+       }
+      },
+      {
+       "title": "BugariaEndPlaza",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaEndPlaza"
+        ]
+       }
+      },
+      {
+       "title": "BugariaEndThrone",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaEndThrone"
+        ]
+       }
+      },
+      {
+       "title": "UndergroundBar",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UndergroundBar"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Snakemouth Den",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Snakemouth Den"
+        ]
+       }
+      },
+      {
+       "title": "Bridge Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthBridgeRoom"
+        ]
+       }
+      },
+      {
+       "title": "Door Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthDoorRoom"
+        ]
+       }
+      },
+      {
+       "title": "Fall Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthFallRoom"
+        ]
+       }
+      },
+      {
+       "title": "Lake",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthLake"
+        ]
+       }
+      },
+      {
+       "title": "Mushroom Pit",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthMushroomPit"
+        ]
+       }
+      },
+      {
+       "title": "SnakemouthUndergroundLeftA",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthUndergroundLeftA"
+        ]
+       }
+      },
+      {
+       "title": "SnakemouthUndergroundLeftB",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthUndergroundLeftB"
+        ]
+       }
+      },
+      {
+       "title": "SnakemouthUndergroundRightA",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthUndergroundRightA"
+        ]
+       }
+      },
+      {
+       "title": "Treasure Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthTreasureRoom"
+        ]
+       }
+      },
+      {
+       "title": "Underground Bridge Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthUndergroundRightB"
+        ]
+       }
+      },
+      {
+       "title": "Underground Door Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthUndergrondDoor"
+        ]
+       }
+      },
+      {
+       "title": "SnakemouthTop",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthTop"
+        ]
+       }
+      },
+      {
+       "title": "UpperSnekEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekEntrance"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Lost Sands",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Lost Sands"
+        ]
+       }
+      },
+      {
+       "title": "DesertDRSouthEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertDRSouthEntrance"
+        ]
+       }
+      },
+      {
+       "title": "DesertFGBorder",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertFGBorder"
+        ]
+       }
+      },
+      {
+       "title": "DesertMountain",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertMountain"
+        ]
+       }
+      },
+      {
+       "title": "DesertSandCastle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertSandCastle"
+        ]
+       }
+      },
+      {
+       "title": "DesertScorpion",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertScorpion"
+        ]
+       }
+      },
+      {
+       "title": "Badge Alcove",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertBadgeAlcove"
+        ]
+       }
+      },
+      {
+       "title": "Badlands",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertBadlands"
+        ]
+       }
+      },
+      {
+       "title": "Book Area",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertBookArea"
+        ]
+       }
+      },
+      {
+       "title": "Caravan Camp",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertCaravanMap"
+        ]
+       }
+      },
+      {
+       "title": "Defiant Root Entrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertDREastEntrance"
+        ]
+       }
+      },
+      {
+       "title": "DesertEastmost",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertEastmost"
+        ]
+       }
+      },
+      {
+       "title": "DesertEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertEntrance"
+        ]
+       }
+      },
+      {
+       "title": "DesertJumpPuzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertJumpPuzzle"
+        ]
+       }
+      },
+      {
+       "title": "DesertOasisEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertOasisEntrance"
+        ]
+       }
+      },
+      {
+       "title": "DesertSandPitArea",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertSandPitArea"
+        ]
+       }
+      },
+      {
+       "title": "DesertSouthern",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertSouthern"
+        ]
+       }
+      },
+      {
+       "title": "DesertTrenchMiddle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertTrenchMiddle"
+        ]
+       }
+      },
+      {
+       "title": "DesertWestDunes",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertWestDunes"
+        ]
+       }
+      },
+      {
+       "title": "Golden Hills Border",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertBeforeGH"
+        ]
+       }
+      },
+      {
+       "title": "Oasis",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertOasis"
+        ]
+       }
+      },
+      {
+       "title": "Roach Village",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertRoachVillage"
+        ]
+       }
+      },
+      {
+       "title": "Rock Formation",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertRockFormation"
+        ]
+       }
+      },
+      {
+       "title": "South Trench",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertTrenchSouth"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Golden Hills",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Golden Hills"
+        ]
+       }
+      },
+      {
+       "title": "GoldenHillsDungeonUpperSide",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonUpperSide"
+        ]
+       }
+      },
+      {
+       "title": "GoldenHillsLowerRightCrank",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsLowerRightCrank"
+        ]
+       }
+      },
+      {
+       "title": "Left Crank Half Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonLeftCrankHalf"
+        ]
+       }
+      },
+      {
+       "title": "Left Crank Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonCrankLeft"
+        ]
+       }
+      },
+      {
+       "title": "Left Hall",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonLeftMain"
+        ]
+       }
+      },
+      {
+       "title": "Pitcher Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenPitcher1"
+        ]
+       }
+      },
+      {
+       "title": "Right Crank Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonRightCrank"
+        ]
+       }
+      },
+      {
+       "title": "Summit",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonBoss"
+        ]
+       }
+      },
+      {
+       "title": "Upper Pitcher Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenPitcher2"
+        ]
+       }
+      },
+      {
+       "title": "GoldenHillsDungeonEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonEntrance"
+        ]
+       }
+      },
+      {
+       "title": "GoldenHillsDungeonUpperMain",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonUpperMain"
+        ]
+       }
+      },
+      {
+       "title": "PitcherPlantArena",
+       "content": {
+        "type": "map",
+        "maps": [
+         "PitcherPlantArena"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Golden Path",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Golden Path"
+        ]
+       }
+      },
+      {
+       "title": "Cable Car Station",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsCableCar"
+        ]
+       }
+      },
+      {
+       "title": "Cave Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsPath3"
+        ]
+       }
+      },
+      {
+       "title": "Crank Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsPath2"
+        ]
+       }
+      },
+      {
+       "title": "Settlement Entrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlementEntrance"
+        ]
+       }
+      },
+      {
+       "title": "Whack Farms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSMinigame"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Golden Settlement",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Golden Settlement"
+        ]
+       }
+      },
+      {
+       "title": "Farm",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement2"
+        ]
+       }
+      },
+      {
+       "title": "Power Plant",
+       "content": {
+        "type": "map",
+        "maps": [
+         "PowerPlant"
+        ]
+       }
+      },
+      {
+       "title": "Square",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement1"
+        ]
+       }
+      },
+      {
+       "title": "GoldenSettlement1Night",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement1Night"
+        ]
+       }
+      },
+      {
+       "title": "GoldenSettlement2Night",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement2Night"
+        ]
+       }
+      },
+      {
+       "title": "GoldenSettlement3",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement3"
+        ]
+       }
+      },
+      {
+       "title": "GoldenSettlement3Night",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement3Night"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Forsaken Lands",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Forsaken Lands"
+        ]
+       }
+      },
+      {
+       "title": "AbandonedCityTent",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AbandonedCityTent"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsEntrance"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsMiniboss",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsMiniboss"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsMushrooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsMushrooms"
+        ]
+       }
+      },
+      {
+       "title": "Abandoned City",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AbandonedCity"
+        ]
+       }
+      },
+      {
+       "title": "Ant Tunnel",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsAntTunnel"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsBeefly",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsBeefly"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsCD",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsCD"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsTanks",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsTanks"
+        ]
+       }
+      },
+      {
+       "title": "Dome Overlook",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsRock"
+        ]
+       }
+      },
+      {
+       "title": "Pink Spider",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsPinkSpider"
+        ]
+       }
+      },
+      {
+       "title": "Pumpkin Patch",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsPumpkins"
+        ]
+       }
+      },
+      {
+       "title": "Tunnel Side",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsSideGPT"
+        ]
+       }
+      },
+      {
+       "title": "Wind Pipes",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsCloud"
+        ]
+       }
+      },
+      {
+       "title": "TermiteOutside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteOutside"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Far Grasslands",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Far Grasslands"
+        ]
+       }
+      },
+      {
+       "title": "BroodmotherLair",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BroodmotherLair"
+        ]
+       }
+      },
+      {
+       "title": "FGCave",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FGCave"
+        ]
+       }
+      },
+      {
+       "title": "FGOutsideSwamplands",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FGOutsideSwamplands"
+        ]
+       }
+      },
+      {
+       "title": "Clearing",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FGClearing"
+        ]
+       }
+      },
+      {
+       "title": "Crossroads",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslands1"
+        ]
+       }
+      },
+      {
+       "title": "FarGrasslands3",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslands3"
+        ]
+       }
+      },
+      {
+       "title": "FarGrasslands4",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslands4"
+        ]
+       }
+      },
+      {
+       "title": "FarGrasslandsOutsideCave",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslandsOutsideCave"
+        ]
+       }
+      },
+      {
+       "title": "FarGrasslandsOutsideVillage",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslandsOutsideVillage"
+        ]
+       }
+      },
+      {
+       "title": "Lake",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslandsLake"
+        ]
+       }
+      },
+      {
+       "title": "West Path",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslands2"
+        ]
+       }
+      },
+      {
+       "title": "Wizard's Tower",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FarGrasslandsWizard"
+        ]
+       }
+      },
+      {
+       "title": "Wizard's Tower Attic",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WizardTowerAttic"
+        ]
+       }
+      },
+      {
+       "title": "Wizard's Tower Basement",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WizardTowerBasement"
+        ]
+       }
+      },
+      {
+       "title": "WizardTowerStairs",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WizardTowerStairs"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Wild Swamplands",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Wild Swamplands"
+        ]
+       }
+      },
+      {
+       "title": "SwamplandsBoss",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SwamplandsBoss"
+        ]
+       }
+      },
+      {
+       "title": "Bridge",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SwamplandsBridge"
+        ]
+       }
+      },
+      {
+       "title": "Crank Pond",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands6"
+        ]
+       }
+      },
+      {
+       "title": "Fenced Pond",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands8"
+        ]
+       }
+      },
+      {
+       "title": "Ice Block Climb",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands7"
+        ]
+       }
+      },
+      {
+       "title": "Junction",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands5"
+        ]
+       }
+      },
+      {
+       "title": "Lily Pad Pond",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands2"
+        ]
+       }
+      },
+      {
+       "title": "Swamplands3",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands3"
+        ]
+       }
+      },
+      {
+       "title": "Swamplands4",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Swamplands4"
+        ]
+       }
+      },
+      {
+       "title": "SwamplandsEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SwamplandsEntrance"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Defiant Root",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Defiant Root"
+        ]
+       }
+      },
+      {
+       "title": "Beehive Lift",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DefiantRoot2"
+        ]
+       }
+      },
+      {
+       "title": "Market",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DefiantRoot3"
+        ]
+       }
+      },
+      {
+       "title": "Square",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DefiantRoot1"
+        ]
+       }
+      },
+      {
+       "title": "Well",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DefiantRootWell"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Ancient Castle",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Ancient Castle"
+        ]
+       }
+      },
+      {
+       "title": "Basement",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleBasement"
+        ]
+       }
+      },
+      {
+       "title": "Boss Key Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleBossKeyRoom"
+        ]
+       }
+      },
+      {
+       "title": "Boss Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleBossRoom"
+        ]
+       }
+      },
+      {
+       "title": "Pressure Puzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastlePressurePuzzle"
+        ]
+       }
+      },
+      {
+       "title": "Rock Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleRockRoom"
+        ]
+       }
+      },
+      {
+       "title": "Roof",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleRoof"
+        ]
+       }
+      },
+      {
+       "title": "SandCastleEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleEntrance"
+        ]
+       }
+      },
+      {
+       "title": "SandCastleMainRoom",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleMainRoom"
+        ]
+       }
+      },
+      {
+       "title": "SandCastleStatueRoom",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleStatueRoom"
+        ]
+       }
+      },
+      {
+       "title": "Slide Puzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleSlidePuzzle"
+        ]
+       }
+      },
+      {
+       "title": "Treasure Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SandCastleTreasureRoom"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Bee Kingdom Hive",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Bee Kingdom Hive"
+        ]
+       }
+      },
+      {
+       "title": "Balcony",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveBalcony"
+        ]
+       }
+      },
+      {
+       "title": "Jaune's Gallery",
+       "content": {
+        "type": "map",
+        "maps": [
+         "JaunesGallery"
+        ]
+       }
+      },
+      {
+       "title": "Main Area",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveMainArea"
+        ]
+       }
+      },
+      {
+       "title": "Scanner Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveScannerRoom"
+        ]
+       }
+      },
+      {
+       "title": "BeehiveOutside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveOutside"
+        ]
+       }
+      },
+      {
+       "title": "BeehiveThroneRoom",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveThroneRoom"
+        ]
+       }
+      },
+      {
+       "title": "HBsLab",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HBsLab"
+        ]
+       }
+      },
+      {
+       "title": "HoneycombsLab",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HoneycombsLab"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Honey Factory",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Honey Factory"
+        ]
+       }
+      },
+      {
+       "title": "FactoryProcessingMalbee",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingMalbee"
+        ]
+       }
+      },
+      {
+       "title": "FactoryStorageElevator",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryStorageElevator"
+        ]
+       }
+      },
+      {
+       "title": "Core",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HoneyFactoryCore"
+        ]
+       }
+      },
+      {
+       "title": "FactoryProcessing2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessing2"
+        ]
+       }
+      },
+      {
+       "title": "FactoryStorageOverseer",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryStorageOverseer"
+        ]
+       }
+      },
+      {
+       "title": "First Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingFirstRoom"
+        ]
+       }
+      },
+      {
+       "title": "Gen and Eri's Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingPuzzle1"
+        ]
+       }
+      },
+      {
+       "title": "Lobby",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HoneyFactoryEntrance"
+        ]
+       }
+      },
+      {
+       "title": "Pressure Plate Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingPuzzle3"
+        ]
+       }
+      },
+      {
+       "title": "Pump Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingPump"
+        ]
+       }
+      },
+      {
+       "title": "Storage Maze",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryStorageMaze"
+        ]
+       }
+      },
+      {
+       "title": "Storage Mini-boss Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryStorageMiniboss"
+        ]
+       }
+      },
+      {
+       "title": "Training Grounds",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingPuzzle2"
+        ]
+       }
+      },
+      {
+       "title": "Worker Rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HoneyFactoryWorkerRooms"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Rubber Prison",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Rubber Prison"
+        ]
+       }
+      },
+      {
+       "title": "Electric Cells",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonCells2"
+        ]
+       }
+      },
+      {
+       "title": "Giant's Lair Bridge",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonGiantLairBridge"
+        ]
+       }
+      },
+      {
+       "title": "Gym",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonGym"
+        ]
+       }
+      },
+      {
+       "title": "Pier",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonPier"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonCafeteria",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonCafeteria"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonCells1",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonCells1"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonCheckpointCorridor",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonCheckpointCorridor"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonLibrary",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonLibrary"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonOffice",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonOffice"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonSecurity",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonSecurity"
+        ]
+       }
+      },
+      {
+       "title": "RubberPrisonThirdFloor",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonThirdFloor"
+        ]
+       }
+      },
+      {
+       "title": "Spike Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "RubberPrisonSpikeRoom"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Giant's Lair",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Giant's Lair"
+        ]
+       }
+      },
+      {
+       "title": "Crane Crossing",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairDeadLands2"
+        ]
+       }
+      },
+      {
+       "title": "Giant's Hand",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairDeadLands1"
+        ]
+       }
+      },
+      {
+       "title": "GiantLairBeforeBoss2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairBeforeBoss2"
+        ]
+       }
+      },
+      {
+       "title": "Inside the Fridge",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairFridgeInside"
+        ]
+       }
+      },
+      {
+       "title": "Kitchen Stove",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairBeforeBoss"
+        ]
+       }
+      },
+      {
+       "title": "Roach Village",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairRoachVillage"
+        ]
+       }
+      },
+      {
+       "title": "Sapling Plains",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairSaplingPlains"
+        ]
+       }
+      },
+      {
+       "title": "GiantLairEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairEntrance"
+        ]
+       }
+      },
+      {
+       "title": "GiantLairFridgeOutside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairFridgeOutside"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Metal Lake",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Metal Lake"
+        ]
+       }
+      },
+      {
+       "title": "MetalLake",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MetalLake"
+        ]
+       }
+      },
+      {
+       "title": "Peacock Island",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MysteryIsland"
+        ]
+       }
+      },
+      {
+       "title": "MysteryIslandInside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MysteryIslandInside"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Metal Island",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Metal Island"
+        ]
+       }
+      },
+      {
+       "title": "Town",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MetalIsland1"
+        ]
+       }
+      },
+      {
+       "title": "MetalIsland2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MetalIsland2"
+        ]
+       }
+      },
+      {
+       "title": "MetalIslandAuditorium",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MetalIslandAuditorium"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Termite Capitol",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Termite Capitol"
+        ]
+       }
+      },
+      {
+       "title": "Colosseum Lobby",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteColiseum1"
+        ]
+       }
+      },
+      {
+       "title": "Industrial District",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteIndustrial"
+        ]
+       }
+      },
+      {
+       "title": "Main Plaza",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteMainPlaza"
+        ]
+       }
+      },
+      {
+       "title": "Pier",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermitePier"
+        ]
+       }
+      },
+      {
+       "title": "Royal Chamber",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteRoyalChamber"
+        ]
+       }
+      },
+      {
+       "title": "TermiteColiseum2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteColiseum2"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Wasp Kingdom Hive",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Wasp Kingdom Hive"
+        ]
+       }
+      },
+      {
+       "title": "Drill Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomDrillRoom"
+        ]
+       }
+      },
+      {
+       "title": "Fountain Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdom3"
+        ]
+       }
+      },
+      {
+       "title": "Jayde's Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomJayde"
+        ]
+       }
+      },
+      {
+       "title": "Prison",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomPrison"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdom5",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdom5"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdom1",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdom1"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdom2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdom2"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdom4",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdom4"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdomMainHall",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomMainHall"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdomOutside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomOutside"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdomQueen",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomQueen"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdomThrone",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdomThrone"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Bandit Hideout",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Bandit Hideout"
+        ]
+       }
+      },
+      {
+       "title": "Cell",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutCell"
+        ]
+       }
+      },
+      {
+       "title": "Dining Hall",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutRightA"
+        ]
+       }
+      },
+      {
+       "title": "Entrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutEntrance"
+        ]
+       }
+      },
+      {
+       "title": "Garden",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutGarden"
+        ]
+       }
+      },
+      {
+       "title": "HideoutCentralRoom",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutCentralRoom"
+        ]
+       }
+      },
+      {
+       "title": "HideoutLeftA",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutLeftA"
+        ]
+       }
+      },
+      {
+       "title": "Treasury",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutWestStorage"
+        ]
+       }
+      },
+      {
+       "title": "HideoutStairsRoom",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutStairsRoom"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Stream Mountain",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Stream Mountain"
+        ]
+       }
+      },
+      {
+       "title": "Bridge Puzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "StreamMountain4"
+        ]
+       }
+      },
+      {
+       "title": "Climb",
+       "content": {
+        "type": "map",
+        "maps": [
+         "StreamMountain3"
+        ]
+       }
+      },
+      {
+       "title": "StreamMountain1",
+       "content": {
+        "type": "map",
+        "maps": [
+         "StreamMountain1"
+        ]
+       }
+      },
+      {
+       "title": "StreamMountain2",
+       "content": {
+        "type": "map",
+        "maps": [
+         "StreamMountain2"
+        ]
+       }
+      },
+      {
+       "title": "Wyrm's Den",
+       "content": {
+        "type": "map",
+        "maps": [
+         "StreamMountain5"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Chomper Caves",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Chomper Caves"
+        ]
+       }
+      },
+      {
+       "title": "Chomper Nest",
+       "content": {
+        "type": "map",
+        "maps": [
+         "ChomperCaves3"
+        ]
+       }
+      },
+      {
+       "title": "ChomperCave1",
+       "content": {
+        "type": "map",
+        "maps": [
+         "ChomperCave1"
+        ]
+       }
+      },
+      {
+       "title": "Droplet Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "ChomperCaves2"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Fishing Village",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Fishing Village"
+        ]
+       }
+      },
+      {
+       "title": "FishingVillage",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FishingVillage"
+        ]
+       }
+      }
+     ]
+    }
+   },
+   {
+    "title": "Upper Snakemouth",
+    "content": {
+     "type": "tabbed",
+     "tabs": [
+      {
+       "title": "All rooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "Area: Upper Snakemouth"
+        ]
+       }
+      },
+      {
+       "title": "Flooded Hall",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekMiddleRoom"
+        ]
+       }
+      },
+      {
+       "title": "Gear Machine",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekBeforeBoss"
+        ]
+       }
+      },
+      {
+       "title": "Geyser Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekGeizerRoom"
+        ]
+       }
+      },
+      {
+       "title": "Icicle Climb",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekPlatformRoom"
+        ]
+       }
+      },
+      {
+       "title": "Icicle Pond",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekTransition"
+        ]
+       }
+      },
+      {
+       "title": "Piano Puzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekPressurePlateRoom"
+        ]
+       }
+      },
+      {
+       "title": "Pipe Puzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekSwitchPuzzle"
+        ]
+       }
+      },
+      {
+       "title": "River Puzzle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekRiverPuzzle"
+        ]
+       }
+      },
+      {
+       "title": "UpperSnekBossRoom",
+       "content": {
+        "type": "map",
+        "maps": [
+         "UpperSnekBossRoom"
+        ]
+       }
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

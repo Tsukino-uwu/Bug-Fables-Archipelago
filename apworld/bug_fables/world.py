@@ -79,6 +79,8 @@ class BugFablesWorld(World):
     # Universal Tracker regenerates a seed from its slot_data with no yaml; passthrough is that slot_data while it does.
     ut_can_gen_without_yaml = True
     passthrough: Mapping[str, Any] | None = None
+    # Universal Tracker's map tab: plain diagrams of each room, area and the world (universal_tracker.TRACKER_WORLD).
+    tracker_world = universal_tracker.TRACKER_WORLD
     # Universal Tracker's deferred entrances: each shuffled door's region until the player goes through it, and with
     # coupled doors the door each leads back through (universal_tracker.defer_doors).
     deferred_doors: dict[str, Any]

@@ -174,6 +174,10 @@ tests under `test/webhost` render the world's docs and options as the website do
 them, add `--ignore=test/webhost`. Set `SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to
 install other games' packages.
 
+**Universal Tracker's map tab** (build step 101) is drawn from the apworld's data: after a change to the rooms, their
+areas, doors, spots or names, run `python dev-scripts/ut-map.py --archipelago <your checkout>` and commit what it
+rewrites in `apworld/bug_fables/ut_map/`. CI runs it with `--check`, which fails while a diagram is out of date.
+
 ## Fuzzing the apworld
 
 The tests check the option sets we thought of; the [Archipelago-fuzzer](https://github.com/Eijebong/Archipelago-fuzzer)
