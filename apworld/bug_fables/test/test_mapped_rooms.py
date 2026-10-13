@@ -32,15 +32,14 @@ class TestItemOnHand(BugFablesTestBase):
         self.assertTrue(ITEM_SHOP_ROOMS <= set(rule.region_dependencies()))
 
 
-class TestWaspFrontGateOpen(BugFablesTestBase):
-    # The Wasp Kingdom's front gate (the lake to outside the hive), made in the game only after the story: open from the
-    # start (2026-10-13), both sides doors that need nothing; the hive's own door stays shut.
-    def test_both_sides_open(self) -> None:
-        made = {entrance.name: entrance for entrance in self.multiworld.get_entrances(self.player)}
+class TestWaspFrontGateShut(BugFablesTestBase):
+    # The Wasp Kingdom's front gate (the lake to outside the hive) exists only after the story: shut for good, it is
+    # left out of the door graph (SHUT_DOORS), so neither side is an entrance and the randomizer never shuffles it.
+    def test_neither_side_opens(self) -> None:
+        made = {entrance.name for entrance in self.multiworld.get_entrances(self.player)}
         for door in (door_name("FarGrasslandsLake", "loadzonewasp"), door_name("WaspKingdomOutside", "loadzonesouth")):
             with self.subTest(door=door):
-                self.assertIn(door, made)
-                self.assertTrue(made[door].access_rule(self.state_with()))
+                self.assertNotIn(door, made)
 
 
 class TestRizOffersHisFight(BugFablesTestBase):

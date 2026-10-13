@@ -59,6 +59,11 @@ STORY_EVENTS = (
 # door itself is open both ways in a seed (below).
 DOOR_RULES = (
     DoorRule("FarGrasslandsWizard", "loadzonebasement", CanUse("Horn Slash")),
+    # The Wasp Kingdom's front gate between the lake and outside the hive: in the game its door (both ends) is there
+    # only from peace with the wasps (flag 555, after the story), a grate and a gate shutting it until then. Kept shut
+    # (the user, 2026-10-08: opened, its far side lands inside the wasps' patrol, which catches the party in a loop).
+    DoorRule("FarGrasslandsLake", "loadzonewasp", False_()),
+    DoorRule("WaspKingdomOutside", "loadzonesouth", False_()),
 )
 _SWAMP_TOP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash")
 # Above the west path, back up to its raised left after the drop: from the bottom right by Bee Fly, from the top right
@@ -140,11 +145,6 @@ KEPT_OPEN = (
 # cave's right door already leads there before the boss.
 KEPT_PRESENT = (
     EntityRef("FGOutsideSwamplands", "loadzone wasp"),
-    # The Wasp Kingdom's front gate between the lake and outside the hive, both ends made in the game only from peace
-    # with the wasps (555, after the story): open from the start (2026-10-13). Shut until 2026-10-13 because its far side
-    # landed in the patrol's loop; the patrol has been kept away since 2026-10-11. The hive's own door stays shut.
-    EntityRef("FarGrasslandsLake", "loadzonewasp"),
-    EntityRef("WaspKingdomOutside", "loadzonesouth"),
     # The wizard's tower (above): the hole's door down and the front door outside, both made in the game from 449.
     EntityRef("FarGrasslandsWizard", "loadzonebasement"),
     EntityRef("FarGrasslandsWizard", "loadzonetower"),
@@ -152,10 +152,6 @@ KEPT_PRESENT = (
 # The wizard's tower (above): the front door's model outside and its lock on the stairs' side, hidden in the game from
 # the attic wizard's first talk (450), hidden from the start.
 SCENERY_HIDDEN = (
-    # The front gate's grate at the lake and its gate outside the hive (the one by that door, at z -9.5; the other,
-    # Base/gate, stays), both hidden from 555 in the game.
-    EntityRef("FarGrasslandsLake", "Base/grate"),
-    EntityRef("WaspKingdomOutside", "Base/gate (1)"),
     EntityRef("FarGrasslandsWizard", "Base/Tower/Door"),
     EntityRef("WizardTowerStairs", "Base/DoorLock"),
 )
