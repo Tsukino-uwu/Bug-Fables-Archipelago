@@ -46,7 +46,7 @@ LOCATIONS = (
     Location("Upper Snakemouth: Piano Puzzle, Pressure Plate Door", 309, _PIANO,
              Source(flag=521, pickup=Pickup(map=_PIANO, type=1, item=157)), rule=_PLATES),
     Location("Upper Snakemouth: Piano Puzzle, By the Wind Pipe", 310, _PIANO,
-             Source(berry=42, pickup=Pickup(map=_PIANO, type=3, item=0)), rule=_PLATES),
+             Source(berry=42, pickup=Pickup(map=_PIANO, type=3, item=0)), rule=_PLATES, category="crystal_berry"),
     # The Icicle Climb (UpperSnekPlatformRoom; named 2026-10-12): its bottom floor (the door, two switches, a bounce pad
     # up) free; moving platforms climbed to the top, their switches hit from above and below by the Icicle, Jump or Bee
     # Fly between them, to a Lab Card (flag 523) in a broken test tube.
