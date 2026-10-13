@@ -11,8 +11,9 @@ The questions of Archipelago's AI disclosure policy, answered one by one.
 **Q: Was AI used in any capacity?**
 
 A: Yes, a lot. All of the code in this repository, and nearly all of the documentation, has been written by AI under my
-direction; I've edited a few lines of the docs by hand. This repo will never contain any AI art, and AI has made no
-design, logic or naming decisions: it suggests, I decide.
+direction; I've edited a few lines of the docs by hand. This repo will never contain any AI-generated images. Every
+decision about what the randomizer does is mine: the AI suggests, I decide. How the code does it (its structure, and how
+it hooks into the game) is the AI's work, which I judge by what it does in the game.
 
 **Q: If so, what tools were used?**
 
@@ -22,52 +23,52 @@ A: Only Claude, used through Claude Code, Anthropic's coding agent. No other AI 
 
 A:
 - Writing the mod (C#, a BepInEx plugin) and the apworld (Python), and their tests.
-- Reading the game's decompiled code for facts: what a flag does, which scene gives an item, why something freezes.
-  That decompiled output stays on my machine and never enters the repo.
+- Reading the game's decompiled code for facts: what a flag does, which scene gives an item, why something freezes. That
+  decompiled code never enters the repo or a release.
 - Reading the source and docs of Archipelago, Archipelago.MultiClient.Net and other projects, to follow Archipelago's
   own way of doing things instead of reinventing it: a custom solution the AI comes up with can look right and still not
-  work. Other projects are read for their approach only, never their code: a project's licence is checked before
-  anything of it is read, and nothing is copied.
-- Running the checks meant to catch its mistakes: the builds, the apworld's tests, Archipelago's fuzzer, seed
-  generation, and the preflight (a strict automated gate, like a linter, that refuses anything unsafe or unpublishable);
-  and writing down what was measured.
+  work. Other projects' code is read to learn how they do something, never copied, and a project's licence is checked
+  before anything else of it is read.
+- Reading each room's data for me (its items, dig spots, doors and the story flags that open them), so I can check I
+  haven't missed anything while I map it.
+- Running the checks meant to catch its mistakes (the builds, the tests, the fuzzer, seed generation and the preflight,
+  described in the last answer), and writing down the results.
 - Writing the documentation, including the two step-by-step guides of how it was built.
 
 **Q: How extensively were the tools used?**
 
-A: Nearly everything that is written is the agent's. What isn't:
-- **Every decision:** what the randomizer does, its options and their defaults, which items are progression, and every
-  location and item name. Each decision is recorded with its date.
+A: Nearly everything written here is the AI's. What is mine:
+- **Every decision about what the randomizer does:** its options and their defaults, which items are progression, and
+  every location and item name. When I'm unsure what to call something, the AI suggests names, and I choose.
 - **The logic:** I played and checked every one of the game's 244 rooms myself, one at a time: from every entrance, for
-  every obstacle, and for every ability needed to get into or out of an area or to reach an item. I described each room,
-  and the AI wrote it as Archipelago rules (the rule builder). AI was never used to work out, plan or decide the logic:
-  I believe it is the most crucial part of an apworld, and it has to be hand-crafted to be strict and correct and to
+  every obstacle, and for every ability needed to get into or out of an area or to reach an item. The AI read each
+  room's data for me and helped me find things, but it has never made or decided the logic of a single room: I worked
+  out what each way needs by playing, described it, and the AI wrote my answers as Archipelago's logic rules. I believe
+  the logic is the most crucial part of an apworld, and it has to be hand-crafted to be strict and correct and to
   account for everything.
-- **What counts as working:** nothing in the game is done until I have seen it work on screen.
+- **What counts as confirmed:** only what I have seen work in the game.
 
 **Q: How much human review was done?**
 
-A: I trust the code the AI writes, but not its result/output. Code can look right, and even run, without doing what it's
-meant to do. So I test, check and verify every single step in the game myself, and anything not yet confirmed on screen
-is assumed not to work. I do look at some of the code, mostly the logic files where the rules are written, but I can't
-judge complicated code at a glance, so I don't really review the code itself; I review what it does. On top of that the
-code is checked by tools, not trust: the apworld's tests and Archipelago's fuzzer (10000 random seeds) on every push, a
-preflight that holds the code to an exact list of what it may do, and a mod build anyone with the game can rebuild byte
-for byte. The rest of this page says how to check each of those yourself.
+A: I don't judge the AI's code by how it looks, and I don't take it on trust either: code can look right, and even run,
+without doing what it's meant to do, and the AI often needs several attempts to get something right. So I test every new
+feature in the game myself until I've seen it work. Something that repeats what's already proven elsewhere, like
+randomizing the shop in one more room, I don't re-test one by one: it should work the same way, and I fix it if I see it
+break. Each step's **Status** line in the two process guides ([how the mod was made](../agent_docs/documentation.md),
+[the Archipelago side](../agent_docs/apimplementation.md)) says what has been seen in game, and when; commits with a
+`Seen:` line record each thing confirmed on screen (`git log -i --grep='^Seen:'` lists them); and [the
+log](../agent_docs/log.md) records each session.
 
-In practice:
-- **The agent** writes the code and the docs. It reads the game's decompiled code for facts. That output stays on the
-  maintainer's machine and never enters the repo.
-- **The maintainer** decides what the randomizer does (its features, options, logic rules and names) and verifies every
-  change in the game on screen before it counts as done.
-- **What was seen, and when:**
-  - each step in the two process guides ([how the mod was made](../agent_docs/documentation.md), [the Archipelago
-    side](../agent_docs/apimplementation.md)) ends with a dated **Status** line;
-  - commits whose subject starts with `Seen:` record what was confirmed on screen;
-  - [the log](../agent_docs/log.md) records what was tried and what the maintainer said.
-- **The one picture the mod draws**, besides a plain ringed circle behind its pause-menu buttons, is the Archipelago
-  icon: Archipelago's logo rebuilt from six circles in code
-  (`mod/BugFablesAP/Ui/ApIcon.cs`); its look was picked on screen.
+I do look at some of the code, mostly the logic files where the rules are written, but I can't judge complicated code at
+a glance, so I don't really review the code itself; I review what it does in the game. I couldn't write or fix this code
+without the AI. With it, I haven't yet met a problem I couldn't fix, even with frequent bugs and crashes along the way.
+
+On top of that, the code is checked by tools. The apworld's own tests and the preflight were written by the AI too;
+these were not: Archipelago's general tests for every world, the Archipelago-fuzzer (10000 random seeds), the Logic Test
+world and Universal Tracker's fuzzer. They run on every push, with the results public in the repo's Actions tab, and a
+release goes out only with all of them passing. The preflight holds the code to an exact list of what it may reach
+outside its own files, and anyone with the same version of the game can rebuild the mod byte for byte. The rest of this
+page says how to check each of those yourself.
 
 ## Checks that need only git, Python and the release
 
