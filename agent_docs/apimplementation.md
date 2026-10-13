@@ -5931,7 +5931,9 @@ first press still stops Kabbu for the game's own double-tap window (15 frames, t
 
 **Status:** works, seen in seeds `AP_29838564452193402645` and `AP_13327170896682920080` (2026-10-13): the Dash
 without the Horn Slash, and Bee Fly and the Shield without their attacks, none of them buzzing; the Horn Dash
-breaking Chuck's Abode's big rock without the Horn Slash. Grass on Horn Dash routes waits for its recheck (above).
+breaking Chuck's Abode's big rock without the Horn Slash, and stopped by grass it can't cut; with the Horn Slash
+received mid-file, the Horn Dash cutting that grass as in the game. Grass on Horn Dash routes waits for its recheck
+(above).
 
 *Code: the mod `World/FieldMoves.cs` (`HornLock`, `HornTag`, `SlashAnim`, `SlashSound`); `logic/forsaken_lands.py`,
 `options.py`; tests `test_moves.py` (`TestDashWithoutTheHorn`).*
