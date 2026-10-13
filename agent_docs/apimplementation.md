@@ -173,6 +173,7 @@ this file and that doc disagree, that doc is right.
 98. [Build step 98: Start Inventory from Pool](#build-step-98-start-inventory-from-pool)
 99. [Build step 99: DeathLink in the yaml too](#build-step-99-deathlink-in-the-yaml-too)
 100. [Build step 100: the PopTracker pack with every room, the game's own pictures, a tab per room](#build-step-100-the-poptracker-pack-with-every-room-the-games-own-pictures-a-tab-per-room)
+101. [Build step 101: Universal Tracker's map tab, plain diagrams drawn by code](#build-step-101-universal-trackers-map-tab-plain-diagrams-drawn-by-code)
 
 **How it works**
 
@@ -7067,6 +7068,55 @@ door shuffle, a Bosses tab, room names for the rooms only Enemysanity names (`Bu
 *Code: the mod: `Dev/MapShots.cs`, `Dev/EntityDump.cs` (`Positions`), `Dev/DevConsole.cs`; the apworld: `rules.py`
 (`ARTIFACT_GATE`). The pack: `tools/export.py`, `tools/world_map.py`, `tools/room_pictures.py`, `tools/item_icons.py`,
 `scripts/logic.lua`, `scripts/autotracking.lua`.*
+
+## Build step 101: Universal Tracker's map tab, plain diagrams drawn by code
+
+**Why:** Next 79 (decided 2026-10-13): every feature Universal Tracker offers a world, its map tab among them, drawn
+by code from our own data, never the game's art and never AI-generated art.
+
+**How it was built:**
+
+1. **The research** (2026-10-13; Universal Tracker v0.3.4, the commit CI pins, its docs and `TrackerClient.py` read):
+   the internal approach (the JSON and the pictures inside the apworld, `map_page_folder`) needs no host.yaml setting.
+   Positions and pictures are read from files once, at connect, so each room stays where its diagram puts it; each
+   pin's colour, each door's state and where it led follow the rebuilt seed. The pictures must be raster: the image
+   loader Archipelago's client hands them to (Kivy's SDL2) reads PNG, not SVG.
+2. **The gate** (`2452dd3f`, build step 28's Binaries): the diagrams are the only binary files besides the release
+   DLLs, in one PNG format only, and CI draws them again and compares (`ut-map.py --check`, after the tests).
+3. **The generator, `dev-scripts/ut-map.py`:** it imports the apworld through the Archipelago checkout and draws with
+   no library: PNG written with `zlib` (a 4-bit palette, every row unfiltered), text from a 5×7 dot-matrix glyph table
+   in the script, in upper case (decided 2026-10-13). It writes `apworld/bug_fables/ut_map/`: `maps.json` (269 tabs:
+   the World, the 25 game areas, the 243 rooms), `locations.json` (the pins), `layout.json` (the dropdown: the World,
+   then each area with its "All rooms" tab and each room) and `follow.json` (the marker's point on each tab for each
+   map), and 270 pictures (209 KB). `--check` draws everything again and fails on a difference, a PNG by its pixels and
+   palette (zlib's bytes may differ between machines).
+   - **A room's tab:** its own region and each of its areas (`MAP_AREAS`) as a labelled box; a square pin per spot
+     (none pending) in its box; a diamond per door on its box's top edge, named as the door's entrance, so Universal
+     Tracker colours it (red, green while the shuffled door is hidden, grey with "connects to" once taken); a line
+     between two areas with one diamond holding both directions; the room's other ways out (transfers, fixed links)
+     on its box's bottom edge.
+   - **An area's tab:** its rooms as boxes, one pin per room holding all its spots; **the World:** the 25 areas, one
+     pin each. The areas from `data/map_areas.json`, each map's `MapControl.areaid` from the mod's map dump.
+   - **Titles:** the approved "Area: Room" names (`enemysanity.room_names`); a room no spot names yet shows its map id.
+4. **The world** (`universal_tracker.py`): `TRACKER_WORLD`, the class's `tracker_world`. Both its keys are the mod's
+   map key (build step 57, `bug_fables_map_{team}_{player}`, which Universal Tracker fills in). `map_page_index` gives
+   the room's own tab, the World while the key is empty or missing (it asks before the server answers) and -1, keeping
+   the tab, for a map with none. `location_icon_coords` puts the marker by the player's area on the World, their room
+   on its area's tab and the title on the room's own; elsewhere none.
+5. **Tests** (`test_ut_map.py`): every pin a location or an entrance, never both; every spot (none pending) and every
+   door on its room's tab exactly once; no two pins of a kind at one point (Universal Tracker keys pins by their
+   place); every picture there with every pin inside it; a tab for every room and the dropdown naming only tabs;
+   every map's area; the tab and marker functions given an empty or missing key, an unknown map and no tab; the keys
+   as Universal Tracker fills them.
+
+**Next, each its own step (Next 79):** story events on the map (deferred events), readable door labels, glitched
+logic, the Enemysanity alias, `TrackerException`.
+
+**Status:** built (2026-10-13): the generator's check passes, the tests written, run with the next full suite. Not
+yet seen in Universal Tracker.
+
+*Code: `dev-scripts/ut-map.py`; the apworld: `universal_tracker.py`, `world.py`, `data_tables.py` (`MAP_AREA_IDS`),
+`data/map_areas.json`, `ut_map/`; tests `test_ut_map.py`.*
 
 # How it works
 

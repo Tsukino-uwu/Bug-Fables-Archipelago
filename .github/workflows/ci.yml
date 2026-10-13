@@ -68,6 +68,11 @@ jobs:
         working-directory: Archipelago
         run: AP_TEST_WORLDS=bug_fables pytest -n auto
 
+      # Universal Tracker's map diagrams drawn again from the world's data: each the same as the committed one.
+      - name: The map diagrams match their data
+        working-directory: Archipelago
+        run: python ../bug_fables_ap/dev-scripts/ut-map.py --archipelago . --check
+
       # Some failures only show in a room with two different games.
       - name: Generate with a second game
         working-directory: Archipelago

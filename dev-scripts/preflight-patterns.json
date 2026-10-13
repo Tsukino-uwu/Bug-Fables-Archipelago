@@ -26,6 +26,8 @@
     ["apworld/bug_fables/**/*.py", "the apworld"],
     ["apworld/bug_fables/archipelago.json", "the apworld's manifest"],
     ["apworld/bug_fables/data/*.json", "the apworld's data"],
+    ["apworld/bug_fables/ut_map/*.json", "Universal Tracker's map tab, written by dev-scripts/ut-map.py"],
+    ["apworld/bug_fables/ut_map/images/*.png", "a Universal Tracker map diagram, drawn by dev-scripts/ut-map.py (the \"images\" rule)"],
     ["apworld/bug_fables/docs/*.md", "the player docs"],
     ["dev-scripts/*.py", "a dev script"],
     ["dev-scripts/*.ps1", "a dev script"],
