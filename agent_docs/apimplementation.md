@@ -901,12 +901,13 @@ be wrong.
     artifact a location at that same fight (2026-10-12): under Artifact Shuffle's Vanilla it sits behind the fight it
     would open, so this goal caps X at 6 there; shuffled, the fill keeps it off the fight; Artifact Hunt reaches all 7.
     **Decided 2026-10-13: the only goal for now.** *Artifacts Required* artifacts open the last fight, and the goal is
-    sent when the credits start (`Event204`, after the ceremony): the win is settled there, nothing can skip it, and
-    the release runs while the credits play. X is 1 to 7 with artifacts shuffled, 1 to 6 under Artifact Shuffle's
-    Vanilla (chapter 7's artifact sits behind that fight). The default is 6 with Artifact Shuffle's default, Vanilla:
-    the six chapters' artifacts open the fight, and the seventh comes from winning it, as in the game. Artifact Hunt, and a warp to the end plaza so other goals walk into the ceremony, wait
-    until it is decided how goals should work. `Event204` started off its own map softlocks (`MEASURED.md`, the
-    Sapling Plains), so any other way into the credits goes through the ending's own maps.
+    sent when the credits start (`Event204`, after the ceremony): the win is settled there, nothing can skip it, and the
+    release runs while the credits play. X is 0 to 7 with artifacts shuffled, 0 to 6 under Artifact Shuffle's Vanilla
+    (chapter 7's artifact sits behind that fight); 0 leaves the fight open from the start, whatever the shuffle. The
+    default is 6 with Artifact Shuffle's default, Vanilla: the six chapters' artifacts open the fight, and the seventh
+    comes from winning it, as in the game. Artifact Hunt, and a warp to the end plaza so other goals walk into the
+    ceremony, wait until it is decided how goals should work. `Event204` started off its own map softlocks
+    (`MEASURED.md`, the Sapling Plains), so any other way into the credits goes through the ending's own maps.
     **Built 2026-10-13: build step 94** (the hold and the sign included, taken over from the chat that began them).
 74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
     after sleeping (the hotel's Tangy Jam from Master Slice, the Bugaria inn's Honey Drop) comes every stay, made fresh
@@ -918,12 +919,12 @@ be wrong.
     the logic lacks is shown to the user, who decides; the hand-mapped logic stays the truth (stricter, more correct).
 76. **A Python linter next to the preflight** (decided 2026-10-13; before v0.4.0): ruff with Archipelago's own
     `ruff.toml` (its checkout's root; at 0.6.8 a config only: no workflow of Archipelago's runs it and its docs don't
-    name it, `style.md` asks for PEP 8 with its exceptions), a check that only reports, never changes files, to catch slips such as unused
-    imports, `zip()` without `strict=` and overwritten loop variables. Measured the same day (ruff 0.17.0): 255 findings
-    in `apworld/bug_fables`, 138 of them RUF012 on the tests' `options` dicts (Archipelago's own test pattern, to be
-    ignored for tests). First a one-time cleanup (`--fix` for the safe ones, the rest by hand, the tests after), then
-    ruff check-only in the pre-commit hook and CI, in a commit of its own (a gate change). The mod's C# side (.NET's
-    code analyzers) a separate look.
+    name it, `style.md` asks for PEP 8 with its exceptions), a check that only reports, never changes files, to catch
+    slips such as unused imports, `zip()` without `strict=` and overwritten loop variables. Measured the same day (ruff
+    0.17.0): 255 findings in `apworld/bug_fables`, 138 of them RUF012 on the tests' `options` dicts (Archipelago's own
+    test pattern, to be ignored for tests). First a one-time cleanup (`--fix` for the safe ones, the rest by hand, the
+    tests after), then ruff check-only in the pre-commit hook and CI, in a commit of its own (a gate change). The mod's
+    C# side (.NET's code analyzers) a separate look.
 
 **Known issues:**
 
