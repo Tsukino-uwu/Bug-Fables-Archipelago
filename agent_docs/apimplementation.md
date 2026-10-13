@@ -70,7 +70,8 @@ this file and that doc disagree, that doc is right.
   [41](#build-step-41-universal-trackers-list-order-and-explanations), explained in [How it works
   12](#12-universal-tracker-how-its-implemented); the PopTracker pack,
   [42](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld), its releases
-  [106](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson); every key, [How
+  [106](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson), its offline toggles
+  [108](#build-step-108-the-poptracker-packs-offline-toggles-and-its-export-at-build-step-105); every key, [How
   it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
@@ -182,6 +183,7 @@ this file and that doc disagree, that doc is right.
 105. [Build step 105: each door's entrance named where it is](#build-step-105-each-doors-entrance-named-where-it-is)
 106. [Build step 106: the PopTracker pack's releases, updates through versions.json](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson)
 107. [Build step 107: Map Shuffle, doors that match sides (experimental)](#build-step-107-map-shuffle-doors-that-match-sides-experimental)
+108. [Build step 108: the PopTracker pack's offline toggles, and its export at build step 105](#build-step-108-the-poptracker-packs-offline-toggles-and-its-export-at-build-step-105)
 
 **How it works**
 
@@ -7357,6 +7359,57 @@ game.
 
 *Code: `dev-scripts/door-graph.py` (`side`), `data/doors.json`, `data_types.py` (`DoorEnd.side`), `options.py`
 (`option_map_shuffle`), `entrances.py` (`MAP_SHUFFLE_GROUPS`, `_split`, `_randomize`), `world.py`.*
+
+## Build step 108: the PopTracker pack's offline toggles, and its export at build step 105
+
+**Why:** with no seed connected, the pack took every option's default, so a location category off by default
+(Shuffle Hidden Items, Shuffle Discoveries, Shuffle Dig Spots, Enemysanity) never showed its checks, and nothing could
+turn it on. Decided 2026-10-13: "Toggles in Settings". And the pack's export was from `4fc3410`, before build steps
+104 (glitched logic), 105 (each door's entrance named where it is) and 107 (Map Shuffle): the 0.4.0 release needs it
+from this repo's main.
+
+**How it was built** (the pack's repo):
+
+1. **A toggle per location category,** one for each option of `options.CATEGORY_OPTIONS` (nine), written by the
+   pack's export beside the two settings: a PopTracker `toggle` item (`initial_active_state`, `doc/PACKS.md` and its
+   `items.json` schema at the commit `pack-checker` pins), named as the option's `display_name`, its code the
+   option's name, on as the option's default, its icon drawn by code as the other settings'; in `settings_popup` and
+   the bottom bar's Settings, three to a row. The Lua reads a toggle only while no seed is connected (`option_value`):
+   for the category's locations, its story events (the old book's delivery is a quest's) and any option filter on it.
+   Once connected, slot_data's options and the server's location list decide, the toggles left as they are and
+   ignored. A toggle is an item, so PopTracker runs the rules again when one changes, as for "Show unvisited rooms";
+   the logic's cached sweep counts them in its key.
+2. **The doors key's names:** since build step 105 an entrance is named "Area: Room, Door to …", and the mod still
+   writes the game's `<map>: <door>`. The export writes `door_entrances`, each game name (a one-way's story copies
+   included) to its entrance, the same table as `universal_tracker._TAKEN`; `bf_door_led_to` reads through it (it
+   replaces `one_way_copies`).
+3. **The gates' pins:** PopTracker cuts a rule string at each `,` and reads what follows a `:` as a count (its
+   `src/core/jsonutil.h` and `src/core/tracker.cpp`, master `19f0b1f`, read 2026-10-13). The 8 gate pins (build step
+   100) named their door's entrance in the rule, and an entrance's name holds a `:` (`<map>: <door>` then, "Area:
+   Room, …" now): by that code PopTracker called the function with the map alone and a count of 0, so every gate
+   showed open. The parity tests called the Lua directly and missed it. The rule now names the door's map and its
+   name in the game (`$bf_entrance_open|<map>|<door>`), and the export refuses any rule holding a `,` or a `:`.
+4. **Glitched logic** (build step 104): "Glitched Logic" is an item no seed holds, so the export accepts it and the
+   Lua never holds it; the blockers' text leaves its ways out, and the two parts it would have made blockers stay off
+   (77 blockers, as before).
+5. **Map Shuffle** (build step 107): the pack shuffles the doors, fog of war included, for any Entrance Randomizer
+   value but Off, so value 4 needed nothing new; the tests now take every value from the option itself.
+
+**Tests** (the pack's): offline, Shuffle Hidden Items toggled on puts the Golden Settlement grass check's section in
+the seed, and Shuffle Quests toggled off takes the old book's story event out of the sweep (each fails without the
+change); a connected seed with the category off ignores its toggle, by its location list and by its options alone;
+each toggle starts at its option's default; fog of war for every door shuffle; every door Archipelago made, by the
+game's name the mod writes. Parity on 200 seeds, each door mode (now five) as often; each gate's rule called as
+PopTracker calls it; every rule in `locations.json` whole; `door_entrances` as Universal Tracker's table. The export at
+`5cf883d2` (world 0.4.0): 614 locations in 182 rooms, 77 blockers; 30 tests and 136944 subtests passed,
+`pack-checker` strict on the folder and on the release zip.
+
+**Status:** built (2026-10-13), the pack's tests pass. Not yet seen in PopTracker: the nine toggles in Settings, a
+category's checks showing with its toggle on and no seed connected, and the gates' pins following the logic.
+
+*Code: the pack: `tools/export.py` (the settings, `door_entrances`, `check_rules`, `logic_only`), `scripts/logic.lua`
+(`option_value`, `bf_entrance_open`, `bf_door_led_to`), `tests/test_autotracking.py`, `tests/test_parity.py`,
+`PLAN.md`.*
 
 # How it works
 
