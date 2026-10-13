@@ -106,6 +106,7 @@ said them.
 - [2026-10-12: Upper Snakemouth, the last nine rooms; every room mapped](#2026-10-12-upper-snakemouth-the-last-nine-rooms-every-room-mapped)
 - [2026-10-12: the artifacts as locations, the Sand Castle Key whole](#2026-10-12-the-artifacts-as-locations-the-sand-castle-key-whole)
 - [2026-10-13: the castle and the Final Boss goal, the Coupled dead ends, the AI disclosure](#2026-10-13-the-castle-and-the-final-boss-goal-the-coupled-dead-ends-the-ai-disclosure)
+- [2026-10-13: the door shuffle's fallback; the spawn in the logic planned](#2026-10-13-the-door-shuffles-fallback-the-spawn-in-the-logic-planned)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4242,8 +4243,8 @@ said them.
   arrives. The locked attack's buzzer before each of them is gone (a press buzzes only with neither move).
 - **The Coupled deadlock, with every room mapped:** 76 of 2000 over the seven failing yamls; 61 dead-end doors left
   waiting, 52 of them one-door rooms. The other nine were looked at in game: six drop-only ledges and the Worker Rooms'
-  halves are real; the Wasp Kingdom's front gate was opened (build step 95, seen) and measured 73 of 2000, so closed
-  again. Decided: a fallback around the shuffler (retry, start-area check, vanilla pins, a hard cap; Pokémon Crystal's
+  halves are real; the Wasp Kingdom's front gate was opened (seen; that step since reverted) and measured 73 of 2000,
+  so closed again. Decided: a fallback around the shuffler (retry, start-area check, vanilla pins, a hard cap; Pokémon Crystal's
   layers read for their approach) before v0.4.0, in another chat; the plan is the local `ERfallback.md`.
 - **The full tests before a push:** 12 failures. One real bug: the Piano Puzzle's berry spot (310) had no category,
   so its Crystal Berry entered the pool with berries off. The rest were tests behind the castle and the goal; two were
@@ -4261,3 +4262,25 @@ said them.
   (measured 255 findings; Next 76), alongside the attribution scrub.
 - **Handoff:** the server hosting `AP_61148440722678327578` on 38281 (generated with the Wasp gate open, before its
   revert), left running. The game's config has InfJump and AdoptSeed on (dev only). Nothing uncommitted.
+
+## 2026-10-13: the door shuffle's fallback; the spawn in the logic planned
+
+- **The fallback around Archipelago's door shuffle** (build step 95): drawn again when it runs out of spare doors
+  (10 draws), a start that opens too few spots drawn again (5 at most, Room Swap's rule), then the doors a failure left
+  waiting pinned where the game has them (10 rounds of 5), 65 draws at most. 0 failures in 2000 over the seven yamls
+  that failed (76 before).
+- **How the shape was found:** a design review against Archipelago's source found the put-back complete, and found
+  that pins barely help: every one of the seven failure logs ends with only one-way exits left and two-way dead ends
+  waiting, so pinning a dead end to its partner spends a spare door to remove a dead end. The draws do the work,
+  measured per yaml (3.5 to 7.5% ran out; 1 to 4% after a round of pins). The review's worry that a random start
+  changes the odds per seed proved wrong: the logic always begins at the game's start (`regions.py`), so a yaml's
+  draws all share one graph.
+- **The start check, first doubted:** Room Swap's rule refused 8 to 65% of Coupled layouts while the full fuzzer showed
+  no `FillError`, so it was measured before keeping it: with it off, 4 `FillError`s in 2000 on the risky case (Coupled,
+  one member, moves and Jump shuffled), each start opening 7 spots; with it on, 0. Kept.
+- **Archipelago's way, checked:** its docs say no retry is attempted and leave room for one; its custom-`Entrance`
+  hook can't see the start's own sphere (it sweeps with every item), so the start check runs after a draw.
+- **Decided for later in the same plan:** the logic begins at the spawn (Next 18; the logic today places a random
+  start's seed as if it began outside Bugaria), then a named start; and a fixed mark on doors whose far side won't let
+  you walk back, an idea (Next 77).
+- **Not run yet:** the tests (at push time).

@@ -902,9 +902,10 @@ be wrong.
 73. **The Final Boss goal** (decided 2026-10-11, mapping the Sapling Plains; its own step): the default goal as vanilla
     plays it: X artifacts open the last fight (its trigger, `Event200`, held until then), and winning it is the goal.
     The current goal becomes the optional "Artifact Hunt" (sent on X artifacts), where the last fight stays open as in
-    vanilla: after "The End" the game puts the party back in Bugaria, so nothing is lost by playing it. Where it sends is not yet decided:
-    "The End" is the lean, the exact moment to be picked in game. A first hold (the trigger switched off) didn't hold;
-    a second (a marker limit, as kept_open does) held: seen 2026-10-11, walked up to with 0 of 1 artifacts.
+    vanilla: after "The End" the game puts the party back in Bugaria, so nothing is lost by playing it. Where it sends
+    is not yet decided: "The End" is the lean, the exact moment to be picked in game. A first hold (the trigger
+    switched off) didn't hold; a second (a marker limit, as kept_open does) held: seen 2026-10-11, walked up to with 0
+    of 1 artifacts.
     A sign showing the artifacts had and needed, at (19.9, 0, 5.2) on the Sapling Plains, by the door and the save
     crystal (the spot picked in game, 2026-10-11): built and seen the same day, one centred line, "Artifacts required:
     X" (the count had is in the pause menu); kept uncommitted with the hold until the goal is built. With chapter 7's
@@ -6685,8 +6686,9 @@ run (at push time).
 **Status:** works, seen in seed `AP_33232363850621305804` (2026-10-13): the Peculiar Gem opening Upper Snakemouth's
 slot, the Sand Castle Key making the castle appear, the one Small Ancient Key opening both main-room locks and kept,
 the Big Ancient Key opening the boss door (used up, its only lock), the Watcher sending its item, the pedestal showing
-and sending its item, its banner naming it. **Found on the way:** the received Small Ancient Key's box names it "Ancient Key", the game's
-own name for item 114, the same as chapter 3's artifact: renamed in the game's text (the mod guide, step 63).
+and sending its item, its banner naming it. **Found on the way:** the received Small Ancient Key's box names it
+"Ancient Key", the game's own name for item 114, the same as chapter 3's artifact: renamed in the game's text (the mod
+guide, step 63).
 
 *Code: `data/items.json`, `logic/ancient_castle.py`, `logic/snakemouth_den.py` (the gem's slot).*
 
@@ -6783,6 +6785,9 @@ once, no target left, every region reachable); two rounds of pins are the game's
 pins read back from `door_targets`, and a seed gives the same doors twice; a setup error and a draw that placed nothing
 are raised at once; a split of mismatched kinds is refused; a start too small is drawn again 5 times, then kept; the
 fuzzer's seed 851669694 (yaml 1905), whose first draw runs out (checked the same day), generates.
+
+**Status:** works (2026-10-13): 0 failures in 2000 over the seven yamls that failed, 0 in 2000 on the start check's
+case. Nothing changes in game.
 
 *Code: `entrances.py` (`_randomize`, `_FreeDoors`, `_pin`, `_Measure.start`), `dev-scripts/preflight-patterns.json`.*
 

@@ -1,8 +1,9 @@
-"""The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled and Decoupled, and
-the room swap, a mode Archipelago has none of, connecting the same split entrances by hand. Each pairing becomes a
-door_targets entry, the doors the mod rewrites. One-way doors (a fog maze's wrong turns, drops) are Archipelago's
-one-way entrances, paired only with one another; the room swap leaves them as they are. replay reads a seed's
-door_targets back into the same graph with no roll, for Universal Tracker.
+"""The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled and Decoupled, drawn
+again when it runs out of spare doors or leaves the start too small, and the room swap, a mode Archipelago has none of,
+connecting the same split entrances by hand. Each pairing becomes a door_targets entry, the doors the mod rewrites.
+One-way doors (a fog maze's wrong turns, drops) are Archipelago's one-way entrances, paired only with one another; the
+room swap leaves them as they are. replay reads a seed's door_targets back into the same graph with no roll, for
+Universal Tracker.
 """
 from __future__ import annotations
 
@@ -12,7 +13,7 @@ from random import Random
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState, Entrance, EntranceType, LocationProgressType, Region
-from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
+from entrance_rando import EntranceRandomizationError, disconnect_entrance_for_randomization, randomize_entrances
 
 from .data_tables import (DOORS, KEPT_DOORS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name, door_region,
                           landing_region, one_way_landing)
@@ -134,16 +135,131 @@ def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
                         "Randomizer on Coupled or Decoupled; they're ignored.", world.player, world.player_name)
     if mode == EntranceRandomizer.option_off:
         return []
-    names = _split(world)
     if mode == EntranceRandomizer.option_room_swap:
-        return _swap_rooms(world, names)
+        return _swap_rooms(world, _split(world))
+    measure = _Measure(world)
+    # Room Swap's rule for the start, measured before the doors are split.
+    wanted = min(_START_SPOTS, measure.start()[0])
+    names = _split(world)
     doors = {name: door for door, name in names.items()}
     doors |= {name: (w.map, w.door) for w in SHUFFLED_ONE_WAYS
               for name in (door_name(w.map, w.door), one_way_landing(w))}
     coupled = mode != EntranceRandomizer.option_decoupled
     planned = _plando(world, names, coupled)
-    placed = randomize_entrances(world, coupled=coupled, target_group_lookup={0: [0]})
-    return planned + [(doors[x], doors[y]) for x, y in placed.pairings]
+    pins, placed = _randomize(world, coupled, measure, wanted)
+    return planned + pins + [(doors[x], doors[y]) for x, y in placed]
+
+
+# Archipelago's randomizer gives up when the dead ends outnumber the spare doors it has reached, with no retry of its own
+# (entrance_rando.py): each try is a new draw from the world's random.
+DOOR_TRIES = 10
+# Draws refused, over all tries, because the start opens fewer spots than wanted (_START_SPOTS).
+START_RESHUFFLES = 5
+# Then the doors a failure left waiting lead where the game has them, and the rest are drawn again, round by round.
+PIN_ROUNDS = 10
+PIN_ROUND_TRIES = 5
+# How Archipelago's randomizer says it ran out; its setup errors say other things.
+_RAN_OUT = "None of the available entrances are valid targets"
+
+
+def _randomize(world: BugFablesWorld, coupled: bool, measure: _Measure,
+               wanted: int) -> tuple[list[tuple[Door, Door]], list[tuple[str, str]]]:
+    """Archipelago's randomizer on the split doors, drawn again when it runs out of spare doors or opens fewer than
+    wanted spots from the start; after DOOR_TRIES failures, the doors a failure left waiting are pinned where the game
+    has them, a round at a time. Returns the pins and the randomizer's pairings."""
+    free = _FreeDoors(world)
+    pins: list[tuple[Door, Door]] = []
+    reshuffles = 0
+    for round_ in range(PIN_ROUNDS + 1):
+        if round_:
+            pins += _pin(world, left)
+            # Pinned doors are connected for good: a new snapshot leaves them out of every reset.
+            free = _FreeDoors(world)
+        tries = 0
+        while tries < (PIN_ROUND_TRIES if round_ else DOOR_TRIES):
+            try:
+                placed = randomize_entrances(world, coupled=coupled, target_group_lookup={0: [0]})
+            except EntranceRandomizationError as error:
+                # One that placed nothing would fail the same way every time.
+                if not str(error).startswith(_RAN_OUT) or not free.placed():
+                    raise
+                tries += 1
+                failure, left = error, free.left()
+                free.reset()
+                logging.info("Bug Fables: player %s (%s)'s door shuffle ran out of spare doors on a draw.",
+                             world.player, world.player_name)
+                continue
+            spots = measure.start()[0]
+            if spots < wanted:
+                if reshuffles < START_RESHUFFLES:
+                    reshuffles += 1
+                    free.reset()
+                    continue
+                logging.info("Bug Fables: player %s (%s)'s doors open %d spots from the start, fewer than %d, after %d "
+                             "draws refused; kept.", world.player, world.player_name, spots, wanted, reshuffles)
+            return pins, placed.pairings
+    raise EntranceRandomizationError(
+        f"Bug Fables: player {world.player_name}'s door shuffle ran out of spare doors in every try, with "
+        f"{len(pins)} ways pinned where the game has them: {', '.join(door_name(*x) for x, _ in pins)}") from failure
+
+
+class _FreeDoors:
+    """The split doors nothing connects yet, the ones Archipelago's randomizer pairs, to put back as they were after a
+    try: the randomizer connects each exit it places and takes the target it used off its region; nothing else of a
+    try outlives it."""
+
+    def __init__(self, world: BugFablesWorld):
+        regions = world.get_regions()
+        self.exits = [e for region in regions for e in region.exits if e.connected_region is None]
+        self.targets = [e for region in regions for e in region.entrances if e.parent_region is None]
+        # The randomizer counts only the total; a mismatch of kinds would fail every try the same way.
+        for kind in (EntranceType.ONE_WAY, EntranceType.TWO_WAY):
+            exits = sum(e.randomization_type == kind for e in self.exits)
+            targets = sum(e.randomization_type == kind for e in self.targets)
+            if exits != targets:
+                raise ValueError(f"Bug Fables: player {world.player_name}'s doors split into {exits} {kind.name} exits "
+                                 f"and {targets} {kind.name} targets")
+
+    def placed(self) -> bool:
+        return any(e.connected_region is not None for e in self.exits)
+
+    def left(self) -> list[Entrance]:
+        return sorted((e for e in self.exits if e.connected_region is None), key=lambda e: e.name)
+
+    def reset(self) -> None:
+        for exit_ in self.exits:
+            if exit_.connected_region is not None:
+                exit_.connected_region.entrances.remove(exit_)
+                exit_.connected_region = None
+        for target in self.targets:
+            if target not in target.connected_region.entrances:
+                target.connected_region.entrances.append(target)
+
+
+def _pin(world: BugFablesWorld, doors: Sequence[Entrance]) -> list[tuple[Door, Door]]:
+    """Each door connected where the game has it: a two-way door both ways with its partner, a one-way door to its own
+    landing; a way a plando connection or an earlier pin took is left as it is. Returns the pins as pairings."""
+    partner = _partners(SHUFFLED_CONNECTIONS)
+    two_ways = {door_name(*door): door for door in partner}
+    one_ways = {door_name(w.map, w.door): w for w in SHUFFLED_ONE_WAYS}
+    pins: list[tuple[Door, Door]] = []
+    for entrance in doors:
+        if entrance.name in one_ways:
+            w = one_ways[entrance.name]
+            ways = [(entrance.name, landing_region(w), one_way_landing(w), ((w.map, w.door), (w.map, w.door)))]
+        else:
+            door = two_ways[entrance.name]
+            other = partner[door]
+            ways = [(door_name(*a), door_region(*b), door_name(*b), (a, b)) for a, b in ((door, other), (other, door))]
+        for exit_name, region, target, pairing in ways:
+            if (world.get_entrance(exit_name).connected_region is None
+                    and _free_target(world, region, target) is not None):
+                _connect(world, exit_name, region, target)
+                pins.append(pairing)
+    logging.warning("Bug Fables: player %s (%s)'s door shuffle kept running out of spare doors; %d ways now lead where "
+                    "the game has them: %s", world.player, world.player_name, len(pins),
+                    ", ".join(door_name(*x) for x, _ in pins) or "none free to pin")
+    return pins
 
 
 def _split(world: BugFablesWorld) -> dict[Door, str]:
@@ -257,8 +373,8 @@ _HOT_MOVES = 0.8
 _TRADES = 0.7
 # A layout that hasn't improved in this many tries is stuck (no one move helps): start again from a new random one.
 _STUCK = 200
-# The spots open from the start that can take progression (not excluded), which the swap must leave: as many as the
-# game's own layout has, up to this many. Fewer and the fill can't place the early items.
+# The spots open from the start that can take progression (not excluded), which every door layout must leave: as many
+# as the game's own layout has, up to this many. Fewer and the fill can't place the early items.
 _START_SPOTS = 10
 
 
@@ -369,16 +485,21 @@ class _Measure:
             if item.player == world.player:
                 world.collect(self.everything, item)
 
-    def __call__(self) -> tuple[set[str], int, set[str]]:
+    def start(self) -> tuple[int, set[str]]:
+        """With only the start's items: the spots that can take progression the layout opens, and the regions."""
         player = self.world.player
         # A new state already holds the start's items.
         start = CollectionState(self.world.multiworld)
         start.sweep_for_advancements(self.locations)
         opened_regions = [region for region in self.regions if start.can_reach_region(region.name, player)]
-        opened = {region.name for region in opened_regions}
         spots = sum(1 for region in opened_regions for location in region.locations
                     if location.address is not None and location.progress_type != LocationProgressType.EXCLUDED
                     and location.access_rule(start))
+        return spots, {region.name for region in opened_regions}
+
+    def __call__(self) -> tuple[set[str], int, set[str]]:
+        player = self.world.player
+        spots, opened = self.start()
         state = self.everything.copy()
         state.sweep_for_advancements(self.locations)
         cut = {region.name for region in self.regions if not state.can_reach_region(region.name, player)}

@@ -1,8 +1,11 @@
 from collections import Counter
+from collections.abc import Callable
 from random import Random
+from typing import Any
 from unittest import TestCase
 
 from BaseClasses import CollectionState, EntranceType, LocationProgressType
+from entrance_rando import EntranceRandomizationError, randomize_entrances
 from worlds.AutoWorld import call_all
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
@@ -12,6 +15,7 @@ from ..data_tables import (DOORS, ONE_WAYS, REGIONS, SHUFFLED_CONNECTIONS, SHUFF
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
+from ..regions import MENU
 from ..world import BugFablesWorld
 
 Door = tuple[str, str]
@@ -373,6 +377,175 @@ def _repaired_within(options: dict[str, object], seed: int, tries: int) -> BugFa
             "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
     finally:
         entrances.ROOM_SWAP_TRIES = limit
+
+
+THROUGH_DOORS = (*BEFORE_DOORS, "connect_entrances")
+COUPLED = {"entrance_randomizer": "coupled"}
+# Archipelago's randomizer's words when it runs out of spare doors (entrance_rando.py), as a test forces them.
+RAN_OUT = "None of the available entrances are valid targets for the available exits (forced by a test)"
+
+
+class TestDoorShuffleRetries(TestCase):
+    """Archipelago's randomizer drawn again when it runs out of spare doors or leaves the start too small, then the
+    doors a failure left waiting pinned where the game has them (build step 95)."""
+
+    # A fuzzer seed (2026-10-13, yaml 1905) whose one draw ran out of spare doors: 52 dead ends, all real.
+    DEADLOCKED = {"progression_balancing": 13, "accessibility": "full", "artifacts_required": 6,
+                  "artifact_shuffle": "vanilla", "shuffle_quests": False, "shuffle_crystal_berries": False,
+                  "shuffle_discoveries": True, "shuffle_hidden_items": True, "shuffle_dig_spots": False,
+                  "enemy_sanity": False, "shuffle_medal_shops": False, "shuffle_item_shops": True,
+                  "shuffle_termacade": True, "minigame_prizes": True, "shop_contents": "filler_only",
+                  "shuffle_shop_inventories": False, "entrance_randomizer": "coupled", "enemy_shuffle": "off",
+                  "starting_location": "anywhere", "starting_party_member": "off", "filler_starting_checks": True,
+                  "shuffle_field_moves": False, "shuffle_jump": False, "points_of_no_return": False,
+                  "progressive_boat": False, "music_shuffle": True}
+
+    def test_a_fuzzer_deadlock_generates(self) -> None:
+        _assert_whole(self, generate_like_main(self.DEADLOCKED, seed=851669694, steps=THROUGH_DOORS))
+
+    def test_a_draw_that_ran_out_is_drawn_again(self) -> None:
+        randomizer = _Randomizer(failures=2)
+        world = randomizer.run(lambda: generate_like_main(COUPLED, seed=1, steps=THROUGH_DOORS))
+        self.assertEqual(len(randomizer.graphs), 3)
+        # Each draw starts from the doors as split: nothing of a failed one is left.
+        self.assertEqual(randomizer.graphs[1], randomizer.graphs[0])
+        self.assertEqual(randomizer.graphs[2], randomizer.graphs[0])
+        _assert_whole(self, world)
+
+    def test_doors_left_waiting_are_pinned(self) -> None:
+        # Two rounds of pins: every try of the first ten and of the first round runs out.
+        world, measure, wanted = _split_world(COUPLED, seed=1)
+        randomizer = _Randomizer(failures=entrances.DOOR_TRIES + entrances.PIN_ROUND_TRIES)
+        pins, _ = randomizer.run(lambda: entrances._randomize(world, True, measure, wanted))
+        self.assertEqual(len(randomizer.graphs), entrances.DOOR_TRIES + entrances.PIN_ROUND_TRIES + 1)
+        self.assertTrue(pins)
+        partner = _partners(SHUFFLED_CONNECTIONS)
+        one_ways = {(w.map, w.door): w for w in SHUFFLED_ONE_WAYS}
+        for x, y in pins:
+            with self.subTest(door=door_name(*x)):
+                entrance = world.multiworld.get_entrance(door_name(*x), world.player)
+                if x in one_ways:
+                    self.assertEqual(y, x)
+                    self.assertEqual(entrance.connected_region.name, landing_region(one_ways[x]))
+                else:
+                    self.assertEqual(y, partner[x])
+                    self.assertEqual(entrance.connected_region.name, door_region(*y))
+        _assert_whole(self, world)
+        self.assertTrue(world.multiworld.can_beat_game(world.multiworld.get_all_state()))
+
+    def test_pins_read_back_and_repeat(self) -> None:
+        def build() -> BugFablesWorld:
+            randomizer = _Randomizer(failures=entrances.DOOR_TRIES + 1)
+            return randomizer.run(lambda: generate_like_main(COUPLED, seed=2, steps=THROUGH_DOORS))
+
+        world, again = build(), build()
+        read = pairings_from_targets(world.door_targets, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS)
+        self.assertEqual(set(read), set(world.door_pairings))
+        self.assertEqual(world.door_pairings, again.door_pairings)
+        self.assertEqual(world.door_targets, again.door_targets)
+
+    def test_a_setup_error_is_not_drawn_again(self) -> None:
+        world = generate_like_main(COUPLED, seed=1, steps=BEFORE_DOORS)
+        world.explicit_indirect_conditions = False
+        randomizer = _Randomizer()
+        with self.assertRaisesRegex(EntranceRandomizationError, "explicit indirect conditions"):
+            randomizer.run(lambda: entrances.shuffle(world))
+        self.assertEqual(len(randomizer.graphs), 1)
+
+    def test_a_draw_that_placed_nothing_is_not_drawn_again(self) -> None:
+        world = generate_like_main(COUPLED, seed=1, steps=BEFORE_DOORS)
+        randomizer = _Randomizer(failures=1, at_once=True)
+        with self.assertRaisesRegex(EntranceRandomizationError, "forced by a test"):
+            randomizer.run(lambda: entrances.shuffle(world))
+        self.assertEqual(len(randomizer.graphs), 1)
+
+    def test_split_kinds_must_match(self) -> None:
+        world = generate_like_main(COUPLED, seed=1, steps=BEFORE_DOORS)
+        world.get_region(MENU).create_exit("A door to nowhere")
+        randomizer = _Randomizer()
+        with self.assertRaisesRegex(ValueError, "ONE_WAY exits"):
+            randomizer.run(lambda: entrances.shuffle(world))
+        self.assertEqual(randomizer.graphs, [])
+
+    def test_a_small_start_is_drawn_again(self) -> None:
+        world, measure, _ = _split_world(COUPLED, seed=1)
+        randomizer = _Randomizer()
+        randomizer.run(lambda: entrances._randomize(world, True, measure, 10 ** 6), start_check=True)
+        self.assertEqual(len(randomizer.graphs), 1 + entrances.START_RESHUFFLES)
+        _assert_whole(self, world)
+
+    def test_the_start_opens_what_is_wanted(self) -> None:
+        world, measure, wanted = _split_world(COUPLED, seed=1)
+        randomizer = _Randomizer()
+        randomizer.run(lambda: entrances._randomize(world, True, measure, wanted), start_check=True)
+        self.assertTrue(measure.start()[0] >= wanted or len(randomizer.graphs) == 1 + entrances.START_RESHUFFLES)
+
+
+class _Randomizer:
+    """Archipelago's randomizer in place of entrances' own: counts its calls, keeps the graph each starts from, and on
+    its first `failures` calls runs out of spare doors once 20 targets are left (through its own on_connect), or
+    before placing anything with `at_once`."""
+
+    def __init__(self, failures: int = 0, at_once: bool = False):
+        self.failures, self.at_once = failures, at_once
+        self.graphs: list[set[tuple[str, str, str | None]]] = []
+
+    def randomize(self, world: BugFablesWorld, coupled: bool, target_group_lookup: dict[int, list[int]]) -> Any:
+        self.graphs.append(_graph(world))
+        if len(self.graphs) > self.failures:
+            return randomize_entrances(world, coupled, target_group_lookup)
+        if self.at_once:
+            raise EntranceRandomizationError(RAN_OUT)
+        return randomize_entrances(world, coupled, target_group_lookup, on_connect=_run_out)
+
+    def run(self, build: Callable[[], Any], start_check: bool = False) -> Any:
+        """build() with this randomizer in place, and the start check off unless asked for, as its draws would change
+        the count."""
+        kept = entrances.randomize_entrances, entrances.START_RESHUFFLES
+        entrances.randomize_entrances = self.randomize
+        if not start_check:
+            entrances.START_RESHUFFLES = 0
+        try:
+            return build()
+        finally:
+            entrances.randomize_entrances, entrances.START_RESHUFFLES = kept
+
+
+def _run_out(state: Any, exits: Any, targets: Any) -> None:
+    if len(state.entrance_lookup) <= 20:
+        raise EntranceRandomizationError(RAN_OUT)
+
+
+def _graph(world: BugFablesWorld) -> set[tuple[str, str, str | None]]:
+    """Every exit and where it leads, and every split door's target still waiting in its region."""
+    exits = {(e.name, e.parent_region.name, e.connected_region.name if e.connected_region else None)
+             for e in world.multiworld.get_entrances(world.player)}
+    return exits | {(e.name, "", region.name) for region in world.get_regions() for e in region.entrances
+                    if e.parent_region is None}
+
+
+def _split_world(options: dict[str, Any], seed: int) -> tuple[BugFablesWorld, Any, int]:
+    """A world with its doors split and planned as shuffle() hands them to the randomizer, and its start measured."""
+    world = generate_like_main(options, seed=seed, steps=BEFORE_DOORS)
+    measure = entrances._Measure(world)
+    wanted = min(entrances._START_SPOTS, measure.start()[0])
+    entrances._plando(world, entrances._split(world), True)
+    return world, measure, wanted
+
+
+def _assert_whole(test: TestCase, world: BugFablesWorld) -> None:
+    """Every exit connected and in its region's entrances once, no split door's target left waiting, and every region
+    reachable with everything."""
+    exits = list(world.multiworld.get_entrances(world.player))
+    test.assertTrue(all(e.connected_region is not None for e in exits))
+    held = Counter(e for region in world.get_regions() for e in region.entrances)
+    test.assertEqual(held, Counter(exits))
+    for region in world.get_regions():
+        for e in region.entrances:
+            test.assertIs(e.connected_region, region)
+    state = world.multiworld.get_all_state()
+    for region in world.get_regions():
+        test.assertTrue(state.can_reach_region(region.name, world.player), region.name)
 
 
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
