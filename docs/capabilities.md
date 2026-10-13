@@ -64,6 +64,7 @@ and preflight checks the shipped DLL holds none of it.
 | `mod/BugFablesAP/Dev/ScriptDump.cs` | writes files | Dev build only: dumps the item, flag, event and transfer tokens of every dialogue line to a file in the BepInEx folder |
 | `mod/BugFablesAP/Dev/SeedDump.cs` | writes files | Dev build only: dumps every table the mod read from the seed's slot_data to a file in the BepInEx folder |
 | `mod/BugFablesAP/Dev/SpriteDump.cs` | writes files | Dev build only: saves the game's interface sprite sheets and its item and medal sprites, each with an index, as images in the BepInEx folder |
+| `mod/BugFablesAP/Dev/MapShots.cs` | writes files | Dev build only: saves pictures of the game's world map and of its rooms, each with a table of where game coordinates land in it, in the BepInEx folder |
 | `mod/BugFablesAP/Dev/VarDump.cs` | writes files | Dev build only: dumps which flag slots the game's text uses to a file in the BepInEx folder |
 
 ## Mod: patches outside the game

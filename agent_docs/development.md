@@ -475,6 +475,11 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `holdup ap`: the drawn Archipelago icon held up on two class backdrops (plum, cyan).
 - `areas`: log the game's area names by number (`MainManager.areanames`, the numbers maps carry as
   `MapControl.areaid`), the logic's one module per area (apimplementation.md, build step 29).
+- `worldmap`: the pause menu's world map, opened and seen from above, to `bugfablesap-worldmap.png`, its texture, and
+  `bugfablesap-worldmap.tsv` (where the map's (x, z) land in the picture), in the BepInEx folder.
+- `roomshot <map> [pitch]`: a room seen from above (or from `pitch` degrees), none of its scripts run, to
+  `bugfablesap-room-<map>.png` and `.tsv`; `roomshot all [pitch]` every map, one a frame, to `bugfablesap-rooms/` with
+  one `rooms.tsv`. For the PopTracker pack's maps; game art, kept out of the repo.
 - `holdup long`: four "You got" lines too wide for the box (the one seen, a longer one, the longest server name with a
   player and alone), to check the fitting (the mod guide, step 9).
 - `shelflook <slot> <white|black> [current|first] [key=value ...]`: a shop slot shows the drawn icon in that look, to

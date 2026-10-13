@@ -80,7 +80,7 @@ namespace BugFablesAP
         }
 
         // The sheets aren't script-readable, so blit to a render texture and read that back.
-        private static void Save(Texture2D texture, string path)
+        internal static void Save(Texture2D texture, string path)
         {
             RenderTexture rt = RenderTexture.GetTemporary(texture.width, texture.height, 0, RenderTextureFormat.ARGB32);
             RenderTexture previous = RenderTexture.active;

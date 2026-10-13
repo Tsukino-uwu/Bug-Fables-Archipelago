@@ -153,6 +153,7 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 | [`SeedDump.cs`](../mod/BugFablesAP/Dev/SeedDump.cs) | Debug.SeedDump: every table the mod read from slot_data to a sorted TSV, to diff before and after a change to how it's read. | [development § Every Debug setting](development.md#every-debug-setting) |
 | [`QuestDump.cs`](../mod/BugFablesAP/Dev/QuestDump.cs) | Dumps every board quest: name, BoardData numbers, QuestChecks row. | [development § Every Debug setting](development.md#every-debug-setting)<br>[MEASURED § The quest board](MEASURED.md#the-quest-board-2026-09-24) |
 | [`SpriteDump.cs`](../mod/BugFablesAP/Dev/SpriteDump.cs) | Dumps the guisprites sheets and the item and medal sprites, each with an index, outside the repo. | [documentation § 10](documentation.md#10-the-quality-of-life-page-fast-text-skip-cutscenes-warp-and-more)<br>[MEASURED § The connection, the dev console, the party, the menus](MEASURED.md#the-connection-the-dev-console-the-party-the-menus) |
+| [`MapShots.cs`](../mod/BugFablesAP/Dev/MapShots.cs) | The console's `worldmap` and `roomshot`: the pause map and each room rendered from above, each with where game coordinates land in it, outside the repo. | [documentation § 7](documentation.md#7-dumps-every-map-script-entity-and-sprite-listed)<br>[development § Dev console (test files only)](development.md#dev-console-test-files-only) |
 
 ## Apworld
 

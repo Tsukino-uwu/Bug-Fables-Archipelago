@@ -515,6 +515,15 @@ settlement entrance's caravan stall with its three goods only.
 (`bugfablesap-itemsprites.tsv`) and their sheets, so a labelled contact sheet can be made from them, to pick an icon
 (the Boat Ticket's) by pointing at it. Game art stays local, never in the repo.
 
+**The world map and the rooms as pictures** (2026-10-13, for the PopTracker pack): `Dev/MapShots.cs`, two console
+commands. `worldmap` makes the pause menu's map (`Prefabs/Objects/map`) as `PauseMenu` does, plays its `Open`
+animation to the end in steps (one update of no time left the paper folded) and renders it from above. `roomshot
+<map>|all [pitch]` copies a room's prefab inactive, removes its scripts and sounds before showing it, so nothing of the
+room runs, hides its insides as from outside, and renders it from above (or from `pitch` degrees) with its own ambient
+light and no fog; `all` takes one room a frame. Each picture comes with where the game's (x, z) land in it, taken
+through the camera's viewport: first taken as screen points after the render target was released, they measured the
+game window instead (x and z at a 16:9 ratio). Game art: written to the BepInEx folder only.
+
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early seen (2026-09-25).
 
 *Code: `Dev/ScriptDump.cs`, `EntityDump.cs`, `MapDump.cs` and `SpriteDump.cs`; making an entity exist early,

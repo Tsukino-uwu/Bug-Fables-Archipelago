@@ -170,6 +170,7 @@ namespace BugFablesAP
             list.Add(("cheats", () => DevCheats.Tick(Log, giveMoney)));
             list.Add(("console", () => DevConsole.Tick(devConsole.Value)));
             list.Add(("loadtime", LoadTimer.Tick));
+            list.Add(("mapshots", () => MapShots.Tick(Log)));
         }
 
         partial void DevJobStart()

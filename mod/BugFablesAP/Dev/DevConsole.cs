@@ -1161,6 +1161,16 @@ namespace BugFablesAP
                         log.LogInfo("[dev] areas: " + string.Join("; ", MainManager.areanames
                             .Select((name, i) => i + " " + name).ToArray()));
                         return $"areas: {MainManager.areanames.Length} logged";
+                    case "worldmap": return MapShots.World(log);
+                    case "roomshot":
+                    {
+                        if (parts.Length < 2)
+                        {
+                            return "roomshot <map|all> [pitch, 90 straight down]";
+                        }
+                        float pitch = parts.Length > 2 && float.TryParse(parts[2], out float p) ? p : 90f;
+                        return parts[1] == "all" ? MapShots.All(pitch) : MapShots.Room(log, parts[1], pitch);
+                    }
                     case "shelfforward":
                     {
                         // shelfforward <step>: this map's shelves in ItemShops.ShelvesForward, live.
