@@ -961,7 +961,8 @@ be wrong.
   grate and near gate hidden; seen working) measured 73 of 2000, no real change, so it was closed again the same day.
   The six drop-only ledges (the southern room's top door, the underground door room's two top doors, the Golden Path
   tunnel's high door, the Lost Sands entrance's and the badge alcove's ledge doors) were each looked at in game: each
-  is a real drop from an isolated ledge, kept as the game has it (the user, 2026-10-13).
+  is a real drop from an isolated ledge, kept as the game has it (the user, 2026-10-13). The Worker Rooms' halves too: two
+  areas with no way between them, kept (the same day).
 - **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
   The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
   the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The
