@@ -4321,3 +4321,6 @@ said them.
 - **Start Inventory from Pool and DeathLink in the yaml** (build steps 98 and 99, mod step 66), both decided
   2026-09-29: the pool's items given before generation and their spots filled with filler, by Archipelago; DeathLink
   set by the yaml once per seed, so a change in the panel afterwards stays.
+- **Handoff:** nothing running and nothing uncommitted; not pushed (`main` 77 ahead, the tests and the full fuzz at
+  push time). Next: a random start's door seen in game (`TO-CHECK.md`), the PopTracker pack starting from slot_data's
+  `start` (its repo, on the user's yes), then the named start (Next 18).
