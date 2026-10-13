@@ -8,7 +8,8 @@ class TestGoalFlags(BugFablesTestBase):
     def test_goal_flags_are_the_artifacts_with_their_events(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["goal_flags"],
                          [{"flag": 41, "events": [26]}, {"flag": 88, "events": [73]},
-                          {"flag": 299, "events": [99]}, {"flag": 346, "events": [194]},
+                          {"flag": 299, "events": [99]}, {"flag": 345, "events": [118]},
+                          {"flag": 346, "events": [194]},
                           {"flag": 347, "events": [142]}, {"flag": 555, "events": [200, 203]}])
 
     def test_each_artifact_set_by_its_own_event(self) -> None:

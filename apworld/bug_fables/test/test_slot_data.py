@@ -99,8 +99,8 @@ class TestFactoryPass(BugFablesTestBase):
     # hand out a vanilla pass instead of its check.
     def test_the_pass_is_kept(self) -> None:
         # The Prison Key (161) with it, since build step 82; the Wasp Key (119) and the Lab Card (160), each one key for
-        # two locks, since 2026-10-12.
-        self.assertEqual(self.world.fill_slot_data()["kept_keys"], [95, 119, 160, 161])
+        # two locks, since 2026-10-12; the Small Ancient Key (114), one for the castle's two locks, since 2026-10-13.
+        self.assertEqual(self.world.fill_slot_data()["kept_keys"], [95, 114, 119, 160, 161])
 
     def test_pass_spots_are_locations(self) -> None:
         data = self.world.fill_slot_data()
@@ -315,9 +315,19 @@ class TestMadeleinesHouse(BugFablesTestBase):
         # The opening's Crunchy Leaf would otherwise reach the bag from the game, not the server.
         data = self.world.fill_slot_data()
         leaf = str(self.world.location_name_to_id["Outskirts: Outside the City, Tutorial Battle"])
-        self.assertEqual(data["location_added"], {leaf: {"type": 0, "item": 0}})
+        self.assertEqual(data["location_added"][leaf], {"type": 0, "item": 0})
         self.assertEqual(data["location_flags"][leaf], 15)
         self.assertIn(int(leaf), data["silent_locations"])
+
+    def test_the_watchers_gem_is_a_location(self) -> None:
+        # The Watcher's scene (Event117) adds the Peculiar Gem (key item 116) straight to the bag (build step 93).
+        data = self.world.fill_slot_data()
+        fight = str(self.world.location_name_to_id["Ancient Castle: Boss Room, Boss Fight"])
+        self.assertEqual(data["location_added"][fight], {"type": 1, "item": 116})
+        self.assertEqual(data["location_flags"][fight], 38)
+        self.assertEqual(sorted(data["location_added"]),
+                         sorted([str(self.world.location_name_to_id["Outskirts: Outside the City, Tutorial Battle"]),
+                                 fight]))
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("Crunchy Leaf", pool)
 

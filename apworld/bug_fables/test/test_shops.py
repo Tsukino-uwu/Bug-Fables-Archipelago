@@ -9,9 +9,12 @@ from ..rules import fall_back_from_filler_only
 
 # Party members, field moves and Jump as items take filler's place: a solo seed is short of filler (68 filler items for
 # 73 excluded spots, 2026-10-10; a default seed holds, 74 for 73), so Filler Only falls back.
-# Filler Only needs as much filler as excluded spots; the pool's padding keeps the two close, so a dozen ordinary
-# locations excluded on top leave it short whatever the room's checks add (2026-10-12: new useful items had closed it).
-SHORT_EXCLUSIONS = [loc.name for loc in LOCATIONS if loc.category is None and not loc.pending and loc.reach is None][:12]
+# Filler Only needs as much filler as excluded spots. The later half of the ordinary locations excluded on top leaves it
+# far short, a gap each new location widens (it adds half an exclusion and at most one filler item); the earliest half
+# stays so the first spheres still fill. Artifact scenes hold locked items, which can't be excluded.
+ORDINARY = [loc.name for loc in LOCATIONS
+            if loc.category is None and not loc.pending and loc.reach is None and loc.source.artifact is None]
+SHORT_EXCLUSIONS = ORDINARY[len(ORDINARY) // 2:]
 SHORT_OF_FILLER = {"shop_contents": "filler_only", "starting_party_member": "random_member",
                    "shuffle_field_moves": True, "shuffle_jump": True, "exclude_locations": SHORT_EXCLUSIONS}
 

@@ -15,6 +15,11 @@ class TestPermitGate(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Snakemouth Den: Treasure Room, Treasure Pedestal"))
 
     def test_goal_needs_the_permit(self) -> None:
+        # Every other pool item (the artifacts stay locked at their scenes, found by the sweep): without the permit the
+        # last fight stays out of reach. Not collect_all_but, which also collects locked items and events unreached.
+        for item in self.multiworld.itempool:
+            if item.player == self.player and item.name != "Explorer Permit":
+                self.multiworld.state.collect(item, prevent_sweep=True)
         self.assertBeatable(False)
         self.collect_by_name("Explorer Permit")
         self.assertBeatable(True)
