@@ -10,15 +10,18 @@ from worlds.AutoWorld import call_all
 
 from .. import entrances
 from ..data_tables import (
+    DOOR_LABELS,
     DOORS,
     ONE_WAYS,
     REGIONS,
     SHUFFLED_CONNECTIONS,
     SHUFFLED_ONE_WAYS,
+    current_name,
     door_name,
     door_region,
     landing_region,
     one_way_landing,
+    room_name,
 )
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
@@ -598,9 +601,9 @@ FIELDS, PALACE = ("NearSnakemouth", "loadingzonefields"), ("AntBridge", "loadzon
 TANKS_NORTH, ENTRANCE_RIGHT = ("BarrenLandsTanks", "returnzonenorth"), ("BarrenLandsEntrance", "returnloadzoneright")
 ENTRANCE_RIGHT_LANDING = "BarrenLandsEntrance as from BarrenLandsEntrance: returnloadzoneright"
 PLANDO = [
-    # Written in another case on purpose: plando names match whatever the case.
-    {"entrance": "bugariaoutskirtsoutsidecity: doorbugaria", "exit": "SnakemouthLake: WarpMap5",
-     "direction": "entrance"},
+    # Named as the spoiler names them, in another case on purpose: plando names match whatever the case.
+    {"entrance": door_name(*CITY_GATE).upper(), "exit": door_name(*LAKE), "direction": "entrance"},
+    # The game's names, as older yamls write them ("<map>: <door>", "<map> as from <map>: <door>").
     {"entrance": "NearSnakemouth: loadingzonefields", "exit": "AntBridge: loadzonepalace", "direction": "exit"},
     # No direction: both, which a one-way can't go; it goes its one way.
     {"entrance": "barrenlandstanks: returnzonenorth", "exit": ENTRANCE_RIGHT_LANDING},
@@ -686,14 +689,24 @@ class TestDoorTargetsReadBack(TestCase):
 
 class TestDoorPlandoNames(TestCase):
     def test_every_door_and_nothing_else(self) -> None:
-        self.assertIn("antbridge: loadzonepalace", DoorPlando.entrances)
-        self.assertIn("antbridge: loadzonepalace", DoorPlando.exits)
-        self.assertIn("barrenlandstanks: returnzonenorth", DoorPlando.entrances)
-        self.assertIn(ENTRANCE_RIGHT_LANDING.lower(), DoorPlando.exits)
+        landing = one_way_landing(next(w for w in SHUFFLED_ONE_WAYS if (w.map, w.door) == ENTRANCE_RIGHT))
+        self.assertIn(door_name(*PALACE).lower(), DoorPlando.entrances)
+        self.assertIn(door_name(*PALACE).lower(), DoorPlando.exits)
+        self.assertIn(door_name(*TANKS_NORTH).lower(), DoorPlando.entrances)
+        self.assertIn(landing.lower(), DoorPlando.exits)
         self.assertEqual(len(DoorPlando.entrances), 2 * len(SHUFFLED_CONNECTIONS) + len(SHUFFLED_ONE_WAYS))
         self.assertEqual(len(DoorPlando.exits), 2 * len(SHUFFLED_CONNECTIONS) + len(SHUFFLED_ONE_WAYS))
         with self.assertRaises(ValueError):
-            DoorPlando.from_any([{"entrance": "Nowhere: door", "exit": "AntBridge: loadzonepalace"}])
+            DoorPlando.from_any([{"entrance": "Nowhere: door", "exit": door_name(*PALACE)}])
+
+    def test_the_game_s_names_still_read(self) -> None:
+        # Older yamls name doors as the game does; the list above holds only the names now.
+        landing = one_way_landing(next(w for w in SHUFFLED_ONE_WAYS if (w.map, w.door) == ENTRANCE_RIGHT))
+        self.assertEqual(current_name("antbridge: LOADZONEPALACE"), door_name(*PALACE))
+        self.assertEqual(current_name(ENTRANCE_RIGHT_LANDING.upper()), landing)
+        self.assertEqual(current_name("Nowhere: door"), "Nowhere: door")
+        self.assertNotIn("antbridge: loadzonepalace", DoorPlando.entrances)
+        DoorPlando.from_any([{"entrance": "AntBridge: loadzonepalace", "exit": door_name(*FIELDS)}])
 
     def test_one_way_and_two_way_never_mix(self) -> None:
         # A one-way door can't arrive next to a door, nor a door take a one-way's landing: Archipelago's can_connect.
@@ -701,6 +714,35 @@ class TestDoorPlandoNames(TestCase):
                                 ("AntBridge: loadzonepalace", ENTRANCE_RIGHT_LANDING)):
             with self.subTest(entrance=entrance), self.assertRaises(ValueError):
                 DoorPlando.from_any([{"entrance": entrance, "exit": exit_}])
+
+
+class TestDoorNames(TestCase):
+    """Each door's entrance named where it is (entrance randomization.md): its room, and the room it leads to in the
+    game."""
+
+    def test_each_names_its_room_and_where_it_leads(self) -> None:
+        ends = [(end, other.map) for c in DOORS.connections for end, other in ((c.a, c.b), (c.b, c.a))]
+        ends += [(DoorEnd(w.map, w.door), w.to) for w in ONE_WAYS]
+        for end, to in ends:
+            name = door_name(end.map, end.door)
+            with self.subTest(door=name):
+                here, door = name.split(", Door", 1)
+                self.assertEqual(here, room_name(end.map))
+                self.assertTrue(room_name(to).endswith(door.split(" to ", 1)[1]))
+
+    def test_doors_between_the_same_rooms_numbered(self) -> None:
+        names = set(DOOR_LABELS.values())
+        self.assertEqual(len(names), len(DOOR_LABELS))
+        numbered = [name for name in names if ", Door 1 to " in name]
+        self.assertTrue(numbered)
+        for name in numbered:
+            self.assertIn(name.replace(", Door 1 to ", ", Door 2 to "), names)
+            self.assertNotIn(name.replace(", Door 1 to ", ", Door to "), names)
+
+    def test_every_entrance_name_once(self) -> None:
+        world = generate_like_main({"entrance_randomizer": "coupled"}, 1)
+        names = [entrance.name for entrance in world.multiworld.get_entrances(world.player)]
+        self.assertEqual(len(names), len(set(names)))
 
 
 class TestOneWayTable(TestCase):

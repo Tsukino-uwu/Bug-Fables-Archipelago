@@ -21,6 +21,7 @@ from .data_tables import (
     ROOM_STARTS,
     SHUFFLED_CONNECTIONS,
     SHUFFLED_ONE_WAYS,
+    current_name,
     door_name,
     door_region,
     landing_region,
@@ -352,8 +353,10 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
     landings = {one_way_landing(w).lower(): w for w in SHUFFLED_ONE_WAYS}
     pairings: list[tuple[Door, Door]] = []
     for connection in world.options.plando_connections:
-        if connection.entrance.lower() in one_ways:
-            x, y = one_ways[connection.entrance.lower()], landings[connection.exit.lower()]
+        # Either name of a door, the one now or the game's (data_tables.current_name).
+        entrance_name, exit_name = current_name(connection.entrance).lower(), current_name(connection.exit).lower()
+        if entrance_name in one_ways:
+            x, y = one_ways[entrance_name], landings[exit_name]
             if (world.get_entrance(door_name(x.map, x.door)).connected_region is not None
                     or _free_target(world, landing_region(y), one_way_landing(y)) is None):
                 raise ValueError(f"Bug Fables: player {world.player_name}'s plando connection {connection.entrance} "
@@ -361,7 +364,7 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
             _connect(world, door_name(x.map, x.door), landing_region(y), one_way_landing(y))
             pairings.append(((x.map, x.door), (y.map, y.door)))
             continue
-        entrance, exit_ = by_name[connection.entrance.lower()], by_name[connection.exit.lower()]
+        entrance, exit_ = by_name[entrance_name], by_name[exit_name]
         ways = []
         if coupled or connection.direction in ("entrance", "both"):
             ways.append((entrance, exit_))

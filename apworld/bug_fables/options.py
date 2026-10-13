@@ -20,6 +20,7 @@ from .data_tables import (
     ONE_WAY_NAMES,
     ROOM_STARTS,
     SHUFFLED_CONNECTIONS,
+    current_name,
 )
 from .roadblock_options import ExtraRoadblocks
 from .shop_inventories import SPOTS
@@ -382,22 +383,31 @@ class MusicShuffle(Toggle):
 class DoorPlando(PlandoConnections):
     """
     Which door leads where, with the Entrance Randomizer on Coupled or Decoupled (ignored when it's off or on Room
-    Swap). Each door is named "<map>: <door>", as the spoiler log's Entrances section lists them. entrance is the door
-    you go through, exit the door you arrive next to. direction: both (the default), entrance (only the entrance door
-    leads to the exit door) or exit (only the exit door leads back to the entrance door); Coupled always joins both
-    ways. A one-way door (a fog maze's wrong turn, a drop) takes another one-way's landing instead, named
-    "<where it lands> as from <map>: <door>" as the spoiler lists it, and only goes one way, whatever the direction.
-    The seed's host must have plando's "connections" turned on.
+    Swap). Each door is named where it is, "<Area>: <Room>, Door to <the room it leads to in the game>", as the spoiler
+    log's Entrances section lists them; the older "<map>: <door>" names still work. entrance is the door you go
+    through, exit the door you arrive next to. direction: both (the default), entrance (only the entrance door leads to
+    the exit door) or exit (only the exit door leads back to the entrance door); Coupled always joins both ways. A
+    one-way door (a fog maze's wrong turn, a drop) takes another one-way's landing instead, named "<where it lands> as
+    from <its door>" as the spoiler lists it, and only goes one way, whatever the direction. The seed's host must have
+    plando's "connections" turned on.
     """
 
     entrances = DOOR_NAMES | ONE_WAY_NAMES
     exits = DOOR_NAMES | ONE_WAY_LANDINGS
 
     @classmethod
+    def validate_entrance_name(cls, entrance: str) -> bool:
+        return super().validate_entrance_name(current_name(entrance))
+
+    @classmethod
+    def validate_exit_name(cls, exit: str) -> bool:
+        return super().validate_exit_name(current_name(exit))
+
+    @classmethod
     def can_connect(cls, entrance: str, exit: str) -> bool:
         # A one-way door goes only to a one-way's landing, and a door only next to a door.
-        return ((entrance.lower() in {name.lower() for name in ONE_WAY_NAMES})
-                == (exit.lower() in {name.lower() for name in ONE_WAY_LANDINGS}))
+        return ((current_name(entrance).lower() in {name.lower() for name in ONE_WAY_NAMES})
+                == (current_name(exit).lower() in {name.lower() for name in ONE_WAY_LANDINGS}))
 
 
 class BugFablesDeathLink(DeathLink):

@@ -11,7 +11,7 @@ from test.general import setup_multiworld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import exclusion_rules
 
-from ..data_tables import ONE_WAYS, door_name
+from ..data_tables import ONE_WAYS, door_name, game_door_name
 from ..universal_tracker import DOORS_TAKEN_KEY
 from ..world import BugFablesWorld
 from . import generate_like_main
@@ -65,14 +65,15 @@ class TestCoupledDoorsDeferred(DeferredDoorsBase):
     def test_a_door_taken_and_its_way_back(self) -> None:
         real = connected(self.real)
         x, y = next((x, y) for x, y in self.real.door_pairings if (y, x) in set(self.real.door_pairings))
-        self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, [door_name(*x)])
+        # The mod names each door as the game does (game_door_name).
+        self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, [game_door_name(*x)])
         now = connected(self.world)
         self.assertEqual(now[door_name(*x)], real[door_name(*x)])
         self.assertEqual(now[door_name(*y)], real[door_name(*y)])
         self.assertEqual(sum(1 for door in self.doors if now[door] is not None), 2)
 
     def test_every_door_taken_is_the_seed_again(self) -> None:
-        self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, self.doors)
+        self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, [game_door_name(*x) for x, _ in self.real.door_pairings])
         self.assertEqual(connected(self.world), connected(self.real))
         progression = [item.name for item in self.real.multiworld.itempool if item.player == 1 and item.advancement]
         sent = [item.name for item in self.real.multiworld.precollected_items[1] if item.code is not None]
@@ -92,6 +93,7 @@ class TestDecoupledDoorsDeferred(DeferredDoorsBase):
     def test_only_the_door_taken(self) -> None:
         real = connected(self.real)
         door = self.doors[0]
+        # By its entrance's own name too.
         self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, [door])
         now = connected(self.world)
         self.assertEqual(now[door], real[door])
@@ -102,7 +104,7 @@ class TestDecoupledDoorsDeferred(DeferredDoorsBase):
         w = next(w for w in ONE_WAYS if w.copies)
         base = door_name(w.map, w.door)
         self.assertIn(base, self.doors)
-        self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, [door_name(w.map, w.copies[0])])
+        self.world.reconnect_found_entrances(DOORS_TAKEN_KEY, [game_door_name(w.map, w.copies[0])])
         self.assertEqual(connected(self.world)[base], connected(self.real)[base])
 
 

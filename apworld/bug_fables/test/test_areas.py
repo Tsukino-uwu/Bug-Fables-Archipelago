@@ -267,9 +267,10 @@ class TestStoryOnlyMaps(BugFablesTestBase):
     options = {"entrance_randomizer": "coupled"}
 
     def test_out_of_shuffle_and_starts(self) -> None:
-        from ..data_tables import DOOR_NAMES, ROOM_STARTS, STORY_ONLY_MAPS
-        for name in DOOR_NAMES:
-            self.assertNotIn(name.split(": ")[0], STORY_ONLY_MAPS)
+        from ..data_tables import ROOM_STARTS, SHUFFLED_CONNECTIONS, STORY_ONLY_MAPS
+        for connection in SHUFFLED_CONNECTIONS:
+            self.assertNotIn(connection.a.map, STORY_ONLY_MAPS)
+            self.assertNotIn(connection.b.map, STORY_ONLY_MAPS)
         for start in ROOM_STARTS:
             self.assertNotIn(start.map, STORY_ONLY_MAPS)
 

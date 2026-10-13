@@ -177,6 +177,7 @@ this file and that doc disagree, that doc is right.
 102. [Build step 102: Universal Tracker's own refusal for a seed of another version](#build-step-102-universal-trackers-own-refusal-for-a-seed-of-another-version)
 103. [Build step 103: Enemysanity's real fight after its name in Universal Tracker](#build-step-103-enemysanitys-real-fight-after-its-name-in-universal-tracker)
 104. [Build step 104: harder ways shown in Universal Tracker as glitched logic](#build-step-104-harder-ways-shown-in-universal-tracker-as-glitched-logic)
+105. [Build step 105: each door's entrance named where it is](#build-step-105-each-doors-entrance-named-where-it-is)
 
 **How it works**
 
@@ -988,7 +989,7 @@ be wrong.
       also logs that the world asked to be disabled; its import allowed in the preflight.
     - **Readable door labels:** "Room: Door to" and the room the door leads to in the unshuffled game, generated
       from the approved room names, the whole list reviewed before use; in the door list, the map's tooltips and
-      `/get_logical_path`.
+      `/get_logical_path`. Built in build step 105, as the entrances' own names (the door list has no other hook).
     - **Enemysanity's alias under Enemy Shuffle:** the real fight shown after the location's name; the names never
       change.
     **The map tab built 2026-10-13** (build step 101); the rest above to come, each its own step.
@@ -2401,9 +2402,10 @@ them; room-by-room rules (build step 24) replace them later.
    both ways and a random start: no region, entrance, transfer, spot, encounter, start or shuffled door names one; it
    fails with the list emptied.
 2. **Every door an entrance of its map's region**, named where it is, `"<map>: <door>"` (the naming the entrance
-   randomization doc recommends), connected as the game has it: 508. Of the 39 fixed doors between two maps, 37 are
-   plain entrances; the two out of `SnakemouthEmpty` and `TestRoom` go with those maps. (Since build step 38: 510 doors,
-   the 17 one-way doors are one-way entrances named the same way, and 21 fixed links are left.)
+   randomization doc recommends; readable since build step 105, `"Area: Room, Door to <room>"`), connected as the game
+   has it: 508. Of the 39 fixed doors between two maps, 37 are plain entrances; the two out of `SnakemouthEmpty` and
+   `TestRoom` go with those maps. (Since build step 38: 510 doors, the 17 one-way doors are one-way entrances named the
+   same way, and 21 fixed links are left.)
 3. **The transfers that join the door graph's parts** (the doors alone split it into 10), each a `Transfer` in its
    area's module, from the decompiled events and the dumps (read 2026-09-29): the boat (`Boat Ticket`), the Beehive
    elevator, the submarine docks, the ant tunnels, the termite gate, the arena, the Roach Village lifts, the Golden
@@ -4337,8 +4339,9 @@ has/does, that includes plando"; How it works §8).
 
 1. **The option is Archipelago's class** with our names: `DoorPlando(PlandoConnections)`, whose `entrances` and
    `exits` are every shuffled door's entrance name, `"<map>: <door>"`, as the spoiler lists them (`DOOR_NAMES` in
-   `data_tables.py`). Archipelago checks the names (any case), refuses a door used twice, and drops the whole option
-   when the host hasn't turned plando's "connections" on.
+   `data_tables.py`; since build step 105 the readable names, the older ones still read). Archipelago checks the names
+   (any case), refuses a door used twice, and drops the whole option when the host hasn't turned plando's
+   "connections" on.
 2. **Placed first, the rest by the randomizer:** after the doors are split, each plando connection is joined by hand
    (The Messenger's pattern), then `randomize_entrances` places what's left. entrance: the entrance door leads next to
    the exit door; exit: the exit door leads back to the entrance door; both: both. Coupled always joins both ways (as
@@ -4809,12 +4812,13 @@ door's map link in `fixed`. The shuffle never touched `fixed`, so every one-way 
    - **`fixed` keeps 22 links:** story copies that have pairs (the Golden Settlement by day and night, the Beehive),
      names two doors share (`GoldenPathTunnel2`, `WaspKingdomOutside`), `TermiteIndustrial`'s in-map pair.
 2. **Regions** (`regions.py`): each one-way is an entrance of its map, named where it is (`"<map>: <door>"`, as every
-   door), to the map it leads into, and one-way typed (Archipelago's default for an `Entrance`). It replaces the plain
-   link `fixed` made, so the logic with the doors off is the same graph.
+   door; readable since build step 105), to the map it leads into, and one-way typed (Archipelago's default for an
+   `Entrance`). It replaces the plain link `fixed` made, so the logic with the doors off is the same graph.
 3. **The shuffle** (`entrances.py`), Coupled and Decoupled:
    - each one-way is split with `disconnect_entrance_for_randomization(..., one_way_target_name=...)`, the
      function's required name for a one-way's target;
-   - the target is named for its landing, `"<to> as from <map>: <door>"`. That's apart from the door's own name,
+   - the target is named for its landing, `"<to> as from <map>: <door>"` (since build step 105, `"<room> as from
+     <door's name>"`). That's apart from the door's own name,
      since coupled, Archipelago never joins an exit to a target of its own name, and a one-way may keep its own
      landing;
    - a pairing (x, y) of one-ways means x now lands where y did;
@@ -5686,7 +5690,8 @@ replaced 2026-10-01's "no" (build step 41).
    (`TrackerCore.py`), and nothing of ours sweeps before that. Its fuzzer hook turns deferral off, so the hook still
    compares every sphere (development.md, Fuzzing the apworld, Universal Tracker's fuzzer hook, item 4).
 3. **The mod** (`DoorShuffle.cs`, `ApConnection.cs`): a prefix on `MainManager.TransferMap`, whose `caller` is the door
-   walked through, names it as the apworld does (`Map: door`, or `name#row` where its map has two doors of that name)
+   walked through, names it as the game does (`Map: door`, or `name#row` where its map has two doors of that name;
+   since build step 105 the apworld translates it to the entrance's name)
    while the doors are shuffled in a seed; a failure there only logs (`[doors] … taken but not recorded`), never
    stopping the door. `ApConnection.DoorTaken` adds it with one `Set` carrying its default `[]` and an `update`
    (which adds names not yet in the list; `network protocol.md`, Set), off the game thread, whole as Archipelago's own
@@ -7217,6 +7222,48 @@ knows it's there without the seed ever counting on it.
 *Code: `custom_rules.py` (`GLITCHES_ITEM`, `GLITCHED`), `items.py` (`create_item`), `world.py`
 (`glitches_item_name`), `logic/outskirts.py`, `logic/giants_lair.py`; tests `test_glitched.py`, `test_areas.py`.*
 
+## Build step 105: each door's entrance named where it is
+
+**Why:** Next 79 (decided 2026-10-13): Universal Tracker showed each door by its entrance's internal name
+(`BugariaPier: loadzone`) in its door list, the map's tooltips and `/get_logical_path`. Its door list prints the
+entrance's own name with no hook to relabel it (`TrackerCore.py`, v0.3.4, read 2026-10-13); only the tooltips
+(`poptracker_entrance_mapping`) and `/get_logical_path` (`explain_path`) take a label. Archipelago's entrance
+randomization doc recommends names "that describe the location of the exit, such as 'Starting Room Right Door.'" So
+the entrances themselves are renamed (decided 2026-10-13), and everything that shows a door reads the new name: the
+door list, the map, `/get_logical_path`, the spoiler and plando.
+
+**How it was built:**
+
+1. **The names** (`data_tables.door_name`, from `DOOR_LABELS`): "Area: Room, Door to" and the room the door leads to
+   in the game, that room's area left out when it's the same, e.g. "Outskirts: Outside the City, Door to Bugaria City:
+   Main Plaza". The form matches the location names ("Area: Room, …"; picked 2026-10-13 over "Area: Room: Door to").
+   The rooms are the approved names (`room_name`, as each map's spots begin); a room no spot names yet shows its game
+   area and map id until it's named (decided 2026-10-13). Doors between the same two rooms are Door 1 and Door 2, by
+   their names in the game (42 doors). 526 names, each one unique, checked when the world loads; the whole list was
+   drafted for review first, and the code's names match the draft for all 524 of its doors (the two more are one-ways
+   of the unused maps).
+2. **A one-way's landing** keeps its form with readable parts, "<room> as from <its door>", e.g. "Far Grasslands:
+   Wizard's Tower Basement as from Far Grasslands: Wizard's Tower, Door to Wizard's Tower Basement".
+3. **The older names still read:** `DoorPlando` lists only the names now, and its checks (`validate_entrance_name`,
+   `validate_exit_name`, `can_connect`) and `entrances._plando` take either name in any case
+   (`data_tables.current_name`), so a yaml written for 0.3.x still works.
+4. **The mod is unchanged:** it names a door taken as the game does (`Map: door`, `game_door_name`), and
+   `universal_tracker.reconnect_doors` translates that to the entrance's name. `door_targets` was always by map and
+   door.
+5. **The map tab** (build step 101): each door's pin is named as its entrance, so the tooltips read the new names; the
+   room titles come from the same `room_name`, and the dropdown sorts the rooms by it.
+6. **Tests:** each name says its room and the room it leads to; doors between the same rooms numbered; every entrance
+   name once in a seed; plando with the new names (in another case) and the older ones (`test_doors.py`); the deferred
+   doors fed the names the mod writes (`test_deferred_doors.py`). Tests that named a door literally use `door_name`.
+7. **The PopTracker pack** reads entrance names in its export: handled in its own repo.
+
+**Status:** built (2026-10-13), its tests written, run with the next full suite. Not yet seen in Universal Tracker or
+a spoiler.
+
+*Code: `data_tables.py` (`room_name`, `DOOR_LABELS`, `door_name`, `game_door_name`, `current_name`), `options.py`
+(`DoorPlando`), `entrances.py` (`_plando`), `universal_tracker.py` (`reconnect_doors`), `dev-scripts/ut-map.py`,
+`docs/en_Bug Fables.md`; tests `test_doors.py`, `test_deferred_doors.py`, `test_logic.py`, `test_areas.py`.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -7540,7 +7587,9 @@ Why regions at all, instead of a full rule on every spot:
 - **All of the logic is in the apworld; none is in the mod.** The mod only does what the generator decided
   (`slot_data`; `room-logic.md`, rule 7), so the game's side has no logic and no file per room.
 - **Every map is a region, every door an entrance** (build step 12, 2026-09-30): `regions.py` makes them from the door
-  table, named `"<map>: <door>"`, so Archipelago's entrance randomizer can shuffle them.
+  table, so Archipelago's entrance randomizer can shuffle them. Each door's entrance is named where it is, as the
+  entrance randomization doc recommends: `"Area: Room, Door to"` and the room it leads to in the game
+  (`data_tables.door_name`, build step 105).
 - **One Python module per game area** (`logic/`, build step 29): one for each of the game's 25 areas, from
   `outskirts.py` to `upper_snakemouth.py`. Each lists its locations and story events (each in its
   map, with its own rule), its door gates (`DOOR_RULES`) and ways between maps that aren't doors (`TRANSFERS`). Per

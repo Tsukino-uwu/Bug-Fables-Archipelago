@@ -9,7 +9,15 @@ import pkgutil
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import ENEMY_LOCATIONS, ENEMY_NAMES, LOCATION_NAME_TO_ID, ONE_WAYS, door_name
+from .data_tables import (
+    DOOR_LABELS,
+    ENEMY_LOCATIONS,
+    ENEMY_NAMES,
+    LOCATION_NAME_TO_ID,
+    ONE_WAYS,
+    door_name,
+    game_door_name,
+)
 from .options import BugFablesOptions, EntranceRandomizer
 
 if TYPE_CHECKING:
@@ -71,8 +79,10 @@ TRACKER_WORLD: dict[str, Any] = {
     "location_setting_key": MAP_KEY,
     "location_icon_coords": location_icon_coords,
 }
-# A one-way door's story copies are other doors in the game but one entrance here.
-_COPY_OF = {door_name(w.map, copy): door_name(w.map, w.door) for w in ONE_WAYS for copy in w.copies}
+# The mod's doors key names each door as the game does (game_door_name): each to its entrance. A one-way door's story
+# copies are other doors in the game but one entrance here.
+_TAKEN = {**{game_door_name(*door): label for door, label in DOOR_LABELS.items()},
+          **{game_door_name(w.map, copy): door_name(w.map, w.door) for w in ONE_WAYS for copy in w.copies}}
 _ONE_WAYS = {(w.map, w.door) for w in ONE_WAYS}
 
 
@@ -146,12 +156,13 @@ def defer_doors(world: BugFablesWorld) -> None:
 
 
 def reconnect_doors(world: BugFablesWorld, taken: Any) -> None:
-    """The doors the player has gone through, from the doors key (None before the first): each deferred one connected
-    again, with its way back when the doors are coupled. Anything but a list of names is left alone."""
+    """The doors the player has gone through, from the doors key (None before the first), each named as the game names
+    it: each deferred one connected again, with its way back when the doors are coupled. Anything but a list of names
+    is left alone."""
     for listed in taken if isinstance(taken, list) else ():
         if not isinstance(listed, str):
             continue
-        name = _COPY_OF.get(listed, listed)
+        name = _TAKEN.get(listed, listed)
         for door in (name, world.way_back.get(name)):
             region = world.deferred_doors.pop(door, None) if door else None
             if region is not None:

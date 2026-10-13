@@ -44,29 +44,20 @@
        }
       },
       {
-       "title": "CaveOfTrials",
-       "content": {
-        "type": "map",
-        "maps": [
-         "CaveOfTrials"
-        ]
-       }
-      },
-      {
-       "title": "HermitCave",
-       "content": {
-        "type": "map",
-        "maps": [
-         "HermitCave"
-        ]
-       }
-      },
-      {
        "title": "BugariaOutskitsSnakemouthCorridor1",
        "content": {
         "type": "map",
         "maps": [
          "BugariaOutskitsSnakemouthCorridor1"
+        ]
+       }
+      },
+      {
+       "title": "CaveOfTrials",
+       "content": {
+        "type": "map",
+        "maps": [
+         "CaveOfTrials"
         ]
        }
       },
@@ -121,6 +112,15 @@
         "type": "map",
         "maps": [
          "GoldenPathTunnel2"
+        ]
+       }
+      },
+      {
+       "title": "HermitCave",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HermitCave"
         ]
        }
       },
@@ -214,6 +214,15 @@
        }
       },
       {
+       "title": "Ant Tunnels",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AntMinesBreakRoom"
+        ]
+       }
+      },
+      {
        "title": "AntBridge",
        "content": {
         "type": "map",
@@ -241,15 +250,6 @@
        }
       },
       {
-       "title": "Ant Tunnels",
-       "content": {
-        "type": "map",
-        "maps": [
-         "AntMinesBreakRoom"
-        ]
-       }
-      },
-      {
        "title": "BugariaBridgeAttack",
        "content": {
         "type": "map",
@@ -264,6 +264,33 @@
         "type": "map",
         "maps": [
          "BugariaCastleAttack"
+        ]
+       }
+      },
+      {
+       "title": "BugariaEndBridge",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaEndBridge"
+        ]
+       }
+      },
+      {
+       "title": "BugariaEndPlaza",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaEndPlaza"
+        ]
+       }
+      },
+      {
+       "title": "BugariaEndThrone",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BugariaEndThrone"
         ]
        }
       },
@@ -318,33 +345,6 @@
         "type": "map",
         "maps": [
          "AntPalace1"
-        ]
-       }
-      },
-      {
-       "title": "BugariaEndBridge",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BugariaEndBridge"
-        ]
-       }
-      },
-      {
-       "title": "BugariaEndPlaza",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BugariaEndPlaza"
-        ]
-       }
-      },
-      {
-       "title": "BugariaEndThrone",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BugariaEndThrone"
         ]
        }
       },
@@ -420,6 +420,15 @@
        }
       },
       {
+       "title": "SnakemouthTop",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SnakemouthTop"
+        ]
+       }
+      },
+      {
        "title": "SnakemouthUndergroundLeftA",
        "content": {
         "type": "map",
@@ -474,15 +483,6 @@
        }
       },
       {
-       "title": "SnakemouthTop",
-       "content": {
-        "type": "map",
-        "maps": [
-         "SnakemouthTop"
-        ]
-       }
-      },
-      {
        "title": "UpperSnekEntrance",
        "content": {
         "type": "map",
@@ -505,51 +505,6 @@
         "type": "map",
         "maps": [
          "Area: Lost Sands"
-        ]
-       }
-      },
-      {
-       "title": "DesertDRSouthEntrance",
-       "content": {
-        "type": "map",
-        "maps": [
-         "DesertDRSouthEntrance"
-        ]
-       }
-      },
-      {
-       "title": "DesertFGBorder",
-       "content": {
-        "type": "map",
-        "maps": [
-         "DesertFGBorder"
-        ]
-       }
-      },
-      {
-       "title": "DesertMountain",
-       "content": {
-        "type": "map",
-        "maps": [
-         "DesertMountain"
-        ]
-       }
-      },
-      {
-       "title": "DesertSandCastle",
-       "content": {
-        "type": "map",
-        "maps": [
-         "DesertSandCastle"
-        ]
-       }
-      },
-      {
-       "title": "DesertScorpion",
-       "content": {
-        "type": "map",
-        "maps": [
-         "DesertScorpion"
         ]
        }
       },
@@ -599,6 +554,15 @@
        }
       },
       {
+       "title": "DesertDRSouthEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertDRSouthEntrance"
+        ]
+       }
+      },
+      {
        "title": "DesertEastmost",
        "content": {
         "type": "map",
@@ -617,11 +581,29 @@
        }
       },
       {
+       "title": "DesertFGBorder",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertFGBorder"
+        ]
+       }
+      },
+      {
        "title": "DesertJumpPuzzle",
        "content": {
         "type": "map",
         "maps": [
          "DesertJumpPuzzle"
+        ]
+       }
+      },
+      {
+       "title": "DesertMountain",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertMountain"
         ]
        }
       },
@@ -635,11 +617,29 @@
        }
       },
       {
+       "title": "DesertSandCastle",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertSandCastle"
+        ]
+       }
+      },
+      {
        "title": "DesertSandPitArea",
        "content": {
         "type": "map",
         "maps": [
          "DesertSandPitArea"
+        ]
+       }
+      },
+      {
+       "title": "DesertScorpion",
+       "content": {
+        "type": "map",
+        "maps": [
+         "DesertScorpion"
         ]
        }
       },
@@ -733,6 +733,24 @@
        }
       },
       {
+       "title": "GoldenHillsDungeonEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonEntrance"
+        ]
+       }
+      },
+      {
+       "title": "GoldenHillsDungeonUpperMain",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenHillsDungeonUpperMain"
+        ]
+       }
+      },
+      {
        "title": "GoldenHillsDungeonUpperSide",
        "content": {
         "type": "map",
@@ -787,6 +805,15 @@
        }
       },
       {
+       "title": "PitcherPlantArena",
+       "content": {
+        "type": "map",
+        "maps": [
+         "PitcherPlantArena"
+        ]
+       }
+      },
+      {
        "title": "Right Crank Room",
        "content": {
         "type": "map",
@@ -810,33 +837,6 @@
         "type": "map",
         "maps": [
          "GoldenPitcher2"
-        ]
-       }
-      },
-      {
-       "title": "GoldenHillsDungeonEntrance",
-       "content": {
-        "type": "map",
-        "maps": [
-         "GoldenHillsDungeonEntrance"
-        ]
-       }
-      },
-      {
-       "title": "GoldenHillsDungeonUpperMain",
-       "content": {
-        "type": "map",
-        "maps": [
-         "GoldenHillsDungeonUpperMain"
-        ]
-       }
-      },
-      {
-       "title": "PitcherPlantArena",
-       "content": {
-        "type": "map",
-        "maps": [
-         "PitcherPlantArena"
         ]
        }
       }
@@ -929,24 +929,6 @@
        }
       },
       {
-       "title": "Power Plant",
-       "content": {
-        "type": "map",
-        "maps": [
-         "PowerPlant"
-        ]
-       }
-      },
-      {
-       "title": "Square",
-       "content": {
-        "type": "map",
-        "maps": [
-         "GoldenSettlement1"
-        ]
-       }
-      },
-      {
        "title": "GoldenSettlement1Night",
        "content": {
         "type": "map",
@@ -981,6 +963,24 @@
          "GoldenSettlement3Night"
         ]
        }
+      },
+      {
+       "title": "Power Plant",
+       "content": {
+        "type": "map",
+        "maps": [
+         "PowerPlant"
+        ]
+       }
+      },
+      {
+       "title": "Square",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GoldenSettlement1"
+        ]
+       }
       }
      ]
     }
@@ -1000,47 +1000,20 @@
        }
       },
       {
-       "title": "AbandonedCityTent",
-       "content": {
-        "type": "map",
-        "maps": [
-         "AbandonedCityTent"
-        ]
-       }
-      },
-      {
-       "title": "BarrenLandsEntrance",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BarrenLandsEntrance"
-        ]
-       }
-      },
-      {
-       "title": "BarrenLandsMiniboss",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BarrenLandsMiniboss"
-        ]
-       }
-      },
-      {
-       "title": "BarrenLandsMushrooms",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BarrenLandsMushrooms"
-        ]
-       }
-      },
-      {
        "title": "Abandoned City",
        "content": {
         "type": "map",
         "maps": [
          "AbandonedCity"
+        ]
+       }
+      },
+      {
+       "title": "AbandonedCityTent",
+       "content": {
+        "type": "map",
+        "maps": [
+         "AbandonedCityTent"
         ]
        }
       },
@@ -1068,6 +1041,33 @@
         "type": "map",
         "maps": [
          "BarrenLandsCD"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsEntrance"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsMiniboss",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsMiniboss"
+        ]
+       }
+      },
+      {
+       "title": "BarrenLandsMushrooms",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BarrenLandsMushrooms"
         ]
        }
       },
@@ -1108,6 +1108,15 @@
        }
       },
       {
+       "title": "TermiteOutside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "TermiteOutside"
+        ]
+       }
+      },
+      {
        "title": "Tunnel Side",
        "content": {
         "type": "map",
@@ -1122,15 +1131,6 @@
         "type": "map",
         "maps": [
          "BarrenLandsCloud"
-        ]
-       }
-      },
-      {
-       "title": "TermiteOutside",
-       "content": {
-        "type": "map",
-        "maps": [
-         "TermiteOutside"
         ]
        }
       }
@@ -1161,24 +1161,6 @@
        }
       },
       {
-       "title": "FGCave",
-       "content": {
-        "type": "map",
-        "maps": [
-         "FGCave"
-        ]
-       }
-      },
-      {
-       "title": "FGOutsideSwamplands",
-       "content": {
-        "type": "map",
-        "maps": [
-         "FGOutsideSwamplands"
-        ]
-       }
-      },
-      {
        "title": "Clearing",
        "content": {
         "type": "map",
@@ -1193,6 +1175,24 @@
         "type": "map",
         "maps": [
          "FarGrasslands1"
+        ]
+       }
+      },
+      {
+       "title": "FGCave",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FGCave"
+        ]
+       }
+      },
+      {
+       "title": "FGOutsideSwamplands",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FGOutsideSwamplands"
         ]
        }
       },
@@ -1304,15 +1304,6 @@
        }
       },
       {
-       "title": "SwamplandsBoss",
-       "content": {
-        "type": "map",
-        "maps": [
-         "SwamplandsBoss"
-        ]
-       }
-      },
-      {
        "title": "Bridge",
        "content": {
         "type": "map",
@@ -1381,6 +1372,15 @@
         "type": "map",
         "maps": [
          "Swamplands4"
+        ]
+       }
+      },
+      {
+       "title": "SwamplandsBoss",
+       "content": {
+        "type": "map",
+        "maps": [
+         "SwamplandsBoss"
         ]
        }
       },
@@ -1589,33 +1589,6 @@
        }
       },
       {
-       "title": "Jaune's Gallery",
-       "content": {
-        "type": "map",
-        "maps": [
-         "JaunesGallery"
-        ]
-       }
-      },
-      {
-       "title": "Main Area",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BeehiveMainArea"
-        ]
-       }
-      },
-      {
-       "title": "Scanner Room",
-       "content": {
-        "type": "map",
-        "maps": [
-         "BeehiveScannerRoom"
-        ]
-       }
-      },
-      {
        "title": "BeehiveOutside",
        "content": {
         "type": "map",
@@ -1650,6 +1623,33 @@
          "HoneycombsLab"
         ]
        }
+      },
+      {
+       "title": "Jaune's Gallery",
+       "content": {
+        "type": "map",
+        "maps": [
+         "JaunesGallery"
+        ]
+       }
+      },
+      {
+       "title": "Main Area",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveMainArea"
+        ]
+       }
+      },
+      {
+       "title": "Scanner Room",
+       "content": {
+        "type": "map",
+        "maps": [
+         "BeehiveScannerRoom"
+        ]
+       }
       }
      ]
     }
@@ -1669,24 +1669,6 @@
        }
       },
       {
-       "title": "FactoryProcessingMalbee",
-       "content": {
-        "type": "map",
-        "maps": [
-         "FactoryProcessingMalbee"
-        ]
-       }
-      },
-      {
-       "title": "FactoryStorageElevator",
-       "content": {
-        "type": "map",
-        "maps": [
-         "FactoryStorageElevator"
-        ]
-       }
-      },
-      {
        "title": "Core",
        "content": {
         "type": "map",
@@ -1701,6 +1683,24 @@
         "type": "map",
         "maps": [
          "FactoryProcessing2"
+        ]
+       }
+      },
+      {
+       "title": "FactoryProcessingMalbee",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryProcessingMalbee"
+        ]
+       }
+      },
+      {
+       "title": "FactoryStorageElevator",
+       "content": {
+        "type": "map",
+        "maps": [
+         "FactoryStorageElevator"
         ]
        }
       },
@@ -1964,6 +1964,24 @@
        }
       },
       {
+       "title": "GiantLairEntrance",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairEntrance"
+        ]
+       }
+      },
+      {
+       "title": "GiantLairFridgeOutside",
+       "content": {
+        "type": "map",
+        "maps": [
+         "GiantLairFridgeOutside"
+        ]
+       }
+      },
+      {
        "title": "Inside the Fridge",
        "content": {
         "type": "map",
@@ -1998,24 +2016,6 @@
          "GiantLairSaplingPlains"
         ]
        }
-      },
-      {
-       "title": "GiantLairEntrance",
-       "content": {
-        "type": "map",
-        "maps": [
-         "GiantLairEntrance"
-        ]
-       }
-      },
-      {
-       "title": "GiantLairFridgeOutside",
-       "content": {
-        "type": "map",
-        "maps": [
-         "GiantLairFridgeOutside"
-        ]
-       }
       }
      ]
     }
@@ -2044,20 +2044,20 @@
        }
       },
       {
-       "title": "Peacock Island",
-       "content": {
-        "type": "map",
-        "maps": [
-         "MysteryIsland"
-        ]
-       }
-      },
-      {
        "title": "MysteryIslandInside",
        "content": {
         "type": "map",
         "maps": [
          "MysteryIslandInside"
+        ]
+       }
+      },
+      {
+       "title": "Peacock Island",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MysteryIsland"
         ]
        }
       }
@@ -2079,15 +2079,6 @@
        }
       },
       {
-       "title": "Town",
-       "content": {
-        "type": "map",
-        "maps": [
-         "MetalIsland1"
-        ]
-       }
-      },
-      {
        "title": "MetalIsland2",
        "content": {
         "type": "map",
@@ -2102,6 +2093,15 @@
         "type": "map",
         "maps": [
          "MetalIslandAuditorium"
+        ]
+       }
+      },
+      {
+       "title": "Town",
+       "content": {
+        "type": "map",
+        "maps": [
+         "MetalIsland1"
         ]
        }
       }
@@ -2230,15 +2230,6 @@
        }
       },
       {
-       "title": "WaspKingdom5",
-       "content": {
-        "type": "map",
-        "maps": [
-         "WaspKingdom5"
-        ]
-       }
-      },
-      {
        "title": "WaspKingdom1",
        "content": {
         "type": "map",
@@ -2262,6 +2253,15 @@
         "type": "map",
         "maps": [
          "WaspKingdom4"
+        ]
+       }
+      },
+      {
+       "title": "WaspKingdom5",
+       "content": {
+        "type": "map",
+        "maps": [
+         "WaspKingdom5"
         ]
        }
       },
@@ -2373,20 +2373,20 @@
        }
       },
       {
-       "title": "Treasury",
-       "content": {
-        "type": "map",
-        "maps": [
-         "HideoutWestStorage"
-        ]
-       }
-      },
-      {
        "title": "HideoutStairsRoom",
        "content": {
         "type": "map",
         "maps": [
          "HideoutStairsRoom"
+        ]
+       }
+      },
+      {
+       "title": "Treasury",
+       "content": {
+        "type": "map",
+        "maps": [
+         "HideoutWestStorage"
         ]
        }
       }

@@ -10,7 +10,7 @@ from typing import Any
 from rule_builder.rules import False_
 
 from .data_types import Area, DoorConnection, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
-from .enemysanity import enemy_locations
+from .enemysanity import AREA_NAMES, enemy_locations, room_names
 
 # The room logic's tables: a few used here, the rest read from here by slot_data.py, world.py and the tests.
 from .logic import (  # noqa: F401
@@ -93,8 +93,47 @@ def _shut_doors_out(doors: Doors) -> Doors:
 DOORS: Doors = _shut_doors_out(_story_doors_fixed(Doors.from_json(_load("doors.json"))))
 
 
+# Each map's game area (MapControl.areaid, numbered as enemysanity.AREA_NAMES): Universal Tracker's area tabs.
+MAP_AREA_IDS: dict[str, int] = _load("map_areas.json")["maps"]
+_ROOM_NAMES = room_names(LOCATIONS)
+
+
+def room_name(map_name: str) -> str:
+    """A map's "Area: Room", as its spots begin; a map no spot names yet is its game area and its map id."""
+    return _ROOM_NAMES.get(map_name) or f"{AREA_NAMES.get(MAP_AREA_IDS.get(map_name, -1), 'Bug Fables')}: {map_name}"
+
+
+def _door_labels(doors: Doors) -> dict[tuple[str, str], str]:
+    """Each door's entrance name, saying where the door is: "Area: Room, Door to" the room it leads to in the game,
+    that room's area left out when it's the same. Doors between the same two rooms are Door 1, Door 2, by their names
+    in the game."""
+    ends = [(end.map, end.door, other.map) for c in doors.connections for end, other in ((c.a, c.b), (c.b, c.a))]
+    ends += [(w.map, w.door, w.to) for w in doors.one_way]
+    between: dict[tuple[str, str], list[str]] = {}
+    for map_name, door, to in ends:
+        between.setdefault((map_name, to), []).append(door)
+    labels = {}
+    for (map_name, to), found in between.items():
+        here, there = room_name(map_name), room_name(to)
+        if here.split(": ", 1)[0] == there.split(": ", 1)[0]:
+            there = there.split(": ", 1)[1]
+        for number, door in enumerate(sorted(found), 1):
+            labels[(map_name, door)] = f"{here}, Door{f' {number}' if len(found) > 1 else ''} to {there}"
+    if len(set(labels.values())) != len(labels):
+        raise ValueError("bug_fables: two doors share an entrance name")
+    return labels
+
+
+DOOR_LABELS: dict[tuple[str, str], str] = _door_labels(DOORS)
+
+
 def door_name(map_name: str, door: str) -> str:
-    """A door's entrance, named where it is."""
+    """A door's entrance (DOOR_LABELS)."""
+    return DOOR_LABELS[(map_name, door)]
+
+
+def game_door_name(map_name: str, door: str) -> str:
+    """A door as the game names it, "<map>: <door>": the mod's doors key, and plando's older names."""
     return f"{map_name}: {door}"
 
 
@@ -124,12 +163,23 @@ SHUFFLED_ONE_WAYS: tuple[OneWayDoor, ...] = tuple(w for w in ONE_WAYS if (w.map,
 def one_way_landing(door: OneWayDoor) -> str:
     """A one-way door's landing, the entrance randomizer's target: named apart from the door, so a one-way may keep its
     own landing (coupled, the randomizer never joins an exit to a target of its own name)."""
-    return f"{door.to} as from {door_name(door.map, door.door)}"
+    return f"{room_name(door.to)} as from {door_name(door.map, door.door)}"
 
 
 # The one-way doors and their landings, by name.
 ONE_WAY_NAMES: frozenset[str] = frozenset(door_name(w.map, w.door) for w in SHUFFLED_ONE_WAYS)
 ONE_WAY_LANDINGS: frozenset[str] = frozenset(one_way_landing(w) for w in SHUFFLED_ONE_WAYS)
+# Plando's older names, by the game's ("<map>: <door>", "<map> as from <map>: <door>"), in lower case: each to its
+# name now.
+_FORMER_NAMES: dict[str, str] = {
+    **{game_door_name(*door).lower(): label for door, label in DOOR_LABELS.items()},
+    **{f"{w.to} as from {game_door_name(w.map, w.door)}".lower(): one_way_landing(w) for w in ONE_WAYS},
+}
+
+
+def current_name(name: str) -> str:
+    """A door or landing as named now, given either name, in any case; anything else as it is."""
+    return _FORMER_NAMES.get(name.lower(), name)
 # Every map a region: the door table's and those only a transfer reaches.
 MAPS: tuple[str, ...] = tuple(sorted(
     ({end.map for c in DOORS.connections for end in (c.a, c.b)} | {m for w in ONE_WAYS for m in (w.map, w.to)}
@@ -180,8 +230,6 @@ def start_region(start: Mapping[str, str]) -> str:
 # Every save point (map, entity index). Unused today (a random start picks from ROOM_STARTS); kept for named start
 # spots, a planned option.
 STARTS: tuple[SavePoint, ...] = tuple(SavePoint.from_json(s) for s in _load("starts.json")["starts"])
-# Each map's game area (MapControl.areaid, numbered as enemysanity.AREA_NAMES): Universal Tracker's area tabs.
-MAP_AREA_IDS: dict[str, int] = _load("map_areas.json")["maps"]
 # Each enemy's name in the game, by its id: Universal Tracker's alias of an Enemysanity spot under Enemy Shuffle.
 ENEMY_NAMES: dict[int, str] = {int(i): name for i, name in _load("enemy_names.json")["names"].items()}
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.

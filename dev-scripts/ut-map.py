@@ -346,7 +346,6 @@ def build(data_tables, enemysanity, regions):
     areas_of = data_tables.MAP_AREA_IDS
     area_names = enemysanity.AREA_NAMES
     spots_all = [loc for loc in data_tables.LOCATIONS if not loc.pending]
-    titles = enemysanity.room_names(data_tables.LOCATIONS)
     entrances = [e for e in regions.logic_entrances() if e.from_map != regions.MENU]
     edge_names = {}
     for area in data_tables.MAP_AREAS:
@@ -355,7 +354,7 @@ def build(data_tables, enemysanity, regions):
         edge_names[f'{area.region} to {joined}'] = (joined, area.region)
     files, maps, nodes, follow = {}, [], [], {}
     layout_areas = {a: [] for a in area_names}
-    order = sorted(data_tables.MAPS, key=lambda m: (areas_of[m], titles.get(m, m)))
+    order = sorted(data_tables.MAPS, key=lambda m: (areas_of[m], data_tables.room_name(m)))
     room_pins = {}
     for room in order:
         boxes = [room, *(a.region for a in data_tables.MAP_AREAS if a.map == room)]
@@ -377,7 +376,7 @@ def build(data_tables, enemysanity, regions):
             else:
                 others[e.from_map].append(e.name)
         edges = [(a, b, sorted(names)) for (a, b), names in pairs.items() if a in doors and b in doors]
-        title = titles.get(room, f'{area_names[areas_of[room]]}: {room}')
+        title = data_tables.room_name(room)
         canvas, pins, marker = room_tab(room, title, boxes, label, spots, doors, others, edges)
         files[f'images/room_{room}.png'] = canvas.png(PALETTE)
         maps.append({'name': room, 'img': f'images/room_{room}.png', **MAP_SETTINGS})
@@ -392,7 +391,7 @@ def build(data_tables, enemysanity, regions):
         if not rooms:
             continue
         tab = f'Area: {name}'
-        members = [(m, titles.get(m, f'{name}: {m}').split(': ', 1)[-1], room_pins[m]) for m in rooms]
+        members = [(m, data_tables.room_name(m).split(': ', 1)[-1], room_pins[m]) for m in rooms]
         canvas, pins, markers = group_tab(tab, name, members, 4)
         files[f'images/area_{area:02}.png'] = canvas.png(PALETTE)
         maps.append({'name': tab, 'img': f'images/area_{area:02}.png', **MAP_SETTINGS})

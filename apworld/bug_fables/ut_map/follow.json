@@ -11,21 +11,15 @@
    31
   ]
  },
- "CaveOfTrials": {
-  "CaveOfTrials": [
-   336,
-   31
-  ]
- },
- "HermitCave": {
-  "HermitCave": [
-   312,
-   31
-  ]
- },
  "BugariaOutskitsSnakemouthCorridor1": {
   "BugariaOutskitsSnakemouthCorridor1": [
    600,
+   31
+  ]
+ },
+ "CaveOfTrials": {
+  "CaveOfTrials": [
+   336,
    31
   ]
  },
@@ -62,6 +56,12 @@
  "GoldenPathTunnel2": {
   "GoldenPathTunnel2": [
    396,
+   31
+  ]
+ },
+ "HermitCave": {
+  "HermitCave": [
+   312,
    31
   ]
  },
@@ -113,6 +113,12 @@
    31
   ]
  },
+ "AntMinesBreakRoom": {
+  "AntMinesBreakRoom": [
+   360,
+   31
+  ]
+ },
  "AntBridge": {
   "AntBridge": [
    336,
@@ -131,12 +137,6 @@
    31
   ]
  },
- "AntMinesBreakRoom": {
-  "AntMinesBreakRoom": [
-   360,
-   31
-  ]
- },
  "BugariaBridgeAttack": {
   "BugariaBridgeAttack": [
    456,
@@ -146,6 +146,24 @@
  "BugariaCastleAttack": {
   "BugariaCastleAttack": [
    456,
+   31
+  ]
+ },
+ "BugariaEndBridge": {
+  "BugariaEndBridge": [
+   420,
+   31
+  ]
+ },
+ "BugariaEndPlaza": {
+  "BugariaEndPlaza": [
+   408,
+   31
+  ]
+ },
+ "BugariaEndThrone": {
+  "BugariaEndThrone": [
+   420,
    31
   ]
  },
@@ -185,24 +203,6 @@
    31
   ]
  },
- "BugariaEndBridge": {
-  "BugariaEndBridge": [
-   420,
-   31
-  ]
- },
- "BugariaEndPlaza": {
-  "BugariaEndPlaza": [
-   408,
-   31
-  ]
- },
- "BugariaEndThrone": {
-  "BugariaEndThrone": [
-   420,
-   31
-  ]
- },
  "UndergroundBar": {
   "UndergroundBar": [
    396,
@@ -236,6 +236,12 @@
  "SnakemouthMushroomPit": {
   "SnakemouthMushroomPit": [
    396,
+   31
+  ]
+ },
+ "SnakemouthTop": {
+  "SnakemouthTop": [
+   408,
    31
   ]
  },
@@ -275,45 +281,9 @@
    31
   ]
  },
- "SnakemouthTop": {
-  "SnakemouthTop": [
-   408,
-   31
-  ]
- },
  "UpperSnekEntrance": {
   "UpperSnekEntrance": [
    456,
-   31
-  ]
- },
- "DesertDRSouthEntrance": {
-  "DesertDRSouthEntrance": [
-   456,
-   31
-  ]
- },
- "DesertFGBorder": {
-  "DesertFGBorder": [
-   372,
-   31
-  ]
- },
- "DesertMountain": {
-  "DesertMountain": [
-   372,
-   31
-  ]
- },
- "DesertSandCastle": {
-  "DesertSandCastle": [
-   396,
-   31
-  ]
- },
- "DesertScorpion": {
-  "DesertScorpion": [
-   372,
    31
   ]
  },
@@ -347,6 +317,12 @@
    31
   ]
  },
+ "DesertDRSouthEntrance": {
+  "DesertDRSouthEntrance": [
+   456,
+   31
+  ]
+ },
  "DesertEastmost": {
   "DesertEastmost": [
    372,
@@ -359,9 +335,21 @@
    31
   ]
  },
+ "DesertFGBorder": {
+  "DesertFGBorder": [
+   372,
+   31
+  ]
+ },
  "DesertJumpPuzzle": {
   "DesertJumpPuzzle": [
    396,
+   31
+  ]
+ },
+ "DesertMountain": {
+  "DesertMountain": [
+   372,
    31
   ]
  },
@@ -371,9 +359,21 @@
    31
   ]
  },
+ "DesertSandCastle": {
+  "DesertSandCastle": [
+   396,
+   31
+  ]
+ },
  "DesertSandPitArea": {
   "DesertSandPitArea": [
    408,
+   31
+  ]
+ },
+ "DesertScorpion": {
+  "DesertScorpion": [
+   372,
    31
   ]
  },
@@ -425,6 +425,18 @@
    31
   ]
  },
+ "GoldenHillsDungeonEntrance": {
+  "GoldenHillsDungeonEntrance": [
+   540,
+   31
+  ]
+ },
+ "GoldenHillsDungeonUpperMain": {
+  "GoldenHillsDungeonUpperMain": [
+   552,
+   31
+  ]
+ },
  "GoldenHillsDungeonUpperSide": {
   "GoldenHillsDungeonUpperSide": [
    552,
@@ -461,6 +473,12 @@
    31
   ]
  },
+ "PitcherPlantArena": {
+  "PitcherPlantArena": [
+   432,
+   31
+  ]
+ },
  "GoldenHillsDungeonRightCrank": {
   "GoldenHillsDungeonRightCrank": [
    420,
@@ -476,24 +494,6 @@
  "GoldenPitcher2": {
   "GoldenPitcher2": [
    444,
-   31
-  ]
- },
- "GoldenHillsDungeonEntrance": {
-  "GoldenHillsDungeonEntrance": [
-   540,
-   31
-  ]
- },
- "GoldenHillsDungeonUpperMain": {
-  "GoldenHillsDungeonUpperMain": [
-   552,
-   31
-  ]
- },
- "PitcherPlantArena": {
-  "PitcherPlantArena": [
-   432,
    31
   ]
  },
@@ -533,18 +533,6 @@
    31
   ]
  },
- "PowerPlant": {
-  "PowerPlant": [
-   420,
-   31
-  ]
- },
- "GoldenSettlement1": {
-  "GoldenSettlement1": [
-   360,
-   31
-  ]
- },
  "GoldenSettlement1Night": {
   "GoldenSettlement1Night": [
    552,
@@ -569,33 +557,27 @@
    31
   ]
  },
- "AbandonedCityTent": {
-  "AbandonedCityTent": [
-   456,
+ "PowerPlant": {
+  "PowerPlant": [
+   420,
    31
   ]
  },
- "BarrenLandsEntrance": {
-  "BarrenLandsEntrance": [
-   480,
-   31
-  ]
- },
- "BarrenLandsMiniboss": {
-  "BarrenLandsMiniboss": [
-   480,
-   31
-  ]
- },
- "BarrenLandsMushrooms": {
-  "BarrenLandsMushrooms": [
-   492,
+ "GoldenSettlement1": {
+  "GoldenSettlement1": [
+   360,
    31
   ]
  },
  "AbandonedCity": {
   "AbandonedCity": [
    420,
+   31
+  ]
+ },
+ "AbandonedCityTent": {
+  "AbandonedCityTent": [
+   456,
    31
   ]
  },
@@ -614,6 +596,24 @@
  "BarrenLandsCD": {
   "BarrenLandsCD": [
    408,
+   31
+  ]
+ },
+ "BarrenLandsEntrance": {
+  "BarrenLandsEntrance": [
+   480,
+   31
+  ]
+ },
+ "BarrenLandsMiniboss": {
+  "BarrenLandsMiniboss": [
+   480,
+   31
+  ]
+ },
+ "BarrenLandsMushrooms": {
+  "BarrenLandsMushrooms": [
+   492,
    31
   ]
  },
@@ -641,6 +641,12 @@
    31
   ]
  },
+ "TermiteOutside": {
+  "TermiteOutside": [
+   420,
+   31
+  ]
+ },
  "BarrenLandsSideGPT": {
   "BarrenLandsSideGPT": [
    384,
@@ -653,27 +659,9 @@
    31
   ]
  },
- "TermiteOutside": {
-  "TermiteOutside": [
-   420,
-   31
-  ]
- },
  "BroodmotherLair": {
   "BroodmotherLair": [
    432,
-   31
-  ]
- },
- "FGCave": {
-  "FGCave": [
-   324,
-   31
-  ]
- },
- "FGOutsideSwamplands": {
-  "FGOutsideSwamplands": [
-   480,
    31
   ]
  },
@@ -686,6 +674,18 @@
  "FarGrasslands1": {
   "FarGrasslands1": [
    372,
+   31
+  ]
+ },
+ "FGCave": {
+  "FGCave": [
+   324,
+   31
+  ]
+ },
+ "FGOutsideSwamplands": {
+  "FGOutsideSwamplands": [
+   480,
    31
   ]
  },
@@ -749,12 +749,6 @@
    31
   ]
  },
- "SwamplandsBoss": {
-  "SwamplandsBoss": [
-   432,
-   31
-  ]
- },
  "SwamplandsBridge": {
   "SwamplandsBridge": [
    336,
@@ -800,6 +794,12 @@
  "Swamplands4": {
   "Swamplands4": [
    396,
+   31
+  ]
+ },
+ "SwamplandsBoss": {
+  "SwamplandsBoss": [
+   432,
    31
   ]
  },
@@ -905,24 +905,6 @@
    31
   ]
  },
- "JaunesGallery": {
-  "JaunesGallery": [
-   456,
-   31
-  ]
- },
- "BeehiveMainArea": {
-  "BeehiveMainArea": [
-   384,
-   31
-  ]
- },
- "BeehiveScannerRoom": {
-  "BeehiveScannerRoom": [
-   420,
-   31
-  ]
- },
  "BeehiveOutside": {
   "BeehiveOutside": [
    444,
@@ -947,15 +929,21 @@
    31
   ]
  },
- "FactoryProcessingMalbee": {
-  "FactoryProcessingMalbee": [
-   516,
+ "JaunesGallery": {
+  "JaunesGallery": [
+   456,
    31
   ]
  },
- "FactoryStorageElevator": {
-  "FactoryStorageElevator": [
-   504,
+ "BeehiveMainArea": {
+  "BeehiveMainArea": [
+   384,
+   31
+  ]
+ },
+ "BeehiveScannerRoom": {
+  "BeehiveScannerRoom": [
+   420,
    31
   ]
  },
@@ -968,6 +956,18 @@
  "FactoryProcessing2": {
   "FactoryProcessing2": [
    456,
+   31
+  ]
+ },
+ "FactoryProcessingMalbee": {
+  "FactoryProcessingMalbee": [
+   516,
+   31
+  ]
+ },
+ "FactoryStorageElevator": {
+  "FactoryStorageElevator": [
+   504,
    31
   ]
  },
@@ -1121,6 +1121,18 @@
    31
   ]
  },
+ "GiantLairEntrance": {
+  "GiantLairEntrance": [
+   432,
+   31
+  ]
+ },
+ "GiantLairFridgeOutside": {
+  "GiantLairFridgeOutside": [
+   492,
+   31
+  ]
+ },
  "GiantLairFridgeInside": {
   "GiantLairFridgeInside": [
    432,
@@ -1145,27 +1157,9 @@
    31
   ]
  },
- "GiantLairEntrance": {
-  "GiantLairEntrance": [
-   432,
-   31
-  ]
- },
- "GiantLairFridgeOutside": {
-  "GiantLairFridgeOutside": [
-   492,
-   31
-  ]
- },
  "MetalLake": {
   "MetalLake": [
    312,
-   31
-  ]
- },
- "MysteryIsland": {
-  "MysteryIsland": [
-   372,
    31
   ]
  },
@@ -1175,9 +1169,9 @@
    31
   ]
  },
- "MetalIsland1": {
-  "MetalIsland1": [
-   276,
+ "MysteryIsland": {
+  "MysteryIsland": [
+   372,
    31
   ]
  },
@@ -1190,6 +1184,12 @@
  "MetalIslandAuditorium": {
   "MetalIslandAuditorium": [
    480,
+   31
+  ]
+ },
+ "MetalIsland1": {
+  "MetalIsland1": [
+   276,
    31
   ]
  },
@@ -1253,12 +1253,6 @@
    31
   ]
  },
- "WaspKingdom5": {
-  "WaspKingdom5": [
-   432,
-   31
-  ]
- },
  "WaspKingdom1": {
   "WaspKingdom1": [
    432,
@@ -1273,6 +1267,12 @@
  },
  "WaspKingdom4": {
   "WaspKingdom4": [
+   432,
+   31
+  ]
+ },
+ "WaspKingdom5": {
+  "WaspKingdom5": [
    432,
    31
   ]
@@ -1337,15 +1337,15 @@
    31
   ]
  },
- "HideoutWestStorage": {
-  "HideoutWestStorage": [
-   348,
-   31
-  ]
- },
  "HideoutStairsRoom": {
   "HideoutStairsRoom": [
    456,
+   31
+  ]
+ },
+ "HideoutWestStorage": {
+  "HideoutWestStorage": [
+   348,
    31
   ]
  },
@@ -1463,47 +1463,47 @@
    76
   ],
   "BugariaAssociationAttack": [
-   916,
-   76
-  ],
-  "CaveOfTrials": [
-   1188,
-   76
-  ],
-  "HermitCave": [
-   1512,
+   736,
    76
   ],
   "BugariaOutskitsSnakemouthCorridor1": [
-   500,
-   204
+   1272,
+   76
+  ],
+  "CaveOfTrials": [
+   1544,
+   76
   ],
   "ChucksAbode": [
-   784,
+   248,
    204
   ],
   "BugariaOutskirtsEast1": [
-   1180,
+   584,
    204
   ],
   "BugariaOutskirtsEast2": [
-   1628,
+   1116,
    204
   ],
   "BOGoldenPath": [
-   228,
-   332
+   1536,
+   204
   ],
   "GoldenPathTunnel": [
-   844,
+   308,
    332
   ],
   "GoldenPathTunnel2": [
-   1248,
+   652,
+   332
+  ],
+  "HermitCave": [
+   1000,
    332
   ],
   "NearSnakemouth": [
-   1604,
+   1628,
    332
   ],
   "BugariaOutskirtsOutsideCity": [
@@ -1511,15 +1511,15 @@
    460
   ],
   "BugariaPier": [
-   764,
+   584,
    460
   ],
   "SeedlingHaven": [
-   1200,
+   1020,
    460
   ],
   "OutsideSnakemouth": [
-   1652,
+   1676,
    460
   ],
   "BugariaOutskirtsSnakemouthCorridor2": [
@@ -1533,71 +1533,71 @@
    76
   ],
   "AntPalaceWarRoom": [
-   572,
+   584,
+   76
+  ],
+  "AntMinesBreakRoom": [
+   892,
    76
   ],
   "AntBridge": [
-   928,
+   1260,
    76
   ],
   "AntPalace2": [
-   1284,
-   76
-  ],
-  "AntTunnels": [
    228,
    204
   ],
-  "AntMinesBreakRoom": [
-   572,
+  "AntTunnels": [
+   584,
    204
   ],
   "BugariaBridgeAttack": [
-   1020,
+   984,
    204
   ],
   "BugariaCastleAttack": [
-   1376,
+   1352,
    204
   ],
+  "BugariaEndBridge": [
+   284,
+   332
+  ],
+  "BugariaEndPlaza": [
+   628,
+   332
+  ],
+  "BugariaEndThrone": [
+   948,
+   332
+  ],
   "BugariaPlazaAttack": [
-   308,
+   1340,
    332
   ],
   "BugariaCommercial": [
-   664,
-   332
+   320,
+   460
   ],
   "BugariaMainPlaza": [
-   928,
-   332
+   584,
+   460
   ],
   "BugariaResidential": [
-   1388,
-   332
+   996,
+   460
   ],
   "BugariaTheater": [
-   228,
+   1260,
    460
   ],
   "AntPalace1": [
-   572,
-   460
-  ],
-  "BugariaEndBridge": [
-   984,
-   460
-  ],
-  "BugariaEndPlaza": [
-   1328,
-   460
-  ],
-  "BugariaEndThrone": [
-   284,
+   228,
    588
   ],
   "UndergroundBar": [
-   604,
+   616,
    588
   ]
  },
@@ -1607,47 +1607,47 @@
    76
   ],
   "SnakemouthDoorRoom": [
-   560,
+   680,
    76
   ],
   "SnakemouthFallRoom": [
-   1000,
+   964,
    76
   ],
   "SnakemouthLake": [
-   1440,
+   1404,
    76
   ],
   "SnakemouthMushroomPit": [
    236,
    204
   ],
+  "SnakemouthTop": [
+   700,
+   204
+  ],
   "SnakemouthUndergroundLeftA": [
-   736,
+   1140,
    204
   ],
   "SnakemouthUndergroundLeftB": [
-   1176,
+   1580,
    204
   ],
   "SnakemouthUndergroundRightA": [
-   1628,
-   204
-  ],
-  "SnakemouthTreasureRoom": [
-   248,
+   416,
    332
   ],
-  "SnakemouthUndergroundRightB": [
+  "SnakemouthTreasureRoom": [
    700,
    332
   ],
-  "SnakemouthUndergrondDoor": [
-   1116,
+  "SnakemouthUndergroundRightB": [
+   1104,
    332
   ],
-  "SnakemouthTop": [
-   1460,
+  "SnakemouthUndergrondDoor": [
+   1520,
    332
   ],
   "UpperSnekEntrance": [
@@ -1656,64 +1656,64 @@
   ]
  },
  "Area: Lost Sands": {
-  "DesertDRSouthEntrance": [
-   344,
-   76
-  ],
-  "DesertFGBorder": [
-   640,
-   76
-  ],
-  "DesertMountain": [
-   1020,
-   76
-  ],
-  "DesertSandCastle": [
-   1400,
-   76
-  ],
-  "DesertScorpion": [
-   260,
-   204
-  ],
   "DesertBadgeAlcove": [
-   616,
-   204
+   236,
+   76
   ],
   "DesertBadlands": [
-   988,
-   204
+   608,
+   76
   ],
   "DesertBookArea": [
-   1344,
-   204
+   988,
+   76
   ],
   "DesertCaravanMap": [
-   236,
-   332
+   1352,
+   76
   ],
   "DesertDREastEntrance": [
+   344,
+   204
+  ],
+  "DesertDRSouthEntrance": [
    724,
-   332
+   204
   ],
   "DesertEastmost": [
    1020,
-   332
+   204
   ],
   "DesertEntrance": [
    1376,
+   204
+  ],
+  "DesertFGBorder": [
+   260,
    332
   ],
   "DesertJumpPuzzle": [
+   664,
+   332
+  ],
+  "DesertMountain": [
+   1020,
+   332
+  ],
+  "DesertOasisEntrance": [
+   1436,
+   332
+  ],
+  "DesertSandCastle": [
    284,
    460
   ],
-  "DesertOasisEntrance": [
-   700,
+  "DesertSandPitArea": [
+   676,
    460
   ],
-  "DesertSandPitArea": [
-   1056,
+  "DesertScorpion": [
+   1020,
    460
   ],
   "DesertSouthern": [
@@ -1750,52 +1750,52 @@
   ]
  },
  "Area: Golden Hills": {
+  "GoldenHillsDungeonEntrance": [
+   404,
+   76
+  ],
+  "GoldenHillsDungeonUpperMain": [
+   856,
+   76
+  ],
   "GoldenHillsDungeonUpperSide": [
-   416,
+   1308,
    76
   ],
   "GoldenHillsLowerRightCrank": [
-   856,
+   1748,
    76
   ],
   "GoldenHillsDungeonLeftCrankHalf": [
-   1224,
-   76
+   332,
+   204
   ],
   "GoldenHillsDungeonCrankLeft": [
-   1616,
-   76
+   712,
+   204
   ],
   "GoldenHillsDungeonLeftMain": [
-   228,
+   1120,
    204
   ],
   "GoldenPitcher1": [
-   688,
+   1580,
    204
-  ],
-  "GoldenHillsDungeonRightCrank": [
-   1176,
-   204
-  ],
-  "GoldenHillsDungeonBoss": [
-   1572,
-   204
-  ],
-  "GoldenPitcher2": [
-   308,
-   332
-  ],
-  "GoldenHillsDungeonEntrance": [
-   856,
-   332
-  ],
-  "GoldenHillsDungeonUpperMain": [
-   1308,
-   332
   ],
   "PitcherPlantArena": [
-   1640,
+   296,
+   332
+  ],
+  "GoldenHillsDungeonRightCrank": [
+   724,
+   332
+  ],
+  "GoldenHillsDungeonBoss": [
+   1120,
+   332
+  ],
+  "GoldenPitcher2": [
+   1652,
    332
   ]
  },
@@ -1826,62 +1826,62 @@
    228,
    76
   ],
-  "PowerPlant": [
-   620,
-   76
-  ],
-  "GoldenSettlement1": [
-   952,
-   76
-  ],
   "GoldenSettlement1Night": [
-   1472,
+   748,
    76
   ],
   "GoldenSettlement2Night": [
+   1140,
+   76
+  ],
+  "GoldenSettlement3": [
+   1472,
+   76
+  ],
+  "GoldenSettlement3Night": [
    356,
    204
   ],
-  "GoldenSettlement3": [
-   688,
+  "PowerPlant": [
+   620,
    204
   ],
-  "GoldenSettlement3Night": [
-   1080,
+  "GoldenSettlement1": [
+   1012,
    204
   ]
  },
  "Area: Forsaken Lands": {
-  "AbandonedCityTent": [
-   296,
-   76
-  ],
-  "BarrenLandsEntrance": [
-   652,
-   76
-  ],
-  "BarrenLandsMiniboss": [
-   1008,
-   76
-  ],
-  "BarrenLandsMushrooms": [
-   1376,
-   76
-  ],
   "AbandonedCity": [
    260,
-   204
+   76
+  ],
+  "AbandonedCityTent": [
+   616,
+   76
   ],
   "BarrenLandsAntTunnel": [
-   560,
-   204
+   904,
+   76
   ],
   "BarrenLandsBeefly": [
-   984,
-   204
+   1328,
+   76
   ],
   "BarrenLandsCD": [
-   1292,
+   248,
+   204
+  ],
+  "BarrenLandsEntrance": [
+   640,
+   204
+  ],
+  "BarrenLandsMiniboss": [
+   996,
+   204
+  ],
+  "BarrenLandsMushrooms": [
+   1364,
    204
   ],
   "BarrenLandsTanks": [
@@ -1889,27 +1889,27 @@
    332
   ],
   "BarrenLandsRock": [
-   580,
+   568,
    332
   ],
   "BarrenLandsPinkSpider": [
-   916,
+   904,
    332
   ],
   "BarrenLandsPumpkins": [
-   1292,
+   1280,
    332
   ],
+  "TermiteOutside": [
+   260,
+   460
+  ],
   "BarrenLandsSideGPT": [
-   228,
+   548,
    460
   ],
   "BarrenLandsCloud": [
-   560,
-   460
-  ],
-  "TermiteOutside": [
-   948,
+   904,
    460
   ]
  },
@@ -1918,20 +1918,20 @@
    272,
    76
   ],
-  "FGCave": [
+  "FGClearing": [
    680,
    76
   ],
-  "FGOutsideSwamplands": [
-   1176,
-   76
-  ],
-  "FGClearing": [
-   1440,
-   76
-  ],
   "FarGrasslands1": [
-   228,
+   1084,
+   76
+  ],
+  "FGCave": [
+   1416,
+   76
+  ],
+  "FGOutsideSwamplands": [
+   320,
    204
   ],
   "FarGrasslands3": [
@@ -1943,7 +1943,7 @@
    204
   ],
   "FarGrasslandsOutsideCave": [
-   1592,
+   1568,
    204
   ],
   "FarGrasslandsOutsideVillage": [
@@ -1959,7 +1959,7 @@
    332
   ],
   "FarGrasslandsWizard": [
-   1472,
+   1448,
    332
   ],
   "WizardTowerAttic": [
@@ -1976,44 +1976,44 @@
   ]
  },
  "Area: Wild Swamplands": {
-  "SwamplandsBoss": [
-   260,
-   76
-  ],
   "SwamplandsBridge": [
-   536,
+   228,
    76
   ],
   "Swamplands6": [
-   880,
+   524,
    76
   ],
   "Swamplands8": [
-   1164,
+   868,
    76
   ],
   "Swamplands7": [
-   272,
-   204
+   1176,
+   76
   ],
   "Swamplands5": [
-   536,
+   228,
    204
   ],
   "Swamplands2": [
-   900,
+   544,
    204
   ],
   "Swamplands3": [
-   1164,
+   868,
    204
   ],
   "Swamplands4": [
-   228,
+   1132,
+   204
+  ],
+  "SwamplandsBoss": [
+   260,
    332
   ],
   "SwamplandsEntrance": [
-   616,
+   604,
    332
   ]
  },
@@ -2086,50 +2086,50 @@
    228,
    76
   ],
-  "JaunesGallery": [
-   568,
-   76
-  ],
-  "BeehiveMainArea": [
-   856,
-   76
-  ],
-  "BeehiveScannerRoom": [
-   1128,
-   76
-  ],
   "BeehiveOutside": [
-   260,
-   204
+   544,
+   76
   ],
   "BeehiveThroneRoom": [
-   592,
-   204
+   888,
+   76
   ],
   "HBsLab": [
-   856,
-   204
+   1152,
+   76
   ],
   "HoneycombsLab": [
-   1140,
+   248,
+   204
+  ],
+  "JaunesGallery": [
+   556,
+   204
+  ],
+  "BeehiveMainArea": [
+   820,
+   204
+  ],
+  "BeehiveScannerRoom": [
+   1160,
    204
   ]
  },
  "Area: Honey Factory": {
-  "FactoryProcessingMalbee": [
-   368,
-   76
-  ],
-  "FactoryStorageElevator": [
-   760,
-   76
-  ],
   "HoneyFactoryCore": [
-   1024,
+   228,
    76
   ],
   "FactoryProcessing2": [
-   1448,
+   700,
+   76
+  ],
+  "FactoryProcessingMalbee": [
+   1104,
+   76
+  ],
+  "FactoryStorageElevator": [
+   1496,
    76
   ],
   "FactoryStorageOverseer": [
@@ -2137,11 +2137,11 @@
    204
   ],
   "FactoryProcessingFirstRoom": [
-   632,
+   620,
    204
   ],
   "FactoryProcessingPuzzle1": [
-   1104,
+   1044,
    204
   ],
   "HoneyFactoryEntrance": [
@@ -2153,11 +2153,11 @@
    332
   ],
   "FactoryProcessingPump": [
-   632,
+   620,
    332
   ],
   "FactoryStorageMaze": [
-   1032,
+   972,
    332
   ],
   "FactoryStorageMiniboss": [
@@ -2169,7 +2169,7 @@
    460
   ],
   "HoneyFactoryWorkerRooms": [
-   640,
+   628,
    460
   ]
  },
@@ -2233,31 +2233,31 @@
    76
   ],
   "GiantLairBeforeBoss2": [
-   1008,
+   1056,
    76
-  ],
-  "GiantLairFridgeInside": [
-   1340,
-   76
-  ],
-  "GiantLairBeforeBoss": [
-   248,
-   204
-  ],
-  "GiantLairRoachVillage": [
-   640,
-   204
-  ],
-  "GiantLairSaplingPlains": [
-   936,
-   204
   ],
   "GiantLairEntrance": [
-   1340,
-   204
+   1388,
+   76
   ],
   "GiantLairFridgeOutside": [
    356,
+   204
+  ],
+  "GiantLairFridgeInside": [
+   688,
+   204
+  ],
+  "GiantLairBeforeBoss": [
+   972,
+   204
+  ],
+  "GiantLairRoachVillage": [
+   1340,
+   204
+  ],
+  "GiantLairSaplingPlains": [
+   260,
    332
   ]
  },
@@ -2266,25 +2266,25 @@
    228,
    76
   ],
-  "MysteryIsland": [
-   524,
+  "MysteryIslandInside": [
+   584,
    76
   ],
-  "MysteryIslandInside": [
+  "MysteryIsland": [
    880,
    76
   ]
  },
  "Area: Metal Island": {
-  "MetalIsland1": [
-   228,
-   76
-  ],
   "MetalIsland2": [
-   500,
+   236,
    76
   ],
   "MetalIslandAuditorium": [
+   616,
+   76
+  ],
+  "MetalIsland1": [
    880,
    76
   ]
@@ -2332,19 +2332,19 @@
    1248,
    76
   ],
-  "WaspKingdom5": [
+  "WaspKingdom1": [
    236,
    204
   ],
-  "WaspKingdom1": [
+  "WaspKingdom2": [
    592,
    204
   ],
-  "WaspKingdom2": [
+  "WaspKingdom4": [
    936,
    204
   ],
-  "WaspKingdom4": [
+  "WaspKingdom5": [
    1256,
    204
   ],
@@ -2379,7 +2379,7 @@
    76
   ],
   "HideoutGarden": [
-   1108,
+   1176,
    76
   ],
   "HideoutCentralRoom": [
@@ -2390,11 +2390,11 @@
    580,
    204
   ],
-  "HideoutWestStorage": [
-   844,
+  "HideoutStairsRoom": [
+   912,
    204
   ],
-  "HideoutStairsRoom": [
+  "HideoutWestStorage": [
    1176,
    204
   ]
@@ -2488,15 +2488,11 @@
    228,
    76
   ],
-  "CaveOfTrials": [
-   228,
-   76
-  ],
-  "HermitCave": [
-   228,
-   76
-  ],
   "BugariaOutskitsSnakemouthCorridor1": [
+   228,
+   76
+  ],
+  "CaveOfTrials": [
    228,
    76
   ],
@@ -2521,6 +2517,10 @@
    76
   ],
   "GoldenPathTunnel2": [
+   228,
+   76
+  ],
+  "HermitCave": [
    228,
    76
   ],
@@ -2556,6 +2556,10 @@
    532,
    76
   ],
+  "AntMinesBreakRoom": [
+   532,
+   76
+  ],
   "AntBridge": [
    532,
    76
@@ -2568,15 +2572,23 @@
    532,
    76
   ],
-  "AntMinesBreakRoom": [
-   532,
-   76
-  ],
   "BugariaBridgeAttack": [
    532,
    76
   ],
   "BugariaCastleAttack": [
+   532,
+   76
+  ],
+  "BugariaEndBridge": [
+   532,
+   76
+  ],
+  "BugariaEndPlaza": [
+   532,
+   76
+  ],
+  "BugariaEndThrone": [
    532,
    76
   ],
@@ -2604,18 +2616,6 @@
    532,
    76
   ],
-  "BugariaEndBridge": [
-   532,
-   76
-  ],
-  "BugariaEndPlaza": [
-   532,
-   76
-  ],
-  "BugariaEndThrone": [
-   532,
-   76
-  ],
   "UndergroundBar": [
    532,
    76
@@ -2637,6 +2637,10 @@
    76
   ],
   "SnakemouthMushroomPit": [
+   888,
+   76
+  ],
+  "SnakemouthTop": [
    888,
    76
   ],
@@ -2664,32 +2668,8 @@
    888,
    76
   ],
-  "SnakemouthTop": [
-   888,
-   76
-  ],
   "UpperSnekEntrance": [
    888,
-   76
-  ],
-  "DesertDRSouthEntrance": [
-   1176,
-   76
-  ],
-  "DesertFGBorder": [
-   1176,
-   76
-  ],
-  "DesertMountain": [
-   1176,
-   76
-  ],
-  "DesertSandCastle": [
-   1176,
-   76
-  ],
-  "DesertScorpion": [
-   1176,
    76
   ],
   "DesertBadgeAlcove": [
@@ -2712,6 +2692,10 @@
    1176,
    76
   ],
+  "DesertDRSouthEntrance": [
+   1176,
+   76
+  ],
   "DesertEastmost": [
    1176,
    76
@@ -2720,7 +2704,15 @@
    1176,
    76
   ],
+  "DesertFGBorder": [
+   1176,
+   76
+  ],
   "DesertJumpPuzzle": [
+   1176,
+   76
+  ],
+  "DesertMountain": [
    1176,
    76
   ],
@@ -2728,7 +2720,15 @@
    1176,
    76
   ],
+  "DesertSandCastle": [
+   1176,
+   76
+  ],
   "DesertSandPitArea": [
+   1176,
+   76
+  ],
+  "DesertScorpion": [
    1176,
    76
   ],
@@ -2764,6 +2764,14 @@
    1176,
    76
   ],
+  "GoldenHillsDungeonEntrance": [
+   1492,
+   76
+  ],
+  "GoldenHillsDungeonUpperMain": [
+   1492,
+   76
+  ],
   "GoldenHillsDungeonUpperSide": [
    1492,
    76
@@ -2788,6 +2796,10 @@
    1492,
    76
   ],
+  "PitcherPlantArena": [
+   1492,
+   76
+  ],
   "GoldenHillsDungeonRightCrank": [
    1492,
    76
@@ -2797,18 +2809,6 @@
    76
   ],
   "GoldenPitcher2": [
-   1492,
-   76
-  ],
-  "GoldenHillsDungeonEntrance": [
-   1492,
-   76
-  ],
-  "GoldenHillsDungeonUpperMain": [
-   1492,
-   76
-  ],
-  "PitcherPlantArena": [
    1492,
    76
   ],
@@ -2836,14 +2836,6 @@
    592,
    204
   ],
-  "PowerPlant": [
-   592,
-   204
-  ],
-  "GoldenSettlement1": [
-   592,
-   204
-  ],
   "GoldenSettlement1Night": [
    592,
    204
@@ -2860,23 +2852,19 @@
    592,
    204
   ],
-  "AbandonedCityTent": [
-   888,
+  "PowerPlant": [
+   592,
    204
   ],
-  "BarrenLandsEntrance": [
-   888,
-   204
-  ],
-  "BarrenLandsMiniboss": [
-   888,
-   204
-  ],
-  "BarrenLandsMushrooms": [
-   888,
+  "GoldenSettlement1": [
+   592,
    204
   ],
   "AbandonedCity": [
+   888,
+   204
+  ],
+  "AbandonedCityTent": [
    888,
    204
   ],
@@ -2889,6 +2877,18 @@
    204
   ],
   "BarrenLandsCD": [
+   888,
+   204
+  ],
+  "BarrenLandsEntrance": [
+   888,
+   204
+  ],
+  "BarrenLandsMiniboss": [
+   888,
+   204
+  ],
+  "BarrenLandsMushrooms": [
    888,
    204
   ],
@@ -2908,6 +2908,10 @@
    888,
    204
   ],
+  "TermiteOutside": [
+   888,
+   204
+  ],
   "BarrenLandsSideGPT": [
    888,
    204
@@ -2916,19 +2920,7 @@
    888,
    204
   ],
-  "TermiteOutside": [
-   888,
-   204
-  ],
   "BroodmotherLair": [
-   1208,
-   204
-  ],
-  "FGCave": [
-   1208,
-   204
-  ],
-  "FGOutsideSwamplands": [
    1208,
    204
   ],
@@ -2937,6 +2929,14 @@
    204
   ],
   "FarGrasslands1": [
+   1208,
+   204
+  ],
+  "FGCave": [
+   1208,
+   204
+  ],
+  "FGOutsideSwamplands": [
    1208,
    204
   ],
@@ -2980,10 +2980,6 @@
    1208,
    204
   ],
-  "SwamplandsBoss": [
-   1528,
-   204
-  ],
   "SwamplandsBridge": [
    1528,
    204
@@ -3013,6 +3009,10 @@
    204
   ],
   "Swamplands4": [
+   1528,
+   204
+  ],
+  "SwamplandsBoss": [
    1528,
    204
   ],
@@ -3084,18 +3084,6 @@
    912,
    332
   ],
-  "JaunesGallery": [
-   912,
-   332
-  ],
-  "BeehiveMainArea": [
-   912,
-   332
-  ],
-  "BeehiveScannerRoom": [
-   912,
-   332
-  ],
   "BeehiveOutside": [
    912,
    332
@@ -3112,12 +3100,16 @@
    912,
    332
   ],
-  "FactoryProcessingMalbee": [
-   1196,
+  "JaunesGallery": [
+   912,
    332
   ],
-  "FactoryStorageElevator": [
-   1196,
+  "BeehiveMainArea": [
+   912,
+   332
+  ],
+  "BeehiveScannerRoom": [
+   912,
    332
   ],
   "HoneyFactoryCore": [
@@ -3125,6 +3117,14 @@
    332
   ],
   "FactoryProcessing2": [
+   1196,
+   332
+  ],
+  "FactoryProcessingMalbee": [
+   1196,
+   332
+  ],
+  "FactoryStorageElevator": [
    1196,
    332
   ],
@@ -3228,6 +3228,14 @@
    236,
    460
   ],
+  "GiantLairEntrance": [
+   236,
+   460
+  ],
+  "GiantLairFridgeOutside": [
+   236,
+   460
+  ],
   "GiantLairFridgeInside": [
    236,
    460
@@ -3244,19 +3252,7 @@
    236,
    460
   ],
-  "GiantLairEntrance": [
-   236,
-   460
-  ],
-  "GiantLairFridgeOutside": [
-   236,
-   460
-  ],
   "MetalLake": [
-   524,
-   460
-  ],
-  "MysteryIsland": [
    524,
    460
   ],
@@ -3264,8 +3260,8 @@
    524,
    460
   ],
-  "MetalIsland1": [
-   864,
+  "MysteryIsland": [
+   524,
    460
   ],
   "MetalIsland2": [
@@ -3273,6 +3269,10 @@
    460
   ],
   "MetalIslandAuditorium": [
+   864,
+   460
+  ],
+  "MetalIsland1": [
    864,
    460
   ],
@@ -3316,10 +3316,6 @@
    1552,
    460
   ],
-  "WaspKingdom5": [
-   1552,
-   460
-  ],
   "WaspKingdom1": [
    1552,
    460
@@ -3329,6 +3325,10 @@
    460
   ],
   "WaspKingdom4": [
+   1552,
+   460
+  ],
+  "WaspKingdom5": [
    1552,
    460
   ],
@@ -3372,11 +3372,11 @@
    260,
    588
   ],
-  "HideoutWestStorage": [
+  "HideoutStairsRoom": [
    260,
    588
   ],
-  "HideoutStairsRoom": [
+  "HideoutWestStorage": [
    260,
    588
   ],

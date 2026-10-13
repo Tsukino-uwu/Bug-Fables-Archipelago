@@ -21,22 +21,15 @@
   "location_border_thickness": 3
  },
  {
-  "name": "CaveOfTrials",
-  "img": "images/room_CaveOfTrials.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "HermitCave",
-  "img": "images/room_HermitCave.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "BugariaOutskitsSnakemouthCorridor1",
   "img": "images/room_BugariaOutskitsSnakemouthCorridor1.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "CaveOfTrials",
+  "img": "images/room_CaveOfTrials.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -79,6 +72,13 @@
  {
   "name": "GoldenPathTunnel2",
   "img": "images/room_GoldenPathTunnel2.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "HermitCave",
+  "img": "images/room_HermitCave.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -140,6 +140,13 @@
   "location_border_thickness": 3
  },
  {
+  "name": "AntMinesBreakRoom",
+  "img": "images/room_AntMinesBreakRoom.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "AntBridge",
   "img": "images/room_AntBridge.png",
   "location_size": 24,
@@ -161,13 +168,6 @@
   "location_border_thickness": 3
  },
  {
-  "name": "AntMinesBreakRoom",
-  "img": "images/room_AntMinesBreakRoom.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "BugariaBridgeAttack",
   "img": "images/room_BugariaBridgeAttack.png",
   "location_size": 24,
@@ -177,6 +177,27 @@
  {
   "name": "BugariaCastleAttack",
   "img": "images/room_BugariaCastleAttack.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BugariaEndBridge",
+  "img": "images/room_BugariaEndBridge.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BugariaEndPlaza",
+  "img": "images/room_BugariaEndPlaza.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BugariaEndThrone",
+  "img": "images/room_BugariaEndThrone.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -224,27 +245,6 @@
   "location_border_thickness": 3
  },
  {
-  "name": "BugariaEndBridge",
-  "img": "images/room_BugariaEndBridge.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "BugariaEndPlaza",
-  "img": "images/room_BugariaEndPlaza.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "BugariaEndThrone",
-  "img": "images/room_BugariaEndThrone.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "UndergroundBar",
   "img": "images/room_UndergroundBar.png",
   "location_size": 24,
@@ -282,6 +282,13 @@
  {
   "name": "SnakemouthMushroomPit",
   "img": "images/room_SnakemouthMushroomPit.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "SnakemouthTop",
+  "img": "images/room_SnakemouthTop.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -329,50 +336,8 @@
   "location_border_thickness": 3
  },
  {
-  "name": "SnakemouthTop",
-  "img": "images/room_SnakemouthTop.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "UpperSnekEntrance",
   "img": "images/room_UpperSnekEntrance.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "DesertDRSouthEntrance",
-  "img": "images/room_DesertDRSouthEntrance.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "DesertFGBorder",
-  "img": "images/room_DesertFGBorder.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "DesertMountain",
-  "img": "images/room_DesertMountain.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "DesertSandCastle",
-  "img": "images/room_DesertSandCastle.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "DesertScorpion",
-  "img": "images/room_DesertScorpion.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -413,6 +378,13 @@
   "location_border_thickness": 3
  },
  {
+  "name": "DesertDRSouthEntrance",
+  "img": "images/room_DesertDRSouthEntrance.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "DesertEastmost",
   "img": "images/room_DesertEastmost.png",
   "location_size": 24,
@@ -427,8 +399,22 @@
   "location_border_thickness": 3
  },
  {
+  "name": "DesertFGBorder",
+  "img": "images/room_DesertFGBorder.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "DesertJumpPuzzle",
   "img": "images/room_DesertJumpPuzzle.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "DesertMountain",
+  "img": "images/room_DesertMountain.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -441,8 +427,22 @@
   "location_border_thickness": 3
  },
  {
+  "name": "DesertSandCastle",
+  "img": "images/room_DesertSandCastle.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "DesertSandPitArea",
   "img": "images/room_DesertSandPitArea.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "DesertScorpion",
+  "img": "images/room_DesertScorpion.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -504,6 +504,20 @@
   "location_border_thickness": 3
  },
  {
+  "name": "GoldenHillsDungeonEntrance",
+  "img": "images/room_GoldenHillsDungeonEntrance.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "GoldenHillsDungeonUpperMain",
+  "img": "images/room_GoldenHillsDungeonUpperMain.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "GoldenHillsDungeonUpperSide",
   "img": "images/room_GoldenHillsDungeonUpperSide.png",
   "location_size": 24,
@@ -546,6 +560,13 @@
   "location_border_thickness": 3
  },
  {
+  "name": "PitcherPlantArena",
+  "img": "images/room_PitcherPlantArena.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "GoldenHillsDungeonRightCrank",
   "img": "images/room_GoldenHillsDungeonRightCrank.png",
   "location_size": 24,
@@ -562,27 +583,6 @@
  {
   "name": "GoldenPitcher2",
   "img": "images/room_GoldenPitcher2.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "GoldenHillsDungeonEntrance",
-  "img": "images/room_GoldenHillsDungeonEntrance.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "GoldenHillsDungeonUpperMain",
-  "img": "images/room_GoldenHillsDungeonUpperMain.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "PitcherPlantArena",
-  "img": "images/room_PitcherPlantArena.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -630,20 +630,6 @@
   "location_border_thickness": 3
  },
  {
-  "name": "PowerPlant",
-  "img": "images/room_PowerPlant.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "GoldenSettlement1",
-  "img": "images/room_GoldenSettlement1.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "GoldenSettlement1Night",
   "img": "images/room_GoldenSettlement1Night.png",
   "location_size": 24,
@@ -672,29 +658,15 @@
   "location_border_thickness": 3
  },
  {
-  "name": "AbandonedCityTent",
-  "img": "images/room_AbandonedCityTent.png",
+  "name": "PowerPlant",
+  "img": "images/room_PowerPlant.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
  },
  {
-  "name": "BarrenLandsEntrance",
-  "img": "images/room_BarrenLandsEntrance.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "BarrenLandsMiniboss",
-  "img": "images/room_BarrenLandsMiniboss.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "BarrenLandsMushrooms",
-  "img": "images/room_BarrenLandsMushrooms.png",
+  "name": "GoldenSettlement1",
+  "img": "images/room_GoldenSettlement1.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -702,6 +674,13 @@
  {
   "name": "AbandonedCity",
   "img": "images/room_AbandonedCity.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "AbandonedCityTent",
+  "img": "images/room_AbandonedCityTent.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -723,6 +702,27 @@
  {
   "name": "BarrenLandsCD",
   "img": "images/room_BarrenLandsCD.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BarrenLandsEntrance",
+  "img": "images/room_BarrenLandsEntrance.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BarrenLandsMiniboss",
+  "img": "images/room_BarrenLandsMiniboss.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BarrenLandsMushrooms",
+  "img": "images/room_BarrenLandsMushrooms.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -756,6 +756,13 @@
   "location_border_thickness": 3
  },
  {
+  "name": "TermiteOutside",
+  "img": "images/room_TermiteOutside.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "BarrenLandsSideGPT",
   "img": "images/room_BarrenLandsSideGPT.png",
   "location_size": 24,
@@ -770,29 +777,8 @@
   "location_border_thickness": 3
  },
  {
-  "name": "TermiteOutside",
-  "img": "images/room_TermiteOutside.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "BroodmotherLair",
   "img": "images/room_BroodmotherLair.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "FGCave",
-  "img": "images/room_FGCave.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "FGOutsideSwamplands",
-  "img": "images/room_FGOutsideSwamplands.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -807,6 +793,20 @@
  {
   "name": "FarGrasslands1",
   "img": "images/room_FarGrasslands1.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "FGCave",
+  "img": "images/room_FGCave.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "FGOutsideSwamplands",
+  "img": "images/room_FGOutsideSwamplands.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -882,13 +882,6 @@
   "location_border_thickness": 3
  },
  {
-  "name": "SwamplandsBoss",
-  "img": "images/room_SwamplandsBoss.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "SwamplandsBridge",
   "img": "images/room_SwamplandsBridge.png",
   "location_size": 24,
@@ -940,6 +933,13 @@
  {
   "name": "Swamplands4",
   "img": "images/room_Swamplands4.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "SwamplandsBoss",
+  "img": "images/room_SwamplandsBoss.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1064,27 +1064,6 @@
   "location_border_thickness": 3
  },
  {
-  "name": "JaunesGallery",
-  "img": "images/room_JaunesGallery.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "BeehiveMainArea",
-  "img": "images/room_BeehiveMainArea.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "BeehiveScannerRoom",
-  "img": "images/room_BeehiveScannerRoom.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "BeehiveOutside",
   "img": "images/room_BeehiveOutside.png",
   "location_size": 24,
@@ -1113,15 +1092,22 @@
   "location_border_thickness": 3
  },
  {
-  "name": "FactoryProcessingMalbee",
-  "img": "images/room_FactoryProcessingMalbee.png",
+  "name": "JaunesGallery",
+  "img": "images/room_JaunesGallery.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
  },
  {
-  "name": "FactoryStorageElevator",
-  "img": "images/room_FactoryStorageElevator.png",
+  "name": "BeehiveMainArea",
+  "img": "images/room_BeehiveMainArea.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "BeehiveScannerRoom",
+  "img": "images/room_BeehiveScannerRoom.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1136,6 +1122,20 @@
  {
   "name": "FactoryProcessing2",
   "img": "images/room_FactoryProcessing2.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "FactoryProcessingMalbee",
+  "img": "images/room_FactoryProcessingMalbee.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "FactoryStorageElevator",
+  "img": "images/room_FactoryStorageElevator.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1316,6 +1316,20 @@
   "location_border_thickness": 3
  },
  {
+  "name": "GiantLairEntrance",
+  "img": "images/room_GiantLairEntrance.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "GiantLairFridgeOutside",
+  "img": "images/room_GiantLairFridgeOutside.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
   "name": "GiantLairFridgeInside",
   "img": "images/room_GiantLairFridgeInside.png",
   "location_size": 24,
@@ -1344,29 +1358,8 @@
   "location_border_thickness": 3
  },
  {
-  "name": "GiantLairEntrance",
-  "img": "images/room_GiantLairEntrance.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "GiantLairFridgeOutside",
-  "img": "images/room_GiantLairFridgeOutside.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "MetalLake",
   "img": "images/room_MetalLake.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
-  "name": "MysteryIsland",
-  "img": "images/room_MysteryIsland.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1379,8 +1372,8 @@
   "location_border_thickness": 3
  },
  {
-  "name": "MetalIsland1",
-  "img": "images/room_MetalIsland1.png",
+  "name": "MysteryIsland",
+  "img": "images/room_MysteryIsland.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1395,6 +1388,13 @@
  {
   "name": "MetalIslandAuditorium",
   "img": "images/room_MetalIslandAuditorium.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "MetalIsland1",
+  "img": "images/room_MetalIsland1.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1470,13 +1470,6 @@
   "location_border_thickness": 3
  },
  {
-  "name": "WaspKingdom5",
-  "img": "images/room_WaspKingdom5.png",
-  "location_size": 24,
-  "location_icon_size": 40,
-  "location_border_thickness": 3
- },
- {
   "name": "WaspKingdom1",
   "img": "images/room_WaspKingdom1.png",
   "location_size": 24,
@@ -1493,6 +1486,13 @@
  {
   "name": "WaspKingdom4",
   "img": "images/room_WaspKingdom4.png",
+  "location_size": 24,
+  "location_icon_size": 40,
+  "location_border_thickness": 3
+ },
+ {
+  "name": "WaspKingdom5",
+  "img": "images/room_WaspKingdom5.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
@@ -1568,15 +1568,15 @@
   "location_border_thickness": 3
  },
  {
-  "name": "HideoutWestStorage",
-  "img": "images/room_HideoutWestStorage.png",
+  "name": "HideoutStairsRoom",
+  "img": "images/room_HideoutStairsRoom.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3
  },
  {
-  "name": "HideoutStairsRoom",
-  "img": "images/room_HideoutStairsRoom.png",
+  "name": "HideoutWestStorage",
+  "img": "images/room_HideoutWestStorage.png",
   "location_size": 24,
   "location_icon_size": 40,
   "location_border_thickness": 3

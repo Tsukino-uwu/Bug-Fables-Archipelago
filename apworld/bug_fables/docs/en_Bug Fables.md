@@ -85,23 +85,25 @@ so it stays experimental, and the pause menu's Warp gets you out of a dead end.
 ## Plando: choosing where doors lead
 
 With *Entrance Randomizer* on Coupled or Decoupled, `plando_connections` pins doors (new in 0.3.0). Each door is
-named by its map and its door, `MapName: DoorName`, as the spoiler log's Entrances section lists them. `entrance` is the
-door you go through, `exit` the door you arrive next to:
+named where it is, `Area: Room, Door to` and the room it leads to in the unshuffled game, as the spoiler log's Entrances
+section lists them (a room with no name yet shows its map's name; two doors between the same rooms are `Door 1` and
+`Door 2`). The older names, `MapName: DoorName`, still work. `entrance` is the door you go through, `exit` the door you
+arrive next to:
 
 ```yaml
 plando_connections:
-  - entrance: "BugariaOutskirtsOutsideCity: DoorBugaria"
-    exit: "SnakemouthLake: WarpMap5"
+  - entrance: "Outskirts: Outside the City, Door to Bugaria City: Main Plaza"
+    exit: "Snakemouth Den: Lake, Door to Underground Door Room"
     direction: both
 ```
 
 `direction` is `both` (the default), `entrance` (only the first door leads to the second) or `exit` (only the second
 leads back to the first); Coupled always joins both ways. A one-way door's `exit` is another one-way's landing, named
-as the spoiler log lists it, e.g. `"BarrenLandsEntrance as from BarrenLandsEntrance: returnloadzoneright"`; it
-only goes one way, whatever the direction, and can't be paired with a two-way door. The rest of the doors are
-shuffled around them. Plando's
-"connections" must be turned on where the seed is generated (Archipelago's plando guide). It's ignored with the
-Entrance Randomizer off or on Room Swap.
+as the spoiler log lists it, e.g.
+`"Far Grasslands: Wizard's Tower Basement as from Far Grasslands: Wizard's Tower, Door to Wizard's Tower Basement"`;
+it only goes one way, whatever the direction, and can't be paired with a two-way door. The rest of the doors are
+shuffled around them. Plando's "connections" must be turned on where the seed is generated (Archipelago's plando
+guide). It's ignored with the Entrance Randomizer off or on Room Swap.
 
 ## Field abilities
 

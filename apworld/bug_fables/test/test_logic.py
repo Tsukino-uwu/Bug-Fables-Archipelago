@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState, ItemClassification
 
-from ..data_tables import ARTIFACTS, STORY_EVENTS, vanilla_item
+from ..data_tables import ARTIFACTS, STORY_EVENTS, door_name, vanilla_item
 from ..rules import FINAL_FIGHT
 from . import BugFablesTestBase
 
@@ -638,7 +638,7 @@ class TestBarCorner(BugFablesTestBase):
         self.assertTrue(self.can_reach_region("UndergroundBar"))
 
     def test_the_bar_door_lands_behind_the_grass(self) -> None:
-        entrance = self.multiworld.get_entrance("UndergroundBar: LoadZone", self.player)
+        entrance = self.multiworld.get_entrance(door_name("UndergroundBar", "LoadZone"), self.player)
         self.assertEqual(entrance.connected_region.name, "BugariaCommercial (Bar Corner)")
 
 
@@ -889,7 +889,7 @@ class TestSecurityRoom(_PrisonRoom):
                 self.assertTrue(self.way(name)(self.state_with("Beetle Dig")))
 
     def test_the_ledge(self) -> None:
-        self.assertEqual(self.multiworld.get_entrance("RubberPrisonSecurity: loadzone3rdfloor",
+        self.assertEqual(self.multiworld.get_entrance(door_name("RubberPrisonSecurity", "loadzone3rdfloor"),
                                                       self.player).parent_region.name, f"{self.MAP} (Bottom Right)")
         up = self.way(f"{self.MAP} (Bottom Right) to {self.MAP}")
         self.assertFalse(up(self.state_with("Beetle Dig")))
@@ -1830,7 +1830,7 @@ class TestLobby(BugFablesTestBase):
                                             self.player)
         self.assertFalse(back.access_rule(self.state_with("Jump", "Bee Fly")))
         self.assertTrue(back.access_rule(self.state_with("Factory Pass")))
-        door = self.multiworld.get_entrance("HoneyFactoryEntrance: loadzone processing", self.player)
+        door = self.multiworld.get_entrance(door_name("HoneyFactoryEntrance", "loadzone processing"), self.player)
         self.assertEqual(door.parent_region.name, "HoneyFactoryEntrance (Processing Door)")
 
     def test_storage_door_open(self) -> None:
@@ -2114,7 +2114,7 @@ class TestStorageMaze(BugFablesTestBase):
         back = self.way("FactoryStorageMaze (Overseer Door) to FactoryStorageMaze")
         self.assertFalse(back(self.state_with("Jump", "Horn Slash", "Bee Fly")))
         self.assertTrue(back(self.state_with("Factory Pass")))
-        door = self.multiworld.get_entrance("FactoryStorageMaze: loadzoneos", self.player)
+        door = self.multiworld.get_entrance(door_name("FactoryStorageMaze", "loadzoneos"), self.player)
         self.assertEqual(door.parent_region.name, "FactoryStorageMaze (Overseer Door)")
 
 
