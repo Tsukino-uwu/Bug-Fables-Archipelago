@@ -167,6 +167,7 @@ this file and that doc disagree, that doc is right.
 92. [Build step 92: the Sand Castle Key whole, its halves' spots locations](#build-step-92-the-sand-castle-key-whole-its-halves-spots-locations)
 93. [Build step 93: the Ancient Castle's spots back, its keys and the Peculiar Gem as items](#build-step-93-the-ancient-castles-spots-back-its-keys-and-the-peculiar-gem-as-items)
 94. [Build step 94: the Final Boss goal](#build-step-94-the-final-boss-goal)
+95. [Build step 95: the Wasp Kingdom's front gate open](#build-step-95-the-wasp-kingdoms-front-gate-open)
 
 **How it works**
 
@@ -6702,6 +6703,23 @@ once the six arrived and the map was entered again, then won; the Wasp King's Cr
 and the world released as the credits started.
 
 *Code: `options.py` (`ArtifactsRequired`), `world.py` (the cap), `rules.py` (`FINAL_FIGHT`), `items.py`.*
+
+## Build step 95: the Wasp Kingdom's front gate open
+
+**Found** (2026-10-13, the Coupled deadlock's dead ends): the lake's door south was a dead end in the door shuffle (left
+waiting in 16 of 76 failures), because its other door, the Wasp Kingdom's front gate, was kept shut. It was shut on
+2026-10-08 since its far side landed in the patrol's loop; the patrol has been kept away since 2026-10-11.
+
+**Decided** (2026-10-13): open, as other areas are; the hive's own door stays shut.
+
+**Built:** the gate's two `DoorRule`s gone (so it joins the door graph, `SHUT_DOORS`); both ends (`FarGrasslandsLake`
+`loadzonewasp`, `WaspKingdomOutside` `loadzonesouth`, made in the game from 555) kept present; the lake's `Base/grate`
+and outside's `Base/gate (1)` (the one by that door, z -9.5, read with dev `conditions`; `Base/gate` stays) hidden.
+Maki's turn-back there was already kept away. Test `TestWaspFrontGateOpen` (not yet run).
+
+**Status:** works, seen in seed `AP_61148440722678327578` (2026-10-13): no grate, no turn-back, through and back.
+
+*Code: `logic/far_grasslands.py`.*
 
 # How it works
 

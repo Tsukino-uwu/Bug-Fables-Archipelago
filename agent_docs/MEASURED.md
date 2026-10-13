@@ -1216,7 +1216,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   from 555, no animation); before it `blocker` (`Event12`, until 336) turns the party back, spoken by the follower
   (Maki here). Opened as a test, its far side (`WaspKingdomOutside`'s `loadzonesouth`, requires 555, its own gate hidden
   from 555) pushed the party past that gate into the patrol's `see area` (`Event138`, until 347), which puts the party
-  back at `lastpos`, inside itself: a loop, freed by `unstick` then `nudge` onto the door. Arriving here through the gate
+  back at `lastpos`, inside itself: a loop, freed by `unstick` then `nudge` onto the door. Outside the hive two gates hide from 555: `Base/gate (1)` at (0, 0, -9.5) by this door, and `Base/gate` at (0, 0,
+12.4) (dev `conditions`, 2026-10-13). Opened for good on 2026-10-13 (build step 95), the patrol kept away. Arriving here through the gate
   pushes the party past the grate, no trap. The one grass drops only money.
   **`FarGrasslandsOutsideVillage`, outside the Fishing Village (2026-10-08, the user, `Event176` and the battle code):**
   the left door (to `FarGrasslands3`) and the top right (to `FGOutsideSwamplands`) free between them; the village door
