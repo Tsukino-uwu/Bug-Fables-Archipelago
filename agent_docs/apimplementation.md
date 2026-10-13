@@ -293,7 +293,9 @@ be wrong.
     or with *Use on normal saves*.
 18. **Random start** (2026-09-26): `anywhere` built, experimental; *Save Points* and *Any Room* designed
     2026-09-30 (replacing the planned `towns`), to build. See build step 15. **The logic from the spawn:** built
-    2026-10-13 (build step 96, a tight start's way on placed early in build step 97). **Next, a named start** (decided
+    2026-10-13 (build step 96, a tight start's way on placed early in build step 97). **The PopTracker pack** still
+    begins at the game's start (it exports `logic_entrances()`, Menu to `START_MAP`): it must read slot_data's
+    `start` and begin beside its door, in its own repo, on the user's yes. **Next, a named start** (decided
     2026-10-13): *Starting Location* as Archipelago's `TextChoice`: Off, Anywhere or one room by name (which names, to
     decide then); a named room the seed can't begin from (build step 96's rule) refused with the reason.
 19. **Traps, an idea for later** (2026-09-26; not planned yet). A trap sent to this game takes effect when
