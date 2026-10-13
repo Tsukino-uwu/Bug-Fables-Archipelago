@@ -68,7 +68,8 @@ this file and that doc disagree, that doc is right.
   [40](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml) and
   [41](#build-step-41-universal-trackers-list-order-and-explanations), explained in [How it works
   12](#12-universal-tracker-how-its-implemented); the PopTracker pack,
-  [42](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld); every key, [How
+  [42](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld), its releases
+  [106](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson); every key, [How
   it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
@@ -178,6 +179,7 @@ this file and that doc disagree, that doc is right.
 103. [Build step 103: Enemysanity's real fight after its name in Universal Tracker](#build-step-103-enemysanitys-real-fight-after-its-name-in-universal-tracker)
 104. [Build step 104: harder ways shown in Universal Tracker as glitched logic](#build-step-104-harder-ways-shown-in-universal-tracker-as-glitched-logic)
 105. [Build step 105: each door's entrance named where it is](#build-step-105-each-doors-entrance-named-where-it-is)
+106. [Build step 106: the PopTracker pack's releases, updates through versions.json](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson)
 
 **How it works**
 
@@ -7263,6 +7265,44 @@ a spoiler.
 *Code: `data_tables.py` (`room_name`, `DOOR_LABELS`, `door_name`, `game_door_name`, `current_name`), `options.py`
 (`DoorPlando`), `entrances.py` (`_plando`), `universal_tracker.py` (`reconnect_doors`), `dev-scripts/ut-map.py`,
 `docs/en_Bug Fables.md`; tests `test_doors.py`, `test_deferred_doors.py`, `test_logic.py`, `test_areas.py`.*
+
+## Build step 106: the PopTracker pack's releases, updates through versions.json
+
+**Why:** PopTracker updates a pack from the `versions.json` its manifest's `versions_url` names (`doc/PACKS.md`; the
+format on PopTracker's `packlist` branch at `6cd531b`: `README.md`, `schema/versions.schema.json`, `checklist.md`).
+Decided 2026-10-13: the setup built now, the first release together with this randomizer's 0.4.0, the pack's repo
+public by then.
+
+**How it was built** (the pack's repo), as crystal-ap-tracker releases (its row in `licensing.md`):
+
+1. **The download is GitHub's source zip of the tag.** `.gitattributes`' `export-ignore` leaves out the tools, the
+   tests, `data/`, the plan, the README and the dev files, so the zip holds the pack and its licence alone (320
+   files, 34 MB). PopTracker opens a zip whose only top folder holds the manifest, as GitHub's archive has it
+   (`src/core/pack.cpp`, master `19f0b1f`), and saves an update as `<uid>_<version>.zip`
+   (`src/packmanager/packmanager.cpp`), so the download's name doesn't matter. An update is a higher
+   `package_version`; PopTracker asks once before trusting the host.
+2. **`versions.json` on a `versions` branch**, the manifest's `versions_url` its raw URL. The pack's
+   `.github/workflows/release.yml` runs when a release is published (a pre-release never): `tools/release.py check`
+   (the tag is `v` and `package_version`; the export's `randomizer_commit` is this repo's own tag of its
+   `world_version`, so a seed's version check means the logic matches), then the download fetched, `check-zip` (its
+   top level exactly the pack's files) and `pack-checker` strict on it, then the release added on top with its sha256
+   and the release notes' bullets as its changelog. The first release starts the branch. The actions are pinned to
+   the commits this repo's workflows use.
+3. **Before a release:** the pack's `tools/test.ps1` runs `check-zip` and `pack-checker` on the zip a release would
+   ship (`git archive` of the tracked files, uncommitted changes included), and `release.py check` runs by hand.
+   `release.py` lists every tag rather than one: given a pattern, one git build printed an annotated tag without its
+   `^{}` line, and the check took the tag object for the commit (its test caught it).
+
+**Tests:** the pack's `tests/test_release.py`: the tag rule, the export pin (an annotated tag peeled), the zip's
+contents at its root or in one folder, the changelog, `versions.json` newest first and valid against PopTracker's own
+schema. The workflow's versions step run against a throwaway repo: the first release started the branch, the second
+went on top. `check` refuses today's export (`4fc3410`, not `v0.3.0`).
+
+**Status:** built (2026-10-13), not yet run on GitHub: the first release is its first run. Not in PopTracker's pack
+list.
+
+*Code: the pack: `tools/release.py`, `.github/workflows/release.yml`, `.gitattributes`, `tools/test.ps1`,
+`tests/test_release.py`.*
 
 # How it works
 

@@ -111,6 +111,7 @@ said them.
 - [2026-10-13: the PopTracker pack with every room and the game's own pictures](#2026-10-13-the-poptracker-pack-with-every-room-and-the-games-own-pictures)
 - [2026-10-13: attributions out of the docs and code, ruff on the apworld, each release checked by its own preflight](#2026-10-13-attributions-out-of-the-docs-and-code-ruff-on-the-apworld-each-release-checked-by-its-own-preflight)
 - [2026-10-13: the room pictures from the front, nine rooms picked by look](#2026-10-13-the-room-pictures-from-the-front-nine-rooms-picked-by-look)
+- [2026-10-13: the PopTracker pack's releases set up](#2026-10-13-the-poptracker-packs-releases-set-up)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4396,3 +4397,20 @@ said them.
 - **The pack** (its `ecf9fe1`): each picture cut to what the game's camera shows (`MapControl`'s camera limits), pins
   at their height, crystal berries found in their dig spots (520 of 614 at their own spot); its tests pass against
   `4fc3410` (parity on 200 seeds, pack-checker). The pictures not yet seen in PopTracker.
+
+## 2026-10-13: the PopTracker pack's releases set up
+
+- **Built so a release is possible, none made** (build step 106): the download is GitHub's source zip of the tag,
+  `export-ignore` leaving the pack and its licence (the README stays in the repo only); `versions.json` on a
+  `versions` branch the pack's release workflow starts and adds to, as crystal-ap-tracker releases (read again for
+  it, its row in `licensing.md`). The first release comes with 0.4.0, the pack's repo public by then (decided
+  2026-10-13).
+- **A release only from a release:** `release.py check` wants the export's `randomizer_commit` to be this repo's tag
+  of its `world_version`; today's export (`4fc3410`) is refused, as it should be.
+- **How the tag check was found wrong:** its test failed under one git build: given a pattern, that build's
+  `ls-remote` printed an annotated tag without its `^{}` line, so the check took the tag object for the commit. With
+  `--tags` and no pattern, both builds print it; the check reads every tag now.
+- **The suite against `4fc3410`:** `main`'s build step 105 renames the entrances the pack's export reads (the pack
+  follows it in its own repo), so the pack's tests ran against the randomizer at the commit its export records: all
+  pass (parity on 200 seeds, 133,766 subtests; pack-checker on the folder and on the zip, 320 files). The workflow's
+  versions step ran against a throwaway repo: the first release started the branch, the second went on top.
