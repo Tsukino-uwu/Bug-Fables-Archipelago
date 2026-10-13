@@ -4348,5 +4348,5 @@ said them.
   their doors to say where they lead; blockers only for what stands in the road (77 of 263 room parts); the less
   important items in the same grid; the story's milestones as hand-marked events; a Bosses tab and an Enemies tab
   next.
-- **Handoff:** the game left at the main menu with the dev build and its console's command file. Nothing uncommitted
-  of this session's in either repo; neither pushed.
+- **Handoff:** the game closed (the dev build still installed). Nothing uncommitted of this session's in either
+  repo; neither pushed.
