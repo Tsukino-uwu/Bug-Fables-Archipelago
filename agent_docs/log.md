@@ -105,6 +105,7 @@ said them.
 - [2026-10-12: the Termite Capitol, the Wasp Kingdom, the Bandit Hideout, Stream Mountain and the Chomper Caves](#2026-10-12-the-termite-capitol-the-wasp-kingdom-the-bandit-hideout-stream-mountain-and-the-chomper-caves)
 - [2026-10-12: Upper Snakemouth, the last nine rooms; every room mapped](#2026-10-12-upper-snakemouth-the-last-nine-rooms-every-room-mapped)
 - [2026-10-12: the artifacts as locations, the Sand Castle Key whole](#2026-10-12-the-artifacts-as-locations-the-sand-castle-key-whole)
+- [2026-10-13: the castle and the Final Boss goal, the Coupled dead ends, the AI disclosure](#2026-10-13-the-castle-and-the-final-boss-goal-the-coupled-dead-ends-the-ai-disclosure)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4218,3 +4219,41 @@ said them.
   not this session's: `KeptOpen.cs` (the Final Boss goal's hold and sign) and `docs/reviewing.md` (a placeholder, left
   alone as asked).
 
+## 2026-10-13: the castle and the Final Boss goal, the Coupled dead ends, the AI disclosure
+
+- **The Ancient Castle** (build step 93, mod 63): its spots back in every seed; one Small Ancient Key kept for both
+  main-room locks, the Big Ancient Key and the Peculiar Gem progression, the Watcher's fight (320) and the treasure
+  pedestal (321, chapter 4's *Ancient Half*) as locations. All seen in seed `AP_33232363850621305804`. Key item 114
+  renamed *Small Ancient Key* in the game's text while Archipelago is on (it shared "Ancient Key" with chapter 3's
+  artifact).
+- **How the castle's fixes were found:** the gem reached the bag on the first try with no `[adds]` line in the log;
+  the DLL in the game lacked the new hook because `copy-dev.ps1` copies what `stage-dev.ps1` staged and staging was
+  skipped. The pedestal's banner kept the game's text because the swap took the line after it (3); `ArtifactGet` reads
+  the message id it's called with (2).
+- **Artifact scenes:** chapters 3 and 7 seen in a seed; chapters 2 and 6 not yet since their swap was built.
+- **The Final Boss goal** (build step 94, mod 64): *Artifacts Required* 0-7, default 6 (at most 6 unshuffled), the
+  last fight held until they arrive, the goal sent as the credits start (`Event204`); seen held, opened, sent and
+  released. Artifacts useful at 0. **A false release, found the same day:** after one seed's credits a new seed's new
+  file sent its goal at login (303 of 303 released at once): the credits' note was static and outlived the file. The
+  goal now needs the file's own flag 555. **`Event204` started elsewhere softlocks** (seen on the Outskirts, a null
+  reference before its music); dev `event` and `uncredits` came from that.
+- **Moves without their attack** (build step 63): the Dash, Bee Fly and the Shield seen working without Horn Slash,
+  Beemerang Toss and Freeze; the Horn Dash breaks a boulder without the horn and is stopped by grass until Horn Slash
+  arrives. The locked attack's buzzer before each of them is gone (a press buzzes only with neither move).
+- **The Coupled deadlock, with every room mapped:** 76 of 2000 over the seven failing yamls; 61 dead-end doors left
+  waiting, 52 of them one-door rooms. The other nine were looked at in game: six drop-only ledges and the Worker Rooms'
+  halves are real; the Wasp Kingdom's front gate was opened (build step 95, seen) and measured 73 of 2000, so closed
+  again. Decided: a fallback around the shuffler (retry, start-area check, vanilla pins, a hard cap; Pokémon Crystal's
+  layers read for their approach) before v0.4.0, in another chat; the plan is the local `ERfallback.md`.
+- **The full tests before a push:** 12 failures. One real bug: the Piano Puzzle's berry spot (310) had no category,
+  so its Crystal Berry entered the pool with berries off. The rest were tests behind the castle and the goal; two were
+  diagnosed by a workflow with skeptics, no code bug found (the permit test now checks the permit is needed with every
+  other item; the Filler Only fixture excludes the later half of the ordinary spots). Then 1368 passed; the fuzzer 7
+  of 10000, all the known deadlock; the tracker's fuzz 0. **Not pushed:** the push waits for the next release's other
+  changes.
+- **The AI disclosure** (Archipelago's policy): `docs/reviewing.md` answers its five questions as a Q&A; the README's
+  line matches it and links there. Not on a dated page of its own.
+- **Planned for the cleanup chat** (local `SCRUB.md`): a Python linter, ruff with Archipelago's own `ruff.toml`
+  (measured 255 findings; Next 76), alongside the attribution scrub.
+- **Handoff:** the server hosting `AP_61148440722678327578` on 38281 (generated with the Wasp gate open, before its
+  revert), left running. The game's config has InfJump and AdoptSeed on (dev only). Nothing uncommitted.
