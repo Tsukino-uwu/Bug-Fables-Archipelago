@@ -11,12 +11,13 @@ The questions of Archipelago's AI disclosure policy, answered one by one.
 **Q: Was AI used in any capacity?**
 
 A: Yes, a lot. All of the code in this repository, and nearly all of the documentation, has been written by AI under my
-direction; I've edited a few lines of the docs by hand. This repo will never contain any AI-generated images. Any
-picture it holds is a plain diagram for Universal Tracker's map tab, drawn by a script from the project's own room
-data (shapes, lines and text, the same picture every time from the same data), never by an image-generating AI and
-never the game's art. Every decision about what the randomizer does is mine: the AI suggests, I
-decide. How the code does it (its structure, and how it hooks into the game) is the AI's work, which I judge by what it
-does in the game.
+direction; I've edited a few lines of the docs by hand. This repo will never contain any AI-generated images. Every
+picture the project makes is drawn by code from plain shapes and text, the same every time: in the mod, the Archipelago
+icon (six circles in its logo's colours) and a button's backdrop, drawn at run time; and the diagrams for Universal
+Tracker's map tab, drawn by a script from the project's own room data. None comes from an image-generating AI, and none
+copies the game's art: the mod shows the game's own sprites in the game, never a copy in this repo. Every decision about
+what the randomizer does is mine: the AI suggests, I decide. How the code does it (its structure, and how it hooks into
+the game) is the AI's work, which I judge by what it does in the game.
 
 **Q: If so, what tools were used?**
 
