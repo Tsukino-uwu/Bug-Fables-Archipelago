@@ -4363,6 +4363,7 @@ said them.
 - **`verify-release.py` runs the tag's own preflight** (`d311778`): run from main it refused v0.3.0 over a pattern
   key added later. All three releases pass with the full command, and v0.3.0's DLL rebuilt byte for byte from its
   tag (the installed game matches `built-from.txt`), so `reviewing.md` now lists it (`fc5e4e4`).
-- **Next:** preflight's Attributions section, refusing any such tag outside the three exempt places, matched on the
-  whole text; then the full suite and the fuzzer before the push (the ruff cleanup changed code: `zip(strict=True)`
-  where both sides are built from one another), and `reviewing.md`'s test count from that run.
+- **Preflight's Attributions** (`6b72d33d`, build step 28): refuses any such tag outside the three exempt places,
+  matched on the whole text; the negative test plants one split inside a code comment. 88 fixtures, 0 problems.
+- **Next:** the full suite and the fuzzer before the push (the ruff cleanup changed code: `zip(strict=True)` where both
+  sides are built from one another), and `reviewing.md`'s test count from that run.
