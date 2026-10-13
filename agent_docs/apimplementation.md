@@ -7344,8 +7344,10 @@ choice is its opposite with every group reachable. `TestDoorSides`: every shuffl
 none. **Measured** (2026-10-13, full generation through `generate_like_main`): 800 of 800 seeds generated (300 default,
 300 with a random start, 200 with a random start, Jump and moves shuffled and minimal accessibility), 90% of two-way
 doors matched in each set. Found on the way, build step 105's: a test naming a one-way's story copy through
-`door_name` (copies have no entrance name: now `game_door_name`), a positional `DoorEnd(...)` in the names test, and
-the deadlock test's seed, which no longer ran out after the rename reordered Archipelago's sorted doors (seed 22 now).
+`door_name` (copies have no entrance name: now `game_door_name`), a positional `DoorEnd(...)` in the names test, the
+deadlock test's seed, which no longer ran out after the rename reordered Archipelago's sorted doors (seed 22 now), and,
+in the full suite's run, two tests still on the old `<map>: <door>` names (the pump room's door to Malbee, the Wasp
+Kingdom's shut front gate, which has no entrance name at all since it's out of the door graph).
 
 **Status:** built (2026-10-13), tests passing, the full suite and both fuzzers run before the push; not yet seen in
 game.

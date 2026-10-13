@@ -1964,7 +1964,7 @@ class TestPumpRoom(BugFablesTestBase):
 
     def test_malbee_door_locked(self) -> None:
         # The scanner takes the one pass three times, never using it up (build step 79).
-        door = self.way("FactoryProcessingPump: loadzonemalbee")
+        door = self.way(door_name("FactoryProcessingPump", "loadzonemalbee"))
         self.assertFalse(door(self.state_with("Jump", "Shield", "Bee Fly")))
         self.assertTrue(door(self.state_with("Factory Pass")))
 

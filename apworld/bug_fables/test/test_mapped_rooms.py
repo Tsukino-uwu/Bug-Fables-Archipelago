@@ -1,6 +1,6 @@
 """Rules from the room mapping that the generic tests don't reach: a trade's item, a gate kept shut, Riz's fight."""
 from ..custom_rules import ItemOnHand
-from ..data_tables import door_name
+from ..data_tables import DOOR_LABELS, game_door_name
 from . import BugFablesTestBase
 
 PINK_SPIDER = "Forsaken Lands: Pink Spider, First Trade"
@@ -37,9 +37,10 @@ class TestWaspFrontGateShut(BugFablesTestBase):
     # left out of the door graph (SHUT_DOORS), so neither side is an entrance and the randomizer never shuffles it.
     def test_neither_side_opens(self) -> None:
         made = {entrance.name for entrance in self.multiworld.get_entrances(self.player)}
-        for door in (door_name("FarGrasslandsLake", "loadzonewasp"), door_name("WaspKingdomOutside", "loadzonesouth")):
-            with self.subTest(door=door):
-                self.assertNotIn(door, made)
+        for door in (("FarGrasslandsLake", "loadzonewasp"), ("WaspKingdomOutside", "loadzonesouth")):
+            with self.subTest(door=game_door_name(*door)):
+                self.assertNotIn(door, DOOR_LABELS)
+                self.assertNotIn(game_door_name(*door), made)
 
 
 class TestRizOffersHisFight(BugFablesTestBase):
