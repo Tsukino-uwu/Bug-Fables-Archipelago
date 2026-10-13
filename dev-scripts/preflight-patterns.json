@@ -106,6 +106,7 @@
     "entrance_rando": ["EntranceRandomizationError", "disconnect_entrance_for_randomization", "randomize_entrances"],
     "Options": ["Choice", "DeathLink", "DefaultOnToggle", "OptionGroup", "OptionSet", "PerGameCommonOptions", "PlandoConnections",
                 "Range", "StartInventoryPool", "Toggle"],
+    "rule_builder.field_resolvers": ["FromWorldAttr"],
     "rule_builder.options": ["OptionFilter"],
     "rule_builder.rules": ["CanReachRegion", "False_", "Has", "HasAllCounts", "HasFromListUnique", "Or", "Rule", "True_",
                            "WrapperRule"],
