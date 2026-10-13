@@ -384,7 +384,6 @@ class DoorPlando(PlandoConnections):
                 == (exit.lower() in {name.lower() for name in ONE_WAY_LANDINGS}))
 
 
-@dataclass
 class BugFablesDeathLink(DeathLink):
     """
     When your party is defeated in a battle, everyone in the room with DeathLink on is too, and their deaths reach
@@ -393,6 +392,7 @@ class BugFablesDeathLink(DeathLink):
     """
 
 
+@dataclass
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
     artifact_shuffle: ArtifactShuffle

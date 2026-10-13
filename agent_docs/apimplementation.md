@@ -6957,7 +6957,10 @@ a death is here and that the panel can still switch it), sent in slot_data's `op
 (`documentation.md`, step 66): a row set at every login would undo a change made on the main menu at the next one. The
 preflight's import list gains `DeathLink`.
 
-**Tests** (not yet run, at push time): `death_link` sent as a JSON boolean, off by default and on when asked.
+**Tests:** `death_link` sent as a JSON boolean, off by default and on when asked. First run 2026-10-13 (with
+Archipelago's general tests, 1394 passed) after a fix: the new class had been put between `BugFablesOptions` and its
+`@dataclass`, which made every option value fail to build, so every seed failed to generate (found by the PopTracker
+pack's parity tests).
 
 **Status:** built (2026-10-13); not yet seen in game.
 
