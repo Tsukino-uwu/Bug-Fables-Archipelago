@@ -108,6 +108,7 @@ said them.
 - [2026-10-13: the castle and the Final Boss goal, the Coupled dead ends, the AI disclosure](#2026-10-13-the-castle-and-the-final-boss-goal-the-coupled-dead-ends-the-ai-disclosure)
 - [2026-10-13: the door shuffle's fallback; the spawn in the logic planned](#2026-10-13-the-door-shuffles-fallback-the-spawn-in-the-logic-planned)
 - [2026-10-13: the logic from the spawn, a tight start's way on placed early](#2026-10-13-the-logic-from-the-spawn-a-tight-starts-way-on-placed-early)
+- [2026-10-13: the PopTracker pack with every room and the game's own pictures](#2026-10-13-the-poptracker-pack-with-every-room-and-the-games-own-pictures)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4324,3 +4325,28 @@ said them.
 - **Handoff:** nothing running and nothing uncommitted; not pushed (`main` 77 ahead, the tests and the full fuzz at
   push time). Next: a random start's door seen in game (`TO-CHECK.md`), the PopTracker pack starting from slot_data's
   `start` (its repo, on the user's yes), then the named start (Next 18).
+
+## 2026-10-13: the PopTracker pack with every room and the game's own pictures
+
+- **The pack** (build step 100): exported with every room mapped (614 locations in 182 rooms); the start from
+  slot_data; the game's own pause map and a picture of every room from above (the mod's dev console: `worldmap`,
+  `roomshot all`, `roomstates`, `apicon`); a tab per room in eight story-order regions, a pin at each check's own
+  spot, blockers on gates, following the player, fog of war with the doors shuffled, a bottom bar of items with the
+  game's icons, the Goal, events and settings, laid out as crystal-ap-tracker lays out its rooms (read for it, its
+  row in `licensing.md`; TunicTracker read for fog of war, which it doesn't have).
+- **Found by the pack's tests:** build step 99's `@dataclass` sat on `BugFablesDeathLink`, so every seed failed to
+  generate (fixed, `f7228ec`); the last fight's artifact gate was outside the exported rule (now `ARTIFACT_GATE`
+  with `FromWorldAttr`, `ca06363`; the preflight's import list widened, `5963b4e`).
+- **How the pictures were found, wrong turns first:** the world map rendered folded (one animator update of no time
+  poses no bones); the pixel mapping first measured the game window (screen points taken after the render target
+  was released; x and z at 16:9); slicing at a ceiling showed logs' and rocks' dark insides, so whole objects over
+  the ceiling are switched off instead (at first only left out of the framing, so still drawn); black blobs were the
+  objects' outline shells; water drew white whatever the fog, depth texture or camera (a perspective try broke its
+  clipping), so it is drawn unlit in its texture's colour; the start room showed the boulders a seed removes, so
+  each room's flag-switched scenery is set as a new file has it, with a seed's own lists on top.
+- **Decided 2026-10-13:** the game's art for the pack's maps and icons; rooms stay at home in every door shuffle,
+  their doors to say where they lead; blockers only for what stands in the road (77 of 263 room parts); the less
+  important items in the same grid; the story's milestones as hand-marked events; a Bosses tab and an Enemies tab
+  next.
+- **Handoff:** the game left at the main menu with the dev build and its console's command file. Nothing uncommitted
+  of this session's in either repo; neither pushed.
