@@ -4,8 +4,19 @@ from __future__ import annotations
 from rule_builder.rules import True_
 
 from ..custom_rules import CanUse, one_way
-from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagEntity, Give, Location, Pickup, PlacedPickup, SceneryFit,
-                          Source, Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          EntityRef,
+                          FlagEntity,
+                          Give,
+                          Location,
+                          Pickup,
+                          PlacedPickup,
+                          SceneryFit,
+                          Source,
+                          Transfer,
+)
 
 LOCATIONS = (
     # Astotheles' fight at the Entrance's far right (`event2`, Event109, once: until 301) gives the Earth Key, half the
@@ -23,8 +34,8 @@ LOCATIONS = (
     Location("Bandit Hideout: Garden, By the Box", 294, "HideoutGarden",
              Source(flag=270, pickup=Pickup(map="HideoutGarden", type=1, item=108)), area="Upper", no_jump=True),
     # The Treasury (HideoutWestStorage; named 2026-10-12): under a barrier (Beetle Dig) and up on boxes (Jump or Bee
-    # Fly) to the story's scene there (Event109, until 260: talk only, it sets 260 and its wasps and bandits leave), then its
-    # Lore Book (flag 271).
+    # Fly) to the story's scene there (Event109, until 260: talk only, it sets 260 and its wasps and bandits leave),
+    # then its Lore Book (flag 271).
     Location("Bandit Hideout: Treasury, By the Chest", 295, "HideoutWestStorage",
              Source(flag=271, pickup=Pickup(map="HideoutWestStorage", type=1, item=52)),
              rule=CanUse("Beetle Dig") & (CanUse("Jump") | CanUse("Bee Fly")), no_jump=True),

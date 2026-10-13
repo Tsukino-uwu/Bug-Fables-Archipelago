@@ -3,12 +3,28 @@ exists."""
 from BaseClasses import EntranceType
 from rule_builder.rules import Has
 
-from . import BugFablesTestBase, logic_rules, rule_parts
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
-from ..data_tables import (DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ONE_WAYS, REGIONS,
-                           ROOM_STARTS, SHUT_DOORS, STARTS, STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name,
-                           door_region, landing_region)
+from ..data_tables import (
+    DOOR_RULES,
+    DOORS,
+    ENCOUNTERS,
+    ITEMS,
+    LOCATIONS,
+    MAPS,
+    ONE_WAYS,
+    REGIONS,
+    ROOM_STARTS,
+    SHUT_DOORS,
+    STARTS,
+    STORY_EVENTS,
+    TRANSFERS,
+    UNUSED_MAPS,
+    door_name,
+    door_region,
+    landing_region,
+)
+from . import BugFablesTestBase, logic_rules, rule_parts
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS)
 # The unused room and the debug room: never part of anything (room-logic.md, the model).

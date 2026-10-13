@@ -83,7 +83,7 @@ class TestSmallPool(BugFablesTestBase):
                "shuffle_medal_shops": False, "shuffle_item_shops": False}
 
     def test_only_ordinary_filler_gives_way(self) -> None:
-        from ..data_tables import ITEM_KIND, MONEY_KIND, ITEMS, vanilla_item
+        from ..data_tables import ITEM_KIND, ITEMS, MONEY_KIND, vanilla_item
         from ..items import ITEMS_BY_NAME, own_copies
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         for item in ITEMS:

@@ -38,10 +38,11 @@ MAP_AREAS = (
     # the Desert Oasis) by Jump or Bee Fly, a free drop back.
     Area("StreamMountain3", "Upper", ("loadzone exit",), CanUse("Jump") | CanUse("Bee Fly"),
          out=one_way(None, CanUse("Jump") | CanUse("Bee Fly"))),
-    # The Bridge Puzzle (StreamMountain4; named 2026-10-12): its right door and crystal switch (any attack) the map's own region; the middle (the
-    # Clear Water, a bounce pad up) dropped into with the water lowered; the left (the boss door) over the bridge,
-    # knocked down from its ledge (Jump or Bee Fly, Horn Slash), then across the floating logs with the water held up by
-    # Beemerang Halt, released to jump off at the far left; a one-way drop back into the middle.
+    # The Bridge Puzzle (StreamMountain4; named 2026-10-12): its right door and crystal switch (any attack) the map's
+    # own region; the middle (the Clear Water, a bounce pad up) dropped into with the water lowered; the left (the boss
+    # door) over the bridge, knocked down from its ledge (Jump or Bee Fly, Horn Slash), then across the floating logs
+    # with the water held up by Beemerang Halt, released to jump off at the far left; a one-way drop back into the
+    # middle.
     Area("StreamMountain4", "Middle", (), ANY_ATTACK, out=one_way(None, ANY_ATTACK)),
     Area("StreamMountain4", "Left", ("loadzone boss",),
          CanUse("Horn Slash") & CanUse("Jump") & CanUse("Beemerang Halt"),

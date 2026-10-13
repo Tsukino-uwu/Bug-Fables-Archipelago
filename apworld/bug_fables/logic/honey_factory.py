@@ -5,8 +5,20 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Give, ItemShop, Location, Pickup, Source,
-                          StoryEvent, Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          DoorRule,
+                          EntityRef,
+                          FlagSwap,
+                          Give,
+                          ItemShop,
+                          Location,
+                          Pickup,
+                          Source,
+                          StoryEvent,
+                          Transfer,
+)
 
 # The Factory Pass (key item 95): in a seed the mod leaves it in the bag at each of its three locks (Event59, key index
 # 4; build step 79), so the pool holds one and every lock needs only it. The game's five passes are locations 235-239.

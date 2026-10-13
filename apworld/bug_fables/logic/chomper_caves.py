@@ -7,8 +7,8 @@ from ..custom_rules import CanUse, one_way
 from ..data_types import Area, Location, Pickup, Source
 
 LOCATIONS = (
-    # The Droplet Room (ChomperCaves2; named 2026-10-12): the Berserker medal (flag 338) in an isolated corner at the far left of its bottom,
-    # dug to and from (Beetle Dig).
+    # The Droplet Room (ChomperCaves2; named 2026-10-12): the Berserker medal (flag 338) in an isolated corner at the
+    # far left of its bottom, dug to and from (Beetle Dig).
     Location("Chomper Caves: Droplet Room, Behind the Crack", 302, "ChomperCaves2",
              Source(flag=338, pickup=Pickup(map="ChomperCaves2", type=2, item=8)), rule=CanUse("Beetle Dig"),
              no_jump=True),

@@ -5,8 +5,20 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagEntity, FlagSwap, Give, Location, Pickup,
-                          Source, StoryEvent, Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          DoorRule,
+                          EntityRef,
+                          FlagEntity,
+                          FlagSwap,
+                          Give,
+                          Location,
+                          Pickup,
+                          Source,
+                          StoryEvent,
+                          Transfer,
+)
 
 # The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
 # item yet, so the later chapters' stand-in until its sale is a location.

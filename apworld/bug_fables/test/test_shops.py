@@ -3,9 +3,9 @@ from unittest import TestCase
 from BaseClasses import LocationProgressType
 from worlds.generic.Rules import add_item_rule
 
-from . import BugFablesTestBase, generate_like_main
 from ..data_tables import LOCATIONS
 from ..rules import fall_back_from_filler_only
+from . import BugFablesTestBase, generate_like_main
 
 # Party members, field moves and Jump as items take filler's place: a solo seed is short of filler (68 filler items for
 # 73 excluded spots, 2026-10-10; a default seed holds, 74 for 73), so Filler Only falls back.

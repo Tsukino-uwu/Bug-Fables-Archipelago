@@ -128,10 +128,11 @@ MAP_AREAS = (
     Area("GiantLairBeforeBoss", "Left", ("loadzonefinal",), _UP, to="GiantLairBeforeBoss (Middle Left)"),
     Area("GiantLairBeforeBoss", "Upper", ("loadzoneup",),
          CanUse("Bee Fly") & CanUse("Horn Dash") & CanUse("Horn Slash") & _UP),
-    # Above the Stove (GiantLairBeforeBoss2; named 2026-10-11): its right (the bounce pad's door) the map's own region. The gate
-    # in the middle opens only while the ice block sits on the right's pressure plate (no flag: shut again on leaving):
-    # Jump and Bee Fly over the platforms, the droplet frozen, the block knocked along with the horn. On the left, the
-    # switches hit with the Beemerang, Jump and Bee Fly over platforms, the Shield over the thorns, to the hole down.
+    # Above the Stove (GiantLairBeforeBoss2; named 2026-10-11): its right (the bounce pad's door) the map's own region.
+    # The gate in the middle opens only while the ice block sits on the right's pressure plate (no flag: shut again on
+    # leaving): Jump and Bee Fly over the platforms, the droplet frozen, the block knocked along with the horn. On the
+    # left, the switches hit with the Beemerang, Jump and Bee Fly over platforms, the Shield over the thorns, to the
+    # hole down.
     Area("GiantLairBeforeBoss2", "Left Right", (), CanUse("Jump") & CanUse("Bee Fly") & CanUse("Freeze")
          & CanUse("Horn Slash")),
     Area("GiantLairBeforeBoss2", "Left Left", ("loadzoneleft",), CanUse("Beemerang Toss") & CanUse("Jump")

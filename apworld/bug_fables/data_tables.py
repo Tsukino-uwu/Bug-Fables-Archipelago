@@ -11,12 +11,43 @@ from rule_builder.rules import False_
 
 from .data_types import Area, DoorConnection, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
-from .logic import (ACTIVATION_FLAGS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS, DOOR_RULES, ENTITIES_MOVED, FLAGS_WITH,
-                    HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT, LIMIT_FLAGS, LOCATIONS, MAP_AREAS,
-                    PICKUPS_PLACED, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_COPIED,
-                    SCENERY_FITTED, SCENERY_HIDDEN, SCENERY_LAYERS, SCENERY_MOVED, SCENERY_OFF,
-                    SCENERY_PRESENT, SCENERY_SPRITE_OFF, FLOAT_FLAGS,
-                    SCENES_KEPT_AWAY, STORY_EVENTS, TIME_SWITCHES, TRACKER_ORDER, TRANSFERS)
+
+# The room logic's tables: a few used here, the rest read from here by slot_data.py, world.py and the tests.
+from .logic import (  # noqa: F401
+    ACTIVATION_FLAGS,
+    DAY_NIGHT,
+    DIALOGUE_FLAGS,
+    DOOR_ROWS,
+    DOOR_RULES,
+    ENTITIES_MOVED,
+    FLAGS_WITH,
+    FLOAT_FLAGS,
+    HELD_UNTIL,
+    HELD_UNTIL_ITEM,
+    KEPT_OPEN,
+    KEPT_PRESENT,
+    LIMIT_FLAGS,
+    LOCATIONS,
+    MAP_AREAS,
+    PICKUPS_PLACED,
+    PRESENT_FROM,
+    PRESENT_WITH_ITEM,
+    ROADBLOCKS,
+    SCENE_CAMERAS,
+    SCENERY_COPIED,
+    SCENERY_FITTED,
+    SCENERY_HIDDEN,
+    SCENERY_LAYERS,
+    SCENERY_MOVED,
+    SCENERY_OFF,
+    SCENERY_PRESENT,
+    SCENERY_SPRITE_OFF,
+    SCENES_KEPT_AWAY,
+    STORY_EVENTS,
+    TIME_SWITCHES,
+    TRACKER_ORDER,
+    TRANSFERS,
+)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000

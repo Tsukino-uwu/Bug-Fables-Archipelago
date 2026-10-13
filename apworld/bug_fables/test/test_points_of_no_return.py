@@ -1,9 +1,9 @@
-"""Points of No Return: with it on, a one-way's way back (WayBack) needs nothing, since the Warp to Start is the way back
-(room-logic.md, rules 4 and 9); with it off, the way back is needed."""
+"""Points of No Return: with it on, a one-way's way back (WayBack) needs nothing, since the Warp to Start is the way
+back (room-logic.md, rules 4 and 9); with it off, the way back is needed."""
 from rule_builder.rules import Has
 
-from . import BugFablesTestBase
 from ..custom_rules import WayBack, one_way
+from . import BugFablesTestBase
 
 
 class TestPointsOfNoReturnOff(BugFablesTestBase):

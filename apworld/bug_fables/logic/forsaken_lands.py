@@ -40,8 +40,8 @@ LOCATIONS = (
     Location("Forsaken Lands: Wind Pipes, Isolated Platform", 164, "BarrenLandsCloud",
              Source(flag=455, pickup=Pickup(map="BarrenLandsCloud", type=1, item=52)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Bottom"),
-    # The dome overlook's vista, up its springs: discovery 41, "Termite Kingdom", with or without the queen (line 1 or 2,
-    # flag 470); nothing needed.
+    # The dome overlook's vista, up its springs: discovery 41, "Termite Kingdom", with or without the queen (line 1
+    # or 2, flag 470); nothing needed.
     Location("Forsaken Lands: Dome Overlook, Vista", 165, "BarrenLandsRock", Source(discovery=41),
              category="discovery", no_jump=True),
     # A respawning Squash in grass by the log (regional flag 11): the horn.

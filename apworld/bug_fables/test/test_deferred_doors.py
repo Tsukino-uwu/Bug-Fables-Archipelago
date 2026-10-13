@@ -11,11 +11,11 @@ from test.general import setup_multiworld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import exclusion_rules
 
-from . import generate_like_main
-from .test_tracker import TRACKER_STEPS, as_sent, reached
 from ..data_tables import ONE_WAYS, door_name
 from ..universal_tracker import DOORS_TAKEN_KEY
 from ..world import BugFablesWorld
+from . import generate_like_main
+from .test_tracker import TRACKER_STEPS, as_sent, reached
 
 
 def rebuild(slot_data: Mapping[str, Any], seed: int, deferred: str) -> BugFablesWorld:

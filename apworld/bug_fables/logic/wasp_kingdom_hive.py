@@ -4,8 +4,20 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member
-from ..data_types import (Area, EntityMove, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, SceneryCopy, SceneryLayer,
-                          Source, Transfer)
+from ..data_types import (
+                          Area,
+                          EntityMove,
+                          EntityRef,
+                          FlagEntity,
+                          Give,
+                          ItemShop,
+                          Location,
+                          Pickup,
+                          SceneryCopy,
+                          SceneryLayer,
+                          Source,
+                          Transfer,
+)
 
 LOCATIONS = (
     # WaspKingdom3 (2026-10-11): the Wasp Key (key item 119, flag 364), which lay free under the left ledge once the
@@ -39,7 +51,8 @@ ENTITIES_MOVED = (
 )
 MAP_AREAS = (
     # Outside the hive (WaspKingdomOutside; 2026-10-11): from the cave's door the game pushes the party past a boulder
-    # (rock, until 332), so that way in is free; back out to the cave, the boulder broken by Horn Dash (it stays broken).
+    # (rock, until 332), so that way in is free; back out to the cave, the boulder broken by Horn Dash (it stays
+    # broken).
     Area("WaspKingdomOutside", "Left", ("loadzonecave",), CanUse("Horn Dash"), out=True_()),
     # The hive's door (to the main hall): coming out, the party is put past its barrier; from outside the barrier
     # keeps it shut.
@@ -53,9 +66,9 @@ MAP_AREAS = (
          landings=(("WaspKingdomOutside", "loadzoneinside#14"),)),
     # WaspKingdom2 (2026-10-11): its bottom (the Pantry's door and the lower left one, to 243) the map's own region; up
     # to the top (the save crystal, the upper left and right doors) on the wooden lift, started by a lever in a small
-    # house dug into (Beetle Dig, then any attack) and boarded by Jump or Bee Fly; down, a free drop. The right door behind a lock that
-    # takes the Wasp Key (Event59, key index 9, kept in a seed; gone from 363): arriving through it the game puts the party
-    # past the lock; out through it with the key.
+    # house dug into (Beetle Dig, then any attack) and boarded by Jump or Bee Fly; down, a free drop. The right door
+    # behind a lock that takes the Wasp Key (Event59, key index 9, kept in a seed; gone from 363): arriving through it
+    # the game puts the party past the lock; out through it with the key.
     Area("WaspKingdom2", "Top", ("loadzoneleft",),
          CanUse("Beetle Dig") & ANY_ATTACK & (CanUse("Jump") | CanUse("Bee Fly")), out=True_()),
     # WaspKingdom4 (2026-10-11): from its left door (the map's own region) a lever (any attack) opens a barrier to the
@@ -65,9 +78,9 @@ MAP_AREAS = (
     Area("WaspKingdom4", "Top", (), ANY_ATTACK & CanUse("Beetle Dig"), out=ANY_ATTACK & CanUse("Beetle Dig")),
     Area("WaspKingdom4", "Right", ("loadzonenext",), ANY_ATTACK & CanUse("Beetle Dig"), out=False_(),
          to="WaspKingdom4 (Top)"),
-    # Food Storage (WaspKingdom5; named 2026-10-11 from its sign): its bottom (the Barrier Room's door, the save crystal,
-    # the right door) the map's own region; the top through a key door on the ground, the Wasp Key either way (gone
-    # from 365); the vent to the main hall on a small ledge of its own, dropped from free, up by Jump.
+    # Food Storage (WaspKingdom5; named 2026-10-11 from its sign): its bottom (the Barrier Room's door, the save
+    # crystal, the right door) the map's own region; the top through a key door on the ground, the Wasp Key either way
+    # (gone from 365); the vent to the main hall on a small ledge of its own, dropped from free, up by Jump.
     Area("WaspKingdom5", "Top", (), Has("Wasp Key"), out=Has("Wasp Key")),
     Area("WaspKingdom5", "Vent", ("loadzone vent",), CanUse("Jump"), out=True_(), to="WaspKingdom5 (Top)"),
     # The Main Hall (WaspKingdomMainHall; 2026-10-11): the vent from the Food Storage opens on a ledge of its own, a

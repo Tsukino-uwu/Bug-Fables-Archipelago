@@ -5,19 +5,19 @@ from unittest import TestCase
 
 from rule_builder.rules import Has, Rule
 
-from . import BugFablesTestBase, logic_rules
 from ..custom_rules import one_way
 from ..data_tables import LOCATIONS, STORY_EVENTS
 from ..regions import logic_entrances
 from ..rules import spot_rule
 from ..world import BugFablesWorld
+from . import BugFablesTestBase, logic_rules
 
 
 class TestRuleExport(TestCase):
     def assert_round_trip(self, where: str, rule: Rule) -> None:
-        data = rule.to_dict()
-        self.assertEqual(json.loads(json.dumps(data)), data, where)
-        self.assertEqual(BugFablesWorld.rule_from_dict(data).to_dict(), data, where)
+        # As a tracker receives it, through JSON: a tuple of names arrives as a list.
+        data = json.loads(json.dumps(rule.to_dict()))
+        self.assertEqual(json.loads(json.dumps(BugFablesWorld.rule_from_dict(data).to_dict())), data, where)
 
     def test_every_logic_rule(self) -> None:
         for where, rule in logic_rules():

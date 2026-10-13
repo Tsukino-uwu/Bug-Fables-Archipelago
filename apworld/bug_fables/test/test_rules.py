@@ -1,8 +1,8 @@
 """Bug Fables' own Rule Builder rules (custom_rules.py), and "and" and "or" as the logic writes them."""
 from rule_builder.rules import Has
 
-from . import BugFablesTestBase
 from ..custom_rules import CanUse, Member, MoveItem
+from . import BugFablesTestBase
 
 
 class TestStoryParty(BugFablesTestBase):

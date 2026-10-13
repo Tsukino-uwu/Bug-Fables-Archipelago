@@ -5,8 +5,20 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, SUBMARINE, SUBMARINE_KEY, WOODEN_CRANK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Area, EntityMove, EntityRef, FlagEntity, FlagSwap, ItemEntity, Location, Pickup,
-                          Source, StoryEvent, Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          EntityMove,
+                          EntityRef,
+                          FlagEntity,
+                          FlagSwap,
+                          ItemEntity,
+                          Location,
+                          Pickup,
+                          Source,
+                          StoryEvent,
+                          Transfer,
+)
 
 # The one Prison Key, never used up at the prison's four locks in a seed (build step 82).
 PRISON_KEY = Has("Prison Key")

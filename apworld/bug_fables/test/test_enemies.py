@@ -1,9 +1,9 @@
 from collections import Counter
 from random import Random
 
-from . import BugFablesTestBase
 from ..data_tables import ENCOUNTERS
 from ..enemies import shuffle_encounters
+from . import BugFablesTestBase
 
 
 class TestEnemiesOffByDefault(BugFablesTestBase):

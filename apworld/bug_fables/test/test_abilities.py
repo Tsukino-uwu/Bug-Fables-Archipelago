@@ -1,5 +1,5 @@
-from . import BugFablesTestBase
 from ..abilities import ABILITIES
+from . import BugFablesTestBase
 
 LEARNED = ["Progressive Dash", "Bee Fly", "Beetle Dig", "Shield"]
 

@@ -4,10 +4,20 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import (ALL_ATTACKS, ANY_ATTACK, BOAT_TICKET, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
-                            CanUse, one_way)
-from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
-                          Source, Transfer)
+from ..custom_rules import ALL_ATTACKS, ANY_ATTACK, BOAT_TICKET, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY, CanUse, one_way
+from ..data_types import (
+                            Added,
+                            Area,
+                            DialogueFlag,
+                            EntityRef,
+                            Give,
+                            ItemEntity,
+                            ItemShop,
+                            Location,
+                            Pickup,
+                            Source,
+                            Transfer,
+)
 
 # Past the Explorer Permit gate (the "Past the Gate" area): cautious until the rooms past it are measured, every member
 # (when members are items) and every move item (when moves are).

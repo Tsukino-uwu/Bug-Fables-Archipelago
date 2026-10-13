@@ -8,15 +8,24 @@ from BaseClasses import CollectionState, EntranceType, LocationProgressType
 from entrance_rando import EntranceRandomizationError, randomize_entrances
 from worlds.AutoWorld import call_all
 
-from . import BugFablesTestBase, entrance_graph, generate_like_main
 from .. import entrances
-from ..data_tables import (DOORS, ONE_WAYS, REGIONS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name, door_region,
-                           landing_region, one_way_landing)
+from ..data_tables import (
+    DOORS,
+    ONE_WAYS,
+    REGIONS,
+    SHUFFLED_CONNECTIONS,
+    SHUFFLED_ONE_WAYS,
+    door_name,
+    door_region,
+    landing_region,
+    one_way_landing,
+)
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
 from ..regions import MENU
 from ..world import BugFablesWorld
+from . import BugFablesTestBase, entrance_graph, generate_like_main
 
 Door = tuple[str, str]
 ONE_WAY_DOORS = {(w.map, w.door) for w in SHUFFLED_ONE_WAYS}
@@ -63,7 +72,8 @@ def one_way_lands(one_ways, targets) -> dict[Door, str]:
     map, or the area of it that takes the landing (landing_region)."""
     to = {(w.map, w.door): landing_region(w) for w in one_ways}
     like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}
-    return {(w.map, name): to[like.get((w.map, name), (w.map, w.door))] for w in one_ways for name in (w.door, *w.copies)}
+    return {(w.map, name): to[like.get((w.map, name), (w.map, w.door))]
+            for w in one_ways for name in (w.door, *w.copies)}
 
 
 def _links(connections, fixed, targets) -> dict[str, set[str]]:
@@ -589,7 +599,8 @@ TANKS_NORTH, ENTRANCE_RIGHT = ("BarrenLandsTanks", "returnzonenorth"), ("BarrenL
 ENTRANCE_RIGHT_LANDING = "BarrenLandsEntrance as from BarrenLandsEntrance: returnloadzoneright"
 PLANDO = [
     # Written in another case on purpose: plando names match whatever the case.
-    {"entrance": "bugariaoutskirtsoutsidecity: doorbugaria", "exit": "SnakemouthLake: WarpMap5", "direction": "entrance"},
+    {"entrance": "bugariaoutskirtsoutsidecity: doorbugaria", "exit": "SnakemouthLake: WarpMap5",
+     "direction": "entrance"},
     {"entrance": "NearSnakemouth: loadingzonefields", "exit": "AntBridge: loadzonepalace", "direction": "exit"},
     # No direction: both, which a one-way can't go; it goes its one way.
     {"entrance": "barrenlandstanks: returnzonenorth", "exit": ENTRANCE_RIGHT_LANDING},
@@ -637,15 +648,15 @@ class TestDoorTargetsReadBack(TestCase):
                 ys, landings = doors[:], one_ways[:]
                 random.shuffle(ys)
                 random.shuffle(landings)
-                pairings = [*zip(doors, ys), *zip(one_ways, landings)]
+                pairings = [*zip(doors, ys, strict=True), *zip(one_ways, landings, strict=True)]
                 targets = door_targets(pairings, DOORS.connections, SHUFFLED_ONE_WAYS)
                 read = pairings_from_targets(targets, DOORS.connections, SHUFFLED_ONE_WAYS)
                 self.assertEqual(set(read), set(pairings))
                 # Coupled: doors in pairs, each leading to the other.
                 matched = doors[:]
                 random.shuffle(matched)
-                pairs = _both_ways(list(zip(matched[::2], matched[1::2])))
-                pairings = [*pairs, *zip(one_ways, landings)]
+                pairs = _both_ways(list(zip(matched[::2], matched[1::2], strict=False)))
+                pairings = [*pairs, *zip(one_ways, landings, strict=True)]
                 targets = door_targets(pairings, DOORS.connections, SHUFFLED_ONE_WAYS)
                 read = pairings_from_targets(targets, DOORS.connections, SHUFFLED_ONE_WAYS)
                 self.assertEqual(set(read), set(pairings))
@@ -706,7 +717,8 @@ class TestOneWayTable(TestCase):
     def test_ladder_pair_is_a_connection(self) -> None:
         # Its way back lands 11.3 from it, once just past the pairing distance.
         ends = {frozenset({(c.a.map, c.a.door), (c.b.map, c.b.door)}) for c in DOORS.connections}
-        self.assertIn(frozenset({("GiantLairBeforeBoss", "loadzoneup"), ("GiantLairBeforeBoss2", "loadzoneright")}), ends)
+        self.assertIn(frozenset({("GiantLairBeforeBoss", "loadzoneup"), ("GiantLairBeforeBoss2", "loadzoneright")}),
+                      ends)
 
     def test_parked_doors_are_in_no_list(self) -> None:
         # The Sand Castle's two right-hand basement doors sit at height 99, out of reach.

@@ -5,8 +5,19 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Added, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
-                          Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Added,
+                          Area,
+                          DoorRule,
+                          EntityRef,
+                          FlagSwap,
+                          Location,
+                          Pickup,
+                          Source,
+                          StoryEvent,
+                          Transfer,
+)
 
 _SLIDE_SOLVED = "Sand Castle Slide Puzzle Solved"
 # The Slide Puzzle's upper gap: filled once the puzzle is solved, or flown over.

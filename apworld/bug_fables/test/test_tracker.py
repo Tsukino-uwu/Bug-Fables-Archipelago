@@ -13,11 +13,11 @@ from test.general import setup_multiworld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import exclusion_rules
 
+from ..data_tables import TRACKER_ORDER
+from ..world import BugFablesWorld
 from . import entrance_graph, generate_like_main
 from .test_doors import PLANDO
 from .test_shops import SHORT_EXCLUSIONS, SHORT_OF_FILLER
-from ..data_tables import TRACKER_ORDER
-from ..world import BugFablesWorld
 
 # Universal Tracker's TrackerCore.TMain: these steps, its exclusions after set_rules, nothing after generate_basic.
 TRACKER_STEPS = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic")

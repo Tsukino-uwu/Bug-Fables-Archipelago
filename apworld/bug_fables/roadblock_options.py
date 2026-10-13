@@ -15,4 +15,4 @@ class ExtraRoadblocks(OptionSet):
     """
 
     display_name = "Extra Roadblocks"
-    valid_keys: list[str] = []
+    valid_keys: tuple[str, ...] = ()

@@ -1,7 +1,7 @@
 """Rules from the room mapping that the generic tests don't reach: a trade's item, a gate kept shut, Riz's fight."""
-from . import BugFablesTestBase
 from ..custom_rules import ItemOnHand
 from ..data_tables import door_name
+from . import BugFablesTestBase
 
 PINK_SPIDER = "Forsaken Lands: Pink Spider, First Trade"
 ITEM_SHOP_ROOMS = {"GoldenSettlement1", "GoldenSettlementEntrance", "BugariaCommercial", "BugariaOutskirtsOutsideCity",

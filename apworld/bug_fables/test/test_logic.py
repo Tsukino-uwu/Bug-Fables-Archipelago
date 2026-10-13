@@ -1,8 +1,8 @@
 from BaseClasses import CollectionState, ItemClassification
 
-from . import BugFablesTestBase
 from ..data_tables import ARTIFACTS, STORY_EVENTS, vanilla_item
 from ..rules import FINAL_FIGHT
+from . import BugFablesTestBase
 
 
 class TestPermitGate(BugFablesTestBase):
@@ -1250,7 +1250,7 @@ class TestIceBlockClimb(BugFablesTestBase):
     # brought up past a boulder (Horn Dash) opens the middle's ways up and across; Bee Fly for some.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
     ICE = ("Progressive Freeze", "Horn Slash", "Jump")
-    ICE_UP = ICE + ("Progressive Dash", "Progressive Dash")
+    ICE_UP = (*ICE, "Progressive Dash", "Progressive Dash")
 
     def test_bottom_right_to_the_bottom_middle(self) -> None:
         across = self.multiworld.get_entrance("Swamplands7 (Bottom Right) to Swamplands7 (Bottom Middle)", self.player)

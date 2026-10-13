@@ -1,6 +1,6 @@
-"""The regions: Menu, the origin, then one per map and one per part of a map a roadblock cuts off (MAP_AREAS). Every door
-is an entrance of the region it stands in, named after where it is, a one-way door too; fixed doors, the transfers that
-aren't doors (logic/) and each map area's way across join regions too."""
+"""The regions: Menu, the origin, then one per map and one per part of a map a roadblock cuts off (MAP_AREAS). Every
+door is an entrance of the region it stands in, named after where it is, a one-way door too; fixed doors, the transfers
+that aren't doors (logic/) and each map area's way across join regions too."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, NamedTuple
@@ -8,8 +8,19 @@ from typing import TYPE_CHECKING, NamedTuple
 from BaseClasses import Region
 
 from .custom_rules import one_way
-from .data_tables import (DOOR_RULES, DOORS, MAP_AREAS, MAPS, ONE_WAYS, REGIONS, TRANSFERS, door_name,
-                          door_region, landing_region, start_region)
+from .data_tables import (
+    DOOR_RULES,
+    DOORS,
+    MAP_AREAS,
+    MAPS,
+    ONE_WAYS,
+    REGIONS,
+    TRANSFERS,
+    door_name,
+    door_region,
+    landing_region,
+    start_region,
+)
 
 if TYPE_CHECKING:
     from rule_builder.rules import Rule
@@ -29,10 +40,10 @@ def create_and_connect_regions(world: BugFablesWorld) -> None:
     regions = {name: Region(name, world.player, world.multiworld) for name in REGIONS}
     world.multiworld.regions += [menu, *regions.values()]
     regions[MENU] = menu
-    for entrance in logic_entrances():
-        if entrance.from_map == MENU and world.start:
-            # The logic starts where the seed's start puts the party, as a reset (the Warp to Start) takes it back.
-            entrance = entrance._replace(name=START_ENTRANCE, to_map=start_region(world.start))
+    for listed in logic_entrances():
+        # The logic starts where the seed's start puts the party, as a reset (the Warp to Start) takes it back.
+        entrance = (listed._replace(name=START_ENTRANCE, to_map=start_region(world.start))
+                    if listed.from_map == MENU and world.start else listed)
         # A door is always made, even one its rule shuts for good: the entrance randomizer and the door table name
         # every door (World.create_entrance otherwise skips a rule that is always false).
         world.create_entrance(regions[entrance.from_map], regions[entrance.to_map], entrance.rule, name=entrance.name,
@@ -57,9 +68,8 @@ def logic_entrances() -> list[LogicEntrance]:
         for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
             entrances.append(LogicEntrance(door_name(end.map, end.door), door_region(end.map, end.door),
                                            door_region(other.map, other.door), gates.get((end.map, end.door)), True))
-    for door in ONE_WAYS:
-        entrances.append(LogicEntrance(door_name(door.map, door.door), door_region(door.map, door.door),
-                                       landing_region(door), gates.get((door.map, door.door)), True))
+    entrances.extend(LogicEntrance(door_name(door.map, door.door), door_region(door.map, door.door),
+                                   landing_region(door), gates.get((door.map, door.door)), True) for door in ONE_WAYS)
     for a, b in dict.fromkeys(DOORS.fixed):
         if a != b and a in MAPS and b in MAPS:
             entrances.append(LogicEntrance(f"{a} to {b}", a, b, None))

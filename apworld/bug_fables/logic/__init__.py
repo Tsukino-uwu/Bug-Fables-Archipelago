@@ -8,13 +8,58 @@ origin, is in regions.py.
 """
 from __future__ import annotations
 
-from ..data_types import (Area, DayNight, DialogueFlag, DoorRow, DoorRule, EntityMove, EntityRef, FlagEntity, FlagSwap,
-                          FlagWith, ItemEntity, Location, MapScene, PlacedPickup, Roadblock, SceneCamera, SceneryCopy,
-                          SceneryFit, SceneryLayer, SceneryMove, StoryEvent, TimeSwitch, Transfer)
-from . import (ancient_castle, bandit_hideout, bee_kingdom_hive, bugaria_city, chomper_caves, defiant_root,
-               far_grasslands, fishing_village, forsaken_lands, giants_lair, golden_hills, golden_path,
-               golden_settlement, honey_factory, lost_sands, metal_island, metal_lake, outskirts, rubber_prison,
-               snakemouth_den, stream_mountain, termite_capitol, upper_snakemouth, wasp_kingdom_hive, wild_swamplands)
+from ..data_types import (
+                          Area,
+                          DayNight,
+                          DialogueFlag,
+                          DoorRow,
+                          DoorRule,
+                          EntityMove,
+                          EntityRef,
+                          FlagEntity,
+                          FlagSwap,
+                          FlagWith,
+                          ItemEntity,
+                          Location,
+                          MapScene,
+                          PlacedPickup,
+                          Roadblock,
+                          SceneCamera,
+                          SceneryCopy,
+                          SceneryFit,
+                          SceneryLayer,
+                          SceneryMove,
+                          StoryEvent,
+                          TimeSwitch,
+                          Transfer,
+)
+from . import (
+                          ancient_castle,
+                          bandit_hideout,
+                          bee_kingdom_hive,
+                          bugaria_city,
+                          chomper_caves,
+                          defiant_root,
+                          far_grasslands,
+                          fishing_village,
+                          forsaken_lands,
+                          giants_lair,
+                          golden_hills,
+                          golden_path,
+                          golden_settlement,
+                          honey_factory,
+                          lost_sands,
+                          metal_island,
+                          metal_lake,
+                          outskirts,
+                          rubber_prison,
+                          snakemouth_den,
+                          stream_mountain,
+                          termite_capitol,
+                          upper_snakemouth,
+                          wasp_kingdom_hive,
+                          wild_swamplands,
+)
 
 # One per game area (MapControl.areaid, named after its AreaNames entry): the first three as the story starts, then
 # by area number. An area's module holds what's on its maps.

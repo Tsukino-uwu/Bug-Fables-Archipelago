@@ -16,6 +16,6 @@ def shuffle_encounters(encounters: Sequence[Encounter], random: Random) -> dict[
     for group in by_size.values():
         fights = [list(encounter.ids) for encounter in group]
         random.shuffle(fights)
-        for encounter, fight in zip(group, fights):
+        for encounter, fight in zip(group, fights, strict=True):
             swaps[f"{encounter.map}:{encounter.entity}"] = fight
     return swaps

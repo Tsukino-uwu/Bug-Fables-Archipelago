@@ -5,8 +5,23 @@ from __future__ import annotations
 from rule_builder.rules import Has
 
 from ..custom_rules import ANY_ATTACK, CanUse
-from ..data_types import (ALWAYS_SET, Area, DayNight, EntityMove, EntityRef, FlagSwap, Give, ItemShop, Location, Pickup,
-                          SceneCamera, SceneryMove, Source, StoryEvent, TimeSwitch)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          DayNight,
+                          EntityMove,
+                          EntityRef,
+                          FlagSwap,
+                          Give,
+                          ItemShop,
+                          Location,
+                          Pickup,
+                          SceneCamera,
+                          SceneryMove,
+                          Source,
+                          StoryEvent,
+                          TimeSwitch,
+)
 
 LOCATIONS = (
     # Where the game teaches Beemerang Halt (flag 21), after the mayor's Wacka Worm game at night, played by Vi with

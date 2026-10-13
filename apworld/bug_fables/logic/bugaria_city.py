@@ -5,8 +5,20 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse
-from ..data_types import (ALWAYS_SET, Area, DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup,
-                          Source, StoryEvent, Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          DialogueFlag,
+                          EntityRef,
+                          FlagEntity,
+                          Give,
+                          ItemShop,
+                          Location,
+                          Pickup,
+                          Source,
+                          StoryEvent,
+                          Transfer,
+)
 
 DOOR_RULES = (
     # The palace hall's doors (the plaza's, the mine's, the library's and the war room's) are all kept present by the
@@ -132,8 +144,8 @@ LOCATIONS = (
     Location("Bugaria City: Residential District, Fountain Rooftop", 33, "BugariaResidential",
              Source(flag=59, pickup=Pickup(map="BugariaResidential", type=2, item=18)),
              rule=(CanUse("Jump") & CanUse("Freeze")) | CanUse("Bee Fly"), no_jump=True),
-    # The Bank of Bugaria's banker, up a ledge (Jump): the Platinum Card once the account (50 berries to open) holds 500.
-    # Berries aren't in the logic yet: how they will be is still to decide (apimplementation.md, Next 63).
+    # The Bank of Bugaria's banker, up a ledge (Jump): the Platinum Card once the account (50 berries to open) holds
+    # 500. Berries aren't in the logic yet: how they will be is still to decide (apimplementation.md, Next 63).
     Location("Bugaria City: Residential District, Banker", 176, "BugariaResidential",
              Source(flag=630, give=Give(map="BugariaResidential", type=1, item=176)), rule=CanUse("Jump")),
     # Merab's medal shop, full stock from a new game: one location per copy she ever stocks, done by a per-copy bit in

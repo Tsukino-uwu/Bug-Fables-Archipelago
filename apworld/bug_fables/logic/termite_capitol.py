@@ -15,8 +15,8 @@ LOCATIONS = (
     Location("Termite Capitol: Termite King's Reward", 76, "TermiteRoyalChamber",
              Source(event=164, flag=379),
              rule=_COLOSSEUM),
-    # The Main Plaza (TermiteMainPlaza; named 2026-10-11): everything free. Its shop computer (Squash, Shell Ointment, Mega-Rush, Aphid
-    # Shake): first purchase a check, then its own item.
+    # The Main Plaza (TermiteMainPlaza; named 2026-10-11): everything free. Its shop computer (Squash, Shell Ointment,
+    # Mega-Rush, Aphid Shake): first purchase a check, then its own item.
     *(Location(f"Termite Capitol: Main Plaza, Shop {slot}", 261 + slot, "TermiteMainPlaza",
                Source(item_shop=ItemShop(map="TermiteMainPlaza", keeper="Fixedshopcomputer", item=item)),
                category="item_shop", no_jump=True)
@@ -36,7 +36,8 @@ LOCATIONS = (
     Location("Termite Capitol: Industrial District, Apartment Balcony", 270, "TermiteIndustrial",
              Source(flag=469, pickup=Pickup(map="TermiteIndustrial", type=1, item=52)), rule=CanUse("Bee Fly"),
              no_jump=True),
-    # The bomb shop (Spicy, Burly, Poison, Frost, Numb, Sleep and Clear Bomb): first purchase a check, then its own item.
+    # The bomb shop (Spicy, Burly, Poison, Frost, Numb, Sleep and Clear Bomb): first purchase a check, then its own
+    # item.
     *(Location(f"Termite Capitol: Industrial District, Bomb Shop {slot}", 270 + slot, "TermiteIndustrial",
                Source(item_shop=ItemShop(map="TermiteIndustrial", keeper="bombshop", item=item)),
                category="item_shop", no_jump=True)
@@ -94,8 +95,8 @@ KEPT_OPEN = (
     EntityRef("TermiteMainPlaza", "elizant"),
     EntityRef("TermiteMainPlaza", "eventguard"),
 )
-# The caravan's stall in the Colosseum's lobby there for good: in the game Crickerly comes with chapter 1's end (flag 41),
-# an artifact flag a seed doesn't set (2026-10-11).
+# The caravan's stall in the Colosseum's lobby there for good: in the game Crickerly comes with chapter 1's end (flag
+# 41), an artifact flag a seed doesn't set (2026-10-11).
 KEPT_PRESENT = (
     EntityRef("TermiteColiseum1", "crickerly"),
 )

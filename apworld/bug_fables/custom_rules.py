@@ -64,7 +64,8 @@ class ItemOnHand(Rule["BugFablesWorld"], game=GAME):
     def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
         return Or(*self._ways()).resolve(world)
 
-    # Serialized as the Or it stands for (rule builder.md, Custom serialization), so a tracker reads only built-in rules.
+    # Serialized as the Or it stands for (rule builder.md, Custom serialization), so a tracker reads only built-in
+    # rules.
     def to_dict(self) -> dict[str, Any]:
         return Or(*self._ways(), options=self.options, filtered_resolution=self.filtered_resolution).to_dict()
 

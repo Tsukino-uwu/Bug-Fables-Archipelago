@@ -5,8 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import Has, True_
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagSwap, Location, MapScene, Pickup, Source, StoryEvent,
-                          Transfer)
+from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, Location, MapScene, Pickup, Source, StoryEvent, Transfer
 
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 _TREE_DOWN = "Swamp Tree Knocked Down"

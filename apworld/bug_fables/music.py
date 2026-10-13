@@ -35,4 +35,4 @@ def shuffle(names: tuple[str, ...], random: Random) -> dict[str, str]:
     """{track: the track played in its place}: a permutation, so every track still plays somewhere."""
     played = list(names)
     random.shuffle(played)
-    return dict(zip(names, played))
+    return dict(zip(names, played, strict=True))

@@ -38,11 +38,11 @@ class Item:
     padding: the filler used to fill leftover locations, in any number. always: enters the pool this many times in
     every seed, each copy taking a filler slot (the mod's own items, which no location holds in vanilla).
     progressive_boat: such an item only with the option Progressive Boat on (true) or off (false). member: a party
-    member, in the pool only with Starting Party Member on (the ones not starting; none with All Three). move: a field ability's item, in the
-    pool as many times as abilities.py says. kept: a key item the mod leaves in the bag at its locks (slot_data
-    kept_keys): in the pool once, however many included spots hold it, padding making up the count. Every other item
-    enters the pool once per included location that holds it in vanilla, except an artifact with Artifact Shuffle's
-    Vanilla, locked at its own scene instead.
+    member, in the pool only with Starting Party Member on (the ones not starting; none with All Three). move: a field
+    ability's item, in the pool as many times as abilities.py says. kept: a key item the mod leaves in the bag at its
+    locks (slot_data kept_keys): in the pool once, however many included spots hold it, padding making up the count.
+    Every other item enters the pool once per included location that holds it in vanilla, except an artifact with
+    Artifact Shuffle's Vanilla, locked at its own scene instead.
     """
 
     name: str
@@ -309,7 +309,8 @@ class SceneryFit:
 @dataclass(frozen=True, slots=True)
 class PlacedPickup:
     """A pickup the client makes on a map while its flag is unset, lying on top of a piece of scenery (by its path), as
-    the game makes a dug-up item (EntityControl.CreateItem): taking it sets the flag, so a location's Pickup finds it."""
+    the game makes a dug-up item (EntityControl.CreateItem): taking it sets the flag, so a location's Pickup
+    finds it."""
 
     map: str
     on: str
@@ -600,10 +601,11 @@ class Location:
     rule: what the spot itself needs once you're in its map, kept apart from what reaching it needs (so entrance rando
     can change one without the other); written even when reach implies it. reach: what reaching the spot needs beyond
     the doors until its room is mapped (build step 24), the stand-in its area's big region needed. category marks a
-    location a yaml option can leave out (quest, crystal_berry, discovery, hidden_item, dig_spot, shop, item_shop; party_member, only with
-    Starting Party Member on; story_party, a story event only with it off). quiet marks an opening check whose item
-    arrives with no hold-up (the start of a new file); with Filler Starting Checks, it holds filler only. no_jump: seen reachable without a jump (with Shuffle Jump, every
-    other spot needs it). pending: a quest not yet gone through (build step 44), out of every seed and vanilla.
+    location a yaml option can leave out (quest, crystal_berry, discovery, hidden_item, dig_spot, shop, item_shop;
+    party_member, only with Starting Party Member on; story_party, a story event only with it off). quiet marks an
+    opening check whose item arrives with no hold-up (the start of a new file); with Filler Starting Checks, it holds
+    filler only. no_jump: seen reachable without a jump (with Shuffle Jump, every other spot needs it). pending: a
+    quest not yet gone through (build step 44), out of every seed and vanilla.
     filler: Archipelago keeps it to filler (an excluded location): the Termacade's gift and prizes.
     """
 

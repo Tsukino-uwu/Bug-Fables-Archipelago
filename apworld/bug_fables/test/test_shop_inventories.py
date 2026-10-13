@@ -3,9 +3,9 @@ from random import Random
 from typing import Any
 from unittest import TestCase
 
-from . import BugFablesTestBase
 from ..data_tables import LOCATIONS
 from ..shop_inventories import SPOTS, shuffle
+from . import BugFablesTestBase
 
 
 def where(swap: dict[str, Any]) -> tuple[Any, ...]:

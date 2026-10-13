@@ -45,7 +45,8 @@ def rule_parts(rule: Rule | None) -> Iterable[Rule]:
 
 
 def logic_rules() -> Iterable[tuple[str, Rule | None]]:
-    """Every rule the logic writes, with where it is: each door gate, transfer, and spot (its own rule and its reach)."""
+    """Every rule the logic writes, with where it is: each door gate, transfer, and spot (its own rule and its
+    reach)."""
     for gate in DOOR_RULES:
         yield f"{gate.map}: {gate.door}", gate.rule
     for transfer in TRANSFERS:

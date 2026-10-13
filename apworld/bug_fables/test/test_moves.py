@@ -121,4 +121,4 @@ class TestMovesAndJumpTogether(BugFablesTestBase):
 
     def test_all_four_in_the_pool(self) -> None:
         pool = _pool(self)
-        self.assertEqual([pool.count(move) for move in MOVES + ["Jump"]], [2, 1, 2, 1])
+        self.assertEqual([pool.count(move) for move in [*MOVES, "Jump"]], [2, 1, 2, 1])

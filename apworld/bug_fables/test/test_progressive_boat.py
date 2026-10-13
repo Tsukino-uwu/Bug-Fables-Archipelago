@@ -4,8 +4,8 @@ BOAT = "Progressive Boat"
 TICKET = "Boat Ticket"
 SUBMARINE = "Subaquatic Maritime Neotransport"
 THRONE_ROOM = "Termite Capitol: Termite King's Reward"
-# collect_all_but takes every placed item, story events too; this one opens the ant tunnel's door to the bridge, which in
-# play needs the bridge reached first, so it stays out.
+# collect_all_but takes every placed item, story events too; this one opens the ant tunnel's door to the bridge, which
+# in play needs the bridge reached first, so it stays out.
 BRIDGE_FIGHT = "Giant's Lair Bridge Fight Won"
 
 

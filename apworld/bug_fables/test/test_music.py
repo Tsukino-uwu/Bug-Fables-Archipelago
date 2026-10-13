@@ -1,7 +1,7 @@
 from typing import Any
 
-from . import BugFablesTestBase
 from ..music import JINGLES, KEPT, NO_CLIP, POOL, TRACKS
+from . import BugFablesTestBase
 
 
 class TestMusicOffByDefault(BugFablesTestBase):

@@ -1,10 +1,26 @@
 from dataclasses import dataclass
 
-from Options import (Choice, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range,
-                     StartInventoryPool, Toggle)
+from Options import (
+    Choice,
+    DeathLink,
+    DefaultOnToggle,
+    OptionGroup,
+    PerGameCommonOptions,
+    PlandoConnections,
+    Range,
+    StartInventoryPool,
+    Toggle,
+)
 
-from .data_tables import (DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ONE_WAY_LANDINGS, ONE_WAY_NAMES, ROOM_STARTS,
-                          SHUFFLED_CONNECTIONS)
+from .data_tables import (
+    DOOR_NAMES,
+    ENCOUNTERS,
+    LOCATIONS,
+    ONE_WAY_LANDINGS,
+    ONE_WAY_NAMES,
+    ROOM_STARTS,
+    SHUFFLED_CONNECTIONS,
+)
 from .roadblock_options import ExtraRoadblocks
 from .shop_inventories import SPOTS
 
@@ -356,8 +372,8 @@ class MusicShuffle(Toggle):
     """
     Every song plays in place of another, the same way every time the seed is played: an area's music, a battle's, a
     boss's. The short jingles (the victory fanfare, the game over, the chapter titles) swap among themselves. The title
-    screen, the wind, water, machine and breathing sounds, and the factory elevator's music stay as they are. Samira plays the
-    song you pick. Nothing else changes: no item, check or rule depends on it. Off by default.
+    screen, the wind, water, machine and breathing sounds, and the factory elevator's music stay as they are. Samira
+    plays the song you pick. Nothing else changes: no item, check or rule depends on it. Off by default.
     """
 
     display_name = "Music Shuffle"

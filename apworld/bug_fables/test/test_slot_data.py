@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from . import BugFablesTestBase
 from ..options import BugFablesOptions
 from ..slot_data import NOT_SENT, SLOT_OPTIONS
+from . import BugFablesTestBase
 
 
 class TestOptionsSent(TestCase):
@@ -229,7 +229,8 @@ class TestKeptPresent(BugFablesTestBase):
 
 
 class TestSnakemouthGateStaysOpen(BugFablesTestBase):
-    # Once the Explorer Permit opens it, the way to Snakemouth Den never closes: not at the first boss, not in chapter 2.
+    # Once the Explorer Permit opens it, the way to Snakemouth Den never closes: not at the first boss, not in
+    # chapter 2.
     def test_later_gates_removed(self) -> None:
         data = self.world.fill_slot_data()
         for scenery in ({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Gate/SnekGate (1)"},

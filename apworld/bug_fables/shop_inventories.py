@@ -43,7 +43,7 @@ SPOTS: tuple[Spot, ...] = tuple(spot for spot in map(_spot, LOCATIONS) if spot i
 
 def _sells_twice(spots: tuple[Spot, ...], items: list[int]) -> bool:
     seen: set[tuple[str, str, int]] = set()
-    for spot, item in zip(spots, items):
+    for spot, item in zip(spots, items, strict=True):
         if spot.keeper is not None:
             if (spot.map, spot.keeper, item) in seen:
                 return True
@@ -62,7 +62,7 @@ def shuffle(spots: tuple[Spot, ...], random: Random) -> list[dict[str, Any]]:
     else:
         logging.warning("Bug Fables: no shop inventory shuffle without a repeat in %d tries; one shop sells an item "
                         "twice.", TRIES)
-    return [spot.to_slot(to) for spot, to in zip(spots, items)]
+    return [spot.to_slot(to) for spot, to in zip(spots, items, strict=True)]
 
 
 def _shop(spot: Spot) -> tuple[str, str] | None:

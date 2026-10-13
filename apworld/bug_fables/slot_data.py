@@ -4,16 +4,61 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS,
-                          ENTITIES_MOVED, FLAGS_WITH, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
-                          KEPT_PRESENT, LIMIT_FLAGS, LOCATION_NAME_TO_ID, PICKUPS_PLACED, PRESENT_FROM,
-                          PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_COPIED, SCENERY_FITTED, SCENERY_HIDDEN,
-                          SCENERY_LAYERS, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT,
-                          SCENERY_SPRITE_OFF, FLOAT_FLAGS, SCENES_KEPT_AWAY,
-                          STORY_ONLY_MAPS, TIME_SWITCHES)
-from .data_types import (DayNight, DialogueFlag, DoorRow, EntityMove, EntityRef, FlagEntity, FlagSwap, FlagWith,
-                         ItemEntity, MapScene, PlacedPickup, SceneCamera, SceneryCopy, SceneryFit, SceneryLayer,
-                         SceneryMove, Source, TimeSwitch)
+from .data_tables import (
+    ACTIVATION_FLAGS,
+    ARTIFACT_WRITERS,
+    ARTIFACTS,
+    DAY_NIGHT,
+    DIALOGUE_FLAGS,
+    DOOR_ROWS,
+    ENTITIES_MOVED,
+    FLAGS_WITH,
+    FLOAT_FLAGS,
+    HELD_UNTIL,
+    HELD_UNTIL_ITEM,
+    ITEM_NAME_TO_ID,
+    ITEMS,
+    KEPT_OPEN,
+    KEPT_PRESENT,
+    LIMIT_FLAGS,
+    LOCATION_NAME_TO_ID,
+    PICKUPS_PLACED,
+    PRESENT_FROM,
+    PRESENT_WITH_ITEM,
+    ROADBLOCKS,
+    SCENE_CAMERAS,
+    SCENERY_COPIED,
+    SCENERY_FITTED,
+    SCENERY_HIDDEN,
+    SCENERY_LAYERS,
+    SCENERY_MOVED,
+    SCENERY_OFF,
+    SCENERY_PRESENT,
+    SCENERY_SPRITE_OFF,
+    SCENES_KEPT_AWAY,
+    STORY_ONLY_MAPS,
+    TIME_SWITCHES,
+)
+from .data_types import (
+    DayNight,
+    DialogueFlag,
+    DoorRow,
+    EntityMove,
+    EntityRef,
+    FlagEntity,
+    FlagSwap,
+    FlagWith,
+    ItemEntity,
+    MapScene,
+    PlacedPickup,
+    SceneCamera,
+    SceneryCopy,
+    SceneryFit,
+    SceneryLayer,
+    SceneryMove,
+    Source,
+    TimeSwitch,
+)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -197,8 +242,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "termite_gate_from_inside": True,
         # The festival's eating contest always won, its prize the Moon Offering.
         "contest_always_won": True,
-        # Riz at the Fishing Village's door offers his fight while Maki follows (Maki never leaves, the swamp bridge kept
-        # up), Maki helping and Riz given more HP.
+        # Riz at the Fishing Village's door offers his fight while Maki follows (Maki never leaves, the swamp bridge
+        # kept up), Maki helping and Riz given more HP.
         "riz_fight_with_follower": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.

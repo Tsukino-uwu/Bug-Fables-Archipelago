@@ -15,8 +15,17 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState, Entrance, EntranceType, Item, LocationProgressType, Region
 from entrance_rando import EntranceRandomizationError, disconnect_entrance_for_randomization, randomize_entrances
 
-from .data_tables import (DOORS, KEPT_DOORS, ROOM_STARTS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name,
-                          door_region, landing_region, one_way_landing)
+from .data_tables import (
+    DOORS,
+    KEPT_DOORS,
+    ROOM_STARTS,
+    SHUFFLED_CONNECTIONS,
+    SHUFFLED_ONE_WAYS,
+    door_name,
+    door_region,
+    landing_region,
+    one_way_landing,
+)
 from .data_types import DoorConnection, OneWayDoor
 from .options import EntranceRandomizer
 from .regions import START_ENTRANCE, START_MAP
@@ -78,7 +87,7 @@ class _RoomLayout:
         for slots in self.groups:
             rooms = list(slots)
             random.shuffle(rooms)
-            for slot, room in zip(slots, rooms):
+            for slot, room in zip(slots, rooms, strict=True):
                 self.room_at[slot] = room
                 self.order[room] = list(self.by_area[room])
                 random.shuffle(self.order[room])
@@ -88,7 +97,7 @@ class _RoomLayout:
         # placed[d]: the door that now stands where d stood, a door of the area that took d's area's place.
         placed: dict[Door, Door] = {}
         for slot, room in self.room_at.items():
-            placed.update(zip(self.by_area[slot], self.order[room]))
+            placed.update(zip(self.by_area[slot], self.order[room], strict=True))
         return [(placed[a], placed[b]) for a, b in self.partner.items() if a < b]
 
 
@@ -121,8 +130,7 @@ def door_targets(pairings: Sequence[tuple[Door, Door]], connections: Sequence[Do
             targets.append({"map": x[0], "door": x[1], "like_map": like[0], "like_door": like[1]})
     for w in one_ways:
         like = like_of.get((w.map, w.door), (w.map, w.door))
-        for copy in w.copies:
-            targets.append({"map": w.map, "door": copy, "like_map": like[0], "like_door": like[1]})
+        targets.extend({"map": w.map, "door": copy, "like_map": like[0], "like_door": like[1]} for copy in w.copies)
     return targets
 
 
@@ -150,8 +158,8 @@ def shuffle(world: BugFablesWorld, wanted: int) -> list[tuple[Door, Door]]:
     return planned + pins + [(doors[x], doors[y]) for x, y in placed]
 
 
-# Archipelago's randomizer gives up when the dead ends outnumber the spare doors it has reached, with no retry of its own
-# (entrance_rando.py): each try is a new draw from the world's random.
+# Archipelago's randomizer gives up when the dead ends outnumber the spare doors it has reached, with no retry of its
+# own (entrance_rando.py): each try is a new draw from the world's random.
 DOOR_TRIES = 10
 # Draws refused, over all tries, because the start opens fewer spots than wanted (start_wanted): up to 71% of draws
 # for some options (measured 2026-10-13), and a start kept that small can fail the fill.
@@ -170,6 +178,8 @@ def _randomize(world: BugFablesWorld, coupled: bool, measure: _Measure,
     has them, a round at a time. Returns the pins and the randomizer's pairings."""
     free = _FreeDoors(world)
     pins: list[tuple[Door, Door]] = []
+    # The doors the last failed draw left waiting: every round after the first follows a failed one.
+    left: list[Entrance] = []
     reshuffles = 0
     for round_ in range(PIN_ROUNDS + 1):
         if round_:
@@ -195,8 +205,8 @@ def _randomize(world: BugFablesWorld, coupled: bool, measure: _Measure,
                     else measure.start()[0] >= wanted):
                 if reshuffles == START_RESHUFFLES:
                     raise EntranceRandomizationError(
-                        f"Bug Fables: player {world.player_name}'s doors opened fewer than {wanted} spots from the start "
-                        f"in {START_RESHUFFLES + 1} draws")
+                        f"Bug Fables: player {world.player_name}'s doors opened fewer than {wanted} spots "
+                        f"from the start in {START_RESHUFFLES + 1} draws")
                 reshuffles += 1
                 free.reset()
                 continue

@@ -1,7 +1,7 @@
 from rule_builder.rules import Has
 
-from . import BugFablesTestBase
 from ..custom_rules import CanUse
+from . import BugFablesTestBase
 
 MEMBERS = ["Vi", "Kabbu", "Leif"]
 JOINS = ["Outskirts: Outside the City, Opening", "Snakemouth Den: Fall Room, After the Spider"]

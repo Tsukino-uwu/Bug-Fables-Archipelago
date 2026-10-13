@@ -7,13 +7,42 @@ from typing import Any
 
 from worlds.AutoWorld import World
 
-from . import (entrances, items, locations, music, regions, rules, shop_inventories, slot_data, universal_tracker,
-               web_world)
-from .data_tables import (ARTIFACT_KIND, ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID,
-                          LOCATIONS, ONE_WAYS, ROOM_STARTS, STORY_EVENTS, TRACKER_ORDER, vanilla_item)
+from . import (
+    entrances,
+    items,
+    locations,
+    music,
+    regions,
+    rules,
+    shop_inventories,
+    slot_data,
+    universal_tracker,
+    web_world,
+)
+from .data_tables import (
+    ARTIFACT_KIND,
+    ARTIFACTS,
+    DOORS,
+    ENCOUNTERS,
+    ITEM_NAME_TO_ID,
+    ITEMS,
+    LOCATION_NAME_TO_ID,
+    LOCATIONS,
+    ONE_WAYS,
+    ROOM_STARTS,
+    STORY_EVENTS,
+    TRACKER_ORDER,
+    vanilla_item,
+)
 from .enemies import shuffle_encounters
-from .options import (ArtifactShuffle, BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation,
-                      StartingPartyMember)
+from .options import (
+    ArtifactShuffle,
+    BugFablesOptions,
+    EnemyShuffle,
+    EntranceRandomizer,
+    StartingLocation,
+    StartingPartyMember,
+)
 
 
 class BugFablesWorld(World):
@@ -28,7 +57,7 @@ class BugFablesWorld(World):
     location_name_to_id = LOCATION_NAME_TO_ID
     # The boat's items by what they are, so "!hint Submarine" finds it with Progressive Boat on or off (a group hints
     # every copy of every item in it).
-    item_name_groups = {
+    item_name_groups = {  # noqa: RUF012 (World declares it a ClassVar)
         "Submarine": {"Progressive Boat", "Subaquatic Maritime Neotransport"},
         "Boat": {"Progressive Boat", "Boat Ticket"},
         # The goal's artifacts: "!hint Artifacts" any of them, "!hint Artifact 6" the Flame Brooch by its chapter.

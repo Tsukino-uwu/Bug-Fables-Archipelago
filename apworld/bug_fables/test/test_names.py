@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from . import BugFablesTestBase
 from ..data_tables import LOCATIONS, vanilla_item
 from ..data_types import Item
+from . import BugFablesTestBase
 
 
 class TestLocationNames(BugFablesTestBase):
@@ -19,8 +19,14 @@ class TestLocationNames(BugFablesTestBase):
 class TestOptionCounts(BugFablesTestBase):
     # Every toggle that adds locations states how many in its player-visible description.
     def test_toggles_state_their_check_count(self) -> None:
-        from ..options import (ShuffleCrystalBerries, ShuffleDiscoveries, ShuffleItemShops, ShuffleMedalShops,
-                               ShuffleQuests, category_count)
+        from ..options import (
+            ShuffleCrystalBerries,
+            ShuffleDiscoveries,
+            ShuffleItemShops,
+            ShuffleMedalShops,
+            ShuffleQuests,
+            category_count,
+        )
         for option, category in ((ShuffleQuests, "quest"), (ShuffleCrystalBerries, "crystal_berry"),
                                  (ShuffleDiscoveries, "discovery"), (ShuffleMedalShops, "shop"),
                                  (ShuffleItemShops, "item_shop")):

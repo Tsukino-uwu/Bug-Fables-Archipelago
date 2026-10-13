@@ -3,13 +3,13 @@ from unittest import TestCase
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
 
-from . import BugFablesTestBase, generate_like_main
 from .. import entrances
 from ..data_tables import DOORS, ROOM_STARTS, start_region
 from ..data_types import EntityRef
 from ..logic import KEPT_PRESENT
 from ..regions import MENU, START_ENTRANCE, START_MAP
 from ..world import BugFablesWorld
+from . import BugFablesTestBase, generate_like_main
 
 
 class TestStartOffByDefault(BugFablesTestBase):

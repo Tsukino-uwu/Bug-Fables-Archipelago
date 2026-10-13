@@ -67,10 +67,10 @@ def defer_doors(world: BugFablesWorld) -> None:
 def reconnect_doors(world: BugFablesWorld, taken: Any) -> None:
     """The doors the player has gone through, from the doors key (None before the first): each deferred one connected
     again, with its way back when the doors are coupled. Anything but a list of names is left alone."""
-    for name in taken if isinstance(taken, list) else ():
-        if not isinstance(name, str):
+    for listed in taken if isinstance(taken, list) else ():
+        if not isinstance(listed, str):
             continue
-        name = _COPY_OF.get(name, name)
+        name = _COPY_OF.get(listed, listed)
         for door in (name, world.way_back.get(name)):
             region = world.deferred_doors.pop(door, None) if door else None
             if region is not None:

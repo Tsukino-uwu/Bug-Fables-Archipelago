@@ -1,8 +1,8 @@
 from BaseClasses import ItemClassification, LocationProgressType
 
-from . import BugFablesTestBase
 from ..data_tables import LOCATIONS
 from ..items import BugFablesItem
+from . import BugFablesTestBase
 
 OPENING = ["Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Opening",
            "Outskirts: Outside the City, Tutorial Battle"]

@@ -1,5 +1,5 @@
-from . import BugFablesTestBase
 from ..data_tables import ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DIALOGUE_FLAGS, LIMIT_FLAGS
+from . import BugFablesTestBase
 
 
 class TestGoalFlags(BugFablesTestBase):

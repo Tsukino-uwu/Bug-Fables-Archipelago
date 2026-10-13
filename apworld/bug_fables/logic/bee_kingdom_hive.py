@@ -4,8 +4,20 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..data_types import (ALWAYS_SET, Area, DialogueFlag, DoorRow, EntityRef, FlagWith, Give, Location, Pickup, Source,
-                          StoryEvent, Transfer)
+from ..data_types import (
+                          ALWAYS_SET,
+                          Area,
+                          DialogueFlag,
+                          DoorRow,
+                          EntityRef,
+                          FlagWith,
+                          Give,
+                          Location,
+                          Pickup,
+                          Source,
+                          StoryEvent,
+                          Transfer,
+)
 
 # Mothiva's scene in the Main Area (Event86, flag 173): talking to her, from the start; it brings the clothing stall.
 _MOTHIVA_SEEN = "Mothiva's Show Seen"
