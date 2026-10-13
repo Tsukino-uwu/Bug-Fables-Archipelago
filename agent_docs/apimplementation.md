@@ -170,6 +170,8 @@ this file and that doc disagree, that doc is right.
 95. [Build step 95: the door shuffle tried again, its start kept open, its stranded doors pinned](#build-step-95-the-door-shuffle-tried-again-its-start-kept-open-its-stranded-doors-pinned)
 96. [Build step 96: the logic begins at the spawn](#build-step-96-the-logic-begins-at-the-spawn)
 97. [Build step 97: a tight start's way on placed early](#build-step-97-a-tight-starts-way-on-placed-early)
+98. [Build step 98: Start Inventory from Pool](#build-step-98-start-inventory-from-pool)
+99. [Build step 99: DeathLink in the yaml too](#build-step-99-deathlink-in-the-yaml-too)
 
 **How it works**
 
@@ -587,7 +589,8 @@ be wrong.
        *Submarine* and *Boat*, came with build step 36); 11. `World.world_version` (done 2026-10-08: slot_data and
        Universal Tracker's check read core's copy of the manifest's version, How it works 7),
        `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39:
-       slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's `OptionFilter` for Jump (done
+       slot_data's `options`); 12. `start_inventory_from_pool` (done 2026-10-13, build step 98); 13. the Rule
+       Builder's `OptionFilter` for Jump (done
        2026-10-03, build step 42), `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker
        and PopTracker (Universal Tracker with no yaml built 2026-10-03, build step 40; its deferred entrances
        2026-10-08, build step 55; the mod's data storage keys, build steps 55 and 57; its map tab waits for the
@@ -609,8 +612,9 @@ be wrong.
      - **A second look at what we kept:** 24. the enemy shuffle stays in `generate_early` (reversed 2026-09-30, the
        user: it is logic, since fights that can't be fled and Tattle checks depend on it); 25. items through the
        library's queue (to check first); 26. Archipelago's DeathLink yaml option, the panel switch kept too (decided
-       2026-09-29); 27. the library's cache bug: reported by the user as MultiClient.Net #143, our patch until a fix;
-       28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).
+       2026-09-29, done 2026-10-13, build step 99); 27. the library's cache bug: reported by the user as
+       MultiClient.Net #143, our patch until a fix; 28. upstream #141, which would retire our compression switch
+       once released (#142 doesn't cover our net40 build).
      - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 44. **Shuffle Bestiary: Tattle checks, an idea for later** (asked again 2026-09-29, parked since 2026-09-25 in build
     step 10): each enemy spied a location, not just fought, as Pokémon Emerald's apworld's dexsanity needs a catch. The
@@ -3535,7 +3539,8 @@ game decides what "die" means.
 
 **Decided (2026-09-28):**
 - **A row in the Archipelago panel, *DeathLink*, ON / OFF, off by default; not a yaml option**, so a player can change
-  their mind mid-seed. Only while Archipelago is enabled; the seed and the logic know nothing of it.
+  their mind mid-seed. Only while Archipelago is enabled; the seed and the logic know nothing of it. (Since build step
+  99, 2026-10-13, the yaml's `death_link` sets the row once per seed too; the row still changes it mid-seed.)
 - **In the panel on the main menu, next to *Archipelago*, not on the Gameplay page** (2026-09-28: "its an AP
   setting"; first built on the Gameplay page, which the pause menu's Settings also opens). Changing your mind means
   going back to the main menu, on purpose: a death waiting in game can't be switched away from the pause
@@ -6913,6 +6918,41 @@ desert's DR East Entrance (no item alone opens more than 4) is picked again.
 game's start, and 2000 with random options; nothing to see in game but where an item lands.
 
 *Code: `entrances.py` (`early_items`, `_Measure.with_items`), `world.py` (`pre_fill`).*
+
+## Build step 98: Start Inventory from Pool
+
+**Decided** (2026-09-29, `archipelago-review.md`, item 12; built 2026-10-13): Archipelago's
+`start_inventory_from_pool` (`StartInventoryPool`, `Options.py`): start with the named items and don't place them in
+the world, their spots taking filler instead. Not in `PerGameCommonOptions`, so a world adds it; a convention, 32 of
+81 game worlds at 0.6.7 (`world api.md:627`).
+
+**Built:** `BugFablesOptions.start_inventory_from_pool`. Archipelago does the rest (`Main.py`): it gives the items
+before generation (`push_precollected`, so the logic and build steps 96-97's start count hold them) and takes them out
+of the pool after `generate_basic`, asking `create_filler` (our `get_filler_item_name`) for their places; the server
+sends them at login, as `start_inventory`'s. Not in slot_data (`NOT_SENT`: the server sends its items). The preflight's
+import list gains `StartInventoryPool`.
+
+**Tests** (not yet run, at push time): `TestOptionsSent` (every option sent or with its reason);
+`test_a_start_item_from_the_pool_counts` (Jump given before generation makes Vi's tight start open 11 spots, so
+nothing is placed early).
+
+*Code: `options.py`, `slot_data.py` (`NOT_SENT`).*
+
+## Build step 99: DeathLink in the yaml too
+
+**Decided** (2026-09-29, `archipelago-review.md`, item 26, superseding build step 25's "not a yaml option"): both.
+Archipelago's DeathLink option (`DeathLinkMixin`) sets it for the seed and turns the panel's row on or off at login;
+the row stays, to change it mid-seed.
+
+**Built:** `death_link` in `BugFablesOptions` (`BugFablesDeathLink`, Archipelago's `DeathLink` with a text saying what
+a death is here and that the panel can still switch it), sent in slot_data's `options`. The mod applies it once per seed
+(`documentation.md`, step 66): a row set at every login would undo a change made on the main menu at the next one. The
+preflight's import list gains `DeathLink`.
+
+**Tests** (not yet run, at push time): `death_link` sent as a JSON boolean, off by default and on when asked.
+
+*Code: `options.py` (`BugFablesDeathLink`), `slot_data.py` (`SLOT_OPTIONS`); the mod's side `documentation.md`, step
+66.*
 
 # How it works
 
