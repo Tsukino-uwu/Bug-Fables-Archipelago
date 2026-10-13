@@ -1162,14 +1162,19 @@ namespace BugFablesAP
                             .Select((name, i) => i + " " + name).ToArray()));
                         return $"areas: {MainManager.areanames.Length} logged";
                     case "worldmap": return MapShots.World(log);
+                    case "roomstates":
+                        return MapShots.LoadStates(parts.Length > 1 ? string.Join(" ", parts.Skip(1).ToArray())
+                            : LiveSlotData.DefaultPath);
                     case "roomshot":
                     {
                         if (parts.Length < 2)
                         {
-                            return "roomshot <map|all> [pitch, 90 straight down]";
+                            return "roomshot <map|all> [pitch, 90 straight down] [list]";
                         }
                         float pitch = parts.Length > 2 && float.TryParse(parts[2], out float p) ? p : 90f;
-                        return parts[1] == "all" ? MapShots.All(pitch) : MapShots.Room(log, parts[1], pitch);
+                        MapShots.Tries = new HashSet<string>(parts.Skip(2));
+                        return parts[1] == "all" ? MapShots.All(pitch)
+                            : MapShots.Room(log, parts[1], pitch, MapShots.Tries.Contains("list"));
                     }
                     case "shelfforward":
                     {

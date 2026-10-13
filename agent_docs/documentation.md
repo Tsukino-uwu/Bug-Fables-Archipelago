@@ -515,14 +515,29 @@ settlement entrance's caravan stall with its three goods only.
 (`bugfablesap-itemsprites.tsv`) and their sheets, so a labelled contact sheet can be made from them, to pick an icon
 (the Boat Ticket's) by pointing at it. Game art stays local, never in the repo.
 
-**The world map and the rooms as pictures** (2026-10-13, for the PopTracker pack): `Dev/MapShots.cs`, two console
+**The world map and the rooms as pictures** (2026-10-13, for the PopTracker pack): `Dev/MapShots.cs`, console
 commands. `worldmap` makes the pause menu's map (`Prefabs/Objects/map`) as `PauseMenu` does, plays its `Open`
 animation to the end in steps (one update of no time left the paper folded) and renders it from above. `roomshot
-<map>|all [pitch]` copies a room's prefab inactive, removes its scripts and sounds before showing it, so nothing of the
-room runs, hides its insides as from outside, and renders it from above (or from `pitch` degrees) with its own ambient
-light and no fog; `all` takes one room a frame. Each picture comes with where the game's (x, z) land in it, taken
-through the camera's viewport: first taken as screen points after the render target was released, they measured the
-game window instead (x and z at a 16:9 ratio). Game art: written to the BepInEx folder only.
+<map>|all [pitch] [list]` copies a room's prefab inactive, sets its flag-switched scenery, removes its scripts and
+sounds before showing it, so nothing of the room runs, hides its insides as from outside, and renders it from above
+(or from `pitch` degrees) with its own ambient light and no fog; `all` takes one room a frame, `list` logs each object
+drawn. Each picture comes with where the game's (x, z) land in it, through the camera's viewport: first taken as
+screen points after the render target was released, they measured the game window instead (x and z at a 16:9 ratio).
+What a picture from above needed, each found by looking at the pictures:
+- **The scenery a seed shows:** each `ConditionChecker` as the game's own check answers with no flags set (a
+  requirement unmet takes it away, or moves one kept), then a seed's `scenery_hidden` and `scenery_present`
+  (`roomstates <slot_data file>`, from `dev-scripts/live-slot-data.py`) as `KeptOpen` applies them. The start room
+  first showed the boulders a seed removes.
+- **Ceilings and roofs:** switched off when wholly above the room's highest entity plus 5 (`EntityDump.Positions`),
+  the rest kept whole, the view cut 10 higher still. A first try slicing at the ceiling showed logs' and rocks' dark
+  insides.
+- **The black outline shells** (`Outlined/Silhouette Only`, the larger black copy that outlines an object from the
+  side) dropped: from above they were black blobs.
+- **Water** (`Custom/WaterOutline`) draws white from above whatever the fog or the depth texture: drawn instead with
+  the world map's own unlit shader in its texture's colour (`rawwater` keeps the game's).
+
+Something left out is switched off on the copy: at first it was only left out of the framing, and still drawn. NPCs
+and other entities aren't in the pictures. Game art: written to the BepInEx folder only.
 
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early seen (2026-09-25).
 

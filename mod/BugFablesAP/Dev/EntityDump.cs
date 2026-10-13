@@ -115,6 +115,31 @@ namespace BugFablesAP
             log.LogInfo($"[dump] {rows} entities from {maps} maps ({bad} unreadable) -> {outPath}");
         }
 
+        // Where each of a map's entities starts (Data/EntityData), for MapShots' ceiling cut.
+        internal static List<Vector3> Positions(int map)
+        {
+            var positions = new List<Vector3>();
+            TextAsset data = Resources.Load<TextAsset>("Data/EntityData/" + map);
+            if (data == null)
+            {
+                return positions;
+            }
+            string[] lines = data.ToString().Split('\n');
+            for (int i = 0; i < lines.Length - 1; i++)
+            {
+                string[] f = lines[i].Split('}');
+                if (f.Length > Position + 2 && Number(f[Position], out float x) && Number(f[Position + 1], out float y)
+                    && Number(f[Position + 2], out float z))
+                {
+                    positions.Add(new Vector3(x, y, z));
+                }
+            }
+            return positions;
+        }
+
+        private static bool Number(string text, out float value) =>
+            float.TryParse(text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+
         // A count slot, then that many values in groups of `width`: values joined by spaces, groups by ':'.
         private static string List(string[] f, int countAt, int width)
         {

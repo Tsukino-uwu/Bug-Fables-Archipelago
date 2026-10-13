@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using BepInEx;
 using BepInEx.Logging;
@@ -16,6 +17,16 @@ namespace BugFablesAP
         private const int MaxSide = 4096;
         private const float RoomPixelsPerUnit = 24f;
         private const float AllPixelsPerUnit = 12f;
+        // The game parks unused objects this high above a map, out of reach.
+        private const float Parked = 90f;
+        // From straight above, the view starts this high over the room's highest entity: ceilings and roofs over it,
+        // which the game's own camera never shows, are left out.
+        private const float CeilingMargin = 5f;
+        // Over the ceiling by this much, the view is cut even through what reaches below it.
+        private const float ClipAbove = 10f;
+        private const string OutlineShader = "Outlined/Silhouette Only";
+        // Unlit: the pause menu's world map draws with it, so the game has it.
+        private const string FlatShader = "Unlit/Transparent Cutout";
         private const string Header = "map\twidth\theight\torigin_x\torigin_y\tx_step_x\tx_step_y\tz_step_x\tz_step_y\n";
         // Far from anything else in the scene, so a camera sees the copy alone.
         private static readonly Vector3 WorldAway = new Vector3(0f, -5000f, 0f);
@@ -26,6 +37,8 @@ namespace BugFablesAP
         private static float allPitch;
         private static StringBuilder allTable;
         private static int allShot;
+        // roomshot's switches after the map: list (log the objects drawn), rawwater (the game's own water shader).
+        internal static HashSet<string> Tries = new HashSet<string>();
 
         private struct Shot
         {
@@ -42,6 +55,27 @@ namespace BugFablesAP
         }
 
         private static string RoomsFolder => Path.Combine(Paths.BepInExRootPath, "bugfablesap-rooms");
+
+        // A seed's scenery_hidden and scenery_present (map, path in the map), from a slot_data file (roomstates).
+        private static HashSet<(string, string)> sceneryHidden = new HashSet<(string, string)>();
+        private static HashSet<(string, string)> sceneryPresent = new HashSet<(string, string)>();
+
+        // roomstates <file>: the scenery lists of a slot_data file (dev-scripts/live-slot-data.py's), for the rooms'
+        // pictures to show them as a seed does.
+        internal static string LoadStates(string file)
+        {
+            if (!File.Exists(file))
+            {
+                return "roomstates: no file " + file;
+            }
+            Newtonsoft.Json.Linq.JObject data = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(file));
+            HashSet<(string, string)> Read(string key) => new HashSet<(string, string)>(
+                (data[key] as Newtonsoft.Json.Linq.JArray ?? new Newtonsoft.Json.Linq.JArray())
+                .Select(e => ((string)e["map"], (string)e["entity"])));
+            sceneryHidden = Read("scenery_hidden");
+            sceneryPresent = Read("scenery_present");
+            return $"roomstates: {sceneryHidden.Count} scenery hidden, {sceneryPresent.Count} shown, from {file}";
+        }
 
         internal static string World(ManualLogSource log)
         {
@@ -88,7 +122,7 @@ namespace BugFablesAP
                     }
                 }
                 // The pause map's pips stand at (x, 2, z) in the map's own frame.
-                Shot? shot = Shoot(renderers, Quaternion.identity, 2048f, 0f,
+                Shot? shot = Shoot(renderers, Quaternion.identity, 2048f, 0f, null,
                     Path.Combine(Paths.BepInExRootPath, "bugfablesap-worldmap.png"),
                     p => map.transform.TransformPoint(new Vector3(p.x, 2f, p.y)));
                 if (shot == null)
@@ -107,10 +141,10 @@ namespace BugFablesAP
         }
 
         // roomshot <map> [pitch]: one room to bugfablesap-room-<map>.png and .tsv.
-        internal static string Room(ManualLogSource log, string name, float pitch)
+        internal static string Room(ManualLogSource log, string name, float pitch, bool list)
         {
             string message = Room(log, name, pitch, RoomPixelsPerUnit,
-                Path.Combine(Paths.BepInExRootPath, "bugfablesap-room-" + name + ".png"), out Shot? shot);
+                Path.Combine(Paths.BepInExRootPath, "bugfablesap-room-" + name + ".png"), list, out Shot? shot);
             if (shot != null)
             {
                 File.WriteAllText(Path.Combine(Paths.BepInExRootPath, "bugfablesap-room-" + name + ".tsv"),
@@ -146,7 +180,7 @@ namespace BugFablesAP
             }
             string name = pending.Dequeue();
             string message = Room(log, name, allPitch, AllPixelsPerUnit, Path.Combine(RoomsFolder, name + ".png"),
-                out Shot? shot);
+                false, out Shot? shot);
             if (shot != null)
             {
                 allTable.Append(shot.Value.Row(name));
@@ -167,7 +201,7 @@ namespace BugFablesAP
         // A room as the game builds it from its prefab, its insides hidden as from outside, none of its scripts or
         // sounds run: seen from pitch degrees (90, straight down; less, more from the front).
         private static string Room(ManualLogSource log, string name, float pitch, float pixelsPerUnit, string png,
-            out Shot? shot)
+            bool list, out Shot? shot)
         {
             shot = null;
             GameObject prefab = Resources.Load<GameObject>("Prefabs/Maps/" + name);
@@ -191,6 +225,36 @@ namespace BugFablesAP
             bool fog = RenderSettings.fog;
             try
             {
+                // Flag-switched scenery as a seed shows it on a new file: the game's own check with no flags set
+                // (MainManager.CheckIfCanExist: a requirement unmet takes it away, or moves one kept to its other
+                // spot), then the seed's own lists (roomstates) on top, as the mod's KeptOpen applies them.
+                foreach (ConditionChecker c in room.GetComponentsInChildren<ConditionChecker>(true))
+                {
+                    string path = PathOf(c.transform, room.transform, false);
+                    if (sceneryHidden.Contains((name, path)))
+                    {
+                        c.gameObject.SetActive(false);
+                    }
+                    else if (!sceneryPresent.Contains((name, path)) && c.requires != null && c.requires.Length > 0
+                        && c.requires[0] > -1)
+                    {
+                        if (!c.dontdelete)
+                        {
+                            c.gameObject.SetActive(false);
+                        }
+                        else if (c.activepos.magnitude > 0.1f)
+                        {
+                            if (c.worldpos)
+                            {
+                                c.transform.position = c.activepos + RoomAway;
+                            }
+                            else
+                            {
+                                c.transform.localPosition = c.activepos;
+                            }
+                        }
+                    }
+                }
                 foreach (MonoBehaviour b in room.GetComponentsInChildren<MonoBehaviour>(true))
                 {
                     Object.DestroyImmediate(b);
@@ -224,24 +288,122 @@ namespace BugFablesAP
                 RenderSettings.fog = false;
                 Transform main = control != null && control.mainmesh != null
                     ? room.transform.Find(PathOf(control.mainmesh, prefab.transform, false)) : null;
-                var renderers = new List<Renderer>();
-                foreach (Renderer r in (main != null ? main : room.transform).GetComponentsInChildren<Renderer>())
+                float? ceiling = null;
+                if (Mathf.Approximately(pitch, 90f) && Enum.IsDefined(typeof(MainManager.Maps), name))
                 {
-                    // The game parks unused objects high above a map, out of reach.
-                    if (r.bounds.center.y - RoomAway.y < 90f && !(r is ParticleSystemRenderer))
+                    float top = float.MinValue;
+                    foreach (Vector3 p in EntityDump.Positions((int)Enum.Parse(typeof(MainManager.Maps), name)))
                     {
-                        renderers.Add(r);
+                        if (p.y < Parked)
+                        {
+                            top = Mathf.Max(top, p.y);
+                        }
+                    }
+                    if (top > float.MinValue)
+                    {
+                        ceiling = top + CeilingMargin;
                     }
                 }
-                shot = Shoot(renderers, Quaternion.Euler(pitch, 0f, 0f), 0f, pixelsPerUnit, png,
-                    p => new Vector3(p.x, 0f, p.y) + RoomAway);
+                // What lies wholly over the ceiling (a roof, a cave's ceiling) is switched off in this copy, the rest
+                // kept whole: a slice through a log or a rock would show its dark inside.
+                var renderers = new List<Renderer>();
+                var listing = new StringBuilder();
+                Shader flat = Shader.Find(FlatShader);
+                foreach (Renderer r in (main != null ? main : room.transform).GetComponentsInChildren<Renderer>())
+                {
+                    Bounds b = r.bounds;
+                    if (b.center.y - RoomAway.y >= Parked || r is ParticleSystemRenderer
+                        || (ceiling != null && b.min.y - RoomAway.y > ceiling.Value))
+                    {
+                        r.enabled = false;
+                        continue;
+                    }
+                    // The black outline shell the game draws round an object from the side shows as a black blob
+                    // from above: left out of this copy, and an object that is only a shell with it.
+                    Material[] materials = r.sharedMaterials;
+                    Material[] own = Array.FindAll(materials, m => m == null || m.shader.name != OutlineShader);
+                    if (own.Length == 0)
+                    {
+                        r.enabled = false;
+                        continue;
+                    }
+                    if (own.Length < materials.Length)
+                    {
+                        r.sharedMaterials = own;
+                    }
+                    // The game's water shader draws white from above: its texture's own colour instead, unlit (the
+                    // world map's own shader), so the light doesn't wash it out.
+                    if (!Tries.Contains("rawwater") && flat != null)
+                    {
+                        for (int i = 0; i < own.Length; i++)
+                        {
+                            if (own[i] != null && own[i].shader.name.Contains("Water")
+                                && own[i].mainTexture is Texture2D waterTexture)
+                            {
+                                own[i] = new Material(flat) { mainTexture = WaterFill(waterTexture) };
+                                r.sharedMaterials = own;
+                            }
+                        }
+                    }
+                    renderers.Add(r);
+                    if (list)
+                    {
+                        Material m = r.sharedMaterial;
+                        listing.Append("\n  ").Append(PathOf(r.transform, room.transform)).Append(" <")
+                            .Append(r.GetType().Name).Append("> ").Append(m != null ? m.name : "none").Append(" / ")
+                            .Append(m != null ? m.shader.name : "none")
+                            .Append(m != null && m.HasProperty("_Color") ? " colour " + m.color : "")
+                            .Append($" x {b.center.x - RoomAway.x:F1} z {b.center.z - RoomAway.z:F1}, ")
+                            .Append($"y {b.min.y - RoomAway.y:F1} to {b.max.y - RoomAway.y:F1}");
+                        foreach (Material water in r.sharedMaterials)
+                        {
+                            if (water == null || !water.shader.name.Contains("Water"))
+                            {
+                                continue;
+                            }
+                            // Which of the usual colour and texture names the water's material has, and their values.
+                            foreach (string colour in new[] { "_Color", "_TintColor", "_WaterColor", "_DeepColor",
+                                "_ShallowColor", "_FoamColor", "_EdgeColor", "_OutlineColor", "_BaseColor" })
+                            {
+                                if (water.HasProperty(colour))
+                                {
+                                    listing.Append($"\n    {colour} {water.GetColor(colour)}");
+                                }
+                            }
+                            foreach (string texture in new[] { "_MainTex", "_NoiseTex", "_FoamTex", "_BumpMap",
+                                "_DepthTex", "_Ramp" })
+                            {
+                                Texture t = water.HasProperty(texture) ? water.GetTexture(texture) : null;
+                                if (t != null)
+                                {
+                                    listing.Append($"\n    {texture} {t.name} {t.width}x{t.height}");
+                                    if (t is Texture2D t2)
+                                    {
+                                        SpriteDump.Save(t2, Path.Combine(Paths.BepInExRootPath,
+                                            $"bugfablesap-water-{water.name}{texture}.png"));
+                                    }
+                                }
+                            }
+                            listing.Append($"\n    render queue {water.renderQueue}, keywords "
+                                + string.Join(" ", water.shaderKeywords));
+                        }
+                    }
+                }
+                // A room whose floor, walls and ceiling are one model still needs a slice, higher up.
+                shot = Shoot(renderers, Quaternion.Euler(pitch, 0f, 0f), 0f, pixelsPerUnit,
+                    ceiling + ClipAbove + RoomAway.y, png, p => new Vector3(p.x, 0f, p.y) + RoomAway);
+                if (list)
+                {
+                    log.LogInfo($"[dev] roomshot {name}, renderers drawn:" + listing);
+                }
                 if (shot == null)
                 {
                     return $"{name}: nothing to render";
                 }
                 string message = $"{name}: {Path.GetFileName(png)} ({shot.Value.Width}x{shot.Value.Height}), "
                     + $"{renderers.Count} renderers" + (main != null ? " under " + main.name : "")
-                    + $", ambient {RenderSettings.ambientLight}";
+                    + $", ambient {RenderSettings.ambientLight}"
+                    + (ceiling != null ? $", seen from {ceiling.Value:F1} up" : "");
                 log.LogInfo("[dev] roomshot " + message);
                 return message;
             }
@@ -255,8 +417,9 @@ namespace BugFablesAP
 
         // Renders the renderers' bounds from an orthographic camera turned by rotation, width pixels wide (or at
         // pixelsPerUnit), to png; the shot says where game points (x, z) of 0 and 1 land, from the picture's top left.
+        // A ceiling (straight down only) puts the camera at that height, so what stands above it is behind the camera.
         private static Shot? Shoot(List<Renderer> renderers, Quaternion rotation, float width, float pixelsPerUnit,
-            string png, Func<Vector2, Vector3> point)
+            float? ceiling, string png, Func<Vector2, Vector3> point)
         {
             if (renderers.Count == 0)
             {
@@ -297,10 +460,15 @@ namespace BugFablesAP
                 cam.aspect = size.x / size.y;
                 cam.nearClipPlane = 0.01f;
                 cam.farClipPlane = 2f * reach;
+                if (ceiling != null)
+                {
+                    Vector3 at = cam.transform.position;
+                    cam.transform.position = new Vector3(at.x, ceiling.Value, at.z);
+                    cam.farClipPlane = ceiling.Value - bounds.min.y + 1f;
+                }
                 cam.cullingMask = layers;
                 cam.clearFlags = CameraClearFlags.SolidColor;
                 cam.backgroundColor = new Color(0f, 0f, 0f, 0f);
-                cam.depthTextureMode = DepthTextureMode.Depth;
                 rt = RenderTexture.GetTemporary(w, h, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default,
                     8);
                 cam.targetTexture = rt;
@@ -336,6 +504,43 @@ namespace BugFablesAP
                 }
                 Object.Destroy(holder);
             }
+        }
+
+        private static readonly Dictionary<Texture2D, Texture2D> waterFills = new Dictionary<Texture2D, Texture2D>();
+
+        // One pixel of a water texture's own colour: the mean of its coloured pixels, its white crests left out.
+        private static Texture2D WaterFill(Texture2D texture)
+        {
+            if (waterFills.TryGetValue(texture, out Texture2D fill) && fill != null)
+            {
+                return fill;
+            }
+            RenderTexture rt = RenderTexture.GetTemporary(texture.width, texture.height, 0, RenderTextureFormat.ARGB32);
+            RenderTexture previous = RenderTexture.active;
+            Graphics.Blit(texture, rt);
+            RenderTexture.active = rt;
+            var copy = new Texture2D(texture.width, texture.height, TextureFormat.ARGB32, false);
+            copy.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(rt);
+            Vector4 sum = Vector4.zero;
+            int count = 0;
+            foreach (Color32 c in copy.GetPixels32())
+            {
+                if (c.a > 128 && Mathf.Max(c.r, c.g, c.b) - Mathf.Min(c.r, c.g, c.b) > 40)
+                {
+                    sum += new Vector4(c.r, c.g, c.b, 255f);
+                    count++;
+                }
+            }
+            Object.Destroy(copy);
+            Color32 mean = count == 0 ? new Color32(255, 255, 255, 255)
+                : new Color32((byte)(sum.x / count), (byte)(sum.y / count), (byte)(sum.z / count), 255);
+            fill = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+            fill.SetPixels32(new[] { mean });
+            fill.Apply();
+            waterFills[texture] = fill;
+            return fill;
         }
 
         private static IEnumerable<Vector3> Corners(Bounds b)
