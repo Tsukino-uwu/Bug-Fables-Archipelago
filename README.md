@@ -2,9 +2,9 @@
 
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*.
 
-All of the code here, and nearly all of the documentation, has been written by AI (Claude) under my direction. The
-design, the logic and every in-game check are mine; this repo will never contain any AI art. See the
-[AI disclosure](docs/reviewing.md#how-ai-is-used).
+All of the code here, and nearly all of the documentation, has been written by AI (Claude) under my direction. What
+the randomizer does, its logic and all the testing in the game are mine; this repo will never contain any AI-generated
+images. See the [AI disclosure](docs/reviewing.md#how-ai-is-used).
 
 ## Setup
 
