@@ -160,8 +160,10 @@ class TestTrackerHooks(TestCase):
         slot_data = as_sent(generate_like_main({}, 1).fill_slot_data())
         for changed in ({**slot_data, "world_version": "0.0.1"},
                         {k: v for k, v in slot_data.items() if k != "options"}):
-            with self.subTest(keys=sorted(set(slot_data) ^ set(changed))), self.assertRaises(ValueError):
+            # Universal Tracker's TrackerException where it's installed (its message an attribute), else a ValueError.
+            with self.subTest(keys=sorted(set(slot_data) ^ set(changed))), self.assertRaises(Exception) as refused:
                 regenerate(changed, 3)
+            self.assertIn("latest release", str(refused.exception) or refused.exception.message)
 
     def test_the_list_in_story_order(self) -> None:
         # Areas as the story reaches them, each one's spots by name; an entrance or anything unknown after them all.

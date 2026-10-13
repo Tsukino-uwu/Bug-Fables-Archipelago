@@ -116,8 +116,9 @@ Every release passes: v0.1.0 and v0.2.0 (checked 2026-09-29 and 2026-10-13), v0.
 
 **The apworld** runs on whichever machine generates with it in `custom_worlds` (the archipelago.gg website doesn't
 have it), and Archipelago imports it on every start.
-- It imports only the names the preflight lists: 53 from Archipelago and Python's standard library (2026-10-13),
-  plus `json.loads`, `logging` and `pkgutil.get_data`.
+- It imports only the names the preflight lists: 54 from Archipelago, Universal Tracker (its `TrackerException`,
+  where it's installed) and Python's standard library (2026-10-13), plus `json.loads`, `logging` and
+  `pkgutil.get_data`.
 - It reads its own data files, which ship inside it, and nothing else.
 - It writes no file, opens no connection, runs no program and evaluates no text as code.
 - The preflight checks all of this from the syntax tree, not by searching text. Four places look an attribute up by

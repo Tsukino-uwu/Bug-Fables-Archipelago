@@ -81,17 +81,27 @@ def passthrough(world: BugFablesWorld) -> Mapping[str, Any] | None:
     return getattr(world.multiworld, "re_gen_passthrough", {}).get(world.game)
 
 
+def _refused(message: str) -> Exception:
+    """Universal Tracker's own refusal (its TrackerException: "your options are incompatible", the reason in its
+    /faris_asked); the same message as a ValueError where it isn't installed."""
+    try:
+        from worlds.tracker import TrackerException
+    except ImportError:
+        return ValueError(message)
+    return TrackerException(message=message)
+
+
 def apply_options(world: BugFablesWorld, slot_data: Mapping[str, Any]) -> None:
     """The options as the seed applied them (slot_data's options); every other option at its default, as in Universal
     Tracker's empty yaml. A seed from another version of the world is refused: no support for older versions."""
     version = slot_data.get("world_version")
     ours = world.world_version.as_simple_string()
     if version != ours:
-        raise ValueError(f"Bug Fables: this seed was generated with world version {version}, and this apworld is "
-                         f"{ours}: use the latest release of both")
+        raise _refused(f"Bug Fables: this seed was generated with world version {version}, and this apworld is "
+                       f"{ours}: use the latest release of both")
     if "options" not in slot_data:
-        raise ValueError("Bug Fables: this seed's slot_data has no options, so it comes from an older apworld: use the "
-                         "latest release")
+        raise _refused("Bug Fables: this seed's slot_data has no options, so it comes from an older apworld: use the "
+                       "latest release")
     sent = slot_data["options"]
     world.options = BugFablesOptions(**{name: option.from_any(sent.get(name, option.default))
                                         for name, option in BugFablesOptions.type_hints.items()})
