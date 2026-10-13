@@ -236,10 +236,11 @@ For each one it confirms the section fails. It also makes a real commit and a re
 checks that both are refused, and runs the coding agent's guard (`.claude/`) on what it must refuse, ask about and
 let through.
 
-**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every release)
-need an Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test
-check and the fuzzer (10000 seeds), builds the apworld and its yaml and generates from them as a player would, and
-generates seeds with a second game, on every push.
+**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before each release
+since v0.3.0, the first after the fuzzer joined the tests on 2026-09-28) need an Archipelago checkout;
+[development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test check and the fuzzer (10000
+seeds), builds the apworld and its yaml and generates from them as a player would, and generates seeds with a second
+game, on every push.
 
 ## The committed DLL: what is proven, and what isn't
 
@@ -252,18 +253,20 @@ same person wrote both. Here is what can be checked.
   - only `mscoree.dll!_CorDllMain` imported;
   - no native code, embedded resources or stored data;
   - nothing after its last section.
-- **What it can reach:** only the 13 expected assemblies. None of 42 denied kinds of call appears among its 12,762
-  references: starting programs, `System.Net`, loading code, `Marshal`, the registry, code written at run time,
-  opening web pages, reading who the player is, JSON picking its own type. Every file, clipboard, connection and
-  lookup-by-name call is traced to the type that makes it and must be in the capability list.
+- **What it can reach:** only the 13 expected assemblies. None of 42 denied kinds of call appears among its 16,807
+  references (v0.3.0's DLL, 2026-10-13): starting programs, `System.Net`, loading code, `Marshal`, the registry, code
+  written at run time, opening web pages, reading who the player is, JSON picking its own type. Every file, clipboard,
+  connection and lookup-by-name call is traced to the type that makes it and must be in the capability list.
 - **It says only what its source says.** Against the sources of the commit it was built from, every type, method,
-  field and called member name, and every one of its 1,237 strings, must appear in that source. Code in the DLL that
+  field and called member name, and every one of its 1,581 strings, must appear in that source. Code in the DLL that
   the source doesn't have shows up as names and strings the source never wrote.
 
 **What that can't show** is how the IL wires those allowed pieces together. Two things close that gap:
 - **Rebuild it with your own copy of the game.** The build is reproducible: every published DLL rebuilt byte for byte
-  from its own commit (v0.1.0, v0.2.0 and the committed one, 2026-09-29). The SDK is pinned by `global.json` and every
-  package by a lock file. On Windows with the .NET SDK and the game installed:
+  from its own commit (v0.1.0 and v0.2.0 on 2026-09-29; v0.3.0's, now the committed one, on 2026-10-13). The SDK is
+  pinned by `global.json` and every package by a lock file. A byte-identical result needs the same build of the game
+  too: `release/built-from.txt` names it by its `Assembly-CSharp.dll`'s hash. On Windows with the .NET SDK and the game
+  installed:
 
   ```powershell
   git checkout vX.Y.Z
@@ -308,8 +311,9 @@ same person wrote both. Here is what can be checked.
     across rooms;
   - how each answer is confirmed on screen and then tested.
 
-  Each rule carries who decided it and when. Until every room has been through it, the entrance randomizer and a random
-  start stay labelled experimental.
+  Each rule carries who decided it and when. Every room has been through it (the last on 2026-10-12); the entrance
+  randomizer and a random start stay labelled experimental until that logic is tested, and a random start also until
+  every room's spawns are checked on screen.
 - **[licensing.md](../agent_docs/licensing.md)** lists every outside project the code uses or was read for, with its
   licence and the date it was checked; a file linking someone else's GitHub project with no row there fails the
   preflight. **[references.md](../agent_docs/references.md)** says what was taken from the randomizers compared with
