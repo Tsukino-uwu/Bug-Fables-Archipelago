@@ -47,11 +47,13 @@ A: Nearly everything that is written is the agent's. What isn't:
 
 **Q: How much human review was done?**
 
-A: I trust the code the AI writes, but not its result. Code can look right, and even run, without doing what it's meant
-to do. So I test, check and verify every single step in the game myself, and anything not yet confirmed on screen is
-assumed not to work. On top of that the code is checked by tools, not trust: the apworld's tests and Archipelago's
-fuzzer (10000 random seeds) on every push, a preflight that holds the code to an exact list of what it may do, and a mod
-build anyone with the game can rebuild byte for byte. The rest of this page says how to check each of those yourself.
+A: I trust the code the AI writes, but not its result/output. Code can look right, and even run, without doing what it's
+meant to do. So I test, check and verify every single step in the game myself, and anything not yet confirmed on screen
+is assumed not to work. I do look at some of the code, mostly the logic files where the rules are written, but I can't
+judge complicated code at a glance, so I don't really review the code itself; I review what it does. On top of that the
+code is checked by tools, not trust: the apworld's tests and Archipelago's fuzzer (10000 random seeds) on every push, a
+preflight that holds the code to an exact list of what it may do, and a mod build anyone with the game can rebuild byte
+for byte. The rest of this page says how to check each of those yourself.
 
 In practice:
 - **The agent** writes the code and the docs. It reads the game's decompiled code for facts. That output stays on the
