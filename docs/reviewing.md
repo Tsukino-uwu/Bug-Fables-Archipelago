@@ -38,8 +38,11 @@ A:
 A: Nearly everything that is written is the agent's. What isn't:
 - **Every decision:** what the randomizer does, its options and their defaults, which items are progression, and every
   location and item name. Each decision is recorded with its date.
-- **The logic:** I mapped all 244 rooms by playing each one and saying what is needed to reach what; the agent turns
-  that into rules, and I confirm them.
+- **The logic:** I played and checked every one of the game's 244 rooms myself, one at a time: from every entrance, for
+  every obstacle, and for every ability needed to get into or out of an area or to reach an item. I described each room,
+  and the AI wrote it as Archipelago rules (the rule builder). AI was never used to work out, plan or decide the logic:
+  I believe it is the most crucial part of an apworld, and it has to be hand-crafted to be strict and correct and to
+  account for everything.
 - **What counts as working:** nothing in the game is done until I have seen it work on screen.
 
 **Q: How much human review was done?**
