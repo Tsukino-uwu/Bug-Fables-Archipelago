@@ -227,7 +227,12 @@ namespace BugFablesAP
             bool[] flags = MainManager.instance?.flags;
             bool won = flags != null && flags.Length > FightWon && flags[FightWon];
             string map = MainManager.map?.mapid.ToString();
-            bool reached = creditsStarted || (won && map != null && !EndingMaps.Contains(map));
+            // The credits count only in a file whose fight is won: the note outlives a file, a seed and a login.
+            if (!won)
+            {
+                creditsStarted = false;
+            }
+            bool reached = won && (creditsStarted || (map != null && !EndingMaps.Contains(map)));
             string state = reached ? (creditsStarted ? "reached: the credits started" : "reached: the last fight won")
                 : won ? "the last fight won: waiting for the credits" : "the last fight not won yet";
             if (state != lastGoalState)

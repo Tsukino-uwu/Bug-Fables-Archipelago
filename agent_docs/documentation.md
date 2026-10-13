@@ -3730,6 +3730,10 @@ Sapling Plains, the Roach Village, the end plaza, bridge and throne), where 555 
 turns it off and back on. Log: `[goal] the last fight won: waiting for the credits`, then `reached: the credits
 started` and `sent`.
 
+**Found the same day, a false goal:** the credits' note was static, so after one seed's credits a new seed's new file
+sent its goal at login and the server released that world (seen: 303 of 303 at once). Now the goal also needs the
+file's own 555, and the note is cleared while 555 is off.
+
 **Found:** `Event204` started anywhere else softlocks (`MEASURED.md`, the Sapling Plains); dev `event <n>` and
 `uncredits` came from that.
 
