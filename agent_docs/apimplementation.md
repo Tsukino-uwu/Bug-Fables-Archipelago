@@ -2936,6 +2936,10 @@ BepInEx is not bundled; the player installs it first.
    - a `Config.Bind("Debug", ...)` outside `Dev/`;
    - a `[Debug]` setting on by default, for dev installs (an off value is `false`, `0`, `""`, `-1`, or since
      2026-10-13 `QualityOfLife.FullPrice`, the `MedalPrices` cheat's normal prices, first met by v0.4.0's run);
+   - (v0.4.0's run, 2026-10-14) the DLL checks read a patch's target from its `[HarmonyPatch]` type; a bare
+     `[HarmonyPatch]` on a class that names its target only in `TargetMethod()` is refused, so such classes carry no
+     attribute (`Hooks.Install` patches the class itself, as `FollowerHits` always has); a lone `$"{x}"` compiles to a
+     `"{0}"` no source holds, so it is written as plain concatenation;
    - one of `Dev/`'s own types, or a "Dev only" text, found in the built DLL. `-Check` repeats that last check on the
      committed DLL. Since 2026-09-29 preflight's DLL sections do it, refusing any of `Dev/`'s types and any name or
      string the source lacks, on the fresh build and in `-Check`.

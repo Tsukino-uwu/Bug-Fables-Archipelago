@@ -27,7 +27,6 @@ namespace BugFablesAP
                 "a chapter's scene reached out of story order can freeze filing its main quest");
         }
 
-        [HarmonyPatch]
         private static class Filing
         {
             private static IEnumerable<MethodBase> TargetMethods() => Scenes.Select(scene =>

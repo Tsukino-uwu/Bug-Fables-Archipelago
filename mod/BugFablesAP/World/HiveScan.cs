@@ -24,7 +24,6 @@ namespace BugFablesAP
             Hooks.Install(typeof(Scan), "scan", "the scan sets only its own flag, 159");
         }
 
-        [HarmonyPatch]
         private static class Scan
         {
             private static MethodBase TargetMethod() =>

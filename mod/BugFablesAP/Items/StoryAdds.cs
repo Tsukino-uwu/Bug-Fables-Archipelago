@@ -26,7 +26,6 @@ namespace BugFablesAP
                 "a scene that adds a key item straight to the bag would give it from the game, not the server");
         }
 
-        [HarmonyPatch]
         private static class Adds
         {
             private static IEnumerable<MethodBase> TargetMethods() => Scenes.Select(scene =>

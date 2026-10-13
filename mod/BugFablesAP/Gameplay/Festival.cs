@@ -29,7 +29,6 @@ namespace BugFablesAP
         private static bool On => randomizerOn != null && randomizerOn() && seed?.Invoke() != null;
 
         // Event57 stores `won = b <= 0f` in a field of its coroutine: the value passes through here first.
-        [HarmonyPatch]
         private static class Contest
         {
             private static MethodBase TargetMethod() =>

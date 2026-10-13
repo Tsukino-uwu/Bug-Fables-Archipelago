@@ -53,7 +53,7 @@ namespace BugFablesAP
                 {
                     log.LogError($"[tattle] NOT installed in PlayerControl.GetInput: expected one HasPlayer(1), two "
                         + $"GetEntity(-5) and one read of flag {Tattle}, found {asks.Length}, {speakers.Length} and "
-                        + $"{taught.Length}");
+                        + taught.Length);
                     return code;
                 }
                 ReadAs(code, taught[0], nameof(TattleTaught));

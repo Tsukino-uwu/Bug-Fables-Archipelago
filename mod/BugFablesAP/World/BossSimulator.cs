@@ -23,7 +23,6 @@ namespace BugFablesAP
             Hooks.Install(typeof(Lists), "boss", "B.O.S.S. with nobody met in a list freezes the party");
         }
 
-        [HarmonyPatch]
         private static class Lists
         {
             private static MethodBase TargetMethod() =>
