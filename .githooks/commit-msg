@@ -1,5 +1,5 @@
 #!/bin/sh
-# Every commit: a subject of at most 72 characters, with no attribution (who decided goes in log.md).
+# Every commit: a subject of at most 72 characters, with no attribution (a decision is a dated fact, never who said it).
 # A change to the preflight gate (its scripts and patterns, the hooks, the workflows, the agent's guard in .claude/) is
 # a commit of its own, never mixed with mod/ or apworld/ code, so every change to what is checked stands alone in the
 # history.
@@ -23,7 +23,7 @@ if [ "$length" -gt 72 ]; then
     exit 1
 fi
 if printf '%s' "$subject" | grep -qi '(the user'; then
-    echo "commit-msg: the subject names who decided; that goes in agent_docs/log.md, not the commit." >&2
+    echo "commit-msg: the subject names who decided; leave it out (the docs hold the decision, dated)." >&2
     exit 1
 fi
 staged=$(git diff --cached --name-only)

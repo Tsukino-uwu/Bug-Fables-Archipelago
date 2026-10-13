@@ -590,5 +590,11 @@
       ["\\busage (?:cap|limit)s?\\b|\\bweekly usage\\b|\\b5-?hour\\b|\\bmillion tokens\\b", "the maintainer's account usage or budget"]
     ]
   },
-  "ruff_version": "0.17.0"
+  "ruff_version": "0.17.0",
+  "attributions": {
+    "exempt": ["CLAUDE.md", ".claude/", ".githooks/commit-msg"],
+    "rules": [
+      ["\\bthe(?:\\s|#|//|\\*)+user\\b", "who said it: a decision is a fact with its date; evidence is seen, code read or a dump"]
+    ]
+  }
 }

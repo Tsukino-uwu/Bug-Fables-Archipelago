@@ -341,6 +341,17 @@ def fixtures():
     def _(c):
         c.append('agent_docs/log.md', 'stopped at ' + '04' + ':45')
 
+    # Assembled at run time too; the second split across a line break inside a comment, as the scrub found them.
+    @add('an attribution in a guide and one split in a code comment', 'Attributions',
+         names=('agent_docs/MEASURED.md', 'apworld/bug_fables/rules.py'))
+    def _(c):
+        c.append('agent_docs/MEASURED.md', 'Seen (' + 'the ' + 'user' + ', 2026-10-13).')
+        c.append('apworld/bug_fables/rules.py', '# Kept open for good (the\n# ' + 'user' + ').')
+
+    @add('CLAUDE.md still says who decides', 'Attributions', expect='PASS')
+    def _(c):
+        c.append('CLAUDE.md', 'Ask ' + 'the ' + 'user' + ' first.')
+
     @add('a project cited without a licence row', 'Licences')
     def _(c):
         c.append('agent_docs/references.md', 'see github' + '.com/someone-else/some-project')

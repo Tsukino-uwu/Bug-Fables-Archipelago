@@ -3706,6 +3706,11 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
   whole log turned up the maintainer's working hours, setup and account limits, and other people's words; the log was
   rewritten the same day (its entry) and keeps to Bug Fables and Archipelago from then on. What a pattern can't catch
   (someone's words, a private project, an unrelated errand) is the agent's rule.
+- **Attributions** (2026-10-13): no tag naming who said or decided a thing, in any file but `CLAUDE.md`, the agent
+  guard (`.claude/`) and `commit-msg` (they speak to the agent about who decides, or hold the subject check); a
+  decision is written as a fact with its date, and evidence by how it was known (`attributions` in the patterns file).
+  Matched on the whole text, so a line break or a comment's marker between the two words still counts: a line-based
+  search missed those during the scrub that preceded it (2,120 removed on 2026-10-13, the log's entry).
 - **Game files:** no game assembly, asset, save or decompiled code.
 - **Hosts and addresses:** every host named anywhere is in the capabilities list with a reason, and no public IP
   address appears (the four-part version numbers that look like one are listed by name).

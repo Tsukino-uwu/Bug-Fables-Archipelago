@@ -591,6 +591,33 @@ def log_personal(ctx, out):
         out.ok(f'{len(logs)} log(s): no clock time, time of day, network or login setup, or account usage')
 
 
+# A decision is a fact with its date, and evidence says how it was known (seen, code read): who said it is no part of
+# the project. Matched on the whole text, so a line break or a comment's marker between the two words still counts.
+@section('Attributions')
+def attributions(ctx, out):
+    rules = [(re.compile(rx, re.I), why) for rx, why in ctx.patterns['attributions']['rules']]
+    exempt = ctx.patterns['attributions']['exempt']
+
+    def is_exempt(path):
+        return any(path == e or (e.endswith('/') and path.startswith(e)) for e in exempt)
+
+    texts = [f for f in ctx.texts() if not is_exempt(f.path)]
+    absent = [e for e in exempt if not any(f.path == e or (e.endswith('/') and f.path.startswith(e))
+                                          for f in ctx.files)]
+    hits = []
+    for f in texts:
+        for rx, why in rules:
+            for m in rx.finditer(f.text):
+                hits.append(f'{f.path}:{line_of(f.text, m.start())}: "{" ".join(m.group(0).split())}" ({why})')
+    if absent:
+        out.fail('an exempt path the patterns file names is missing: the listing is wrong', absent)
+    elif hits:
+        out.fail('an attribution: write a decision as a fact with its date, and evidence by how it was known', hits)
+    else:
+        out.ok(f'{len(texts)} file(s): no attribution ({", ".join(exempt)} exempt: they speak to the agent about who '
+               'decides, or hold the commit subject\'s own check)')
+
+
 @section('Licences')
 def licences(ctx, out):
     lic = ctx.file(LICENSING)
@@ -1846,11 +1873,12 @@ def load_patterns(files):
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
                 'workflows', 'workflow_capabilities', 'dependencies', 'capability_tables', 'mod_server_text',
-                'agent_settings', 'line_caps', 'durations', 'log_personal', 'ruff_version'}
+                'agent_settings', 'line_caps', 'durations', 'log_personal', 'ruff_version', 'attributions'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
-            rx for rx, why in patterns['durations'] + patterns['log_personal']['rules']] + [
+            rx for rx, why in patterns['durations'] + patterns['log_personal']['rules'] +
+            patterns['attributions']['rules']] + [
             rx for key in ('mod_denied', 'mod_capabilities', 'ps1_denied', 'ps1_capabilities', 'sh_denied',
                            'sh_capabilities', 'workflow_capabilities')
             for rx in patterns[key].values()]:
