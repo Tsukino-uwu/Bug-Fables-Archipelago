@@ -90,10 +90,12 @@ class Encounter:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class DoorEnd:
-    """One side of a door connection: the map and the door entity's name."""
+    """One side of a door connection: the map and the door entity's name, and the edge of its room it's on (left,
+    right, up, down, or other: door-graph.py's side), which only Map Shuffle reads."""
 
     map: str
     door: str
+    side: str = "other"
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> DoorEnd:

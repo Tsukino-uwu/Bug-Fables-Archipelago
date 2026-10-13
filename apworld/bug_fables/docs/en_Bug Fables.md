@@ -38,8 +38,9 @@ Beetle Dig's, held out for now) and the one where the Termite King hands over th
   the first purchase or pickup is still the check, and this changes only what comes after. New in 0.3.0.
 - **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else. Coupled: a door and its way
   back stay a pair. Decoupled (new in 0.3.0): the way back is shuffled too, so turning round can take you
-  somewhere else. Or Room Swap, whole rooms trading places (see below). The spoiler log lists where each door leads.
-  With Coupled or Decoupled, one-way doors (the Forsaken Lands' fog maze's wrong turns, drops, the underground bar's
+  somewhere else. Or Room Swap, whole rooms trading places, or Map Shuffle (new in 0.4.0), doors that match sides
+  (both below). The spoiler log lists where each door leads.
+  With Coupled, Decoupled or Map Shuffle, one-way doors (the Forsaken Lands' fog maze's wrong turns, drops, the underground bar's
   exit) are shuffled too, only among themselves: each now lands where another one did. New in 0.3.0.
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
 - **Starting Location** (off, experimental): a new file begins in any room in the game. From 0.4.0 the items are
@@ -50,8 +51,8 @@ Beetle Dig's, held out for now) and the one where the Termite King hands over th
   any setting but Off, the opening and the fall room after the spider become locations.
 - **Filler Starting Checks** (on): the checks a new file sends by itself when the game begins (Maki and Eetl's gift,
   the tutorial battle, and the opening spot when members are items) hold filler only, so a seed doesn't open with its
-  good items. Nothing else changes; turn it off to plando an item there. With the Entrance Randomizer on Coupled or
-  Room Swap it doesn't apply, since the doors can leave the start too small. New in 0.3.0.
+  good items. Nothing else changes; turn it off to plando an item there. With the Entrance Randomizer on Coupled, Map
+  Shuffle or Room Swap it doesn't apply, since the doors can leave the start too small. New in 0.3.0.
 - **Shuffle Field Moves** (off): Vi's Beemerang Toss, Kabbu's Horn Slash and Leif's Freeze are items too (the Toss and
   the Freeze as the first copy of their progressive item, new in 0.3.0); until one arrives, that attack only buzzes, and
   each shows in your key items once it does.
@@ -82,9 +83,18 @@ Coupled, where any door may lead to any other. One-way doors, like the fog maze'
 in the game. The logic follows the doors and what every room needs inside; a few doors are still to be gone through,
 so it stays experimental, and the pause menu's Warp gets you out of a dead end.
 
+## Map Shuffle
+
+Set *Entrance Randomizer* to `map_shuffle` (experimental, new in 0.4.0). As Coupled, any door may lead to any other,
+but the doors match sides: a door on a room's right edge brings you in through another room's left edge, a door at its
+top in at another's bottom, so walking right keeps you going right and the world still reads like a map. Turning round
+always takes you back. About nine doors in ten match; there are more doors on rooms' left edges than right ones, and
+more at the bottom than the top, so the few left over take another side. One-way doors are shuffled among themselves,
+as with Coupled.
+
 ## Plando: choosing where doors lead
 
-With *Entrance Randomizer* on Coupled or Decoupled, `plando_connections` pins doors (new in 0.3.0). Each door is
+With *Entrance Randomizer* on Coupled, Decoupled or Map Shuffle, `plando_connections` pins doors (new in 0.3.0). Each door is
 named where it is, `Area: Room, Door to` and the room it leads to in the unshuffled game, as the spoiler log's Entrances
 section lists them (a room with no name yet shows its map's name; two doors between the same rooms are `Door 1` and
 `Door 2`). The older names, `MapName: DoorName`, still work. `entrance` is the door you go through, `exit` the door you
@@ -98,7 +108,7 @@ plando_connections:
 ```
 
 `direction` is `both` (the default), `entrance` (only the first door leads to the second) or `exit` (only the second
-leads back to the first); Coupled always joins both ways. A one-way door's `exit` is another one-way's landing, named
+leads back to the first); Coupled and Map Shuffle always join both ways. A one-way door's `exit` is another one-way's landing, named
 as the spoiler log lists it, e.g.
 `"Far Grasslands: Wizard's Tower Basement as from Far Grasslands: Wizard's Tower, Door to Wizard's Tower Basement"`;
 it only goes one way, whatever the direction, and can't be paired with a two-way door. The rest of the doors are

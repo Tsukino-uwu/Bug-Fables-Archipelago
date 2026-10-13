@@ -220,6 +220,10 @@ class EntranceRandomizer(Choice):
     Room Swap: the world keeps the game's shape. Whole rooms trade places with rooms of as many doors in their part of
     the world (parts joined only by a ride or a scene stay apart), and a room's doors may turn: familiar roads,
     unfamiliar rooms. Going back through a door takes you back; one-way doors stay as the game has them.
+    Map Shuffle: a new web of doors that still reads like a map: a door on a room's right edge leads in through another
+    room's left edge, up into down, so walking right keeps you going right. Going back through a door takes you back.
+    Doors whose two sides the game itself doesn't match (a corridor that turns, a ladder) are shuffled among
+    themselves, and one-way doors too.
     Coupled: any door may lead to any other, a new web of doors. Going back through a door always takes you back, so
     you can retrace your steps. One-way doors (the fog maze's wrong turns, drops) are shuffled among themselves.
     Decoupled: as Coupled, but each way of a door is shuffled on its own: going back through a door can take you
@@ -236,6 +240,7 @@ class EntranceRandomizer(Choice):
     option_coupled = 1
     option_room_swap = 2
     option_decoupled = 3
+    option_map_shuffle = 4
     default = 0
 
 

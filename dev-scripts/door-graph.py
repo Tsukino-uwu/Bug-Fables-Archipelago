@@ -84,6 +84,7 @@ def point(field: str | None) -> tuple[float, float, float] | None:
 FAR = 12.0  # no door nearer the arrival point than this: no pair (a ladder lands up to 11.3 below the one back up)
 SAME = 1.0  # doors on one map this close are one door in different story states
 PARKED = 90.0  # a load zone this high is out of reach: the game parks unused objects at 99 and above
+SIDELESS = 0.5  # a door nearer than this across the floor to where its way back lands has no side
 
 
 def parked(d: dict) -> bool:
@@ -119,6 +120,18 @@ def pair_doors(doors: list[dict]) -> dict[tuple[str, int], tuple[dict, float]]:
     return pairs
 
 
+def side(d: dict, back: dict) -> str:
+    """Which edge of its room a door is on, as the room is seen (+x right, +z up): the way from where its way back
+    lands the party to the door. "other" where that way is mostly up or down (a ladder, a well)."""
+    arrive = point(back["vectordata"].split()[1])
+    dx, dz = d["position"][0] - arrive[0], d["position"][2] - arrive[2]
+    if math.hypot(dx, dz) < SIDELESS:
+        return "other"
+    if abs(dx) >= abs(dz):
+        return "right" if dx > 0 else "left"
+    return "up" if dz > 0 else "down"
+
+
 def export(doors: list[dict], pairs: dict, out: Path) -> None:
     """The door table: mutual pairs as connections; doors with no way back as one-ways (story copies at one spot as one
     door, its copies rewritten with it); the map links of the rest in "fixed" (a pair with a story variant). A door is
@@ -145,7 +158,8 @@ def export(doors: list[dict], pairs: dict, out: Path) -> None:
         if theirs is None or theirs[0] is not d:
             continue
         taken |= {key, (b["map"], b["index"])}
-        connections.append({"a": {"map": d["map"], "door": door_id(d)}, "b": {"map": b["map"], "door": door_id(b)}})
+        connections.append({"a": {"map": d["map"], "door": door_id(d), "side": side(d, b)},
+                            "b": {"map": b["map"], "door": door_id(b), "side": side(b, d)}})
 
     # A one-way: no door leads back near where it lands. Copies at one spot (a story variant) count only when every
     # copy is one; the one present first (no required flag) is the door.

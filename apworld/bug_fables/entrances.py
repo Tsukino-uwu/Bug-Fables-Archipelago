@@ -1,4 +1,5 @@
-"""The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled and Decoupled, drawn
+"""The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled, Decoupled and Map
+Shuffle (its "Directional matching" groups: each door into one on the opposite edge of its room where it can), drawn
 again when it runs out of spare doors or leaves the start too small, and the room swap, a mode Archipelago has none of,
 connecting the same split entrances by hand. Each pairing becomes a door_targets entry, the doors the mod rewrites.
 One-way doors (a fog maze's wrong turns, drops) are Archipelago's one-way entrances, paired only with one another; the
@@ -143,7 +144,8 @@ def shuffle(world: BugFablesWorld, wanted: int) -> list[tuple[Door, Door]]:
     if world.options.plando_connections and mode in (EntranceRandomizer.option_off,
                                                      EntranceRandomizer.option_room_swap):
         logging.warning("Bug Fables: player %s (%s) has plando connections, which apply only with the Entrance "
-                        "Randomizer on Coupled or Decoupled; they're ignored.", world.player, world.player_name)
+                        "Randomizer on Coupled, Decoupled or Map Shuffle; they're ignored.", world.player,
+                        world.player_name)
     if mode == EntranceRandomizer.option_off:
         return []
     if mode == EntranceRandomizer.option_room_swap:
@@ -157,6 +159,18 @@ def shuffle(world: BugFablesWorld, wanted: int) -> list[tuple[Door, Door]]:
     planned = _plando(world, names, coupled)
     pins, placed = _randomize(world, coupled, measure, wanted)
     return planned + pins + [(doors[x], doors[y]) for x, y in placed]
+
+
+# Map Shuffle's groups (entrance randomization.md, "Directional matching"): a door's edge of its room (DoorEnd.side),
+# one-way doors staying in the default group among themselves. Each edge takes the opposite one first, then a door with
+# no edge, then the others, its own last: the edges don't balance (more left doors than right, more down than up), so
+# a door matches whenever the randomizer finds a match it can use, and a seed never fails for want of one.
+_SIDES = {"left": 1, "right": 2, "up": 3, "down": 4, "other": 5}
+_OPPOSITE = {"left": "right", "right": "left", "up": "down", "down": "up"}
+MAP_SHUFFLE_GROUPS: dict[int, list[int]] = {0: [0]} | {
+    _SIDES[side]: [_SIDES[_OPPOSITE[side]], _SIDES["other"],
+                   *(_SIDES[s] for s in _OPPOSITE if s not in (side, _OPPOSITE[side])), _SIDES[side]]
+    for side in _OPPOSITE} | {_SIDES["other"]: [_SIDES["other"], *(_SIDES[s] for s in _OPPOSITE)]}
 
 
 # Archipelago's randomizer gives up when the dead ends outnumber the spare doors it has reached, with no retry of its
@@ -177,6 +191,8 @@ def _randomize(world: BugFablesWorld, coupled: bool, measure: _Measure,
     """Archipelago's randomizer on the split doors, drawn again when it runs out of spare doors or opens fewer than
     wanted spots from the start; after DOOR_TRIES failures, the doors a failure left waiting are pinned where the game
     has them, a round at a time. Returns the pins and the randomizer's pairings."""
+    matching = world.options.entrance_randomizer == EntranceRandomizer.option_map_shuffle
+    groups = MAP_SHUFFLE_GROUPS if matching else {0: [0]}
     free = _FreeDoors(world)
     pins: list[tuple[Door, Door]] = []
     # The doors the last failed draw left waiting: every round after the first follows a failed one.
@@ -190,7 +206,8 @@ def _randomize(world: BugFablesWorld, coupled: bool, measure: _Measure,
         tries = 0
         while tries < (PIN_ROUND_TRIES if round_ else DOOR_TRIES):
             try:
-                placed = randomize_entrances(world, coupled=coupled, target_group_lookup={0: [0]})
+                placed = randomize_entrances(world, coupled=coupled, target_group_lookup=groups,
+                                             preserve_group_order=matching)
             except EntranceRandomizationError as error:
                 # One that placed nothing would fail the same way every time.
                 if not str(error).startswith(_RAN_OUT) or not free.placed():
@@ -280,10 +297,14 @@ def _split(world: BugFablesWorld) -> dict[Door, str]:
     """Splits the door entrances the mode shuffles, as Archipelago's randomizer needs them: every two-way door, and the
     one-ways but a ride's way back (SHUFFLED_ONE_WAYS), none with Room Swap; the rest stay as they are. Returns each
     two-way door's entrance name."""
-    names = {(end.map, end.door): door_name(end.map, end.door) for c in SHUFFLED_CONNECTIONS for end in (c.a, c.b)}
-    for name in names.values():
-        entrance = world.get_entrance(name)
+    ends = [end for c in SHUFFLED_CONNECTIONS for end in (c.a, c.b)]
+    names = {(end.map, end.door): door_name(end.map, end.door) for end in ends}
+    matching = world.options.entrance_randomizer == EntranceRandomizer.option_map_shuffle
+    for end in ends:
+        entrance = world.get_entrance(names[(end.map, end.door)])
         entrance.randomization_type = EntranceType.TWO_WAY
+        if matching:
+            entrance.randomization_group = _SIDES[end.side]
         disconnect_entrance_for_randomization(entrance)
     if world.options.entrance_randomizer != EntranceRandomizer.option_room_swap:
         for w in SHUFFLED_ONE_WAYS:

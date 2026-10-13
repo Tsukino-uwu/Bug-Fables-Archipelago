@@ -25,7 +25,8 @@ this file and that doc disagree, that doc is right.
 - **The entrance randomizer:**
   [12](#build-step-12-the-entrance-randomizer-doors-shuffled-by-archipelagos-own-experimental), Room Swap
   [30](#build-step-30-the-entrance-randomizers-room-swap-whole-rooms-trade-places-experimental), Decoupled
-  [31](#build-step-31-the-entrance-randomizers-decoupled-each-door-one-way-experimental), connection plando
+  [31](#build-step-31-the-entrance-randomizers-decoupled-each-door-one-way-experimental), Map Shuffle
+  [107](#build-step-107-map-shuffle-doors-that-match-sides-experimental), connection plando
   [32](#build-step-32-the-entrance-randomizers-connection-plando-doors-pinned-in-the-yaml), one-way doors (the fog maze)
   [38](#build-step-38-one-way-doors-in-the-entrance-randomizer-the-forsaken-lands-fog-maze); in the game, the mod
   guide's [13](documentation.md#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
@@ -180,6 +181,7 @@ this file and that doc disagree, that doc is right.
 104. [Build step 104: harder ways shown in Universal Tracker as glitched logic](#build-step-104-harder-ways-shown-in-universal-tracker-as-glitched-logic)
 105. [Build step 105: each door's entrance named where it is](#build-step-105-each-doors-entrance-named-where-it-is)
 106. [Build step 106: the PopTracker pack's releases, updates through versions.json](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson)
+107. [Build step 107: Map Shuffle, doors that match sides (experimental)](#build-step-107-map-shuffle-doors-that-match-sides-experimental)
 
 **How it works**
 
@@ -956,8 +958,8 @@ be wrong.
     a setting of its own as well, still telling what a door is with the box off. With it, a
     check: whether any one-way's way back needs something the default options don't give early, where the Warp isn't
     forced (`QualityOfLife.WarpOn`: a random start, door shuffle, Shuffle Jump, ability items or Points of No Return).
-78. **Map Shuffle: a door shuffle that keeps the map making sense, an idea** (asked 2026-10-13, not decided; the name
-    picked the same day):
+78. **Map Shuffle: a door shuffle that keeps the map making sense** (asked 2026-10-13, the name picked the same day;
+    built the same evening, build step 107; what follows is the idea as first written):
     Room Swap keeps the game's own map shape and moves rooms within it; Coupled makes a new shape where any door leads
     to any other. A third mode: a new shape whose doors still match sides, a door on a room's right edge always into
     another's left edge, up into down, so going right keeps going right. Archipelago's own way: its randomizer's
@@ -7307,6 +7309,49 @@ list.
 
 *Code: the pack: `tools/release.py`, `.github/workflows/release.yml`, `.gitattributes`, `tools/test.ps1`,
 `tests/test_release.py`.*
+
+## Build step 107: Map Shuffle, doors that match sides (experimental)
+
+**Why:** Room Swap keeps the game's map and moves rooms within it; Coupled makes a new web where any door leads to any
+other, so walking right can bring you in from a room's right edge. Map Shuffle (Next 78, built 2026-10-13) is a new web
+that still reads like a map: a door on a room's right edge leads in through another room's left edge, up into down.
+
+**How it was built**, Archipelago's own way (`docs/entrance randomization.md` at 0.6.8, "Implementing grouping", the
+"Directional matching" recipe):
+
+1. **Each door's edge of its room, from the game's data.** `door-graph.py --export` now writes a `side` on each end of
+   every two-way connection in `doors.json`: the way from where the door's way back lands the party to the door, as the
+   room is seen (+x right, +z up, as the PopTracker pack's room pictures put them, seen on screen 2026-10-13). Mostly up
+   or down (a ladder, a well): `other`. Before adding it, the export was rerun on the same EntityDump and came out
+   byte for byte the same, so the new field is the only change. Counted (`MEASURED.md`, "Each door's edge"): 139 left,
+   132 right, 128 down, 114 up, 3 other; in 211 of the 258 pairs the two ends face each other in the game, and in 47
+   they don't (walking down out of one room, you come into the next from its left).
+2. **A new Entrance Randomizer value,** `map_shuffle` (4; the others keep their numbers, which slot_data sends). It is
+   Coupled with groups: `_split` puts each two-way door in its edge's `randomization_group` before splitting (the target
+   Archipelago makes copies the group), and `_randomize` calls `randomize_entrances` with `MAP_SHUFFLE_GROUPS` and
+   `preserve_group_order=True`: each edge takes the opposite edge first, then a door with no edge, then the other two,
+   its own last. One-way doors stay in group 0, among themselves, as with Coupled.
+3. **Why the fallbacks:** the edges don't balance (seven more left than right, fourteen more down than up), so strict
+   pairs would leave doors with nothing to take and fail every seed. In the recipe's order a door matches whenever the
+   randomizer finds a match it can use, and only the leftovers take another edge.
+4. **Everything else follows Coupled:** plando connections apply (both ways), Filler Starting Checks stands down as it
+   does for Coupled, Universal Tracker and the spoiler treat it as coupled, the mod needs nothing new (it reads only
+   `door_targets`).
+
+**Tests** (`test_doors.py`): `TestDoorsMapShuffle` runs the Coupled and one-way tests on it, plus: over 85% of a seed's
+two-way doors lead into the opposite edge (about 25% by chance, so it fails without the groups), and each edge's first
+choice is its opposite with every group reachable. `TestDoorSides`: every shuffled door has an edge, fewer than ten
+none. **Measured** (2026-10-13, full generation through `generate_like_main`): 800 of 800 seeds generated (300 default,
+300 with a random start, 200 with a random start, Jump and moves shuffled and minimal accessibility), 90% of two-way
+doors matched in each set. Found on the way, build step 105's: a test naming a one-way's story copy through
+`door_name` (copies have no entrance name: now `game_door_name`), a positional `DoorEnd(...)` in the names test, and
+the deadlock test's seed, which no longer ran out after the rename reordered Archipelago's sorted doors (seed 22 now).
+
+**Status:** built (2026-10-13), tests passing, the full suite and both fuzzers run before the push; not yet seen in
+game.
+
+*Code: `dev-scripts/door-graph.py` (`side`), `data/doors.json`, `data_types.py` (`DoorEnd.side`), `options.py`
+(`option_map_shuffle`), `entrances.py` (`MAP_SHUFFLE_GROUPS`, `_split`, `_randomize`), `world.py`.*
 
 # How it works
 

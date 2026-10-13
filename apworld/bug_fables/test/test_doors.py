@@ -19,12 +19,13 @@ from ..data_tables import (
     current_name,
     door_name,
     door_region,
+    game_door_name,
     landing_region,
     one_way_landing,
     room_name,
 )
 from ..data_types import DoorConnection, DoorEnd
-from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
+from ..entrances import MAP_SHUFFLE_GROUPS, _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
 from ..regions import MENU
 from ..world import BugFablesWorld
@@ -175,7 +176,7 @@ class DoorPairTests:
         for w in ONE_WAYS:
             entrance = self.multiworld.get_entrance(door_name(w.map, w.door), self.player)
             for name in (w.door, *w.copies):
-                with self.subTest(door=door_name(w.map, name)):
+                with self.subTest(door=game_door_name(w.map, name)):
                     self.assertEqual(lands[(w.map, name)], entrance.connected_region.name)
 
     def test_the_room_above_the_kitchen_stove_stays(self) -> None:
@@ -249,6 +250,39 @@ class TestDoorsOffByDefault(BugFablesTestBase):
 
 class TestDoorsCoupled(OneWayTests, CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "coupled"}
+
+
+OPPOSITE = {"left": "right", "right": "left", "up": "down", "down": "up"}
+
+
+class TestDoorsMapShuffle(OneWayTests, CoupledTests, BugFablesTestBase):
+    options = {"entrance_randomizer": "map_shuffle"}
+
+    def test_doors_lead_into_the_opposite_edge(self) -> None:
+        # Walking out of a room's right edge comes in at another's left; only the doors the edges' counts leave over
+        # take another edge (more left doors than right, more down than up: 91% matched on 3 seeds, 2026-10-13).
+        side = {(e.map, e.door): e.side for c in SHUFFLED_CONNECTIONS for e in (c.a, c.b)}
+        pairs = [(x, y) for x, y in self.world.door_pairings if x in side and y in side]
+        matched = sum(side[y] == OPPOSITE.get(side[x]) for x, y in pairs)
+        self.assertGreater(matched / len(pairs), 0.85)
+
+    def test_every_edge_can_take_every_other(self) -> None:
+        # Its first choice the opposite edge, and no door left without a match when the edges don't balance.
+        sides = {1: "left", 2: "right", 3: "up", 4: "down"}
+        group = {name: number for number, name in sides.items()}
+        for number, name in sides.items():
+            with self.subTest(side=name):
+                self.assertEqual(MAP_SHUFFLE_GROUPS[number][0], group[OPPOSITE[name]])
+                self.assertEqual(sorted(MAP_SHUFFLE_GROUPS[number]), [1, 2, 3, 4, 5])
+        self.assertEqual(MAP_SHUFFLE_GROUPS[0], [0])
+
+
+class TestDoorSides(TestCase):
+    def test_every_shuffled_door_has_an_edge(self) -> None:
+        sides = Counter(e.side for c in SHUFFLED_CONNECTIONS for e in (c.a, c.b))
+        self.assertLessEqual(set(sides), {"left", "right", "up", "down", "other"})
+        # Most doors sit at a room's edge; a ladder or a well has none.
+        self.assertLess(sides["other"], 10)
 
 
 class TestDoorsDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
@@ -406,7 +440,8 @@ class TestDoorShuffleRetries(TestCase):
     doors a failure left waiting pinned where the game has them (build step 95)."""
 
     # A failing fuzzer yaml's options (2026-10-13, yaml 1905: its one draw ran out of spare doors, 52 dead ends, all
-    # real), the start off so a spawn picked again can't move the draws; seed 9 runs out on a draw (found the same day).
+    # real), the start off so a spawn picked again can't move the draws; seed 22 runs out on a draw (since the doors'
+    # names of build step 105).
     DEADLOCKED = {"progression_balancing": 13, "accessibility": "full", "artifacts_required": 6,
                   "artifact_shuffle": "vanilla", "shuffle_quests": False, "shuffle_crystal_berries": False,
                   "shuffle_discoveries": True, "shuffle_hidden_items": True, "shuffle_dig_spots": False,
@@ -419,7 +454,7 @@ class TestDoorShuffleRetries(TestCase):
 
     def test_a_deadlock_generates(self) -> None:
         with self.assertLogs(level="INFO") as logs:
-            world = generate_like_main(self.DEADLOCKED, seed=9, steps=THROUGH_DOORS)
+            world = generate_like_main(self.DEADLOCKED, seed=22, steps=THROUGH_DOORS)
         self.assertTrue(any("ran out of spare doors on a draw" in line for line in logs.output))
         _assert_whole(self, world)
 
@@ -512,13 +547,14 @@ class _Randomizer:
         self.failures, self.at_once = failures, at_once
         self.graphs: list[set[tuple[str, str, str | None]]] = []
 
-    def randomize(self, world: BugFablesWorld, coupled: bool, target_group_lookup: dict[int, list[int]]) -> Any:
+    def randomize(self, world: BugFablesWorld, coupled: bool, target_group_lookup: dict[int, list[int]],
+                  preserve_group_order: bool = False) -> Any:
         self.graphs.append(_graph(world))
         if len(self.graphs) > self.failures:
-            return randomize_entrances(world, coupled, target_group_lookup)
+            return randomize_entrances(world, coupled, target_group_lookup, preserve_group_order)
         if self.at_once:
             raise EntranceRandomizationError(RAN_OUT)
-        return randomize_entrances(world, coupled, target_group_lookup, on_connect=_run_out)
+        return randomize_entrances(world, coupled, target_group_lookup, preserve_group_order, on_connect=_run_out)
 
     def run(self, build: Callable[[], Any], start_check: bool = False) -> Any:
         """build() with this randomizer in place, and the start's bar at 0 unless the start check is asked for, as its
@@ -722,7 +758,7 @@ class TestDoorNames(TestCase):
 
     def test_each_names_its_room_and_where_it_leads(self) -> None:
         ends = [(end, other.map) for c in DOORS.connections for end, other in ((c.a, c.b), (c.b, c.a))]
-        ends += [(DoorEnd(w.map, w.door), w.to) for w in ONE_WAYS]
+        ends += [(DoorEnd(map=w.map, door=w.door), w.to) for w in ONE_WAYS]
         for end, to in ends:
             name = door_name(end.map, end.door)
             with self.subTest(door=name):

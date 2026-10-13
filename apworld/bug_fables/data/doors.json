@@ -4,2581 +4,3097 @@
   {
    "a": {
     "map": "NearSnakemouth",
-    "door": "loadingzonefields"
+    "door": "loadingzonefields",
+    "side": "left"
    },
    "b": {
     "map": "BugariaOutskitsSnakemouthCorridor1",
-    "door": "DoorSnakemouth"
+    "door": "DoorSnakemouth",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "NearSnakemouth",
-    "door": "loading zone cave"
+    "door": "loading zone cave",
+    "side": "down"
    },
    "b": {
     "map": "BugariaOutskirtsSnakemouthCorridor2",
-    "door": "DoorMap1"
+    "door": "DoorMap1",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "NearSnakemouth",
-    "door": "loadingzonechuck"
+    "door": "loadingzonechuck",
+    "side": "up"
    },
    "b": {
     "map": "ChucksAbode",
-    "door": "Warp"
+    "door": "Warp",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "OutsideSnakemouth",
-    "door": "loading zone outside"
+    "door": "loading zone outside",
+    "side": "left"
    },
    "b": {
     "map": "BugariaOutskirtsSnakemouthCorridor2",
-    "door": "DoorSnakemouth"
+    "door": "DoorSnakemouth",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "OutsideSnakemouth",
-    "door": "LoadingZoneInside"
+    "door": "LoadingZoneInside",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthBridgeRoom",
-    "door": "DoorOutside"
+    "door": "DoorOutside",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "AntTunnels",
-    "door": "LoadZoneMain"
+    "door": "LoadZoneMain",
+    "side": "up"
    },
    "b": {
     "map": "AntPalace1",
-    "door": "MineLoadZone"
+    "door": "MineLoadZone",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "AntTunnels",
-    "door": "door break room"
+    "door": "door break room",
+    "side": "down"
    },
    "b": {
     "map": "AntMinesBreakRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertEntrance",
-    "door": "WarpBookZone"
+    "door": "WarpBookZone",
+    "side": "down"
    },
    "b": {
     "map": "DesertBookArea",
-    "door": "WarpEntrance"
+    "door": "WarpEntrance",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertEntrance",
-    "door": "WarpHideout"
+    "door": "WarpHideout",
+    "side": "left"
    },
    "b": {
     "map": "DesertBadlands",
-    "door": "WarpEntrance"
+    "door": "WarpEntrance",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertEntrance",
-    "door": "WarpTrenchSouth"
+    "door": "WarpTrenchSouth",
+    "side": "right"
    },
    "b": {
     "map": "DesertTrenchSouth",
-    "door": "WarpEntrance"
+    "door": "WarpEntrance",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertEntrance",
-    "door": "loadzone outskirts"
+    "door": "loadzone outskirts",
+    "side": "up"
    },
    "b": {
     "map": "BOLostSandsEntrance",
-    "door": "load zone north"
+    "door": "load zone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertEntrance",
-    "door": "loadzone mountain"
+    "door": "loadzone mountain",
+    "side": "right"
    },
    "b": {
     "map": "DesertTrenchMiddle",
-    "door": "loadzone entrance"
+    "door": "loadzone entrance",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertBadlands",
-    "door": "WarpPuzzle"
+    "door": "WarpPuzzle",
+    "side": "down"
    },
    "b": {
     "map": "DesertRockFormation",
-    "door": "WarpHideout"
+    "door": "WarpHideout",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertBadlands",
-    "door": "loadzone hideout"
+    "door": "loadzone hideout",
+    "side": "down"
    },
    "b": {
     "map": "HideoutEntrance",
-    "door": "loadzone outside"
+    "door": "loadzone outside",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertBookArea",
-    "door": "WarpPuzzle"
+    "door": "WarpPuzzle",
+    "side": "left"
    },
    "b": {
     "map": "DesertRockFormation",
-    "door": "WarpBook"
+    "door": "WarpBook",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertBookArea",
-    "door": "warp north"
+    "door": "warp north",
+    "side": "down"
    },
    "b": {
     "map": "DesertSandPitArea",
-    "door": "loadzone book area"
+    "door": "loadzone book area",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertBookArea",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    },
    "b": {
     "map": "DesertTrenchMiddle",
-    "door": "loadzone book"
+    "door": "loadzone book",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertRockFormation",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    },
    "b": {
     "map": "DesertEastmost",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertTrenchSouth",
-    "door": "loadzone north1"
+    "door": "loadzone north1",
+    "side": "down"
    },
    "b": {
     "map": "DesertTrenchMiddle",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertTrenchSouth",
-    "door": "loadzone north2"
+    "door": "loadzone north2",
+    "side": "down"
    },
    "b": {
     "map": "DesertTrenchMiddle",
-    "door": "loadzone south2"
+    "door": "loadzone south2",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertTrenchSouth",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    },
    "b": {
     "map": "DesertSouthern",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BugariaMainPlaza",
-    "door": "LoadingZoneCommercial"
+    "door": "LoadingZoneCommercial",
+    "side": "right"
    },
    "b": {
     "map": "BugariaCommercial",
-    "door": "DoorPlaza"
+    "door": "DoorPlaza",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BugariaMainPlaza",
-    "door": "loadingzoneexit"
+    "door": "loadingzoneexit",
+    "side": "up"
    },
    "b": {
     "map": "BugariaOutskirtsOutsideCity",
-    "door": "DoorBugaria"
+    "door": "DoorBugaria",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BugariaMainPlaza",
-    "door": "loadingzone theater"
+    "door": "loadingzone theater",
+    "side": "left"
    },
    "b": {
     "map": "BugariaTheater",
-    "door": "LoadingZone"
+    "door": "LoadingZone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BugariaMainPlaza",
-    "door": "LoadingZoneResidential"
+    "door": "LoadingZoneResidential",
+    "side": "left"
    },
    "b": {
     "map": "BugariaResidential",
-    "door": "LoadingZoneMain"
+    "door": "LoadingZoneMain",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BugariaMainPlaza",
-    "door": "loadzone palace"
+    "door": "loadzone palace",
+    "side": "down"
    },
    "b": {
     "map": "AntBridge",
-    "door": "loadzoneplaza"
+    "door": "loadzoneplaza",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BugariaCommercial",
-    "door": "LoadingZoneResidential"
+    "door": "LoadingZoneResidential",
+    "side": "right"
    },
    "b": {
     "map": "BugariaResidential",
-    "door": "LoadingZoneCommercial"
+    "door": "LoadingZoneCommercial",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SnakemouthBridgeRoom",
-    "door": "LoadingZoneDoorRoom"
+    "door": "LoadingZoneDoorRoom",
+    "side": "right"
    },
    "b": {
     "map": "SnakemouthDoorRoom",
-    "door": "LoadingZoneBridge"
+    "door": "LoadingZoneBridge",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SnakemouthDoorRoom",
-    "door": "DoorLoadZone"
+    "door": "DoorLoadZone",
+    "side": "down"
    },
    "b": {
     "map": "UpperSnekEntrance",
-    "door": "door south"
+    "door": "door south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SnakemouthDoorRoom",
-    "door": "LoadZoneFallRoom"
+    "door": "LoadZoneFallRoom",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthFallRoom",
-    "door": "LoadingZoneDoorRoom"
+    "door": "LoadingZoneDoorRoom",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SnakemouthDoorRoom",
-    "door": "New Entity16"
+    "door": "New Entity16",
+    "side": "right"
    },
    "b": {
     "map": "SnakemouthTop",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SnakemouthFallRoom",
-    "door": "DoorLakeRoom"
+    "door": "DoorLakeRoom",
+    "side": "right"
    },
    "b": {
     "map": "SnakemouthLake",
-    "door": "DoorFallRoom"
+    "door": "DoorFallRoom",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SnakemouthLake",
-    "door": "WarpMap5"
+    "door": "WarpMap5",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthUndergrondDoor",
-    "door": "WarpLake"
+    "door": "WarpLake",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BugariaOutskirtsOutsideCity",
-    "door": "DoorSnakemouth"
+    "door": "DoorSnakemouth",
+    "side": "right"
    },
    "b": {
     "map": "BugariaOutskitsSnakemouthCorridor1",
-    "door": "DoorMainArea"
+    "door": "DoorMainArea",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BugariaOutskirtsOutsideCity",
-    "door": "LoadZoneGoldenPath"
+    "door": "LoadZoneGoldenPath",
+    "side": "up"
    },
    "b": {
     "map": "BOGoldenPath",
-    "door": "LoadZoneBugaria"
+    "door": "LoadZoneBugaria",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BugariaOutskirtsOutsideCity",
-    "door": "loadzone east"
+    "door": "loadzone east",
+    "side": "left"
    },
    "b": {
     "map": "BugariaOutskirtsEast1",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BugariaOutskitsSnakemouthCorridor1",
-    "door": "loadzonehaven"
+    "door": "loadzonehaven",
+    "side": "down"
    },
    "b": {
     "map": "SeedlingHaven",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergrondDoor",
-    "door": "WarpPit"
+    "door": "WarpPit",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthMushroomPit",
-    "door": "WarpDoorRoom"
+    "door": "WarpDoorRoom",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergrondDoor",
-    "door": "LoadingRightDown"
+    "door": "LoadingRightDown",
+    "side": "left"
    },
    "b": {
     "map": "SnakemouthUndergroundRightA",
-    "door": "LoadingZoneLeft"
+    "door": "LoadingZoneLeft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergrondDoor",
-    "door": "WarpRightUp"
+    "door": "WarpRightUp",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthUndergroundRightB",
-    "door": "DoorMainRoom"
+    "door": "DoorMainRoom",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergrondDoor",
-    "door": "WarpLeft"
+    "door": "WarpLeft",
+    "side": "right"
    },
    "b": {
     "map": "SnakemouthUndergroundLeftA",
-    "door": "LoadingZoneDoor"
+    "door": "LoadingZoneDoor",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergrondDoor",
-    "door": "WarpLeftUp"
+    "door": "WarpLeftUp",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthUndergroundLeftB",
-    "door": "LoadingZoneDoor"
+    "door": "LoadingZoneDoor",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SnakemouthMushroomPit",
-    "door": "LoadingTreasure"
+    "door": "LoadingTreasure",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthTreasureRoom",
-    "door": "LoadingMushroom"
+    "door": "LoadingMushroom",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergroundRightA",
-    "door": "WarpNext"
+    "door": "WarpNext",
+    "side": "down"
    },
    "b": {
     "map": "SnakemouthUndergroundRightB",
-    "door": "DoorMapA"
+    "door": "DoorMapA",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SnakemouthUndergroundLeftA",
-    "door": "LoadingZoneNext"
+    "door": "LoadingZoneNext",
+    "side": "right"
    },
    "b": {
     "map": "SnakemouthUndergroundLeftB",
-    "door": "LoadingZoneLow"
+    "door": "LoadingZoneLow",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsCableCar",
-    "door": "loadzonetunnel"
+    "door": "loadzonetunnel",
+    "side": "left"
    },
    "b": {
     "map": "GoldenPathTunnel",
-    "door": "loadzonegoldenhills"
+    "door": "loadzonegoldenhills",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "GoldenHillsCableCar",
-    "door": "loadzonepath"
+    "door": "loadzonepath",
+    "side": "right"
    },
    "b": {
     "map": "GoldenHillsPath2",
-    "door": "LoadZoneCable"
+    "door": "LoadZoneCable",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "AntPalace1",
-    "door": "loadzone plaza"
+    "door": "loadzone plaza",
+    "side": "up"
    },
    "b": {
     "map": "AntBridge",
-    "door": "loadzonepalace"
+    "door": "loadzonepalace",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "AntPalace1",
-    "door": "Loadzonethrone"
+    "door": "Loadzonethrone",
+    "side": "down"
    },
    "b": {
     "map": "AntPalace2",
-    "door": "loadzonehall"
+    "door": "loadzonehall",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "AntPalace1",
-    "door": "Loadzonelibrary"
+    "door": "Loadzonelibrary",
+    "side": "right"
    },
    "b": {
     "map": "AntPalaceLibrary",
-    "door": "LoadZone"
+    "door": "LoadZone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "AntPalace1",
-    "door": "loadzonewarroom"
+    "door": "loadzonewarroom",
+    "side": "left"
    },
    "b": {
     "map": "AntPalaceWarRoom",
-    "door": "LoadZone - Duplicate"
+    "door": "LoadZone - Duplicate",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenPathTunnel",
-    "door": "loadzonefields"
+    "door": "loadzonefields",
+    "side": "up"
    },
    "b": {
     "map": "BOGoldenPath",
-    "door": "Loadzonetunnel"
+    "door": "Loadzonetunnel",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "GoldenPathTunnel",
-    "door": "loadzonebarrenlands"
+    "door": "loadzonebarrenlands",
+    "side": "up"
    },
    "b": {
     "map": "BarrenLandsEntrance",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "GoldenPathTunnel",
-    "door": "loadzonegpt2"
+    "door": "loadzonegpt2",
+    "side": "right"
    },
    "b": {
     "map": "GoldenPathTunnel2",
-    "door": "loadzonebarrenlands - Duplicate#9"
+    "door": "loadzonebarrenlands - Duplicate#9",
+    "side": "other"
    }
   },
   {
    "a": {
     "map": "BOGoldenPath",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "right"
    },
    "b": {
     "map": "HermitCave",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsPath2",
-    "door": "loadzonesettlement"
+    "door": "loadzonesettlement",
+    "side": "right"
    },
    "b": {
     "map": "GoldenHillsPath3",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsPath2",
-    "door": "loadzonepitcherarea"
+    "door": "loadzonepitcherarea",
+    "side": "down"
    },
    "b": {
     "map": "GoldenPitcher1",
-    "door": "Loadzonedown"
+    "door": "Loadzonedown",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenSettlementEntrance",
-    "door": "loadzonepath"
+    "door": "loadzonepath",
+    "side": "left"
    },
    "b": {
     "map": "GoldenHillsPath3",
-    "door": "loadzonesettlement"
+    "door": "loadzonesettlement",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GoldenSettlementEntrance",
-    "door": "loadzone desert"
+    "door": "loadzone desert",
+    "side": "down"
    },
    "b": {
     "map": "DesertBeforeGH",
-    "door": "loadzonegh"
+    "door": "loadzonegh",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenSettlementEntrance",
-    "door": "loadzone minigame"
+    "door": "loadzone minigame",
+    "side": "up"
    },
    "b": {
     "map": "GoldenSMinigame",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenSettlement1",
-    "door": "loadzone dungeon"
+    "door": "loadzone dungeon",
+    "side": "down"
    },
    "b": {
     "map": "GoldenHillsDungeonEntrance",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenSettlement2",
-    "door": "loadzonepp"
+    "door": "loadzonepp",
+    "side": "right"
    },
    "b": {
     "map": "PowerPlant",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsPath3",
-    "door": "loadzonechomper"
+    "door": "loadzonechomper",
+    "side": "other"
    },
    "b": {
     "map": "ChomperCave1",
-    "door": "loadzone outside"
+    "door": "loadzone outside",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonEntrance",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    },
    "b": {
     "map": "GoldenHillsDungeonLeftMain",
-    "door": "load zone main room"
+    "door": "load zone main room",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonEntrance",
-    "door": "loadzone topright"
+    "door": "loadzone topright",
+    "side": "down"
    },
    "b": {
     "map": "GoldenHillsDungeonRightCrank",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonEntrance",
-    "door": "loadzonelowright"
+    "door": "loadzonelowright",
+    "side": "left"
    },
    "b": {
     "map": "GoldenHillsLowerRightCrank",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonLeftMain",
-    "door": "loadzonecrankleft"
+    "door": "loadzonecrankleft",
+    "side": "right"
    },
    "b": {
     "map": "GoldenHillsDungeonCrankLeft",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonLeftMain",
-    "door": "load zone crank half"
+    "door": "load zone crank half",
+    "side": "down"
    },
    "b": {
     "map": "GoldenHillsDungeonLeftCrankHalf",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonUpperMain",
-    "door": "loadzonelow"
+    "door": "loadzonelow",
+    "side": "left"
    },
    "b": {
     "map": "GoldenHillsDungeonUpperSide",
-    "door": "loadzonelow"
+    "door": "loadzonelow",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonUpperMain",
-    "door": "loadzonehigh"
+    "door": "loadzonehigh",
+    "side": "left"
    },
    "b": {
     "map": "GoldenHillsDungeonUpperSide",
-    "door": "loadzonehigh"
+    "door": "loadzonehigh",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GoldenHillsDungeonUpperMain",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "down"
    },
    "b": {
     "map": "GoldenHillsDungeonBoss",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BugariaPier",
-    "door": "loadzone bugaria"
+    "door": "loadzone bugaria",
+    "side": "right"
    },
    "b": {
     "map": "BugariaOutskirtsEast2",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BugariaOutskirtsEast1",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    },
    "b": {
     "map": "BugariaOutskirtsEast2",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BugariaOutskirtsEast1",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "down"
    },
    "b": {
     "map": "CaveOfTrials",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BugariaOutskirtsEast2",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    },
    "b": {
     "map": "BOLostSandsEntrance",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DefiantRoot1",
-    "door": "loadzone well"
+    "door": "loadzone well",
+    "side": "up"
    },
    "b": {
     "map": "DefiantRootWell",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "other"
    }
   },
   {
    "a": {
     "map": "DefiantRoot1",
-    "door": "loadzoneelevator"
+    "door": "loadzoneelevator",
+    "side": "right"
    },
    "b": {
     "map": "DefiantRoot2",
-    "door": "loadzonemainarea"
+    "door": "loadzonemainarea",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DefiantRoot1",
-    "door": "loadzonecommercial"
+    "door": "loadzonecommercial",
+    "side": "down"
    },
    "b": {
     "map": "DefiantRoot3",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DefiantRoot1",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "left"
    },
    "b": {
     "map": "DesertDREastEntrance",
-    "door": "loadzoneDR"
+    "door": "loadzoneDR",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DefiantRootWell",
-    "door": "loadzonehideout"
+    "door": "loadzonehideout",
+    "side": "down"
    },
    "b": {
     "map": "HideoutGarden",
-    "door": "loadzone well"
+    "door": "loadzone well",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DefiantRoot2",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    },
    "b": {
     "map": "DesertDRSouthEntrance",
-    "door": "loadzone dr"
+    "door": "loadzone dr",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BeehiveOutside",
-    "door": "loadzone inside factory side"
+    "door": "loadzone inside factory side",
+    "side": "left"
    },
    "b": {
     "map": "BeehiveMainArea",
-    "door": "loadzoneoutside - Duplicate - Duplicate"
+    "door": "loadzoneoutside - Duplicate - Duplicate",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BeehiveOutside",
-    "door": "loadzone factory"
+    "door": "loadzone factory",
+    "side": "right"
    },
    "b": {
     "map": "HoneyFactoryEntrance",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BeehiveThroneRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    },
    "b": {
     "map": "BeehiveMainArea",
-    "door": "loadzone throne"
+    "door": "loadzone throne",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BeehiveMainArea",
-    "door": "loadzonehb"
+    "door": "loadzonehb",
+    "side": "up"
    },
    "b": {
     "map": "HBsLab",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BeehiveMainArea",
-    "door": "loadzone balcony"
+    "door": "loadzone balcony",
+    "side": "left"
    },
    "b": {
     "map": "BeehiveBalcony",
-    "door": "laodzone"
+    "door": "laodzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BeehiveMainArea",
-    "door": "loadzonehonyecomb"
+    "door": "loadzonehonyecomb",
+    "side": "right"
    },
    "b": {
     "map": "HoneycombsLab",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BeehiveMainArea",
-    "door": "loadzonejaune"
+    "door": "loadzonejaune",
+    "side": "up"
    },
    "b": {
     "map": "JaunesGallery",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "HoneyFactoryEntrance",
-    "door": "loadzoneoffice"
+    "door": "loadzoneoffice",
+    "side": "left"
    },
    "b": {
     "map": "HoneyFactoryWorkerRooms",
-    "door": "loadzoneoffice"
+    "door": "loadzoneoffice",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "HoneyFactoryEntrance",
-    "door": "loadzonesleep"
+    "door": "loadzonesleep",
+    "side": "right"
    },
    "b": {
     "map": "HoneyFactoryWorkerRooms",
-    "door": "loadzonebeds"
+    "door": "loadzonebeds",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "HoneyFactoryEntrance",
-    "door": "looadzonecore"
+    "door": "looadzonecore",
+    "side": "down"
    },
    "b": {
     "map": "HoneyFactoryCore",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "HoneyFactoryEntrance",
-    "door": "loadzone processing"
+    "door": "loadzone processing",
+    "side": "right"
    },
    "b": {
     "map": "FactoryProcessingFirstRoom",
-    "door": "loadzonemainarea"
+    "door": "loadzonemainarea",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "HoneyFactoryEntrance",
-    "door": "loadzonestorage"
+    "door": "loadzonestorage",
+    "side": "right"
    },
    "b": {
     "map": "FactoryStorageElevator",
-    "door": "loadzonetop"
+    "door": "loadzonetop",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertDREastEntrance",
-    "door": "loadzoneFG"
+    "door": "loadzoneFG",
+    "side": "left"
    },
    "b": {
     "map": "DesertFGBorder",
-    "door": "loadzone desert"
+    "door": "loadzone desert",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertDREastEntrance",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "DesertBadgeAlcove",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertFGBorder",
-    "door": "loadzonefg"
+    "door": "loadzonefg",
+    "side": "down"
    },
    "b": {
     "map": "FarGrasslands1",
-    "door": "loadzonedesert"
+    "door": "loadzonedesert",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertDRSouthEntrance",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "DesertOasisEntrance",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertDRSouthEntrance",
-    "door": "loadzone side"
+    "door": "loadzone side",
+    "side": "left"
    },
    "b": {
     "map": "DesertJumpPuzzle",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertBadgeAlcove",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "DesertCaravanMap",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertBadgeAlcove",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    },
    "b": {
     "map": "DesertJumpPuzzle",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertCaravanMap",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "DesertSandPitArea",
-    "door": "loadzone caravan area"
+    "door": "loadzone caravan area",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertSandPitArea",
-    "door": "loadzone mountain"
+    "door": "loadzone mountain",
+    "side": "right"
    },
    "b": {
     "map": "DesertMountain",
-    "door": "loadzone side"
+    "door": "loadzone side",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertSandPitArea",
-    "door": "loadzone scorpion"
+    "door": "loadzone scorpion",
+    "side": "down"
    },
    "b": {
     "map": "DesertScorpion",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertSandPitArea",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    },
    "b": {
     "map": "DesertEastmost",
-    "door": "loadzone side"
+    "door": "loadzone side",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertBeforeGH",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    },
    "b": {
     "map": "DesertWestDunes",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertBeforeGH",
-    "door": "loadzone side"
+    "door": "loadzone side",
+    "side": "left"
    },
    "b": {
     "map": "DesertSouthern",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "FactoryProcessingFirstRoom",
-    "door": "loadzoneforward"
+    "door": "loadzoneforward",
+    "side": "right"
    },
    "b": {
     "map": "FactoryProcessing2",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FactoryProcessing2",
-    "door": "loadzone pump"
+    "door": "loadzone pump",
+    "side": "right"
    },
    "b": {
     "map": "FactoryProcessingPump",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FactoryProcessingPump",
-    "door": "loadzonepuzzle1"
+    "door": "loadzonepuzzle1",
+    "side": "down"
    },
    "b": {
     "map": "FactoryProcessingPuzzle1",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FactoryProcessingPump",
-    "door": "loadzonepuzzle2"
+    "door": "loadzonepuzzle2",
+    "side": "down"
    },
    "b": {
     "map": "FactoryProcessingPuzzle2",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FactoryProcessingPump",
-    "door": "loadzonepuzzle3"
+    "door": "loadzonepuzzle3",
+    "side": "right"
    },
    "b": {
     "map": "FactoryProcessingPuzzle3",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FactoryProcessingPump",
-    "door": "loadzonemalbee"
+    "door": "loadzonemalbee",
+    "side": "right"
    },
    "b": {
     "map": "FactoryProcessingMalbee",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FactoryStorageMaze",
-    "door": "loadzoneelevator"
+    "door": "loadzoneelevator",
+    "side": "left"
    },
    "b": {
     "map": "FactoryStorageElevator",
-    "door": "loadzonebottom"
+    "door": "loadzonebottom",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "FactoryStorageMaze",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "up"
    },
    "b": {
     "map": "FactoryStorageMiniboss",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "FactoryStorageMaze",
-    "door": "loadzoneos"
+    "door": "loadzoneos",
+    "side": "down"
    },
    "b": {
     "map": "FactoryStorageOverseer",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "MetalIsland1",
-    "door": "loadzone hotel"
+    "door": "loadzone hotel",
+    "side": "down"
    },
    "b": {
     "map": "MetalIsland2",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertRoachVillage",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    },
    "b": {
     "map": "DesertOasis",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertRoachVillage",
-    "door": "loadzone side"
+    "door": "loadzone side",
+    "side": "left"
    },
    "b": {
     "map": "DesertTrenchMiddle",
-    "door": "loadzone village"
+    "door": "loadzone village",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertRoachVillage",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "DesertSouthern",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertOasis",
-    "door": "loadzoneside"
+    "door": "loadzoneside",
+    "side": "right"
    },
    "b": {
     "map": "DesertOasisEntrance",
-    "door": "loadzoneside"
+    "door": "loadzoneside",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "DesertOasis",
-    "door": "loadzone cave"
+    "door": "loadzone cave",
+    "side": "left"
    },
    "b": {
     "map": "StreamMountain3",
-    "door": "loadzone exit"
+    "door": "loadzone exit",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertOasisEntrance",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "DesertWestDunes",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "HideoutEntrance",
-    "door": "loadzone below"
+    "door": "loadzone below",
+    "side": "down"
    },
    "b": {
     "map": "HideoutStairsRoom",
-    "door": "loadzoneup"
+    "door": "loadzoneup",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "HideoutCell",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    },
    "b": {
     "map": "HideoutCentralRoom",
-    "door": "loadzonecell"
+    "door": "loadzonecell",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "HideoutCentralRoom",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "HideoutLeftA",
-    "door": "loadzone righr"
+    "door": "loadzone righr",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "HideoutCentralRoom",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "HideoutStairsRoom",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "HideoutCentralRoom",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    },
    "b": {
     "map": "HideoutRightA",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "HideoutLeftA",
-    "door": "loadzone garden"
+    "door": "loadzone garden",
+    "side": "right"
    },
    "b": {
     "map": "HideoutGarden",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "HideoutGarden",
-    "door": "loadzonestorage"
+    "door": "loadzonestorage",
+    "side": "down"
    },
    "b": {
     "map": "HideoutWestStorage",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertSandCastle",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    },
    "b": {
     "map": "DesertScorpion",
-    "door": "loadzone castle"
+    "door": "loadzone castle",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertSandCastle",
-    "door": "loadzone castle"
+    "door": "loadzone castle",
+    "side": "down"
    },
    "b": {
     "map": "SandCastleEntrance",
-    "door": "loadzone exit"
+    "door": "loadzone exit",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "DesertMountain",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "DesertTrenchMiddle",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "DesertMountain",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "down"
    },
    "b": {
     "map": "StreamMountain1",
-    "door": "loadzonedesert"
+    "door": "loadzonedesert",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "DesertScorpion",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "DesertEastmost",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "SandCastleEntrance",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzoneentrance"
+    "door": "loadzoneentrance",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SandCastleSlidePuzzle",
-    "door": "loadzoneleftbelow"
+    "door": "loadzoneleftbelow",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzoneslidebelow"
+    "door": "loadzoneslidebelow",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SandCastleSlidePuzzle",
-    "door": "loadzoneleftup"
+    "door": "loadzoneleftup",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzoneslideup"
+    "door": "loadzoneslideup",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SandCastleSlidePuzzle",
-    "door": "loadzonepressure"
+    "door": "loadzonepressure",
+    "side": "down"
    },
    "b": {
     "map": "SandCastlePressurePuzzle",
-    "door": "loadzoneslide"
+    "door": "loadzoneslide",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SandCastleStatueRoom",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzone statue"
+    "door": "loadzone statue",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SandCastleStatueRoom",
-    "door": "loadzonerock"
+    "door": "loadzonerock",
+    "side": "down"
    },
    "b": {
     "map": "SandCastleRockRoom",
-    "door": "loadzonestatue"
+    "door": "loadzonestatue",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SandCastleBasement",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "up"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzonebasementleft"
+    "door": "loadzonebasementleft",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "SandCastleRoof",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzone roof left"
+    "door": "loadzone roof left",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "SandCastleRoof",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleMainRoom",
-    "door": "loadzone roof right"
+    "door": "loadzone roof right",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "SandCastleRoof",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "down"
    },
    "b": {
     "map": "SandCastleBossRoom",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SandCastleMainRoom",
-    "door": "loadzonebosskey"
+    "door": "loadzonebosskey",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleBossKeyRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SandCastleMainRoom",
-    "door": "loadzonepressure"
+    "door": "loadzonepressure",
+    "side": "right"
    },
    "b": {
     "map": "SandCastlePressurePuzzle",
-    "door": "loadzonemain"
+    "door": "loadzonemain",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SandCastleMainRoom",
-    "door": "loadzone rock"
+    "door": "loadzone rock",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleRockRoom",
-    "door": "loadzone main"
+    "door": "loadzone main",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BugariaPlazaAttack",
-    "door": "loadingzoneexit"
+    "door": "loadingzoneexit",
+    "side": "up"
    },
    "b": {
     "map": "BugariaAssociationAttack",
-    "door": "DoorBugaria - Duplicate"
+    "door": "DoorBugaria - Duplicate",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BugariaPlazaAttack",
-    "door": "loadzone palace"
+    "door": "loadzone palace",
+    "side": "down"
    },
    "b": {
     "map": "BugariaBridgeAttack",
-    "door": "loadzoneplaza"
+    "door": "loadzoneplaza",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BugariaBridgeAttack",
-    "door": "loadzonepalace"
+    "door": "loadzonepalace",
+    "side": "down"
    },
    "b": {
     "map": "BugariaCastleAttack",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SandCastleBossRoom",
-    "door": "loadzonetreasure"
+    "door": "loadzonetreasure",
+    "side": "left"
    },
    "b": {
     "map": "SandCastleTreasureRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "MetalIsland2",
-    "door": "loadzone aud"
+    "door": "loadzone aud",
+    "side": "down"
    },
    "b": {
     "map": "MetalIslandAuditorium",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "StreamMountain1",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "StreamMountain2",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "StreamMountain2",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "StreamMountain3",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "StreamMountain2",
-    "door": "loadzonebottom"
+    "door": "loadzonebottom",
+    "side": "down"
    },
    "b": {
     "map": "StreamMountain4",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FGCave",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    },
    "b": {
     "map": "FarGrasslandsOutsideCave",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "FGCave",
-    "door": "loadzone wasp"
+    "door": "loadzone wasp",
+    "side": "left"
    },
    "b": {
     "map": "WaspKingdomOutside",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "FGCave",
-    "door": "loadzonebroodmother"
+    "door": "loadzonebroodmother",
+    "side": "right"
    },
    "b": {
     "map": "BroodmotherLair",
-    "door": "loadzoneFG"
+    "door": "loadzoneFG",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "FarGrasslands1",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    },
    "b": {
     "map": "FarGrasslands2",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FarGrasslands1",
-    "door": "loadzonelake"
+    "door": "loadzonelake",
+    "side": "down"
    },
    "b": {
     "map": "FarGrasslandsLake",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FarGrasslands1",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "FarGrasslands3",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsOutsideCave",
-    "door": "loadzonewizard"
+    "door": "loadzonewizard",
+    "side": "up"
    },
    "b": {
     "map": "FarGrasslandsWizard",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsOutsideCave",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    },
    "b": {
     "map": "FarGrasslands4",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsWizard",
-    "door": "loadzonetower"
+    "door": "loadzonetower",
+    "side": "down"
    },
    "b": {
     "map": "WizardTowerStairs",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FarGrasslands2",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    },
    "b": {
     "map": "FarGrasslands4",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsLake",
-    "door": "loadzonewasp"
+    "door": "loadzonewasp",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomOutside",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsOutsideVillage",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "FarGrasslands3",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsOutsideVillage",
-    "door": "loadzonevillage"
+    "door": "loadzonevillage",
+    "side": "left"
    },
    "b": {
     "map": "FishingVillage",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "FarGrasslandsOutsideVillage",
-    "door": "loadzoneswamp"
+    "door": "loadzoneswamp",
+    "side": "left"
    },
    "b": {
     "map": "FGOutsideSwamplands",
-    "door": "loadzoneymap"
+    "door": "loadzoneymap",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SwamplandsEntrance",
-    "door": "loadzoneexit"
+    "door": "loadzoneexit",
+    "side": "right"
    },
    "b": {
     "map": "FGOutsideSwamplands",
-    "door": "loadzoneswamp1"
+    "door": "loadzoneswamp1",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "SwamplandsEntrance",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    },
    "b": {
     "map": "Swamplands2",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "FGOutsideSwamplands",
-    "door": "loadzone wasp"
+    "door": "loadzone wasp",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomOutside",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "FGOutsideSwamplands",
-    "door": "loadzoneswamp2"
+    "door": "loadzoneswamp2",
+    "side": "left"
    },
    "b": {
     "map": "SwamplandsBoss",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "WaspKingdomOutside",
-    "door": "loadzoneinside#16"
+    "door": "loadzoneinside#16",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomMainHall",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "Swamplands2",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    },
    "b": {
     "map": "Swamplands3",
-    "door": "loadzone back"
+    "door": "loadzone back",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BarrenLandsEntrance",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "BarrenLandsCD",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BarrenLandsEntrance",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "BarrenLandsSideGPT",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BarrenLandsCD",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "BarrenLandsBeefly",
-    "door": "loadzonecd"
+    "door": "loadzonecd",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "Swamplands3",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "SwamplandsBridge",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "SwamplandsBridge",
-    "door": "loadzone boss"
+    "door": "loadzone boss",
+    "side": "down"
    },
    "b": {
     "map": "SwamplandsBoss",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "SwamplandsBridge",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "Swamplands4",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "SwamplandsBridge",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "left"
    },
    "b": {
     "map": "Swamplands7",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "FarGrasslands4",
-    "door": "loadzoneclearing"
+    "door": "loadzoneclearing",
+    "side": "down"
    },
    "b": {
     "map": "FGClearing",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "ChomperCave1",
-    "door": "loadzone low"
+    "door": "loadzone low",
+    "side": "right"
    },
    "b": {
     "map": "ChomperCaves2",
-    "door": "loadzone low"
+    "door": "loadzone low",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "ChomperCave1",
-    "door": "loadzone high"
+    "door": "loadzone high",
+    "side": "right"
    },
    "b": {
     "map": "ChomperCaves2",
-    "door": "loadzonehigh"
+    "door": "loadzonehigh",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "ChomperCave1",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "down"
    },
    "b": {
     "map": "ChomperCaves3",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "Swamplands4",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "Swamplands5",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "Swamplands5",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "Swamplands6",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "Swamplands5",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    },
    "b": {
     "map": "Swamplands7",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "Swamplands5",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "Swamplands8",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "Swamplands6",
-    "door": "loadzone right"
+    "door": "loadzone right",
+    "side": "down"
    },
    "b": {
     "map": "Swamplands8",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "WaspKingdom1",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdom2",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "WaspKingdom2",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "WaspKingdom3",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "WaspKingdom2",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "WaspKingdom4",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "WaspKingdom2",
-    "door": "loadzonedrill"
+    "door": "loadzonedrill",
+    "side": "right"
    },
    "b": {
     "map": "WaspKingdomDrillRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "WaspKingdom4",
-    "door": "loadzonenext"
+    "door": "loadzonenext",
+    "side": "left"
    },
    "b": {
     "map": "WaspKingdom5",
-    "door": "loadzone left"
+    "door": "loadzone left",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "WaspKingdom5",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "WaspKingdomPrison",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "WaspKingdom5",
-    "door": "loadzone vent"
+    "door": "loadzone vent",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomMainHall",
-    "door": "loadzonevent"
+    "door": "loadzonevent",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "WaspKingdomPrison",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomJayde",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "WaspKingdomMainHall",
-    "door": "loadzonethrone"
+    "door": "loadzonethrone",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomThrone",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "WaspKingdomThrone",
-    "door": "loadzonequeen"
+    "door": "loadzonequeen",
+    "side": "down"
    },
    "b": {
     "map": "WaspKingdomQueen",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "TermiteOutside",
-    "door": "loadzonecave"
+    "door": "loadzonecave",
+    "side": "down"
    },
    "b": {
     "map": "BarrenLandsAntTunnel",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "TermiteOutside",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "BarrenLandsMiniboss",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "TermiteMainPlaza",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "TermiteIndustrial",
-    "door": "loadzoneplaza"
+    "door": "loadzoneplaza",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "TermiteMainPlaza",
-    "door": "loadzonecastle"
+    "door": "loadzonecastle",
+    "side": "down"
    },
    "b": {
     "map": "TermiteRoyalChamber",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "TermiteIndustrial",
-    "door": "loadzonepier"
+    "door": "loadzonepier",
+    "side": "left"
    },
    "b": {
     "map": "TermitePier",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "TermiteIndustrial",
-    "door": "NEARloadzonecoliseum"
+    "door": "NEARloadzonecoliseum",
+    "side": "down"
    },
    "b": {
     "map": "TermiteColiseum1",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BarrenLandsBeefly",
-    "door": "loadzoneminiboss"
+    "door": "loadzoneminiboss",
+    "side": "left"
    },
    "b": {
     "map": "BarrenLandsMiniboss",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BarrenLandsBeefly",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    },
    "b": {
     "map": "BarrenLandsCloud",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "BarrenLandsMiniboss",
-    "door": "loadzone south"
+    "door": "loadzone south",
+    "side": "up"
    },
    "b": {
     "map": "BarrenLandsRock",
-    "door": "loadzone north"
+    "door": "loadzone north",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "WizardTowerBasement",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "down"
    },
    "b": {
     "map": "WizardTowerStairs",
-    "door": "loadzonebasement"
+    "door": "loadzonebasement",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "WizardTowerStairs",
-    "door": "loadzoneattic"
+    "door": "loadzoneattic",
+    "side": "up"
    },
    "b": {
     "map": "WizardTowerAttic",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BarrenLandsTanks",
-    "door": "loadzonecity"
+    "door": "loadzonecity",
+    "side": "right"
    },
    "b": {
     "map": "AbandonedCity",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BarrenLandsTanks",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "BarrenLandsCloud",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BarrenLandsMushrooms",
-    "door": "loadzonepumpkin"
+    "door": "loadzonepumpkin",
+    "side": "down"
    },
    "b": {
     "map": "BarrenLandsPumpkins",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "AbandonedCity",
-    "door": "loadzonetent"
+    "door": "loadzonetent",
+    "side": "down"
    },
    "b": {
     "map": "AbandonedCityTent",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BarrenLandsPumpkins",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "BarrenLandsCloud",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "BarrenLandsPumpkins",
-    "door": "loadzoneright - Duplicate"
+    "door": "loadzoneright - Duplicate",
+    "side": "left"
    },
    "b": {
     "map": "BarrenLandsRock",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "PowerPlant",
-    "door": "loadzonebroodmother"
+    "door": "loadzonebroodmother",
+    "side": "down"
    },
    "b": {
     "map": "BroodmotherLair",
-    "door": "LoadzoneBack"
+    "door": "LoadzoneBack",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "BarrenLandsSideGPT",
-    "door": "loadzone cave"
+    "door": "loadzone cave",
+    "side": "down"
    },
    "b": {
     "map": "GoldenPathTunnel2",
-    "door": "loadzonebarrenlands - Duplicate#10"
+    "door": "loadzonebarrenlands - Duplicate#10",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "StreamMountain4",
-    "door": "loadzone boss"
+    "door": "loadzone boss",
+    "side": "right"
    },
    "b": {
     "map": "StreamMountain5",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GoldenPitcher1",
-    "door": "Loadzoneup"
+    "door": "Loadzoneup",
+    "side": "down"
    },
    "b": {
     "map": "GoldenPitcher2",
-    "door": "Loadzonedown - Duplicate"
+    "door": "Loadzonedown - Duplicate",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GoldenPitcher2",
-    "door": "Loadzoneleft"
+    "door": "Loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "PitcherPlantArena",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "MysteryIsland",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "down"
    },
    "b": {
     "map": "MysteryIslandInside",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "UpperSnekEntrance",
-    "door": "door north"
+    "door": "door north",
+    "side": "down"
    },
    "b": {
     "map": "UpperSnekTransition",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "UpperSnekTransition",
-    "door": "loadzoneforward"
+    "door": "loadzoneforward",
+    "side": "right"
    },
    "b": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzoneentrance"
+    "door": "loadzoneentrance",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "UpperSnekSwitchPuzzle",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    },
    "b": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzone switch"
+    "door": "loadzone switch",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "UpperSnekBeforeBoss",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "right"
    },
    "b": {
     "map": "UpperSnekBossRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "UpperSnekBeforeBoss",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "left"
    },
    "b": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "UpperSnekPressurePlateRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    },
    "b": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzonepressure"
+    "door": "loadzonepressure",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzoneplatform"
+    "door": "loadzoneplatform",
+    "side": "up"
    },
    "b": {
     "map": "UpperSnekPlatformRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzoneriverorom"
+    "door": "loadzoneriverorom",
+    "side": "up"
    },
    "b": {
     "map": "UpperSnekRiverPuzzle",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "UpperSnekMiddleRoom",
-    "door": "loadzonegeizer"
+    "door": "loadzonegeizer",
+    "side": "down"
    },
    "b": {
     "map": "UpperSnekGeizerRoom",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "RubberPrisonCheckpointCorridor",
-    "door": "loadzoneexit"
+    "door": "loadzoneexit",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzonecell2"
+    "door": "loadzonecell2",
+    "side": "right"
    },
    "b": {
     "map": "RubberPrisonCells2",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzonesecurity"
+    "door": "loadzonesecurity",
+    "side": "right"
    },
    "b": {
     "map": "RubberPrisonSecurity",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzonelibrary"
+    "door": "loadzonelibrary",
+    "side": "left"
    },
    "b": {
     "map": "RubberPrisonLibrary",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzoneoffice"
+    "door": "loadzoneoffice",
+    "side": "left"
    },
    "b": {
     "map": "RubberPrisonOffice",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzoneboss"
+    "door": "loadzoneboss",
+    "side": "left"
    },
    "b": {
     "map": "RubberPrisonGiantLairBridge",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "bossshortcut"
+    "door": "bossshortcut",
+    "side": "left"
    },
    "b": {
     "map": "RubberPrisonGiantLairBridge",
-    "door": "loadzoneshortcut"
+    "door": "loadzoneshortcut",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "RubberPrisonPier",
-    "door": "loadzone3rdfloor"
+    "door": "loadzone3rdfloor",
+    "side": "right"
    },
    "b": {
     "map": "RubberPrisonThirdFloor",
-    "door": "loadzonebridge"
+    "door": "loadzonebridge",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "RubberPrisonCheckpointCorridor",
-    "door": "loadzoneforward"
+    "door": "loadzoneforward",
+    "side": "down"
    },
    "b": {
     "map": "RubberPrisonSpikeRoom",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "RubberPrisonSpikeRoom",
-    "door": "loadzonenorth"
+    "door": "loadzonenorth",
+    "side": "down"
    },
    "b": {
     "map": "RubberPrisonCells1",
-    "door": "loadzonesouth"
+    "door": "loadzonesouth",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "RubberPrisonCells1",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "left"
    },
    "b": {
     "map": "RubberPrisonCells2",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "RubberPrisonCells1",
-    "door": "loadzoneleft"
+    "door": "loadzoneleft",
+    "side": "right"
    },
    "b": {
     "map": "RubberPrisonCafeteria",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "RubberPrisonCells1",
-    "door": "loadzone3rdfloor"
+    "door": "loadzone3rdfloor",
+    "side": "down"
    },
    "b": {
     "map": "RubberPrisonThirdFloor",
-    "door": "loadzonecells1"
+    "door": "loadzonecells1",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "RubberPrisonCells2",
-    "door": "loadzone3rdfloor"
+    "door": "loadzone3rdfloor",
+    "side": "down"
    },
    "b": {
     "map": "RubberPrisonThirdFloor",
-    "door": "loadzonecells2"
+    "door": "loadzonecells2",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "RubberPrisonGym",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "left"
    },
    "b": {
     "map": "RubberPrisonThirdFloor",
-    "door": "loadzonegym"
+    "door": "loadzonegym",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "RubberPrisonSecurity",
-    "door": "loadzone3rdfloor"
+    "door": "loadzone3rdfloor",
+    "side": "up"
    },
    "b": {
     "map": "RubberPrisonThirdFloor",
-    "door": "loadzonesecurity"
+    "door": "loadzonesecurity",
+    "side": "down"
    }
   },
   {
    "a": {
     "map": "RubberPrisonGiantLairBridge",
-    "door": "loadzonegl"
+    "door": "loadzonegl",
+    "side": "left"
    },
    "b": {
     "map": "GiantLairEntrance",
-    "door": "loadzoneoutside"
+    "door": "loadzoneoutside",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GiantLairEntrance",
-    "door": "loadzonedl"
+    "door": "loadzonedl",
+    "side": "left"
    },
    "b": {
     "map": "GiantLairDeadLands1",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GiantLairDeadLands1",
-    "door": "loadzoneforward"
+    "door": "loadzoneforward",
+    "side": "down"
    },
    "b": {
     "map": "GiantLairDeadLands2",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GiantLairDeadLands2",
-    "door": "loadzonenext"
+    "door": "loadzonenext",
+    "side": "left"
    },
    "b": {
     "map": "GiantLairFridgeOutside",
-    "door": "loadzoneback"
+    "door": "loadzoneback",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "GiantLairFridgeOutside",
-    "door": "fridgeloadzone"
+    "door": "fridgeloadzone",
+    "side": "left"
    },
    "b": {
     "map": "GiantLairFridgeInside",
-    "door": "loadzone"
+    "door": "loadzone",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GiantLairRoachVillage",
-    "door": "loadzoneplains"
+    "door": "loadzoneplains",
+    "side": "right"
    },
    "b": {
     "map": "GiantLairBeforeBoss",
-    "door": "loadzonevillage"
+    "door": "loadzonevillage",
+    "side": "left"
    }
   },
   {
    "a": {
     "map": "GiantLairSaplingPlains",
-    "door": "loadzonevillage"
+    "door": "loadzonevillage",
+    "side": "left"
    },
    "b": {
     "map": "GiantLairBeforeBoss",
-    "door": "loadzonefinal"
+    "door": "loadzonefinal",
+    "side": "right"
    }
   },
   {
    "a": {
     "map": "BugariaEndPlaza",
-    "door": "loadzone palace - Duplicate"
+    "door": "loadzone palace - Duplicate",
+    "side": "down"
    },
    "b": {
     "map": "BugariaEndBridge",
-    "door": "loadzoneplaza - Duplicate"
+    "door": "loadzoneplaza - Duplicate",
+    "side": "up"
    }
   },
   {
    "a": {
     "map": "GiantLairBeforeBoss",
-    "door": "loadzoneup"
+    "door": "loadzoneup",
+    "side": "left"
    },
    "b": {
     "map": "GiantLairBeforeBoss2",
-    "door": "loadzoneright"
+    "door": "loadzoneright",
+    "side": "up"
    }
   }
  ],

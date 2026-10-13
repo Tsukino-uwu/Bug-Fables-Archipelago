@@ -150,11 +150,12 @@ class BugFablesWorld(World):
             self.start = dict(self.passthrough["start"])
         elif self.options.starting_location == StartingLocation.option_anywhere:
             self.start = self.random.choice(ROOM_STARTS).to_slot()
-        # Coupled and Room Swap can leave the start with only the opening's spots, and a seed whose opening takes only
-        # filler then fails to generate: the option stands down for it, as Filler Only shops do.
+        # Coupled, Map Shuffle and Room Swap can leave the start with only the opening's spots, and a seed whose
+        # opening takes only filler then fails to generate: the option stands down for it, as Filler Only shops do.
         self.filler_starting_checks = bool(self.options.filler_starting_checks)
         if self.filler_starting_checks and self.options.entrance_randomizer in (
-                EntranceRandomizer.option_coupled, EntranceRandomizer.option_room_swap):
+                EntranceRandomizer.option_coupled, EntranceRandomizer.option_map_shuffle,
+                EntranceRandomizer.option_room_swap):
             self.filler_starting_checks = False
             logging.warning(
                 "Bug Fables: player %s (%s) asked for Filler Starting Checks with the Entrance Randomizer on %s, whose "

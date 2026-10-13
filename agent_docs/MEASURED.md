@@ -29,6 +29,7 @@ read, a log or a probe.
 - [The door graph](#the-door-graph-2026-09-25-dev-scriptsdoor-graphpy-on-the-entitydump)
 - [Doors paired with their way
   back](#doors-paired-with-their-way-back-2026-09-25-a-new-entitydump-with-positions-door-graphpy)
+- [Each door's edge of its room](#each-doors-edge-of-its-room-2026-10-13-door-graphpys-side-on-the-entitydump)
 - [The Forsaken Lands' fog maze, and the other one-way
   doors](#the-forsaken-lands-fog-maze-and-the-other-one-way-doors-2026-10-02-entitydump-and-code-read)
 - [Transfers that aren't
@@ -2145,6 +2146,21 @@ tester guessed. The wiki is a lead, not proof: each entry is checked against the
   `Base/GateBroken` (requires 348), and brings chapter 5's scene there (Maki, Kina, Yin, `makievent`, requires 348,
   limit 322); the guard `bulkbee1` and `futes - Duplicate` stand there only before it. Used by `data_tables.py`
   (`ROOM_STARTS`) and `logic/lost_sands.py`.
+
+## Each door's edge of its room (2026-10-13, `door-graph.py`'s `side` on the EntityDump)
+
+- **How it's read:** a door's position minus where its way back lands the party in the same room (the way back's
+  `vectordata[1]`), across the floor: +x right, +z up, as the room is seen from the front (the PopTracker pack's room
+  pictures map +x right and +z up, `tools/export.py`'s `pixel`; seen on screen 2026-10-13). Under 0.5 across the
+  floor: no edge (`other`).
+- **The 516 doors of the 258 two-way connections:** 139 left, 132 right, 128 down, 114 up, 3 other (a ladder, a
+  well: `GoldenPathTunnel2`'s `loadzonebarrenlands - Duplicate#9`, `GoldenHillsPath3`'s `loadzonechomper`,
+  `DefiantRootWell`'s `loadzone`).
+- **In 211 pairs the two ends face each other; in 47 they don't**, the game's own: a corridor that turns
+  (`NearSnakemouth`'s cave door leaves downward and enters `BugariaOutskirtsSnakemouthCorridor2` from its left), a
+  room off a side wall whose own door is at its top (`AntPalace1`'s library door, on the hall's right edge;
+  `AntPalaceLibrary`'s door back, at its top).
+- Used by `entrances.py` (Map Shuffle's groups).
 
 ## The Forsaken Lands' fog maze, and the other one-way doors (2026-10-02, EntityDump and code read)
 
