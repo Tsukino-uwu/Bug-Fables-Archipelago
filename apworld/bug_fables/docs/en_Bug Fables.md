@@ -42,7 +42,9 @@ Beetle Dig's, held out for now) and the one where the Termite King hands over th
   With Coupled or Decoupled, one-way doors (the Forsaken Lands' fog maze's wrong turns, drops, the underground bar's
   exit) are shuffled too, only among themselves: each now lands where another one did. New in 0.3.0.
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
-- **Starting Location** (off, experimental): a new file begins in any room in the game.
+- **Starting Location** (off, experimental): a new file begins in any room in the game. From 0.4.0 the items are
+  placed from there, so the seed can be finished from where you begin; a room a seed can't begin from (too few checks
+  in reach with what a new file has, or no way out yet) is never picked.
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
   picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den. With
   any setting but Off, the opening and the fall room after the spider become locations.
@@ -54,7 +56,8 @@ Beetle Dig's, held out for now) and the one where the Termite King hands over th
   the Freeze as the first copy of their progressive item, new in 0.3.0); until one arrives, that attack only buzzes, and
   each shows in your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
-  pause menu's Warp is always there.
+  pause menu's Warp is always there. From 0.4.0, when a new file starts with very little in reach (one member, the
+  moves and Jump shuffled), one item that opens the way on is placed among your first checks.
 - **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp gets you out of,
   a drop or a one-way door, so items can land in more places and you're expected to warp back. Off, it always leaves
   you a way to walk back. New in 0.3.0.
@@ -72,12 +75,12 @@ Each option's description in the yaml says what it does in full and how many che
 
 ## Room Swap
 
-Set *Entrance Randomizer* to `room_swap` (experimental, new in 0.3.0). Each room trades places with a room anywhere in
-the game that has as many doors (rooms reached only by a ride or a scene swap among themselves), so the map keeps the
-game's shape: only which room sits where changes. Turning round always takes you back where you came from. It is gentler
-than Coupled, where any door may lead to any other. One-way doors, like the fog maze's wrong turns, still lead where
-they do in the game. As with Coupled, the logic follows the doors but not yet what each room needs inside, so a seed may
-not be finishable; the pause menu's Warp gets you out of a dead end.
+Set *Entrance Randomizer* to `room_swap` (experimental, new in 0.3.0). Whole rooms trade places with rooms of as many
+doors in their part of the world (parts joined only by a ride or a scene stay apart), so the map keeps the game's
+shape: familiar roads, unfamiliar rooms. Turning round always takes you back where you came from. It is gentler than
+Coupled, where any door may lead to any other. One-way doors, like the fog maze's wrong turns, still lead where they do
+in the game. The logic follows the doors and what every room needs inside; a few doors are still to be gone through,
+so it stays experimental, and the pause menu's Warp gets you out of a dead end.
 
 ## Plando: choosing where doors lead
 

@@ -74,6 +74,11 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 
   Don't make one for a single spot that needs something extra where you can otherwise walk around: that's the spot's
   own rule. Every door, transfer, save point and location sits in one area.
+- **Through a door, you can always turn back** (stated 2026-10-13, from play): the arrival is a safe spot beside the
+  door you came through, which leads back out needing nothing, unless it is a one-way, a hole, or blocked (a door, a
+  boulder). Only going further into the room can need something. So a door is an exit of the area it stands in and
+  its arrival lands in that same area (`regions.py`, `logic_entrances`), and a start, always a door's arrival, keeps
+  its way out.
 - **A spot's own rule is written even when its area already implies it,** so a different way into the area (the
   entrance randomizer, a random start) can't lose it (learned in build step 8; test `TestInRoomRules`).
 - **Each edge between areas is one-directional**, with its own requirement. A two-way path is two edges. A path with
@@ -156,9 +161,10 @@ confirmation on screen. Denied ones leave the start pool; a room with no working
 word. Unchecked ones stay in while Starting Location is experimental (stuck starts are accepted until then); the label
 comes off when none is left unchecked.
 
-**The logic is to start where the spawn is** (planned, `archipelago-review.md`, item 23): Menu joined to the spawn's
-area, so the start table names the exact spawn, never just a pair of maps. Today Menu always joins the game's own start
-(`regions.py`).
+**The logic starts where the spawn is** (built 2026-10-13, `apimplementation.md`, build step 96): Menu joined to the
+spawn's area, the start table naming the exact door, never just a pair of maps. A random start the seed can't begin from
+is picked again: one that reaches too few spots with what a new file has, or one the logic has no way out of even with
+every item (S7 asked by the generator, for every spawn).
 
 ## Chains: what other rooms do to this one
 

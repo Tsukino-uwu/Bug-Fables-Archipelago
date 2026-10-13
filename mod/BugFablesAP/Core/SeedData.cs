@@ -62,9 +62,11 @@ namespace BugFablesAP
         // Shuffle Shop Inventories: what an item shop slot or a respawning pickup holds once it isn't a check.
         internal readonly List<ApConnection.InventorySpot> ShopInventories;
         // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for
-        // the game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
+        // the game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door;
+        // StartDoor: that door, the one whose arrival the logic starts beside.
         internal readonly KeyValuePair<string, int>? Start;
         internal readonly string StartFrom;
+        internal readonly string StartDoor;
         // slot_data's "options", the options as the seed applied them; none means a seed from an older apworld.
         internal readonly bool OptionsMissing;
         // The goal: this many artifact items received (ArtifactIcons). 0 when slot_data has none.
@@ -204,6 +206,7 @@ namespace BugFablesAP
                 startData = null;
             }
             StartFrom = startData?.Value<string>("from");
+            StartDoor = startData?.Value<string>("door");
             Start = startData != null
                 ? new KeyValuePair<string, int>(startData.Value<string>("map"),
                     startData["entity"] != null ? startData.Value<int>("entity") : -1)

@@ -202,6 +202,7 @@ namespace BugFablesAP
         internal List<InventorySpot> ShopInventories => seedData?.ShopInventories;
         internal KeyValuePair<string, int>? Start => seedData?.Start;
         internal string StartFrom => seedData?.StartFrom;
+        internal string StartDoor => seedData?.StartDoor;
         internal int ArtifactsRequired => seedData?.ArtifactsRequired ?? 0;
         internal int OwnSlot => seedData?.OwnSlot ?? -1;
 

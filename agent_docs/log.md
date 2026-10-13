@@ -107,6 +107,7 @@ said them.
 - [2026-10-12: the artifacts as locations, the Sand Castle Key whole](#2026-10-12-the-artifacts-as-locations-the-sand-castle-key-whole)
 - [2026-10-13: the castle and the Final Boss goal, the Coupled dead ends, the AI disclosure](#2026-10-13-the-castle-and-the-final-boss-goal-the-coupled-dead-ends-the-ai-disclosure)
 - [2026-10-13: the door shuffle's fallback; the spawn in the logic planned](#2026-10-13-the-door-shuffles-fallback-the-spawn-in-the-logic-planned)
+- [2026-10-13: the logic from the spawn, a tight start's way on placed early](#2026-10-13-the-logic-from-the-spawn-a-tight-starts-way-on-placed-early)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4284,3 +4285,27 @@ said them.
   start's seed as if it began outside Bugaria), then a named start; and a fixed mark on doors whose far side won't let
   you walk back, an idea (Next 77).
 - **Not run yet:** the tests (at push time).
+
+## 2026-10-13: the logic from the spawn, a tight start's way on placed early
+
+- **The logic begins at the spawn** (build step 96, mod step 65): Menu joined to the area beside the start's door, the
+  start table naming the exact door, the mod arriving by it; a spawn the seed can't begin from picked again; the
+  ending's plaza and bridge story-only (they were in the door shuffle and the start pool).
+- **A tight start's way on placed early** (build step 97): Archipelago's `local_early_items`, its docs' answer to a
+  restrictive start, one item picked at random among those that alone open 10 spots.
+- **How the start rule was found, by measuring, wrong turns first:** a bar of 1 spot failed 528 of 2000; 10, 111; the
+  failures' spawns looked open (30 spots) but sat in 4 regions: Bugaria's commercial district. The count took shop
+  slots under No Progression (the default) for spots that can take progression; counted honestly the game's own start
+  opens 3 on the hardest options and every spawn opening 3 or more filled (228 of 228), so the bar became the game's
+  own start, the rule Room Swap and build step 95 already used. A trapped check came from 53 spawns where the logic has
+  no way out even with every item (11 Room Swap failures pointed at them). Two seeds at the bar still failed, both in
+  one pocket where no single item opens more than 4: the docs' restrictive start, so such a spawn is picked again, and
+  a tight one gets one item early. Then 1000 of 1000 in each case through Archipelago's own fill.
+- **Build step 95's start check tightened:** its confirmation fuzz found two fill failures in 4000, each a start kept
+  after 5 refused draws; its options refused 54% and 71% of draws. Now 50 draws, and a start that small is never kept
+  (110 draws at most).
+- **Checked on the way:** a shuffled door always arrives where the game's own door into that
+  room does (it copies the game's door data), and every door the game makes only after a story flag is covered.
+  "Through a door, you can always turn back" written into `room-logic.md`.
+- **Ideas recorded:** Next 77, a warning before a door whose far side won't let you walk back: a fixed mark, and a
+  Yes/No box ("If you proceed, you may not be able to get back", the cursor on No), each a panel setting.

@@ -173,8 +173,8 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
     mapping, on one region per map. Each door named where it is (`entrance randomization.md:232-236`), split with
     `disconnect_entrance_for_randomization` (`:228-230`), placed by `randomize_entrances` in `connect_entrances`
     (`:373-379`), `pairings` turned into `door_targets` (`:381-384`), the pairs in the spoiler's Entrances section.
-    Still to do: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; today the 17
-    one-way fixed doors are plain entrances, never shuffled), and Menu joined to the random start's region. Connection
+    Since done: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; build step
+    38), and Menu joined to the random start's region (build step 96, 2026-10-13). Connection
     plando (`plando_en.md:283-318`, `Options.PlandoConnections`): optional in the guide ("Support for connection plando
     may vary"), built all the same (2026-09-30, the user: every optional feature, plando included; build step 32).
 

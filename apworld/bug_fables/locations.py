@@ -8,6 +8,7 @@ from BaseClasses import Location
 from .data_tables import LOCATION_NAME_TO_ID
 from .items import GAME, BugFablesItem
 from .options import CATEGORY_OPTIONS
+from .regions import MENU
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -30,6 +31,9 @@ def category_on(world: BugFablesWorld, category: str | None) -> bool:
 def create_all_locations(world: BugFablesWorld) -> None:
     for loc in world.included_locations:
         region = world.get_region(loc.region if loc.area is None else f"{loc.region} ({loc.area})")
+        if loc.quiet and world.start:
+            # The opening's checks are sent as a new file begins, wherever the seed starts.
+            region = world.get_region(MENU)
         region.locations.append(BugFablesLocation(world.player, loc.name, LOCATION_NAME_TO_ID[loc.name], region))
 
     for event in world.included_events:

@@ -168,6 +168,8 @@ this file and that doc disagree, that doc is right.
 93. [Build step 93: the Ancient Castle's spots back, its keys and the Peculiar Gem as items](#build-step-93-the-ancient-castles-spots-back-its-keys-and-the-peculiar-gem-as-items)
 94. [Build step 94: the Final Boss goal](#build-step-94-the-final-boss-goal)
 95. [Build step 95: the door shuffle tried again, its start kept open, its stranded doors pinned](#build-step-95-the-door-shuffle-tried-again-its-start-kept-open-its-stranded-doors-pinned)
+96. [Build step 96: the logic begins at the spawn](#build-step-96-the-logic-begins-at-the-spawn)
+97. [Build step 97: a tight start's way on placed early](#build-step-97-a-tight-starts-way-on-placed-early)
 
 **How it works**
 
@@ -288,13 +290,10 @@ be wrong.
     (lying there or dropped after a fight), never a check's reward from the server. Only while Archipelago is enabled,
     or with *Use on normal saves*.
 18. **Random start** (2026-09-26): `anywhere` built, experimental; *Save Points* and *Any Room* designed
-    2026-09-30 (replacing the planned `towns`), to build. See build step 15. **The logic from the spawn** (decided
-    2026-10-13, every room now mapped; after build step 95, two steps of their own): today the logic always begins at
-    the game's start (`regions.py`, `Menu -> START_MAP`), so a seed started elsewhere is placed as if it began outside
-    Bugaria. First Menu joined to the spawn's area (`room-logic.md`, "Where the party can appear"), the start table
-    naming the exact door and slot_data `start` naming it for the mod (`DoorInto` takes a door name already), with
-    build step 95's start check re-picking a spawn that opens too few spots; then a named start (*Starting Location* as
-    Archipelago's `TextChoice`: Off, Anywhere or one room by name; which names, to decide then).
+    2026-09-30 (replacing the planned `towns`), to build. See build step 15. **The logic from the spawn:** built
+    2026-10-13 (build step 96, a tight start's way on placed early in build step 97). **Next, a named start** (decided
+    2026-10-13): *Starting Location* as Archipelago's `TextChoice`: Off, Anywhere or one room by name (which names, to
+    decide then); a named room the seed can't begin from (build step 96's rule) refused with the reason.
 19. **Traps, an idea for later** (2026-09-26; not planned yet). A trap sent to this game takes effect when
     the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
     starburst. One icon per trap, so the player knows what's coming. Examples: a Mistake (the item) poisons
@@ -939,12 +938,27 @@ be wrong.
 77. **A mark on a door whose far side won't let you walk back, an idea** (asked 2026-10-13; not decided): the logic
     knows every way back (`one_way(rule, way_back)`, the door rules), but a player sees it only after going through:
     with shuffled doors a boulder, a push past a lock or a drop can wait on the far side, and with Points of No Return
-    the logic may send you there on purpose. A fixed mark, like warning tape: always shown on those doors, whatever the
-    player holds, before and after crossing, only to say what to expect (not a live check of the items). The generator
-    lists, per seed, each door whose arrival needs something to leave (or has no way back) in slot_data, and the mod
-    marks them. With it, a
+    the logic may send you there on purpose. The generator lists, per seed, each door whose arrival needs something to
+    leave (or has no way back) in slot_data. Two ways to show it, among others: a fixed mark, like warning tape, always
+    on those doors whatever the player holds, only to say what to expect; or a Yes/No box before going through, gone
+    once the way back is in hand (each door's way-back need in slot_data too, checked against the items received), so
+    it warns without staying in the way ("If you proceed, you may not be able to get back", No / Yes, the cursor on No
+    to begin with); the box a Quality of life panel setting, on by default, off for whoever
+    would rather run through doors freely (Points of No Return on, say): off, every door works as it does now. The mark
+    a setting of its own as well, still telling what a door is with the box off. With it, a
     check: whether any one-way's way back needs something the default options don't give early, where the Warp isn't
     forced (`QualityOfLife.WarpOn`: a random start, door shuffle, Shuffle Jump, ability items or Points of No Return).
+78. **Map Shuffle: a door shuffle that keeps the map making sense, an idea** (asked 2026-10-13, not decided; the name
+    picked the same day):
+    Room Swap keeps the game's own map shape and moves rooms within it; Coupled makes a new shape where any door leads
+    to any other. A third mode: a new shape whose doors still match sides, a door on a room's right edge always into
+    another's left edge, up into down, so going right keeps going right. Archipelago's own way: its randomizer's
+    groups, the "Directional matching" recipe (`docs/entrance randomization.md:316-350`, each entrance a
+    `randomization_group`, `target_group_lookup` pairing left with right or a building door). It needs each door's side
+    of its room (a script from the entity dump's door positions, the odd ones looked at by hand; the game pairs a right
+    door with a left one, so the counts balance) and a new Entrance Randomizer value; the shuffler's dead ends to
+    measure (build step 95 absorbs them). Matching sides gives the feel of a map, not one drawable on a grid with no
+    overlaps (that needs rooms placed by size, a far bigger job). After the named start (Next 18).
 
 **Known issues:**
 
@@ -2657,7 +2671,7 @@ seed and the log (`[enemies] BugariaOutskirtsEast1:4: 30 10 -> 10 9`) said; boss
 
 A yaml option for where a new file begins. **Experimental** (ruled 2026-09-26), like the entrance
 randomizer: "random start should be fully random… random spawn is experimental just like entrance rando". The logic
-still starts outside Bugaria, so a seed started elsewhere may not be finishable until the room-by-room logic exists.
+begins at the seed's start since build step 96 (2026-10-13); a start the seed can't begin from is picked again.
 
 **Decided (2026-09-26):**
 - *Starting Location (experimental)*: `off / anywhere` for now (`towns`, and a named spot if players ask, later), off
@@ -2777,7 +2791,8 @@ among them (flag 67).
 **Status:** in progress (experimental): `anywhere` (any room) works, seen on screen (2026-09-26): a new file starts in
 the seed's room; the Warp back to it through its door, with Travel Off and on Map, seen (2026-10-04); no start at a door
 the game hides on a new file (2026-10-04), not yet seen in a new seed; the truly random
-start designed (2026-09-30), to build; the logic from the start to come; the intro is always skipped with a seed start.
+start designed (2026-09-30), to build; the logic from the start built (build step 96, 2026-10-13); the intro is
+always skipped with a seed start.
 
 *Code: `options.py` (`StartingLocation`), `data_tables.py` (`ROOM_STARTS`, `STARTS`), `data/starts.json` (from
 `dev-scripts/save-points.py`), `world.py` (`generate_early`); in the mod `QualityOfLife.Opening.cs` (`DoorInto`,
@@ -6757,7 +6772,8 @@ allowlist.
    order. A guard refuses a split whose one-way (or two-way) exits and targets differ in number.
 3. **The start check:** after a draw that worked, the spots open from the start with only the start's items
    (`_Measure.start`, Room Swap's count) against the game's own layout's, measured before the split, up to
-   `_START_SPOTS`. Fewer: put back and drawn again, `START_RESHUFFLES` (5) times in all, then kept (logged). Not a
+   `_START_SPOTS`. Fewer: put back and drawn again, `START_RESHUFFLES` (50) times in all, then Archipelago's error;
+   a start that small is never kept (first 5, then kept: two fill failures in 4000, build step 96's fuzz). Not a
    custom `Entrance`: the randomizer sweeps with every item (`entrance_rando.py:193-200`), so a hook can't see the
    start's own sphere while placing.
 4. **Pins:** after 10 failures, each door the last failure left waiting is connected where the game has it (a two-way
@@ -6765,7 +6781,8 @@ allowlist.
    and the rest drawn again: `PIN_ROUND_TRIES` (5) a round, `PIN_ROUNDS` (10) rounds, each pinning its last failure's
    leftovers. A pin is the game's own pairing, so `door_targets` leaves it out, Universal Tracker and the PopTracker
    pack read it as the game has it, and the spoiler lists it like any pair: nothing new in slot_data or the mod.
-5. **A cap:** 65 draws at most; past it, Archipelago's error naming every pinned door.
+5. **A cap:** 110 draws at most (10, 50 refused starts, 10 rounds of 5); past it, Archipelago's error naming every
+   pinned door.
 
 **Measured** (2026-10-13; scratch scripts and the fuzzer's `--sample-from`, kept out of the repo):
 
@@ -6777,19 +6794,125 @@ allowlist.
 - **The start check:** it refuses 8 to 65% of those yamls' layouts. Coupled with one random starting member and the
   field moves and Jump shuffled, 2000 generations each: with the check off, 4 `FillError`s, every one a start that
   opened 7 spots (10 wanted), as Room Swap's did (build step 30); with it on, **0**.
+- **Corrected the same day** (build step 96): the count took a shop's spot under Shop Contents' No Progression (the
+  default) for one that can take progression, as it never can; those 7 spots were mostly shop slots. Counted honestly,
+  the game's start opens 3 spots on those options (16 with the defaults), so the check's bar there is 3. Re-measured,
+  Coupled from the game's start on those options: **1000 of 1000** generated.
 
 **Tests** (`test_doors.py`, `TestDoorShuffleRetries`; not yet run, at push time): Archipelago's randomizer is wrapped
 (`_Randomizer`) to count draws, keep the graph each starts from, and run out of spare doors through its own
 `on_connect`. A draw that ran out is drawn again from the same graph, and the result is whole (every exit connected
 once, no target left, every region reachable); two rounds of pins are the game's own pairs, with the goal reachable;
 pins read back from `door_targets`, and a seed gives the same doors twice; a setup error and a draw that placed nothing
-are raised at once; a split of mismatched kinds is refused; a start too small is drawn again 5 times, then kept; the
-fuzzer's seed 851669694 (yaml 1905), whose first draw runs out (checked the same day), generates.
+are raised at once; a split of mismatched kinds is refused; a start too small is drawn again 50 times, then the
+error; a failing fuzzer yaml's options (1905), the start off, seed 9: a draw runs out (the log says so, checked),
+and the seed generates. (The fuzzer's own seed, 851669694, stopped running out once build step 96 re-picks the
+spawn first, a review's find: the test now asserts the retry, so it can't pass without one.)
 
 **Status:** works (2026-10-13): 0 failures in 2000 over the seven yamls that failed, 0 in 2000 on the start check's
 case. Nothing changes in game.
 
 *Code: `entrances.py` (`_randomize`, `_FreeDoors`, `_pin`, `_Measure.start`), `dev-scripts/preflight-patterns.json`.*
+
+## Build step 96: the logic begins at the spawn
+
+**Found** (2026-10-13): the logic never followed a random start. `regions.py` joined Menu to the game's own start
+outside Bugaria in every seed, and `start` reached only slot_data, so a seed started elsewhere was placed as if it
+began outside Bugaria: early items far from the spawn, and nothing proving the seed could be finished from it.
+Archipelago's origin region is "from which the logic unfolds", and "AP assumes that a player will always be able to
+return to this starting region by resetting the game" (`docs/world api.md:280-281`): with a random start, a reset (the
+Warp to Start) returns to the spawn, never to the game's start. Planned since build step 15 (`room-logic.md`, "Where
+the party can appear"; `archipelago-review.md`, item 23); buildable now that every room is mapped.
+
+**Decided** (2026-10-13): Menu joined to the spawn's area, the start table naming the exact door; a spawn the seed
+can't begin from picked again; the ending's plaza and bridge story-only, like chapter 3's attack maps (they were in the
+door shuffle and the start pool).
+
+**Built:**
+
+1. **The exact spawn:** `RoomStart` gains `door` (the `from` map's door, as the mod reads it) and `arrival` (the
+   room's door the party arrives beside); each door into a room is a start of its own (14 room pairs are joined by two
+   doors). `start_region` gives the start's area, `door_region(map, arrival)`. slot_data `start` is
+   `{"map", "from", "door"}`; the mod's side is `documentation.md`, step 65.
+2. **Menu to the spawn:** `logic_entrances()` stays the same in every seed (the PopTracker pack exports it);
+   `create_and_connect_regions` points Menu's entrance at the start's area instead (`START_ENTRANCE`, "Menu ->
+   Starting Location", named apart from the room since a start may be picked again). The opening's quiet checks, sent
+   as a new file begins wherever it starts, sit in Menu with a random start. Universal Tracker rebuilds the start from
+   slot_data, so it follows unchanged.
+3. **One rule for every start** (`start_wanted`): Room Swap's, from the game's own start on its own doors: as many
+   spots that can take progression as it opens, up to 10. Step 95's door check and Room Swap use it too.
+4. **A spawn the seed can begin from** (`_fit_spawn`): it opens that many spots, cuts no region off even with every
+   item (53 of 501 spawns did, deep in Snakemouth Den, Upper Snakemouth, the Golden Hills dungeon and the ending, where
+   the logic has no way out), and if tight isn't restrictive (build step 97). Checked on the game's own doors before
+   the door shuffle, so the shuffle never grows from a trapped spawn, and on the doors as shuffled: Archipelago's
+   randomizer and Room Swap each try the spawn, then up to 20 other starts (`SPAWN_TRIES`), and draw the doors again if
+   none suits; `keep_spawn_open` tries every start after the shuffle, and none raises.
+5. **A count that tells the truth:** `_Measure` counted a shop's spot under Shop Contents' No Progression (the default)
+   as one that can take progression; a spot now counts only if its item rule takes some progression item of the
+   seed's. This was what made shop-heavy spawns (Bugaria's commercial district) look open and fail the fill. (Asking
+   one stand-in item instead counted nothing at all in a room where that item is non-local: a review's find, fixed
+   before this step was committed.)
+6. **The ending story-only:** `BugariaEndPlaza` and `BugariaEndBridge` join `STORY_ONLY_MAPS`: their door pair stays as
+   the game has it, they're never a start, and the Warp and map travel aren't offered there (`no_travel_maps`).
+
+**Measured** (2026-10-13; scratch scripts, kept out of the repo; one random starting member, the field moves and
+Jump shuffled, a random start):
+
+- **What a start needs:** with the logic from the spawn, a bar of 1 spot failed 528 of 2000 generations, of 10 (the
+  dishonest count) 111, of 10 plus the trapped check 94. Through Archipelago's own fill, 1000 seeds with the doors off
+  and the honest count: spawns opening 0 spots failed 482 of 482, 1 failed 200 of 238, 2 failed 13 of 52, 3 or more 0
+  of 228. The game's own start opens 3 on these options: the rule's bar.
+- **At the bar:** 2 of 754 spawns opening exactly 3 still failed, both in one pocket (the Far Grasslands and the
+  desert border) where no single item opens more than 4: build step 97.
+- **Where a door leads, checked on the way:** a shuffled door copies the game's own door data, so it always arrives
+  where the game's own door into that room does; a one-way lands where another one-way lands in the game. Every door
+  the game makes only after a story flag is covered (kept present, made present from the start, or its area mapped).
+
+**Tests** (`test_start.py`; not yet run, at push time): each door into a room a start; never at a door the game hides;
+Menu leads only to the start's area; the opening's checks in Menu; every region reachable with everything from the
+start; a start reaching too little (Rubber Prison's cell block) picked again, and a trapped one (Snakemouth Den's lake
+from the fall room: 11 spots, 482 regions cut off, so only the cut-off check refuses it); a rule against one item
+leaves the start's count as it was (`TestStartCount`). `TestDoorShuffleRetries` passes the bar to the shuffle.
+
+**Status:** works (2026-10-13), measured through Archipelago's own fill and the fuzzer (random spawns in the three
+door modes, 0 failures and 0 timeouts in 2000); not yet seen in game (the mod's side, `documentation.md`, step 65).
+
+*Code: `data_types.py` (`RoomStart`), `data_tables.py` (`ROOM_STARTS`, `start_region`, `STORY_ONLY_MAPS`),
+`regions.py` (`START_ENTRANCE`), `locations.py`, `world.py` (`connect_entrances`), `entrances.py` (`start_wanted`,
+`keep_spawn_open`, `_fit_spawn`, `_Measure`); the mod's side `documentation.md`, step 65.*
+
+## Build step 97: a tight start's way on placed early
+
+**Found** (2026-10-13, measuring build step 96): a start opening only a few spots can still fail the fill when what
+opens the way on must land in those few spots. Archipelago's docs name it: "My game has a restrictive start that
+leads to fill errors" (`docs/apworld_dev_faq.md`), "very few sphere 1 locations and potentially requiring more than one
+item to get a player to sphere 2", and give `local_early_items` as the first fix.
+
+**Decided** (2026-10-13): only for a tight start, one opening fewer than 10 spots with what a new file has (never
+with the default options, whose start opens 16, nor a spawn there, which must open 10); one item, like a game putting
+its sword early, picked at random among those that alone open 10 spots, so it isn't always the same one. A spawn where
+no single item does is restrictive and is picked again (build step 96).
+
+**Built:** `early_items` (`entrances.py`), in `pre_fill` (after `generate_basic`'s rolls, so they stay as they were):
+for a tight start, one progression item picked with the seed's random among those that alone open 10 spots, else item
+by item the one opening most until the start opens more than alone (3 at most, `EARLY_ITEMS`; only the game's own start
+can need that, a spawn never does); each goes into `multiworld.local_early_items`, and Archipelago's fill
+(`distribute_early_items`, `Fill.py`) places it in one of the player's own spots in the start's reach before the rest.
+Skipped when Universal Tracker rebuilds a seed. `_fit_spawn` refuses a tight spawn with no such item.
+
+**Measured** (2026-10-13; one random starting member, field moves and Jump shuffled; 1000 seeds each through
+Archipelago's own fill): a random start with the doors off, Coupled and Room Swap, and Coupled from the game's start:
+**1000 of 1000** each.
+
+**Tests** (`test_start.py`, `TestTightStart`; not yet run, at push time): none with the defaults; Vi alone with the
+moves and Jump shuffled (the game's start opens 3) gets one, which alone opens 10 or more; none when an item link took
+the player's progression out of the pool (a review's find: it crashed); never a non-local item; Leif alone at the
+desert's DR East Entrance (no item alone opens more than 4) is picked again.
+
+**Status:** works (2026-10-13): 0 failures and 0 timeouts in 2000 through the fuzzer on the hardest options from the
+game's start, and 2000 with random options; nothing to see in game but where an item lands.
+
+*Code: `entrances.py` (`early_items`, `_Measure.with_items`), `world.py` (`pre_fill`).*
 
 # How it works
 

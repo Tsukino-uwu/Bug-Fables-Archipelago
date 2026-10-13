@@ -181,7 +181,7 @@ namespace BugFablesAP
 
         // A door's name in door_targets: its entity name, or "name#row" where its map has two doors of that name, the
         // row being its line in the map's entity table.
-        private static string Split(string door, out int row)
+        internal static string Split(string door, out int row)
         {
             int hash = door.LastIndexOf('#');
             row = -1;

@@ -196,17 +196,19 @@ class ShuffleShopInventories(DefaultOnToggle):
 
 class EntranceRandomizer(Choice):
     """
-    EXPERIMENTAL. Doors between areas lead somewhere else, and every room stays reachable.
+    EXPERIMENTAL. Doors between areas lead somewhere else, and every room stays reachable. From least to most
+    scrambled:
 
-    Room Swap: each room trades places with a room anywhere in the game that has as many doors (rooms reached only by
-    a ride or a scene swap among themselves). The map keeps the game's shape; only which room sits where changes. Turning round takes you back where you came from.
-    Coupled: any door may lead to any other; a door and its way back stay a pair, so turning round takes you back.
-    Decoupled: any door may lead to any other, and the way back is shuffled too: turning round can take you somewhere
-    else.
+    Room Swap: the world keeps the game's shape. Whole rooms trade places with rooms of as many doors in their part of
+    the world (parts joined only by a ride or a scene stay apart), and a room's doors may turn: familiar roads,
+    unfamiliar rooms. Going back through a door takes you back; one-way doors stay as the game has them.
+    Coupled: any door may lead to any other, a new web of doors. Going back through a door always takes you back, so
+    you can retrace your steps. One-way doors (the fog maze's wrong turns, drops) are shuffled among themselves.
+    Decoupled: as Coupled, but each way of a door is shuffled on its own: going back through a door can take you
+    somewhere else. The most chaotic.
 
-    The logic follows the doors, but not yet what each room needs inside: a room can ask for more than the logic knows,
-    so a seed with this on may not be finishable (the pause menu's Warp button gets you out of a dead end). Off by
-    default.
+    The logic follows the doors and what every room needs inside, but a few doors are still to be gone through, so it
+    stays experimental; the pause menu's Warp gets you out of a dead end. Off by default.
 
     Doors in this version: {count}.
     """
@@ -243,8 +245,8 @@ class StartingLocation(Choice):
     even in the middle of a dungeon, arriving as if through one of its doors. The pause menu's Warp takes you back to
     it.
 
-    The logic doesn't know the start yet: items are placed as if you began outside Bugaria, so a seed started anywhere
-    may not be finishable, and a room with no free way out can strand you (a new seed then). Off by default.
+    The logic starts there: items are placed so the seed can be finished from where you begin. A room a seed can't
+    begin from (too few checks in reach with what a new file has, or no way out yet) is never picked. Off by default.
 
     Room arrivals to start at in this version: {count}.
     """

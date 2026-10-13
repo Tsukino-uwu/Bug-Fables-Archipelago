@@ -104,6 +104,7 @@ namespace BugFablesAP
             }
             Add("start", "", c.Start.HasValue ? $"{c.Start.Value.Key}|{c.Start.Value.Value}" : "null");
             Add("start_from", "", c.StartFrom ?? "null");
+            Add("start_door", "", c.StartDoor ?? "null");
             Add("own_slot", "", c.OwnSlot.ToString());
             Add("artifacts_required", "", c.ArtifactsRequired.ToString());
             Add("starting_member", "", $"{PartyMembers.SeedSaysMember}|{PartyMembers.SeedStartMember}");

@@ -9,7 +9,7 @@ from BaseClasses import Region
 
 from .custom_rules import one_way
 from .data_tables import (DOOR_RULES, DOORS, MAP_AREAS, MAPS, ONE_WAYS, REGIONS, TRANSFERS, door_name,
-                          door_region, landing_region)
+                          door_region, landing_region, start_region)
 
 if TYPE_CHECKING:
     from rule_builder.rules import Rule
@@ -20,6 +20,8 @@ if TYPE_CHECKING:
 MENU = "Menu"
 # A new game begins outside the city.
 START_MAP = "BugariaOutskirtsOutsideCity"
+# Menu's way into a seed's own start, named apart from the room it leads to, since a start too small is picked again.
+START_ENTRANCE = f"{MENU} -> Starting Location"
 
 
 def create_and_connect_regions(world: BugFablesWorld) -> None:
@@ -28,6 +30,9 @@ def create_and_connect_regions(world: BugFablesWorld) -> None:
     world.multiworld.regions += [menu, *regions.values()]
     regions[MENU] = menu
     for entrance in logic_entrances():
+        if entrance.from_map == MENU and world.start:
+            # The logic starts where the seed's start puts the party, as a reset (the Warp to Start) takes it back.
+            entrance = entrance._replace(name=START_ENTRANCE, to_map=start_region(world.start))
         # A door is always made, even one its rule shuts for good: the entrance randomizer and the door table name
         # every door (World.create_entrance otherwise skips a rule that is always false).
         world.create_entrance(regions[entrance.from_map], regions[entrance.to_map], entrance.rule, name=entrance.name,
@@ -44,7 +49,8 @@ class LogicEntrance(NamedTuple):
 
 def logic_entrances() -> list[LogicEntrance]:
     """Every entrance the logic makes, the same in every seed (the options resolve its rules), so the PopTracker pack
-    exports these: Menu to the start, the doors, the one-way doors, the fixed doors and the transfers."""
+    exports these: Menu to the game's start (a seed's own start replaces it), the doors, the one-way doors, the fixed
+    doors and the transfers."""
     entrances = [LogicEntrance(f"{MENU} -> {START_MAP}", MENU, START_MAP, None)]
     gates = {(gate.map, gate.door): gate.rule for gate in DOOR_RULES}
     for connection in DOORS.connections:

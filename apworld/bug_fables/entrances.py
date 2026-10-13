@@ -12,13 +12,14 @@ from collections.abc import Mapping, Sequence
 from random import Random
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, Entrance, EntranceType, LocationProgressType, Region
+from BaseClasses import CollectionState, Entrance, EntranceType, Item, LocationProgressType, Region
 from entrance_rando import EntranceRandomizationError, disconnect_entrance_for_randomization, randomize_entrances
 
-from .data_tables import (DOORS, KEPT_DOORS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name, door_region,
-                          landing_region, one_way_landing)
+from .data_tables import (DOORS, KEPT_DOORS, ROOM_STARTS, SHUFFLED_CONNECTIONS, SHUFFLED_ONE_WAYS, door_name,
+                          door_region, landing_region, one_way_landing)
 from .data_types import DoorConnection, OneWayDoor
 from .options import EntranceRandomizer
+from .regions import START_ENTRANCE, START_MAP
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -125,9 +126,10 @@ def door_targets(pairings: Sequence[tuple[Door, Door]], connections: Sequence[Do
     return targets
 
 
-def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
-    """Splits every door entrance and connects them anew as the option says; returns the pairings, each door
-    (exit) with the door it now leads to, or for a one-way, the one-way whose landing it now takes."""
+def shuffle(world: BugFablesWorld, wanted: int) -> list[tuple[Door, Door]]:
+    """Splits every door entrance and connects them anew as the option says, leaving the start at least wanted spots
+    (start_wanted) where Archipelago's randomizer places them; returns the pairings, each door (exit) with the door it
+    now leads to, or for a one-way, the one-way whose landing it now takes."""
     mode = world.options.entrance_randomizer
     if world.options.plando_connections and mode in (EntranceRandomizer.option_off,
                                                      EntranceRandomizer.option_room_swap):
@@ -136,10 +138,8 @@ def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
     if mode == EntranceRandomizer.option_off:
         return []
     if mode == EntranceRandomizer.option_room_swap:
-        return _swap_rooms(world, _split(world))
+        return _swap_rooms(world, _split(world), wanted)
     measure = _Measure(world)
-    # Room Swap's rule for the start, measured before the doors are split.
-    wanted = min(_START_SPOTS, measure.start()[0])
     names = _split(world)
     doors = {name: door for door, name in names.items()}
     doors |= {name: (w.map, w.door) for w in SHUFFLED_ONE_WAYS
@@ -153,8 +153,9 @@ def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
 # Archipelago's randomizer gives up when the dead ends outnumber the spare doors it has reached, with no retry of its own
 # (entrance_rando.py): each try is a new draw from the world's random.
 DOOR_TRIES = 10
-# Draws refused, over all tries, because the start opens fewer spots than wanted (_START_SPOTS).
-START_RESHUFFLES = 5
+# Draws refused, over all tries, because the start opens fewer spots than wanted (start_wanted): up to 71% of draws
+# for some options (measured 2026-10-13), and a start kept that small can fail the fill.
+START_RESHUFFLES = 50
 # Then the doors a failure left waiting lead where the game has them, and the rest are drawn again, round by round.
 PIN_ROUNDS = 10
 PIN_ROUND_TRIES = 5
@@ -189,14 +190,16 @@ def _randomize(world: BugFablesWorld, coupled: bool, measure: _Measure,
                 logging.info("Bug Fables: player %s (%s)'s door shuffle ran out of spare doors on a draw.",
                              world.player, world.player_name)
                 continue
-            spots = measure.start()[0]
-            if spots < wanted:
-                if reshuffles < START_RESHUFFLES:
-                    reshuffles += 1
-                    free.reset()
-                    continue
-                logging.info("Bug Fables: player %s (%s)'s doors open %d spots from the start, fewer than %d, after %d "
-                             "draws refused; kept.", world.player, world.player_name, spots, wanted, reshuffles)
+            # A random start may move to another room start that suits these doors.
+            if not (_fit_spawn(world, measure, wanted, SPAWN_TRIES) if world.start
+                    else measure.start()[0] >= wanted):
+                if reshuffles == START_RESHUFFLES:
+                    raise EntranceRandomizationError(
+                        f"Bug Fables: player {world.player_name}'s doors opened fewer than {wanted} spots from the start "
+                        f"in {START_RESHUFFLES + 1} draws")
+                reshuffles += 1
+                free.reset()
+                continue
             return pins, placed.pairings
     raise EntranceRandomizationError(
         f"Bug Fables: player {world.player_name}'s door shuffle ran out of spare doors in every try, with "
@@ -378,11 +381,12 @@ _STUCK = 200
 _START_SPOTS = 10
 
 
-def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Door, Door]]:
+def _swap_rooms(world: BugFablesWorld, names: dict[Door, str], wanted: int) -> list[tuple[Door, Door]]:
     """A room swap the logic can finish: unlike Archipelago's randomizer, it doesn't follow the logic while placing (a
     gated door moves with its room and can close the only way on), so a random layout is repaired: two like rooms trade
     places, or a room's doors turn, most often among the rooms the start reaches while it opens fewer spots than wanted
-    (the fill needs them), else around what is cut off, each move kept unless it cuts off more or opens fewer."""
+    (the fill needs them), else around what is cut off, each move kept unless it cuts off more or opens fewer. A random
+    start must suit the repaired layout too (_fit_spawn); a layout none suits is dropped for a new one."""
     random = world.random
     wiring = _Wiring(world, names)
     measure = _Measure(world)
@@ -390,8 +394,6 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
     group_of = {slot: slots for slots in layout.groups for slot in slots}
     movable = [g for g in layout.groups if len(g) > 1 or len(layout.by_area[g[0]]) > 1]
     region_of = {door: door_region(*door) for door in layout.partner}
-    wiring.wire([(a, b) for a, b in layout.partner.items() if a < b])
-    wanted = min(_START_SPOTS, measure()[1])
     pairings = wiring.wire(layout.pairs())
     cut, start, opened = measure()
     since_better = 0
@@ -402,7 +404,10 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
             cut, start, opened = measure()
             since_better = 0
         if not cut and start >= wanted:
-            return pairings
+            if not world.start or _fit_spawn(world, measure, wanted, SPAWN_TRIES):
+                return pairings
+            since_better = _STUCK
+            continue
         slots = random.choice(movable)
         if random.random() < _HOT_MOVES:
             if start < wanted:
@@ -472,8 +477,8 @@ class _Wiring:
 
 class _Measure:
     """For the layout connected now: the regions it cuts off with everything the seed holds, as Archipelago's
-    randomizer checks it; how many spots that can take progression (not excluded) it opens from the start, with only
-    the start's items; and the regions it opens."""
+    randomizer checks it; how many spots that can take progression (not excluded, nor kept from it by an item rule) it
+    opens from the start, with only the start's items; and the regions it opens."""
 
     def __init__(self, world: BugFablesWorld):
         self.world = world
@@ -484,17 +489,39 @@ class _Measure:
         for item in world.multiworld.itempool:
             if item.player == world.player:
                 world.collect(self.everything, item)
+        # One of each of the seed's progression items, by name.
+        self.kinds: dict[str, Item] = {}
+        for item in world.multiworld.itempool:
+            if item.player == world.player and item.advancement:
+                self.kinds.setdefault(item.name, item)
+        # The spots that can take some progression item: not excluded, and not kept from all of it by an item rule
+        # (Shop Contents' No Progression keeps a shop's spots to other items; a rule against one item, a non-local one
+        # say, leaves the rest).
+        self.open_to_progression = frozenset(
+            location for location in self.locations
+            if location.address is not None and location.progress_type != LocationProgressType.EXCLUDED
+            and (not self.kinds or any(location.item_rule(item) for item in self.kinds.values())))
+
+    def with_items(self, names: Sequence[str]) -> tuple[int, int]:
+        """With the start's items and one of each named: the spots that can take progression it opens, and regions."""
+        state = CollectionState(self.world.multiworld)
+        for name in names:
+            state.collect(self.kinds[name], True)
+        spots, regions = self.reach(state)
+        return spots, len(regions)
 
     def start(self) -> tuple[int, set[str]]:
         """With only the start's items: the spots that can take progression the layout opens, and the regions."""
-        player = self.world.player
         # A new state already holds the start's items.
-        start = CollectionState(self.world.multiworld)
+        return self.reach(CollectionState(self.world.multiworld))
+
+    def reach(self, start: CollectionState) -> tuple[int, set[str]]:
+        """With the items the state holds: the spots that can take progression the layout opens, and the regions."""
+        player = self.world.player
         start.sweep_for_advancements(self.locations)
         opened_regions = [region for region in self.regions if start.can_reach_region(region.name, player)]
         spots = sum(1 for region in opened_regions for location in region.locations
-                    if location.address is not None and location.progress_type != LocationProgressType.EXCLUDED
-                    and location.access_rule(start))
+                    if location in self.open_to_progression and location.access_rule(start))
         return spots, {region.name for region in opened_regions}
 
     def __call__(self) -> tuple[set[str], int, set[str]]:
@@ -504,6 +531,96 @@ class _Measure:
         state.sweep_for_advancements(self.locations)
         cut = {region.name for region in self.regions if not state.can_reach_region(region.name, player)}
         return cut, spots, opened
+
+
+def start_wanted(world: BugFablesWorld) -> int:
+    """Room Swap's rule for any start, from the game's own start on its own doors (before they're split): as many spots
+    as it opens, up to _START_SPOTS."""
+    measure = _Measure(world)
+    if not world.start:
+        return min(_START_SPOTS, measure.start()[0])
+    entrance = world.get_entrance(START_ENTRANCE)
+    spawn = entrance.connected_region
+    _point(entrance, world.get_region(START_MAP))
+    spots = measure.start()[0]
+    _point(entrance, spawn)
+    return min(_START_SPOTS, spots)
+
+
+# Room starts tried on one door layout, the random start's own first, before the layout is drawn again.
+SPAWN_TRIES = 20
+
+
+def keep_spawn_open(world: BugFablesWorld, wanted: int) -> None:
+    """A random start that can't begin a seed on the doors as they now are is replaced by one that can (_fit_spawn,
+    every room start tried); none can is an error."""
+    if not _fit_spawn(world, _Measure(world), wanted, len(ROOM_STARTS)):
+        raise ValueError(f"Bug Fables: player {world.player_name}: no room start can begin this seed")
+
+
+def _fit_spawn(world: BugFablesWorld, measure: _Measure, wanted: int, tries: int) -> bool:
+    """Whether the random start, or failing it one of `tries` other room starts in the seed's random order, can begin
+    a seed on the doors as they now are: it opens at least wanted spots, cuts no region off even with everything (the
+    logic has no way out of some places), and if tight (fewer than _START_SPOTS) isn't restrictive: one item alone
+    opens _START_SPOTS (Archipelago's restrictive start needs more than one to go on, docs/apworld_dev_faq.md).
+    Menu's way in (and world.start) is left at the one that can, or where it was."""
+    entrance = world.get_entrance(START_ENTRANCE)
+    home = entrance.connected_region
+    # The items early_items may place: never a non-local one.
+    early = sorted(name for name in measure.kinds if name not in world.options.non_local_items.value)
+
+    def fits() -> bool:
+        spots = measure.start()[0]
+        return (spots >= wanted and not measure()[0]
+                and (spots >= _START_SPOTS or any(measure.with_items([name])[0] >= _START_SPOTS for name in early)))
+
+    if fits():
+        return True
+    rooms = list(ROOM_STARTS)
+    world.random.shuffle(rooms)
+    for tried, room in enumerate(rooms[:tries], 1):
+        _point(entrance, world.get_region(door_region(room.map, room.arrival)))
+        if fits():
+            logging.info("Bug Fables: player %s (%s)'s start couldn't begin a seed; %s (from %s) after %d more.",
+                         world.player, world.player_name, room.map, room.from_map, tried)
+            world.start = room.to_slot()
+            return True
+    _point(entrance, home)
+    return False
+
+
+# Items placed early for a tight start, at most: a start that needs more than this to go on isn't helped by them.
+EARLY_ITEMS = 3
+
+
+def early_items(world: BugFablesWorld) -> list[str]:
+    """For a tight start, one opening fewer than _START_SPOTS spots with the start's items: the progression items for
+    Archipelago to place within the start's reach (local_early_items, its answer to a restrictive start,
+    docs/apworld_dev_faq.md). One picked with the seed's random among those that alone open _START_SPOTS; failing
+    that, item by item the one opening most (spots, then regions) until the start opens more than it does alone,
+    EARLY_ITEMS at most (leaving a start can take two at once: a member and their ability). None for a start that
+    isn't tight, and never an item the player's own world mustn't hold (non_local_items) or one an item link took out
+    of the player's pool."""
+    measure = _Measure(world)
+    alone = measure.start()[0]
+    names = sorted(name for name in measure.kinds if name not in world.options.non_local_items.value)
+    if alone >= _START_SPOTS or not names:
+        return []
+    single = {name: measure.with_items([name]) for name in names}
+    enough = [name for name in single if single[name][0] >= _START_SPOTS]
+    if enough:
+        return [world.random.choice(enough)]
+    chosen = [max(single, key=lambda name: single[name])]
+    while measure.with_items(chosen)[0] <= alone and len(chosen) < min(EARLY_ITEMS, len(single)):
+        more = {name: measure.with_items([*chosen, name]) for name in single if name not in chosen}
+        chosen.append(max(more, key=lambda name: more[name]))
+    return chosen
+
+
+def _point(entrance: Entrance, region: Region) -> None:
+    """Menu's way into the start, pointed at another region."""
+    entrance.connected_region.entrances.remove(entrance)
+    entrance.connect(region)
 
 
 def write_spoiler(world: BugFablesWorld) -> None:

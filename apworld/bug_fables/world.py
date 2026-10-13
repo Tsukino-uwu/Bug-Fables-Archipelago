@@ -137,8 +137,17 @@ class BugFablesWorld(World):
             self.door_pairings = entrances.replay(self, self.door_targets)
             universal_tracker.defer_doors(self)
             return
+        # A random start the seed can't begin from is picked again: on the game's own doors first, so the door shuffle
+        # never grows from it, then on the doors as shuffled.
+        # Room Swap's rule for every start, from the game's own start on its own doors: a random start that can't begin
+        # the seed is picked again, on these doors first, so the door shuffle never grows from it, then as shuffled.
+        wanted = entrances.start_wanted(self)
+        if self.start:
+            entrances.keep_spawn_open(self, wanted)
         # Doors are decided here, on the region graph, and sent in slot_data; the client never decides a door itself.
-        self.door_pairings = entrances.shuffle(self)
+        self.door_pairings = entrances.shuffle(self, wanted)
+        if self.start:
+            entrances.keep_spawn_open(self, wanted)
         # With the doors off nothing is rewritten, a one-way's story copies included.
         shuffled = self.options.entrance_randomizer != EntranceRandomizer.option_off
         self.door_targets = entrances.door_targets(self.door_pairings, DOORS.connections,
@@ -179,6 +188,11 @@ class BugFablesWorld(World):
 
     def pre_fill(self) -> None:
         rules.fall_back_from_filler_only(self)
+        if self.passthrough is None:
+            # A tight start gets the items that open its way placed within its reach; drawn after generate_basic's
+            # rolls, so they stay as they were.
+            for item in entrances.early_items(self):
+                self.multiworld.local_early_items[self.player][item] = 1
 
     def get_filler_item_name(self) -> str:
         return items.random_filler_name(self)

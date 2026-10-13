@@ -117,6 +117,7 @@ anyone curious about the process, or thinking of doing the same for another game
 62. [The Sand Castle Key's join kept away](#62-the-sand-castle-keys-join-kept-away)
 63. [The Ancient Castle's story add and its artifact scene](#63-the-ancient-castles-story-add-and-its-artifact-scene)
 64. [The last fight held, and the goal at the credits](#64-the-last-fight-held-and-the-goal-at-the-credits)
+65. [A seed's start through its named door](#65-a-seeds-start-through-its-named-door)
 
 ## Where it stands
 
@@ -3741,3 +3742,21 @@ file's own 555, and the note is cleared while 555 is off.
 
 *Code: `World/KeptOpen.cs` (`HoldLastFight`, `PlaceArtifactSign`), `Items/LocationChecks.cs` (`Credits`, `CheckGoal`);
 `Dev/DevConsole.cs` (`event`, `uncredits`).*
+
+## 65. A seed's start through its named door
+
+Decided 2026-10-13 (`apimplementation.md`, build step 96): the logic now starts beside the door a random start arrives
+by, so the mod must arrive by that same door. Until now `DoorInto(map, from)` took the first row of the `from` map's
+door table that leads into the room, and 14 pairs of rooms are joined by two doors, so the logic couldn't know which.
+
+**Built:** slot_data `start` names the door too (`{"map", "from", "door"}`, the `from` map's door, in the door table's
+form); `SeedData.StartDoor` reads it, and `SeedStartDoor` passes it to `DoorInto`, which already took a door name. A
+door table name may be `name#row` where a map has two doors of one name: `DoorInto` now reads it with
+`DoorShuffle.Split` (made internal) and takes only that row. Warp to Start uses the same `SeedStartDoor`, so it lands
+at the same door. The start's log lines name the door (`entering from <from>'s <door>`), and the dev seed dump shows
+`start_door`.
+
+**Status:** built (2026-10-13); not yet seen in game.
+
+*Code: `Core/SeedData.cs`, `Core/ApConnection.cs`, `Core/Plugin.cs`, `Gameplay/QualityOfLife.Opening.cs` (`DoorInto`,
+`SeedStartDoor`), `Gameplay/QualityOfLife.cs`, `World/DoorShuffle.cs` (`Split`), `Dev/SeedDump.cs`.*

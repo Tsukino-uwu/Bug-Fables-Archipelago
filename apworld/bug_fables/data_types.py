@@ -156,13 +156,16 @@ class Doors:
 
 @dataclass(frozen=True, slots=True, kw_only=True, order=True)
 class RoomStart:
-    """A room a random start can begin in, entered as if through the door from from_map."""
+    """A room a random start can begin in, entered as if through from_map's door: the party appears where that door
+    leads, beside map's door arrival, whose area the logic starts in."""
 
     map: str
     from_map: str
+    door: str
+    arrival: str
 
     def to_slot(self) -> dict[str, str]:
-        return {"map": self.map, "from": self.from_map}
+        return {"map": self.map, "from": self.from_map, "door": self.door}
 
 
 @dataclass(frozen=True, slots=True)

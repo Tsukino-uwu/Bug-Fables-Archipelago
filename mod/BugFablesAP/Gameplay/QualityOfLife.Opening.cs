@@ -26,6 +26,8 @@ namespace BugFablesAP
         internal static Func<KeyValuePair<string, int>?> SeedStart;
         // A room start: the map whose door leads into the start map.
         internal static Func<string> SeedStartFrom;
+        // The door of that map the start comes through (slot_data start "door"), the one the logic starts beside.
+        internal static Func<string> SeedStartDoorName;
         // The seed's items the story puts straight into the bag (slot_data location_added), or null outside a seed.
         internal static Func<Dictionary<long, int[]>> SeedAdded;
         // The seed's quiet checks (slot_data quiet_locations), or null outside a seed.
@@ -37,7 +39,7 @@ namespace BugFablesAP
         internal static Vector3[] SeedStartDoor(MainManager.Maps map)
         {
             string from = SeedStartFrom?.Invoke();
-            return from == null ? null : DoorInto(map, from);
+            return from == null ? null : DoorInto(map, from, SeedStartDoorName?.Invoke());
         }
         internal static Func<bool> SeedKnown;
         private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
@@ -69,6 +71,9 @@ namespace BugFablesAP
                 log.LogInfo($"[qol] arriving in {target} through {fromMap}'s seed door{(door != null ? " " + door : "")}: appear at {seeded[1]}, walk to {seeded[2]}");
                 return seeded;
             }
+            // A door table name: the entity's name, or "name#row" where the map has two of that name.
+            int row = -1;
+            string name = door == null ? null : DoorShuffle.Split(door, out row);
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
                 if (fromMap != null && !string.Equals(map.ToString(), fromMap, StringComparison.OrdinalIgnoreCase))
@@ -89,7 +94,7 @@ namespace BugFablesAP
                 string[] lines = table.ToString().Split('\n');
                 for (int i = 0; i < lines.Length - 1; i++)
                 {
-                    if (door != null && (i >= names.Length || names[i].Trim() != door))
+                    if (door != null && (i >= names.Length || names[i].Trim() != name || row >= 0 && i != row))
                     {
                         continue;
                     }

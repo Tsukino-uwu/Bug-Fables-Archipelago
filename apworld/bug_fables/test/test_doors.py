@@ -312,11 +312,14 @@ class TestRoomSwapLeavesAStart(TestCase):
 
 
 def _start_spots(world: BugFablesWorld) -> int:
-    """The spots that can take progression open from the start, with the start's own items."""
+    """The spots that can take progression open from the start, with the start's own items: not excluded, and not
+    kept from every progression item by an item rule (Shop Contents' No Progression)."""
     state = CollectionState(world.multiworld)
     state.sweep_for_advancements()
+    progression = [item for item in world.multiworld.itempool if item.player == world.player and item.advancement]
     return sum(1 for location in world.get_locations() if location.address is not None
-               and location.progress_type != LocationProgressType.EXCLUDED and location.can_reach(state))
+               and location.progress_type != LocationProgressType.EXCLUDED
+               and any(location.item_rule(item) for item in progression) and location.can_reach(state))
 
 
 class TestRoomSwapRepairsQuickly(TestCase):
@@ -389,19 +392,23 @@ class TestDoorShuffleRetries(TestCase):
     """Archipelago's randomizer drawn again when it runs out of spare doors or leaves the start too small, then the
     doors a failure left waiting pinned where the game has them (build step 95)."""
 
-    # A fuzzer seed (2026-10-13, yaml 1905) whose one draw ran out of spare doors: 52 dead ends, all real.
+    # A failing fuzzer yaml's options (2026-10-13, yaml 1905: its one draw ran out of spare doors, 52 dead ends, all
+    # real), the start off so a spawn picked again can't move the draws; seed 9 runs out on a draw (found the same day).
     DEADLOCKED = {"progression_balancing": 13, "accessibility": "full", "artifacts_required": 6,
                   "artifact_shuffle": "vanilla", "shuffle_quests": False, "shuffle_crystal_berries": False,
                   "shuffle_discoveries": True, "shuffle_hidden_items": True, "shuffle_dig_spots": False,
                   "enemy_sanity": False, "shuffle_medal_shops": False, "shuffle_item_shops": True,
                   "shuffle_termacade": True, "minigame_prizes": True, "shop_contents": "filler_only",
                   "shuffle_shop_inventories": False, "entrance_randomizer": "coupled", "enemy_shuffle": "off",
-                  "starting_location": "anywhere", "starting_party_member": "off", "filler_starting_checks": True,
+                  "starting_location": "off", "starting_party_member": "off", "filler_starting_checks": True,
                   "shuffle_field_moves": False, "shuffle_jump": False, "points_of_no_return": False,
                   "progressive_boat": False, "music_shuffle": True}
 
-    def test_a_fuzzer_deadlock_generates(self) -> None:
-        _assert_whole(self, generate_like_main(self.DEADLOCKED, seed=851669694, steps=THROUGH_DOORS))
+    def test_a_deadlock_generates(self) -> None:
+        with self.assertLogs(level="INFO") as logs:
+            world = generate_like_main(self.DEADLOCKED, seed=9, steps=THROUGH_DOORS)
+        self.assertTrue(any("ran out of spare doors on a draw" in line for line in logs.output))
+        _assert_whole(self, world)
 
     def test_a_draw_that_ran_out_is_drawn_again(self) -> None:
         randomizer = _Randomizer(failures=2)
@@ -413,10 +420,11 @@ class TestDoorShuffleRetries(TestCase):
         _assert_whole(self, world)
 
     def test_doors_left_waiting_are_pinned(self) -> None:
-        # Two rounds of pins: every try of the first ten and of the first round runs out.
-        world, measure, wanted = _split_world(COUPLED, seed=1)
+        # Two rounds of pins: every try of the first ten and of the first round runs out. No bar for the start, whose
+        # redraws would change the count.
+        world, measure, _ = _split_world(COUPLED, seed=1)
         randomizer = _Randomizer(failures=entrances.DOOR_TRIES + entrances.PIN_ROUND_TRIES)
-        pins, _ = randomizer.run(lambda: entrances._randomize(world, True, measure, wanted))
+        pins, _ = randomizer.run(lambda: entrances._randomize(world, True, measure, 0))
         self.assertEqual(len(randomizer.graphs), entrances.DOOR_TRIES + entrances.PIN_ROUND_TRIES + 1)
         self.assertTrue(pins)
         partner = _partners(SHUFFLED_CONNECTIONS)
@@ -449,14 +457,14 @@ class TestDoorShuffleRetries(TestCase):
         world.explicit_indirect_conditions = False
         randomizer = _Randomizer()
         with self.assertRaisesRegex(EntranceRandomizationError, "explicit indirect conditions"):
-            randomizer.run(lambda: entrances.shuffle(world))
+            randomizer.run(lambda: entrances.shuffle(world, 0))
         self.assertEqual(len(randomizer.graphs), 1)
 
     def test_a_draw_that_placed_nothing_is_not_drawn_again(self) -> None:
         world = generate_like_main(COUPLED, seed=1, steps=BEFORE_DOORS)
         randomizer = _Randomizer(failures=1, at_once=True)
         with self.assertRaisesRegex(EntranceRandomizationError, "forced by a test"):
-            randomizer.run(lambda: entrances.shuffle(world))
+            randomizer.run(lambda: entrances.shuffle(world, 0))
         self.assertEqual(len(randomizer.graphs), 1)
 
     def test_split_kinds_must_match(self) -> None:
@@ -464,21 +472,22 @@ class TestDoorShuffleRetries(TestCase):
         world.get_region(MENU).create_exit("A door to nowhere")
         randomizer = _Randomizer()
         with self.assertRaisesRegex(ValueError, "ONE_WAY exits"):
-            randomizer.run(lambda: entrances.shuffle(world))
+            randomizer.run(lambda: entrances.shuffle(world, 0))
         self.assertEqual(randomizer.graphs, [])
 
     def test_a_small_start_is_drawn_again(self) -> None:
+        # A start too small is never kept: drawn again START_RESHUFFLES times, then the error.
         world, measure, _ = _split_world(COUPLED, seed=1)
         randomizer = _Randomizer()
-        randomizer.run(lambda: entrances._randomize(world, True, measure, 10 ** 6), start_check=True)
+        with self.assertRaisesRegex(EntranceRandomizationError, "spots from the start"):
+            randomizer.run(lambda: entrances._randomize(world, True, measure, 10 ** 6), start_check=True)
         self.assertEqual(len(randomizer.graphs), 1 + entrances.START_RESHUFFLES)
-        _assert_whole(self, world)
 
     def test_the_start_opens_what_is_wanted(self) -> None:
         world, measure, wanted = _split_world(COUPLED, seed=1)
         randomizer = _Randomizer()
         randomizer.run(lambda: entrances._randomize(world, True, measure, wanted), start_check=True)
-        self.assertTrue(measure.start()[0] >= wanted or len(randomizer.graphs) == 1 + entrances.START_RESHUFFLES)
+        self.assertGreaterEqual(measure.start()[0], wanted)
 
 
 class _Randomizer:
@@ -499,16 +508,16 @@ class _Randomizer:
         return randomize_entrances(world, coupled, target_group_lookup, on_connect=_run_out)
 
     def run(self, build: Callable[[], Any], start_check: bool = False) -> Any:
-        """build() with this randomizer in place, and the start check off unless asked for, as its draws would change
-        the count."""
-        kept = entrances.randomize_entrances, entrances.START_RESHUFFLES
+        """build() with this randomizer in place, and the start's bar at 0 unless the start check is asked for, as its
+        draws would change the count."""
+        kept = entrances.randomize_entrances, entrances._START_SPOTS
         entrances.randomize_entrances = self.randomize
         if not start_check:
-            entrances.START_RESHUFFLES = 0
+            entrances._START_SPOTS = 0
         try:
             return build()
         finally:
-            entrances.randomize_entrances, entrances.START_RESHUFFLES = kept
+            entrances.randomize_entrances, entrances._START_SPOTS = kept
 
 
 def _run_out(state: Any, exits: Any, targets: Any) -> None:

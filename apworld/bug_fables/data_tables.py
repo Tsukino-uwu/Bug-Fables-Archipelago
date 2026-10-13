@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import pkgutil
+from collections.abc import Mapping
 from typing import Any
 
 from rule_builder.rules import False_
@@ -33,10 +34,11 @@ def _load(name: str) -> dict[str, Any]:
 
 
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
-# Story-only copies of rooms, there for one scene (chapter 3's attack on the city): their doors are never shuffled and
-# they're never a start, so their door pairs join the fixed links (the user, 2026-10-05).
+# Story-only copies of rooms, there for one scene (chapter 3's attack on the city, 2026-10-05; the ending's plaza and
+# bridge, 2026-10-13): their doors are never shuffled and they're never a start, so their door pairs join the fixed
+# links.
 STORY_ONLY_MAPS = frozenset({"BugariaAssociationAttack", "BugariaPlazaAttack", "BugariaBridgeAttack",
-                             "BugariaCastleAttack"})
+                             "BugariaCastleAttack", "BugariaEndPlaza", "BugariaEndBridge"})
 
 
 def _story_doors_fixed(doors: Doors) -> Doors:
@@ -126,14 +128,24 @@ def landing_region(door: OneWayDoor) -> str:
     return door.to if area is None else area.region
 
 
-# Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
-# there lands where walking in through that door ends, at the room's own door back: never one the game makes only from
-# a story flag (absent on a new file, so the landing is over nothing) unless the seed keeps it present.
+# Every room entered through a door, each door into it once (both ways of each connection). A start there lands where
+# walking in through that door ends, at the room's own door back, the area the logic starts in: never one the game
+# makes only from a story flag (absent on a new file, so the landing is over nothing) unless the seed keeps it present.
 _PRESENT_FROM_START: frozenset[tuple[str, str]] = frozenset((e.map, e.entity) for e in KEPT_PRESENT)
 ROOM_STARTS: tuple[RoomStart, ...] = tuple(sorted(
-    {RoomStart(map=end.map, from_map=other.map) for c in DOORS.connections for end, other in ((c.a, c.b), (c.b, c.a))
+    {RoomStart(map=end.map, from_map=other.map, door=other.door, arrival=end.door)
+     for c in DOORS.connections for end, other in ((c.a, c.b), (c.b, c.a))
      if end.map != other.map
      and ((end.map, end.door) not in DOORS.gated or (end.map, end.door) in _PRESENT_FROM_START)}))
+_ROOM_START_OF: dict[tuple[str, str, str], RoomStart] = {(s.map, s.from_map, s.door): s for s in ROOM_STARTS}
+
+
+def start_region(start: Mapping[str, str]) -> str:
+    """The region a seed's start (slot_data start) begins in: the area beside its door's arrival."""
+    room = _ROOM_START_OF.get((start.get("map", ""), start.get("from", ""), start.get("door", "")))
+    if room is None:
+        raise ValueError(f"bug_fables: the start {dict(start)} is no room start of this version")
+    return door_region(room.map, room.arrival)
 # Every save point (map, entity index). Unused today (a random start picks from ROOM_STARTS); kept for named start
 # spots, a planned option.
 STARTS: tuple[SavePoint, ...] = tuple(SavePoint.from_json(s) for s in _load("starts.json")["starts"])
