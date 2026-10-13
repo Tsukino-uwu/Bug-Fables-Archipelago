@@ -905,7 +905,7 @@ be wrong.
     the release runs while the credits play. X is 1 to 7 with artifacts shuffled, 1 to 6 under Artifact Shuffle's
     Vanilla (chapter 7's artifact sits behind that fight). The default is 6 with Artifact Shuffle's default, Vanilla:
     the six chapters' artifacts open the fight, and the seventh comes from winning it, as in the game. Artifact Hunt, and a warp to the end plaza so other goals walk into the ceremony, wait
-    until the user decides how goals should work. `Event204` started off its own map softlocks (`MEASURED.md`, the
+    until it is decided how goals should work. `Event204` started off its own map softlocks (`MEASURED.md`, the
     Sapling Plains), so any other way into the credits goes through the ending's own maps.
     **Built 2026-10-13: build step 94** (the hold and the sign included, taken over from the chat that began them).
 74. **Inn food as a location, an idea** (asked 2026-10-11, mapping Metal Island's hotel; not decided): each inn's food
@@ -969,7 +969,7 @@ be wrong.
   grate and near gate hidden; seen working) measured 73 of 2000, no real change, so it was closed again the same day.
   The six drop-only ledges (the southern room's top door, the underground door room's two top doors, the Golden Path
   tunnel's high door, the Lost Sands entrance's and the badge alcove's ledge doors) were each looked at in game: each
-  is a real drop from an isolated ledge, kept as the game has it (the user, 2026-10-13). The Worker Rooms' halves too: two
+  is a real drop from an isolated ledge (seen), kept as the game has it. The Worker Rooms' halves too: two
   areas with no way between them, kept (the same day). **Next (decided 2026-10-13):** a fallback around the
   shuffler, built before v0.4.0 so the release ships with 0 fuzzer failures: retry, a start-area check, pinning
   stranded doors to vanilla, and a hard cap on attempts (Pokémon Crystal's layers, read for their approach).
@@ -5949,7 +5949,7 @@ position only). The user is "pretty sure" none blocks a way; it is rechecked on 
 **The buzzer, changed (2026-10-13):** a leader's press played the locked attack's buzzer even when it started their
 own learned move, so the Dash, Bee Fly and the Shield each buzzed first (seen). Now a leader's press is silent when
 they have learned that move (flags 699, 19 and 20, `FieldMoves.PressMoveFlags`), and buzzes only with neither it nor
-the attack: a short tap's refused attack then makes no sound either, a fair trade (the user, 2026-10-13). The Dash's
+the attack: a short tap's refused attack then makes no sound either, accepted as a fair trade (2026-10-13). The Dash's
 first press still stops Kabbu for the game's own double-tap window (15 frames, then 0.15 s); left as the game has it.
 
 **Status:** works, seen in seeds `AP_29838564452193402645` and `AP_13327170896682920080` (2026-10-13): the Dash
