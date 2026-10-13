@@ -8,9 +8,9 @@ For developers. You need the .NET SDK and your own copy of the game. The build c
 Once per clone: `git config core.hooksPath .githooks`. The hooks need Python 3.11 or newer and find one themselves
 (`py -3`, `python3`, then `python`, each tried before use), or use the one you name:
 `git config preflight.python <path to python>`. The preflight's Lint section also needs ruff at the version its
-patterns file pins (`ruff_version`, 0.17.0): `uv tool install ruff@0.17.0` (its own environment, on `PATH`; this
-machine's since 2026-10-13), or `python -m pip install ruff==0.17.0` into the hooks' Python, or name one with
-`git config preflight.ruff <path>`. Without it every commit is refused, with these three ways in the message.
+patterns file pins (`ruff_version`, 0.17.0): `uv tool install ruff@0.17.0` (its own environment, on `PATH`), or
+`python -m pip install ruff==0.17.0` into the hooks' Python, or name one with `git config preflight.ruff <path>`.
+Without it every commit is refused, with these three ways in the message.
 
 - `python dev-scripts/preflight.py`: every section on what is staged; the hooks run it on every commit and push.
   `--history` checks every commit ever made; `--text-stdin LABEL` checks text such as release notes.
