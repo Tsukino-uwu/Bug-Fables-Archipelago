@@ -231,6 +231,9 @@ be wrong.
    after bumping both versions. **When (the user, 2026-10-08):** once every room's logic is mapped, which makes the
    game fully playable; after that the quests, the enemies and the discoveries; past that, logic tweaks and maybe new
    features and options. So the root README carries no Status line, as the project only grows more complete.
+   **A release only with every check passing (decided 2026-10-13):** no release until generation is guaranteed valid:
+   the tests, the Logic Test, the Archipelago-fuzzer (0 failures in 10000) and Universal Tracker's fuzzer all pass. The
+   AI disclosure (`docs/reviewing.md`) promises it publicly.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2), so players never
    need the Launcher's Text Client (2026-09-29: DeathLinks shown too, a filter per kind of message, hints and
    commands from the text line, Enter to type in the field and in battles, a Chat menu in the panel). It is the
