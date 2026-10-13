@@ -38,7 +38,7 @@ read, a log or a probe.
 - [All medals by
   source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
 - [We Owe Ya!'s helpers](#we-owe-yas-helpers-2026-09-27-code-read-a-testers-report)
-- [The cooks](#the-cooks-2026-10-07-code-read-and-entitydump-the-users-count)
+- [The cooks](#the-cooks-2026-10-07-code-read-and-entitydump-a-count-from-play)
 - [What the mod's code relies
   on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
 - [Battles, for enemy shuffle — SPOILERS: boss
@@ -69,12 +69,12 @@ read, a log or a probe.
 - [The submarine](#the-submarine-2026-09-30-code-read-the-dumps-and-the-games-text-nothing-seen-in-game)
 - [Spy Specs](#spy-specs-2026-09-30-code-read-nothing-seen-in-game)
 - [The Settings list's
-  arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
+  arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-screenshots)
 - [The goal flags](#the-goal-flags-2026-10-08-code-read-the-dumps-and-the-games-data-file-the-grass-seen-in-play)
 - [Kabbu's horn tags](#kabbus-horn-tags-2026-10-09-code-read-and-the-taps-il-nothing-seen-in-game)
 - [The lock routine,
   Event59](#the-lock-routine-event59-2026-10-10-code-read-and-the-installed-dlls-il-seen-2026-10-10)
-- [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-the-user-every-ability-in-hand)
+- [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-every-ability-in-hand)
 - [Still to measure](#still-to-measure)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
@@ -582,8 +582,8 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   `GetKey` maps action 4 (confirm) to `joykeys[0]`, 5 (cancel) to `[1]`, 6 to `[2]`, 7 to `[3]`, 8 to `[4]` and
   9 to `[5]`. A first read of `joykeys[4]/[5]` as confirm/cancel was wrong; on screen, Start acted as "done".
 - **The game never reads typed text** (no `Input.inputString` anywhere); its name entry is a letter grid.
-- **Action 9 (Enter; Back on a gamepad) does six things** (2026-09-29, code read; the first seen by the user, the
-  rest not): in the field, the "help" (`PlayerControl.GetInput`, `PlayerControl.cs:341`: a party member talks about
+- **Action 9 (Enter; Back on a gamepad) does six things** (2026-09-29, code read; the first seen, the rest
+  not): in the field, the "help" (`PlayerControl.GetInput`, `PlayerControl.cs:341`: a party member talks about
   what's in front, its `tattleid`, when flag 10 is set and Kabbu is in the party); in the pause menu, it opens window
   6 (`PauseMenu.cs:383`), acts on the medal list on page 0 (`:687`), leaves the Settings list (`:895`) and toggles the
   map's icons with action 7 (`:1399`); in the start menu, on an empty save slot with two or more secrets unlocked,
@@ -655,7 +655,7 @@ The output stays in the BepInEx folder.
   (requires flag 41). Seen 2026-10-06 with flag 41 set: Bee Fly (hover) over the pillars and the Beemerang on the
   vine, no Jump, from the room's right side: location 94, kept present from the start. The vine also lets go for the
   horn, the Dash and Icicle (`NPCControl.cs`, CoiledObject), but it hangs too far away for them: only the Beemerang
-  reaches it (the user, seen).
+  reaches it (seen).
   #3 (`ChucksAbode`) lies behind the house, past a big rock that only the Horn Dash breaks (seen 2026-10-05):
   location 82.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
@@ -756,7 +756,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     vine, hit it down, both stones knocked onto the plates). The bridge-room door works both ways with nothing. The big
     door (to `UpperSnekEntrance`) is scenery shut until flag 14 (`Base/Door`, `(1)`; open `(2)`, `(3)` from 14):
     arriving through it the party stood behind it until moving a little, then got through. Kept open from the start
-    (the user); with it open, Event4's drop and Event5's fall still played. The hole down is shut until flag 14 too.
+    (decided); with it open, Event4's drop and Event5's fall still played. The hole down is shut until flag 14 too.
     The high door to `SnakemouthTop` takes the horn (grass) and Bee Fly (across) to reach; dropped down from freely.
     **`SnakemouthFallRoom` (2026-10-06, seen):** the spider scene starts from either side; its fight needs nothing
     particular, every member can hit the web. The door room's door sits on the bounce mushroom's ledge: Jump to get
@@ -780,36 +780,36 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     reached without Jump: up the bounce mushrooms (six `JumpSpring`s, EntityDump) takes it. From the top door (to
     `SnakemouthTreasureRoom`) the medal on its mushroom ledge (location 8) needs nothing, and the bottom door is a
     free way down. The item by the droplet (location 9): Jump and Freeze.
-    **`SnakemouthTreasureRoom` (2026-10-06, the user):** in and out need nothing; past flag 41 an empty dead end. The
+    **`SnakemouthTreasureRoom` (2026-10-06, seen):** in and out need nothing; past flag 41 an empty dead end. The
     Spider fight (`MaskEvent`, limit 41, Event26) needs Vi, the one who hits it in the air. The scene ends on
     `BOGoldenPath` (`event-transfers.py`), not yet in the logic.
-    **`SnakemouthUndergroundRightA` (2026-10-06, the user):** from the left door to `UndergroundRightB`'s door, the
+    **`SnakemouthUndergroundRightA` (2026-10-06, seen):** from the left door to `UndergroundRightB`'s door, the
     same both ways: switches (an attack) and moving platforms (Jump), two small ledges (Jump), then a switch (an
     attack) and the rotating platform (Jump). No locations; the grass by the sign hides nothing (EntityDump).
-    **`SnakemouthUndergroundRightB` (2026-10-06, the user):** from the bottom door the Crunchy Leaf behind the pillar
+    **`SnakemouthUndergroundRightB` (2026-10-06, seen):** from the bottom door the Crunchy Leaf behind the pillar
     (location 24) needs nothing; up to the top (the big switch, flag 34, and the high door) takes a switch on the
     rotating bridge (an attack), Jump, Freeze and the horn; down from the top is free. The high door has a gate the big
     switch opens: arriving through it while shut, the game pushes the party past it, so leaving that way needs the
     switch (an attack).
-    **`SnakemouthUndergroundLeftA` (2026-10-06, the user):** from the right door (to `SnakemouthUndergrondDoor`) up to
+    **`SnakemouthUndergroundLeftA` (2026-10-06, seen):** from the right door (to `SnakemouthUndergrondDoor`) up to
     the left door (to `UndergroundLeftB`) takes Jump, Freeze and the horn; down from it a free drop. No items.
     **`SnakemouthUndergroundLeftB` (2026-10-06, seen):** from the low door (to `UndergroundLeftA`) up to the top (the
     big switch, flag 33, and the high door) takes Jump, Freeze and the horn; down is a free drop. The high door's gate
     opens on the big switch (an attack): arriving through it with flag 33 cleared, the party was pushed past the gate.
-    **`SnakemouthTop` (2026-10-06, the user):** one door, to the door room's high door; in, out and the Sophie Petal
+    **`SnakemouthTop` (2026-10-06, seen):** one door, to the door room's high door; in, out and the Sophie Petal
     (key item 127, gone after flag 421, EntityDump) need nothing. The petal is Doctor Isau's request on `DefiantRoot1`
     ("Have you found the Sophie Petal in Snakemouth Den?", picked from key items; dev `textsearch sophie`).
-    **`UpperSnekEntrance` (2026-10-06, the user):** the bottom door (the door room's big door) and the room itself need
+    **`UpperSnekEntrance` (2026-10-06, seen):** the bottom door (the door room's big door) and the room itself need
     nothing; the gem slot takes Jump to use. The top door (to `UpperSnekTransition`) is shut until the gem is placed
     (flag 517): arriving through it, the party was pushed past it, so leaving that way needs the gem placed.
-    **`AntTunnels` (2026-10-06, the user):** nothing to cross between the palace door and the break room door; each
+    **`AntTunnels` (2026-10-06, seen):** nothing to cross between the palace door and the break room door; each
     tunnel entrance (EventTriggers, flags 75-80, EntityDump) only needs its flag to appear. No items.
-    **`BugariaMainPlaza` (2026-10-06, the user):** its five doors are open to each other; the statue's and the inn
+    **`BugariaMainPlaza` (2026-10-06, seen):** its five doors are open to each other; the statue's and the inn
     portrait's discoveries and the quest board need nothing. The red house takes the Flower Key; its roof's Charge
     Up (medal 52, flag 230) takes only that, the bounce pads working without Jump. The mound (crystal berry #29,
     `DigSpot` data `1 29`) takes only Beetle Dig. Sleeping at the inn needs nothing; the Honey Drop that appears
     each time (Jump to reach) is no location.
-    **`BugariaCommercial` (2026-10-06, the user):** left to right and every shop need nothing. The corner a bit above
+    **`BugariaCommercial` (2026-10-06, seen):** left to right and every shop need nothing. The corner a bit above
     the plaza door is behind grass (the horn), reached freely: the NPC down to the underground bar and a dig spot are
     behind it, and the bar's door comes back up there, the dig spot free from it, the rest of the room the horn. The
     arcade (door, sign, games, helper, exchanger) is made only from flag 350, two miners there until it (EntityDump);
@@ -817,17 +817,17 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     greeter (`termiteoutside`, lines 92-93) gives 15 tokens once (`var,1,15`, `giveitem,1,110`, flag 351, discovery 42);
     the token count is `flagvar[27]` (`Showtokens`, the prize stand spends it, Event at `EventControl.cs:20662`).
     The chef (`FlyChef`, no flags) needs nothing from the left or right door, the horn from the underground bar's door
-    (the user, 2026-10-07: for recipes and quests later).
-    **`BugariaTheater` (2026-10-06, the user):** in and out free; the moth and the spinner need nothing to reach,
+    (seen 2026-10-07; for recipes and quests later).
+    **`BugariaTheater` (2026-10-06, seen):** in and out free; the moth and the spinner need nothing to reach,
     the stage (Chubee) needs Jump. A moth sells the G-Bug Ranger Plushie for 40 berries (line 7, `giveitem,1,25`,
     flag 58). Crystal berry #13 (the one no data or literal grant placed) comes from a `MusicSpinner`, scenery on
     the right: each `BeetleHorn` hit spins it, and past its limit it spits out its item (`itemtype` 3, `flag` the
     berry), only while that berry isn't taken; the hidden-item medal (badge 2) counts it. Seen: picked up,
     `crystalbflags[13]` then true (dev `berry 13`).
-    **`BugariaResidential` (2026-10-06, the user):** free between its two doors and to the cicada's house; the Bad
+    **`BugariaResidential` (2026-10-06, seen):** free between its two doors and to the cicada's house; the Bad
     Book's rooftop (location 32) takes the horn (grass) and no Jump; the fountain rooftop (location 33) takes Jump and
     Freeze. The rest (the moth house from flag 130, the quests) waits for the quest pass.
-    **Rechecked (2026-10-08, the user):** the fountain rooftop also by Bee Fly alone (picked up so); the banker
+    **Rechecked (2026-10-08, seen):** the fountain rooftop also by Bee Fly alone (picked up so); the banker
     (`Fixedbanker - Duplicate`, entity 37, up at height 6.45) takes Jump. **The Bank of Bugaria** (the sign, line 79:
     "50 berries for a new account!"; read in the script dump and `textsearch`): the banker's lines are 65 (first talk,
     "Oho. First time here, aren't you?", which sets flag 253: `textsearch flag,253`), 66 from flag 253
@@ -838,118 +838,117 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     Card), once. Interest (`MainManager.DoClock`): every 30 game minutes with flag 254 and a balance, 2% of it, 4% with
     flag 630, at least 1 and at most 75; so in the game the doubling comes from 630, never from holding the card.
     `DoClock` reads flag 630 once (the hook's count, 2026-10-08). Used by `logic/bugaria_city.py`, `PlatinumCard.cs`.
-    **`UndergroundBar` (2026-10-06, the user):** everything reachable and in and out free: the bounce pad reaches the
+    **`UndergroundBar` (2026-10-06, seen):** everything reachable and in and out free: the bounce pad reaches the
     high door without Jump. Walking in records a discovery, in Shades' scene (Event80, the `shades event` trigger
     until flag 141).
-    **`AntPalace1` (2026-10-06, the user):** nothing needed anywhere in the hall, between its five doors.
-    **`AntPalace2` (2026-10-06, the user):** one door, free in and out, no items in the room; up two ledges to the
+    **`AntPalace1` (2026-10-06, seen):** nothing needed anywhere in the hall, between its five doors.
+    **`AntPalace2` (2026-10-06, seen):** one door, free in and out, no items in the room; up two ledges to the
     guard and the queen takes Jump. Its two crystal berries are story rewards
     (dev `textsearch`): #5 at line 15 ("Here, you've earned this.", a chapter scene) and #12 at line 48 (the Royal
     Guard after flag 130); its discoveries (ant, bee; termite and wasp from 370) are checked.
-    **`AntBridge` (2026-10-06, the user):** nothing needed across, both ways; an NPC there gives a discovery when
+    **`AntBridge` (2026-10-06, seen):** nothing needed across, both ways; an NPC there gives a discovery when
     talked to (discovery 11, line 1). No items; Maki's and Kina's quest NPCs stand here.
-    **`AntPalaceLibrary` (2026-10-06, the user):** nothing needed for anything, the Lore Book behind the bookshelf
+    **`AntPalaceLibrary` (2026-10-06, seen):** nothing needed for anything, the Lore Book behind the bookshelf
     (location 15) included. The librarian's turn-ins (Lore Books, crystal berry #25 at line 27; Bad Books, 35 berries
     each) and the discoveries are for the later passes.
-    **`AntPalaceWarRoom` (2026-10-06, the user):** in and out and its NPCs free; the Royal Calling on the table
+    **`AntPalaceWarRoom` (2026-10-06, seen):** in and out and its NPCs free; the Royal Calling on the table
     (location 77) takes Jump.
-    **`AntMinesBreakRoom` (2026-10-06, the user):** nothing needed in or out or inside; its dig spot (crystal berry
+    **`AntMinesBreakRoom` (2026-10-06, seen):** nothing needed in or out or inside; its dig spot (crystal berry
     #34, `DigSpot` data `1 34`) takes only Beetle Dig.
-    **`BugariaPlazaAttack` (2026-10-06, the user):** nothing needed to cross between its two doors; no items. Its
+    **`BugariaPlazaAttack` (2026-10-06, seen):** nothing needed to cross between its two doors; no items. Its
     discoveries 4 and 5 (MapDump) are the statue and the inn portrait, as in every copy of the plaza (the main and
     the ending's list the same two): never missable, the main plaza always has them.
-    **`BugariaBridgeAttack` (2026-10-06, the user):** nothing needed to cross; no items, no discoveries.
-    **`BugariaCastleAttack` (2026-10-06, the user):** nothing needed to cross from its door to the trigger (Event120,
+    **`BugariaBridgeAttack` (2026-10-06, seen):** nothing needed to cross; no items, no discoveries.
+    **`BugariaCastleAttack` (2026-10-06, seen):** nothing needed to cross from its door to the trigger (Event120,
     which ends in `AntPalace2`); no items, no discoveries.
-    **`BugariaEndPlaza`, `BugariaEndBridge`, `BugariaEndThrone` (2026-10-06, the user):** the ending played through
+    **`BugariaEndPlaza`, `BugariaEndBridge`, `BugariaEndThrone` (2026-10-06, seen):** the ending played through
     from the plaza: nothing needed in the plaza or on the bridge; the throne room is the ending's scene and the credits.
     No items in any of the three (EntityDump).
-    **`DesertEntrance` (2026-10-06, the user):** nothing needed between its four ground doors (the Outskirts, the
+    **`DesertEntrance` (2026-10-06, seen):** nothing needed between its four ground doors (the Outskirts, the
     badlands, the south trench, the middle trench); the book area's door is up a ledge no way inside the room reaches,
     a drop down only. No items.
-    **`DesertBadlands` (2026-10-06, the user):** the entrance and the rock formation's doors free between them; the HP
-    Plus on the center pillar (flag 413) takes Jump and Bee Fly, or Jump and the Beemerang (rechecked 2026-10-08, the
-    user), the Baked Yam on the rock ledge (flag 729) Jump and the Beemerang, Bee Fly, or Freeze and the horn (those
+    **`DesertBadlands` (2026-10-06, seen):** the entrance and the rock formation's doors free between them; the HP
+    Plus on the center pillar (flag 413) takes Jump and Bee Fly, or Jump and the Beemerang (rechecked 2026-10-08,
+    seen), the Baked Yam on the rock ledge (flag 729) Jump and the Beemerang, Bee Fly, or Freeze and the horn (those
     two rechecked the same day). The hideout door (made from flag 239) is
     up two ledges (Jump) behind a grate the Rusty Key opens (`hideoutlock`, Event59 key list index 5 = item 111, gone
     from flag 258); arriving through it while shut pushes the party past, and the ledges drop down freely. The key and
     flag 239 both come from its purchase at the Defiant Root well (line 3, 30 berries).
-    **`DesertBookArea` (2026-10-06, the user):** two halves: the bottom and left doors free between them, the top and
+    **`DesertBookArea` (2026-10-06, seen):** two halves: the bottom and left doors free between them, the top and
     right doors and the Succulent Cookies under the giant book (flag 730, hidden until the boulder breaks) free between
     them; across, either way, the boulder broken by Horn Dash (`blockingrock`, there until 417, which only the book's
     fall sets, `Event158`, never played; breaking it sets no flag) or the sand pit flown over (Bee Fly). **A trick:**
     a tricky jump crosses the sand pit with Jump alone, both ways: not in the basic logic, kept for a harder logic
-    option later (the user).
-    **`DesertRockFormation` (2026-10-06, the user):** nothing needed between its three doors; the Tardigrade Shield
+    option later (decided).
+    **`DesertRockFormation` (2026-10-06, seen):** nothing needed between its three doors; the Tardigrade Shield
     (flag 343, high on the idol) takes Jump, Freeze and the horn, and taking it records the Tardigrade Idol discovery
     (31).
-    **`DesertTrenchSouth` (2026-10-06, the user):** the right and top-right doors free between them; the left side
+    **`DesertTrenchSouth` (2026-10-06, seen):** the right and top-right doors free between them; the left side
     (the left door) across a gap, by the bridge (`bridge1`, a switch, flag 282) knocked over from the left by the horn,
     then crossed both ways without Jump, or flown over (Bee Fly) either way. The top-left door and the Agaric Shroom
     (flag 713) on a ledge over the left side: a drop down, Jump back up.
-    **`DesertDREastEntrance` (2026-10-06, the user):** the right and bottom doors free between them, the left door free
+    **`DesertDREastEntrance` (2026-10-06, seen):** the right and bottom doors free between them, the left door free
     from the left side; left to right takes the crank (the horn) and Beemerang Halt, or Bee Fly; right to left Bee Fly
     only (no crank on the right; the crank resets on leaving the room). The dig spot (Dark Cherries, flag 398) behind
     the rock (Horn Dash), on the left side.
-    **`DesertFGBorder` (2026-10-06, the user):** nothing needed between its two doors with the gate kept open; the
+    **`DesertFGBorder` (2026-10-06, seen):** nothing needed between its two doors with the gate kept open; the
     Bulk Bee still stands there, talking as if the gate were shut, out of the way. No items.
-    **`DesertDRSouthEntrance` (2026-10-06, the user):** nothing needed between its three doors; a caravan NPC stands
+    **`DesertDRSouthEntrance` (2026-10-06, seen):** nothing needed between its three doors; a caravan NPC stands
     there but not the shop itself. No items.
-    **`DesertBadgeAlcove` (2026-10-06, the user):** the top and right doors free between them, cut off from the left;
+    **`DesertBadgeAlcove` (2026-10-06, seen):** the top and right doors free between them, cut off from the left;
     the left door on a ledge, a drop down to the rest with no way back up inside the room. Meditation (flag 262) on a
     small platform on the ledge, Jump; the grass by the right door (flag 210, its vector data 90, a Succulent Berry),
     the horn.
-    **`DesertCaravanMap` (2026-10-06, the user):** nothing needed between its two doors; crystal berry #14's dig spot
+    **`DesertCaravanMap` (2026-10-06, seen):** nothing needed between its two doors; crystal berry #14's dig spot
     (`dirtmound`, height 8, the upper left): the sand funnel flown over (Bee Fly), then rocks jumped up (Jump), and
     Beetle Dig.
-    **`DesertSandPitArea` (2026-10-06, the user, door by door with the bridges reset):** eight bridges over the pit
+    **`DesertSandPitArea` (2026-10-06, seen, door by door with the bridges reset):** eight bridges over the pit
     (`bridge1`-`bridge8`, switches, flags 202-209), each knocked over by the horn from one side, staying down after
     leaving. From the bottom: one bridge, then three more around the middle, reached over small platforms (Jump), to
     the top doors. From the left: two bridges, one leading up and over platforms to the middle; the other, with the
     middle's lower one and the bottom's, joins left and bottom with no Jump. The top-left door: nothing from it. The
-    top-right and right doors: one bridge each, together joining them, no Jump. Bee Fly crosses everything. The user's
-    sketch (the bridges after falling) placed them.
-    **`DesertBeforeGH` (2026-10-06, the user):** nothing needed between its three doors; Strong Start (flag 415) on a
+    top-right and right doors: one bridge each, together joining them, no Jump. Bee Fly crosses everything. A sketch
+    (the bridges after falling) placed them.
+    **`DesertBeforeGH` (2026-10-06, seen):** nothing needed between its three doors; Strong Start (flag 415) on a
     high ledge on the left: grass cut (the horn), Jump, then a bridge the horn lowers (`@Bridge1`, flag 690).
-    **`DesertRoachVillage` (2026-10-06, the user):** nothing needed between its three doors; crystal berry #21's dig
+    **`DesertRoachVillage` (2026-10-06, seen):** nothing needed between its three doors; crystal berry #21's dig
     spot needs only Beetle Dig. The hawk (flags 300-302, key item 105 in line 1) for the quest pass.
-    **`DesertOasis` (2026-10-06, the user):** the left door free; the bottom door behind a gate dug under (Beetle
+    **`DesertOasis` (2026-10-06, seen):** the left door free; the bottom door behind a gate dug under (Beetle
     Dig), left by digging or Jump. The top right (the cave door, height 14) reached only through that door: the Crimson
     Ore (flag 319, `Items:98`, the Ore Wanted quest's) in the cave; a switch (any attack) starts the moving platform,
     which keeps running after leaving the room, boarded from below with Jump; down without it, a drop. The Berry Jam
     (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there. The
-    switch (flag 255) only from up there (the user, 2026-10-07): from below, the platform with it hit and Jump.
-    **`DesertOasisEntrance` (2026-10-06, the user):** the top and bottom doors (the left side) free between them; to
+    switch (flag 255) only from up there (seen 2026-10-07): from below, the platform with it hit and Jump.
+    **`DesertOasisEntrance` (2026-10-06, seen):** the top and bottom doors (the left side) free between them; to
     the right side (the oasis door) the bubble shield over spikes, or Bee Fly, both ways; back, also a red bounce pad
     sends the party left with
     nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4);
-    the user: keep it there for good (`KEPT_PRESENT`), so its one-way counts with Points of No Return. Seen there with
+    decided: keep it there for good (`KEPT_PRESENT`), so its one-way counts with Points of No Return. Seen there with
     flag 300 on (`liveslot`, 2026-10-06), and bouncing the party to the left side.
-    **`DesertSandCastle` (2026-10-06, the user, with the key spawned):** the bottom door and the lock free; the lock
+    **`DesertSandCastle` (2026-10-06, seen, with the key spawned):** the bottom door and the lock free; the lock
     (`keycheck`, `Event59`, `dialogues[0].y` 6, so key item 113, the Sand Castle Key, taken away) plays `Event112`,
     which sets flag 280 and makes the castle door; into it Jump, out of it free. Arriving from the castle with flag 280
     off (`warp ... from SandCastleEntrance`, twice) lands a little in front of the lock, not stuck, the castle shut
     behind. The key is made in `Event109` from the Heaven Key (105) and the Earth Key (106), both taken.
-    **`DesertMountain` (2026-10-06, the user):** the right and bottom doors and the save point free; the bridge to
-    the left (cave) door is easier with Jump but reachable without it, a bit tricky: the user counts it free ("people
-    wouldn't use that setting if they didn't want things to be more challenging"), unlike the book area's sand pit
-    jump, kept for a harder logic (the user: "a tricky jump vs a tricky way to get up without a jump are
-    different"). No items.
-    **`DesertTrenchMiddle` (2026-10-06, the user):** three sides. The right (the bottom, bottom-right and right doors)
+    **`DesertMountain` (2026-10-06, seen):** the right and bottom doors and the save point free; the bridge to the
+    left (cave) door is easier with Jump but reachable without it, a bit tricky: counted free (decided: people wouldn't
+    use that setting if they didn't want things to be more challenging), unlike the book area's sand pit jump, kept
+    for a harder logic (a tricky jump and a tricky way to get up without a jump are different). No items.
+    **`DesertTrenchMiddle` (2026-10-06, seen):** three sides. The right (the bottom, bottom-right and right doors)
     free between them, its top door past a gate dug under (Beetle Dig) both ways; no way up to the middle or the left.
     The middle (the high bottom-left door, `loadzone south2`) reached only through that door, a drop down to either
     side. The left (the roach village door) back up to the middle with Jump and Bee Fly. No items.
-    **`DesertJumpPuzzle` (2026-10-06, the user):** from the left door to the high right one, the thorns (the bubble
+    **`DesertJumpPuzzle` (2026-10-06, seen):** from the left door to the high right one, the thorns (the bubble
     shield) and Jump; from the right, down freely, a one-way without Jump. A bridge (`bridge1`, flag 261) knocked
     down by the horn from the right, staying down, lets Jump alone cross from the left. The room's own line calls the
     hazard thorns ("And their thorns.", `DesertJumpPuzzle:0`). No items.
-    **`DesertSouthern` (2026-10-06, the user):** the left door free; the right door past thorns, the bubble shield or
+    **`DesertSouthern` (2026-10-06, seen):** the left door free; the right door past thorns, the bubble shield or
     Bee Fly, both ways; the top door on a ledge, a drop down with no way up inside the room. No items.
-    **`DesertScorpion` (2026-10-06, the user):** nothing needed between its three doors or to the save point. No
+    **`DesertScorpion` (2026-10-06, seen):** nothing needed between its three doors or to the save point. No
     items. Its Scorpion scene (`Event111`, flags 303 to 298) didn't play.
-    **`DesertEastmost` (2026-10-06, the user):** nothing needed between its three doors; no items. Its `zasp` entry
+    **`DesertEastmost` (2026-10-06, seen):** nothing needed between its three doors; no items. Its `zasp` entry
     (no flags) wasn't seen: a scene's actor, kept hidden.
-- **Golden Hills, room by room** (the user, in-game):
+- **Golden Hills, room by room** (seen in-game):
   **`GoldenHillsDungeonEntrance` (2026-10-06):** the bottom, left and lower right doors free between them. Its
   arrival scene (`Event62`, two triggers, until flag 111) plays from either side and changes nothing: it sets only
   flag 111, which nothing else reads (code and `textsearch ,111,`). The locks: the right one key item 58 (the Wooden
@@ -970,12 +969,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   only item 11, regional flag 0), missed at first, the same (seen the same day).
   **`GoldenHillsDungeonRightCrank` (2026-10-06):** one door; the Big Crank Top Half (key item 59, flag 113) on a
   ledge at the far right: the bubble shield (maybe not needed), Freeze, the horn, Jump, the Beemerang and Halt, all
-  counted (the user); or Bee Fly alone, for everything in the room (the user). The Hustle Candy (flag 727) on a small
+  counted (decided); or Bee Fly alone, for everything in the room (seen). The Hustle Candy (flag 727) on a small
   stump behind a flower among thorns midway: hard to spot,
   grabbed with the Beemerang; `warp ... @Item - Stump` found no safe spot beside it.
   **`GoldenHillsLowerRightCrank` (2026-10-06):** one door; its Wooden Crank (flag 116) on the top right ledge: Jump,
   and an ice block (Freeze) pushed by the horn across platforms Beemerang Halt spins; Bee Fly only stands in for Jump,
-  so not counted (the user). Its Chomper reached with Beemerang Halt alone (for the enemy pass).
+  so not counted (decided). Its Chomper reached with Beemerang Halt alone (for the enemy pass).
   **`GoldenHillsDungeonLeftCrankHalf` (2026-10-06):** one door; everything up its fixed cranks, Jump and Beemerang
   Halt: Back Support (flag 121) behind a bush on the far left, the Burly Berry bush by a crank (`Cutgrass Item`, its
   drop list only item 3, regional flag 7: it regrows), and the Big Crank Bottom Half (flag 117) at the top, where
@@ -996,15 +995,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   door) not needed for it, only for the upper door.
   **`GoldenHillsDungeonBoss` (2026-10-06):** its door free both ways; the Venus' Guardian fight (`Event73`, battle 24,
   until flag 88, which it sets with 76) up two ledges, Jump; afterwards the party stays in the room. The fight's own
-  needs untested (the user: test it properly later). No items.
+  needs untested (to be tested properly later). No items.
   **`GoldenPitcher1` (2026-10-06):** the Burly Bomb (flag 714) behind thorns, free from the lower door; the top right
   door up a ledge: Jump, the horn and Beemerang Halt, a drop down.
   **`GoldenPitcher2` (2026-10-06):** the lower door free; crystal berry #40 (right ledge) and the top left door (to the
   arena) each Jump and Beemerang Halt; from that door a drop down.
   **`PitcherPlantArena` (2026-10-06):** the door and the save point free; walking further in starts the pitcher's
-  bounty fight (`Event124`, until flag 494), nothing needed to reach it; it gives the Crystal Fang (the user). No
+  bounty fight (`Event124`, until flag 494), nothing needed to reach it; it gives the Crystal Fang (seen). No
   items lying in the room.
-- **Golden Path, room by room** (the user, in-game):
+- **Golden Path, room by room** (seen in-game):
   **`GoldenHillsCableCar` (2026-10-07):** from the right door (up high) a drop; back up by Jump, or by the horn
   (grass) and a bounce pad. Crystal berry #8 the horn, by that pad; the dig spot (flag 397) Jump; the Clear Water bush
   (drop list only item 12, regional flag 0, between the green bounce pad and the save crystal) the horn; across to
@@ -1022,35 +1021,35 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `CreateEntities` (`MapControl.cs:1708`, from its keeper's check), each with `shopkeeper` pointing back. The minigame
   room: Wacka Worm replays for 10 berries, and a
   mayor's scene late (flags 557-559).
-  **The festival's day and night (2026-10-07, code and dumps; the user on screen):** the settlement has three states:
+  **The festival's day and night (2026-10-07, code and dumps; seen on screen):** the settlement has three states:
   before the festival (no flag 85), the festival night (85, not 86), after it (86). The innkeeper's "Wait for
   nightfall" runs `Event52`, which only sets 85 and loads `GoldenSettlement1Night`. Flag 86 is set only by `Event58`,
   the festival's fight (lines 123/124, Vi or Kabbu picked), which also sets 102 and 103. A night map has no entity data
   of its own (`MapControl.CreateEntities` reads `readdatafromothermap`): the day map's entities, picked by 85 and 86,
   only the scenery differs. No code reads flag 85: 61 entities (36, 17 and 8 in `GoldenSettlement1`-`3`), three NPCs'
   lines (the barkeeper, the moth merchant, the card master) and one wall (`GoldenSettlement1/Cube`, until 85, top left
-  by the balcony, at (-11.8, 3.2, 18.4); the user: it changes nothing). Flag 86 reaches beyond the settlement
+  by the balcony, at (-11.8, 3.2, 18.4); seen: it changes nothing). Flag 86 reaches beyond the settlement
   (`BugariaOutskirtsOutsideCity`, `BugariaResidential`, `DefiantRoot1`, `BeehiveBalcony`, the settlement entrance).
   About 30 NPCs exist only that night: the mayor's Wacka Worm game, Tanjerin, Carmina and Madame Butterfly, the
   windmill farmer, Chuck, the fortune teller, Stratos and Delilah. **The altar statue** over the way to the Golden
   Hills dungeon (whose door lands behind it: arriving from there, the party is stuck) is `Base/Altar` until flag 103,
   swapped for the moved `Base/Altar (1)` from 103 (`Event58` slides it during the fight); found with the dev `find`.
-  **`GoldenSettlement1` by day (2026-10-07, the user):** the left, bottom and right doors free between them; the lever
+  **`GoldenSettlement1` by day (2026-10-07, seen):** the left, bottom and right doors free between them; the lever
   on the left (any attack) moves a platform up to a house with a discovery (`Event53`), reached without Jump by
   walking up the lever's stump; the arena (`Base/Arena`, Aria on it) takes Jump. With the statue swapped, all four doors
   free without Jump (around the arena). The Lore Book (key item 52, flag 87) in the grass behind the lever's platform
   (`LoreblockGrass`): Horn Slash, by day and by night alike. The Mothiva Doll (key item 57, flag 106, from flag 85)
   inside the Sunset Inn on the left: Jump; it is traded for a Heart Berry in `DefiantRoot3` (line 126). The shop
   (`shopkeeper`: Aphid Egg, Aphid Dew, Honey Drop, Clear Water, Hard Seed) is one shop by day and by night. Kut the
-  chef (`Kut (Chef)`, no flags) is there by day and by night and needs nothing to reach (the user: for recipes and
-  quests later).
-  Sellers by dialogue (not shop entities; left the game's own for now, the user, 2026-10-07): the mosquito girl
+  chef (`Kut (Chef)`, no flags) is there by day and by night and needs nothing to reach (seen; for recipes and quests
+  later).
+  Sellers by dialogue (not shop entities; left the game's own for now, decided 2026-10-07): the mosquito girl
   (`MosquitoGirl`, always) sells Berry Juice for 9 berries again and again (line 2, `giveitem,0,39`); the moth merchant
   (`MerchantMoth`, until flag 88) at night only (line 87, from 85) offers Spicy Berry 20, Numbnail Dart 10, Magic Seed 30
   (lines 88, 91-93) and buys the party's items (89, 98-99). Story Aria takes Queen's Dinner (item 32) as the offering
   "grand enough for Venus" (line 182 to 183, flag 393). Samira (from flag 6), the quest board (from 86), and the night's
   talkers (Layna and her pet, Bomby, Stratos and Delilah, Neolith, the shy bee, Gen and Eri, Zasp) for the quest pass.
-  **`GoldenSettlement2`, the farm (2026-10-07, the user and the lines):** the square's door and the power plant's
+  **`GoldenSettlement2`, the farm (2026-10-07, seen and the lines):** the square's door and the power plant's
   (kept open, its gate gone: the day one by flag, the night map's own switched off) free between them, by day and by
   night; the bee guard by the left door doesn't stop the party. The windmill's crank
   (`ScrewSwitch`) turned with the Beemerang Halt opens it (gate `Base/WindmillGate` until flag 90): crystal berry #4
@@ -1063,40 +1062,41 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   sets 101) and the medal goes to the caravan after the fight. Left side: NPCs that send the party back to the square
   (the sign, the bee guard, the farmer outside and Neo before the festival, a second sign after); the power plant's
   door from flag 226 (`Base/WoodenGate2` until 226). Bomby's hat (flag 309) after the festival. The dig spot (crystal
-  berry #7) by day only, Beetle Dig; the aphid girl's discovery (12) needs nothing (the user).
-  **`GoldenSettlement3`, the houses (2026-10-07, the user and the lines):** the door free; nothing lies out. Aria's
+  berry #7) by day only, Beetle Dig; the aphid girl's discovery (12) needs nothing (seen).
+  **`GoldenSettlement3`, the houses (2026-10-07, seen and the lines):** the door free; nothing lies out. Aria's
   diary (`ariadiary`, line 1-2) is text only; the card master's duels (`Event106`, a card upgraded, later 10 berries,
   line 24), Carmina's at night; Tanjerin's horn quest after the festival (flags 272-274, key item 112); Kenny's quest end
   in a later chapter (flags 602, 409) gives a Lore Book (line 46, flag 603); Jayde (flags 347-555) sells stew, item
   120, for 25 berries (lines 38-39).
-  **`PowerPlant` (2026-10-07, the user and the lines):** two areas. The bottom holds the farm's door (`loadzoneoutside`,
+  **`PowerPlant` (2026-10-07, seen and the lines):** two areas. The bottom holds the farm's door (`loadzoneoutside`,
   free both ways), the save crystal and four switches (`TOGSwitch1`-`4`, `Event169`): a lights-out puzzle (a hit flips
-  its neighbours), all on slides the door up open (`mainmesh` child 0) and sets flag 456, no quest flag read; the user
-  hit them with a basic attack. The top holds the door to `BroodmotherLair` (`loadzonebroodmother`), a dead end from
-  there until the door is open, then free both ways, and the Energy Converter (line 8: discovery 23, "The Power Plant",
-  shown as #24; flag 458). The hole's party talk (`dialoguetrigger`, line 5, flag 457) gives nothing. The workers, the
-  soldier and the door guard talk of the Code 32 alarm and the board quest (31, flags 225-226): for the quest pass.
-  **`BarrenLandsEntrance` (2026-10-07, the user and the dumps):** the fog maze's start, where every wrong way lands. Its
+  its neighbours), all on slides the door up open (`mainmesh` child 0) and sets flag 456, no quest flag read; the
+  tester hit them with a basic attack. The top holds the door to `BroodmotherLair` (`loadzonebroodmother`), a dead
+  end from there until the door is open, then free both ways, and the Energy Converter (line 8: discovery 23, "The
+  Power Plant", shown as #24; flag 458). The hole's party talk (`dialoguetrigger`, line 5, flag 457) gives nothing.
+  The workers, the soldier and the door guard talk of the Code 32 alarm and the board quest (31, flags 225-226): for
+  the quest pass.
+  **`BarrenLandsEntrance` (2026-10-07, seen and the dumps):** the fog maze's start, where every wrong way lands. Its
   three doors (top to `GoldenPathTunnel`, left to `BarrenLandsSideGPT`, bottom to `BarrenLandsCD`) and the save crystal
   free; the right edge (`returnloadzoneright`, inactive) only a landing. The three `BreakableRock`s hide nothing
   (breaking one drops nothing; nothing lies near them). Patton's lab: its door (`doorpatton`, a `DoorSameMap`)
   requires 376 and its slab (`PattonsHouse/PopCan (1)`, a `ConditionChecker`) is hidden from 376; the door alone left
-  the party pushed past the slab (the user), both together seen working. Patton's meeting (`Event159`, 376 until 420)
+  the party pushed past the slab (seen), both together seen working. Patton's meeting (`Event159`, 376 until 420)
   and his stat and potion conversions (lines 4-19) for the quest and sellers' passes; the diary copy text only.
-  **`BarrenLandsCD` (2026-10-07, the user and the dumps):** a floor with the top door (`loadzonenorth`) and the bottom
+  **`BarrenLandsCD` (2026-10-07, seen and the dumps):** a floor with the top door (`loadzonenorth`) and the bottom
   edge's wrong turn (`returnloadzone`), free between them; a raised strip (y 4) with the left edge
   (`returnloadzoneleft`, its copy to `BarrenLandsCloud` from 384) and the right door (`loadzoneright`), free between
   them. Down from the strip a drop; back up the side ledges Jump. Landings: `BarrenLandsSideGPT`'s `returnzone left` on
-  the strip (26.2, 4, -10), every other wrong turn on the floor. The three `BeetleGrass` block nothing (the user) and
+  the strip (26.2, 4, -10), every other wrong turn on the floor. The three `BeetleGrass` block nothing (seen) and
   hide no berry (`data[1]` -1, the berry index `NPCControl` checks). Enemies (`mimicspider`, a mothfly) for the
   enemy pass; nothing else.
-  **`TermiteOutside` (2026-10-07, the user, the log and `Event149` read):** the bottom door free; the gate reached free,
+  **`TermiteOutside` (2026-10-07, seen, the log and `Event149` read):** the bottom door free; the gate reached free,
   its trigger (`event`, limit 384) running the first opening, which lands the party in the plaza; the gate then free
   both ways. The scene moves `GetEntity(1000)`, `map.tempfollowers[0]` (the queen in the story): without her
   `PartyFit` has the leader answer (the log's "companion 1000 asked for … the leader answers"), no freeze. The left
   door (`loadzonecave`) behind two `BreakableRock`s, Horn Dash, both ways. The two guards talk only. In a seed the
   trigger is kept away and the first opening skipped (`documentation.md`, step 10): the gate is used by talking to it.
-  **`BarrenLandsBeefly`, the broken bridge (2026-10-07, the user and the dumps):** three parts. The left door
+  **`BarrenLandsBeefly`, the broken bridge (2026-10-07, seen and the dumps):** three parts. The left door
   (`loadzonecd`) and the Bee Fly scene's trigger (`beeflyevent`, requires 347, limit 19); across the gap with Bee Fly,
   both ways, the right side's bottom: the door to `BarrenLandsCloud` (`loadzonesouth`), where the flight lands; from it
   Jump up a small ledge to the wrong turn up top (`returnloadzone`), a drop back down. The upper right
@@ -1106,43 +1106,43 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   between the upper right and the left, both ways. The grass (`data[1]` -1) hides nothing. The hungry termite
   (`brothertermite`, 475 until 476, wants item 145, lines 8-10) for the quest pass; Ironnail and a Plumpling for the
   enemy pass.
-  **`BarrenLandsAntTunnel` (2026-10-07, the user and the dumps):** its one door and everything in it free. A Plumpling
+  **`BarrenLandsAntTunnel` (2026-10-07, seen and the dumps):** its one door and everything in it free. A Plumpling
   Pie (`Item Pie`: animid 180, the game's item 180, "Plumpling Pie" in its text; data[0] 0, an item; activation and
   limit flag 739) lies behind the mine cart. Diana (until 77, `Event48`) opens the tunnel to the hub (the rock
   `Base/AntTunnelRock` gone from 77), free in a seed (`free_ant_tunnels`); the miner talks only.
-  **`BarrenLandsMiniboss` (2026-10-07, the user and `Event151` read):** its three doors and the save crystal free;
+  **`BarrenLandsMiniboss` (2026-10-07, seen and `Event151` read):** its three doors and the save crystal free;
   the left and bottom doors join without the fight. Between the bottom and the right door, or at once arriving from
   the right, the trigger (`event`, limit 385) runs `Event151`: the queen's lines (`GetEntity(1000)`, the leader
   standing in), a Primal Weevil fight (enemy 76, no escape; alone, it whistles in a Weevil, enemy 17,
   `SummonEnemy` in its battle code; both Ground with no Flip weakness, so every member's plain attack reaches them),
   the termite guards' welcome, then flag 385; no item. The save crystal is swapped for its other copy from 385.
   The fight for the enemy pass.
-  **`BarrenLandsPinkSpider` (2026-10-07, the user and `Event167` read):** its door (`loadzonepumpkin - Duplicate`) free
+  **`BarrenLandsPinkSpider` (2026-10-07, seen and `Event167` read):** its door (`loadzonepumpkin - Duplicate`) free
   both ways; the ledge with the sign and the hole (`interact`, y 2) Jump up, a drop down. The hole takes any ordinary
   item (`pickitem,0`) and the spider pays its sell price (`itemdata[0, id, 4]`, halved for Tangy Berry and Black
   Cherry) in berry drops; inside that loop, the first time (`crystalbflags[38]` and `mapflags[0]` unset) she also
   drops crystal berry #38 (`CreateItem` type 3, index 38), so an item worth 0 would give nothing; flag 451 after.
   Seen: an egg given, a crystal berry dropped. Layna's Nero (465 until 468) for the quest pass; the termite girl from
   675; the grass hides nothing.
-  **`BarrenLandsTanks` (2026-10-07, the user and the dumps):** its four doors (the right one to `BarrenLandsCloud`, the
+  **`BarrenLandsTanks` (2026-10-07, seen and the dumps):** its four doors (the right one to `BarrenLandsCloud`, the
   high left one to `AbandonedCity`, the wrong turns up top to `BarrenLandsCD` and at the bottom to `BarrenLandsCloud`)
   free between them; the two `JumpSpring`s up to the high parts have no flags, so always there. The grass hides
   nothing; two mothflies for the enemy pass; no items.
-  **`BarrenLandsMushrooms`, the mushroom maze (2026-10-07, the user and `Event168` read):** from the right door (to
+  **`BarrenLandsMushrooms`, the mushroom maze (2026-10-07, seen and `Event168` read):** from the right door (to
   `BarrenLandsPumpkins`) to the left (one way into `BarrenLandsPinkSpider`) a maze path, one part under a plank with
   Beetle Dig. Off the path, five `lostzone` triggers (`Event168`) fade to white and put the party back at
   `player.lastpos`, never another room. Layna's scene (`Event172`, 465 until 467) and the gray mushrooms it hides (465
   until 468) for the quest pass; no items. The maze works both ways with Beetle Dig (seen from beside the left door).
-  The left door stays a one-way exit, never given an arrival spot (the user: the maze reads more easily from the
+  The left door stays a one-way exit, never given an arrival spot (decided: the maze reads more easily from the
   right).
-  **`AbandonedCity` (2026-10-07, the user and the dumps):** the bottom door (to `BarrenLandsTanks`) and the save crystal
+  **`AbandonedCity` (2026-10-07, seen and the dumps):** the bottom door (to `BarrenLandsTanks`) and the save crystal
   free; the top door (to the tent, y 7) Jump up, a drop down. The dig spot (`lorebookspot`, data `0 1 52`: a Lore
   Book, flag 499) in a pit: Beetle Dig from the bottom; dropping in from above needs Beetle Dig to leave. One grass
   patch by the fountain, midway up (`grass - Duplicate - Duplicate`, regional flag 10, vectordata x 11: `CutGrass`
   drops item 11, a Magic Seed, with that regional flag) needs Bee Fly to reach and the horn; the other grass hides
   nothing. The hooded mothflies (until 454), the Venus healer (from 130) and Rebecca's scene (701 until 709, quest
   pass) give nothing here.
-  **`BarrenLandsPumpkins`, the pumpkin patch (2026-10-07, the user and the dumps):** the bottom door (to
+  **`BarrenLandsPumpkins`, the pumpkin patch (2026-10-07, seen and the dumps):** the bottom door (to
   `BarrenLandsMushrooms`, where the pink spider's one-way lands) and the left door (to `BarrenLandsCloud`) free between
   them. The top right (the wrong turn up top, `returnloadzone`) up with Jump, the horn and Bee Fly, down with Bee Fly.
   The high right door (to `BarrenLandsRock`) from there: Horn Dash through the boulders (`breakrock`s), the horn to
@@ -1150,7 +1150,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   right's near side (free) or behind the boulders (a trap without Horn Dash). A grass patch in the top right (regional
   flag 7, vectordata x 125: a Squash) needs the horn. The gray mushroom (gone from 384) and the crate (from 452) not
   seen in place; the other grass hides nothing; the enemies for the enemy pass.
-  **`BarrenLandsCloud`, the wind pipes (2026-10-07, the user and the dumps):** a one-way ring of four parts, one door
+  **`BarrenLandsCloud`, the wind pipes (2026-10-07, seen and the dumps):** a one-way ring of four parts, one door
   each, gone round counterclockwise: the right door (to `BarrenLandsPumpkins`) to the top door (to
   `BarrenLandsBeefly`) Jump, Horn Dash and Bee Fly; the top to the left door (to `BarrenLandsTanks`) and the left to the
   bottom edge's wrong turn (`returnzone`) Horn Dash and Bee Fly; the bottom back to the right Bee Fly. `WindPusher`s
@@ -1160,42 +1160,42 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   left from the tanks room; the bottom from the pumpkin patch's wrong turn. A Lore Book (`lorebook`, flag 455) on an
   isolated platform in the bottom part, Bee Fly, just visible from the bottom landing. The game's text calls the
   scenery "pipes" (`LPipe`; the side room's party line).
-  **`BarrenLandsRock`, the dome overlook (2026-10-07, the user and the dumps):** its four doors (the top to
+  **`BarrenLandsRock`, the dome overlook (2026-10-07, seen and the dumps):** its four doors (the top to
   `BarrenLandsMiniboss`, the left to the pumpkin patch's high door, the wrong turns at the right and the bottom) free
   between them. The vista up the springs (`discovery`, y 11) needs nothing (first said Jump, then not): line 1 (before
   384, the queen speaking) or 2 records discovery 41, "Termite Kingdom", and flag 470. A grass patch by the log
   (regional flag 11, vectordata x 125, a Squash) needs the horn; the other grass hides nothing; an Ironnail and a mimic
   spider for the enemy pass.
-  **`AbandonedCityTent` (2026-10-07, the user and `Event124` read):** its door free both ways; a few steps in, the
+  **`AbandonedCityTent` (2026-10-07, seen and `Event124` read):** its door free both ways; a few steps in, the
   trigger (`event`, limit 454, no requirement) starts the False Monarch bounty (Event124's tent branch): the fight
   (enemy 77, Ground, no Flip weakness, no summons, no escape), then key item 146, the Crystal Crown
   (`GiveItem(1, 146)`), discovery 40, "Ancient City" (`librarystuff[0, 40]` set directly, no pop-up), and flag 454,
   which also unmasks the Abandoned City's mothflies. For the quest pass with the other bounties, as the Seedling
   King's.
-  **`BarrenLandsSideGPT`, the tunnel side (2026-10-07, the user and the dumps):** its right door (to
+  **`BarrenLandsSideGPT`, the tunnel side (2026-10-07, seen and the dumps):** its right door (to
   `BarrenLandsEntrance`) and the two wrong turns (left and bottom, to `BarrenLandsCD`) free between them; the high
   door (to `GoldenPathTunnel2`, y 6) Jump, Horn Dash and Bee Fly up, a drop down. On the bottom: a Lore Book lying in
   tall grass (scenery, not a bush; flag 463), nothing needed; two grass patches each dropping a Squash once
   (`CutGrass` hands the drop the grass's `activationflag`: 678 by the tree, 677 by the tall grass), the horn. Seen:
-  the user cut the one by the tree, standing at (-4.6, -10.5).
-  **`FGCave`, the border cave (2026-10-07, the user and the dumps):** four parts. The bottom door (to
+  the one by the tree cut, the party standing at (-4.6, -10.5).
+  **`FGCave`, the border cave (2026-10-07, seen and the dumps):** four parts. The bottom door (to
   `FarGrasslandsOutsideCave`) in the middle; the ant tunnel's Diana (until 80) at the top past grass, the horn. The
   left door (to `BroodmotherLair`) and the right (to `WaspKingdomOutside`) each behind a gate (`Base/WoodPillar*/
   SnekGate (1)`, hidden from its flag) that a lever on its own side opens for good: `switchleft` (activationflag
   362) and `switchright` (361), `Event136` setting the lever's flag; data[4] 0, so any basic attack. Seen from both
   doors. The miners talk only; the grass hides nothing; no items.
-  **`FarGrasslands1`, the crossroads (2026-10-08, the user and the dumps):** its four doors (left to
+  **`FarGrasslands1`, the crossroads (2026-10-08, seen and the dumps):** its four doors (left to
   `FarGrasslands2`, right to `FarGrasslands3`, top right to `FarGrasslandsLake`, bottom to `DesertFGBorder`) and the
   save crystal free. The dig spot (`digspot`, data `1 31`: crystal berry #31) reached with nothing, Beetle Dig. The
   arrival scene (`Event125`, trigger until 323) sets 322 and 323 and makes Maki a follower (`AddFollower`): he fights
-  alongside in this area and the swamp, never outside it, and in vanilla leaves when the swamp bridge falls (the user);
-  that bridge is to stay up (`apimplementation.md`, Known issues), so for the swamp's mapping. The wasp twin (638 until
-  639) for the quest pass; the grass hides nothing.
-  **`FarGrasslandsOutsideCave` (2026-10-08, the user and the dumps):** the top door (to `FGCave`'s middle) and the save
+  alongside in this area and the swamp, never outside it, and in vanilla leaves when the swamp bridge falls (an
+  account of play); that bridge is to stay up (`apimplementation.md`, Known issues), so for the swamp's mapping. The
+  wasp twin (638 until 639) for the quest pass; the grass hides nothing.
+  **`FarGrasslandsOutsideCave` (2026-10-08, seen and the dumps):** the top door (to `FGCave`'s middle) and the save
   crystal free; the right door (to `FarGrasslands4`) behind two `BreakableRock`s (regional flags 0 and 1, so they stay
   broken once gone), Horn Dash both ways; the bottom left door (to `FarGrasslandsWizard`) by burrowing, Beetle Dig both
   ways. Riz (from 509) for the quest pass; the grass hides nothing; no items.
-  **`FarGrasslandsWizard`, outside the wizard's tower (2026-10-08, the user, the dumps and code):** the door to
+  **`FarGrasslandsWizard`, outside the wizard's tower (2026-10-08, seen, the dumps and code):** the door to
   `FarGrasslandsOutsideCave` (top left) its own part; the tower side across with the Shield or Bee Fly. There, the hole
   (ringed with grass, the horn) drops into `WizardTowerBasement` one way: before 449 the trigger `basementevent`
   (`Event166`, the fall, sets 449), after it the door `loadzonebasement` (requires 449). The front door
@@ -1204,12 +1204,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   The lookout rock on the cave door's side (`discovery`, Jump): its talk sets 546, and `CheckAchievement` (each map
   load, the pause menu) records discovery 36, "Wizard's Tower", which entering `WizardTowerStairs` also records
   (`MapControl`). Three signs ("STAY AWAY"...); the grass hides nothing; no items.
-  **`FarGrasslands2`, the west path (2026-10-08, the user and the dumps):** the right door (to `FarGrasslands1`) and
+  **`FarGrasslands2`, the west path (2026-10-08, seen and the dumps):** the right door (to `FarGrasslands1`) and
   crystal berry #26 (`Fixedcrystalb`, data `3 -1 0 26`, on top of the big tree root) free; the top door (to
   `FarGrasslands4`, y 6) Jump up a ledge, a drop down. Three grass patches (regional 9-11) drop only berries, the money
   (items 6 and 7): not locations, as at Seedling Haven. A Mantidfly, a flowering plant and a jumping spider for the
   enemy pass.
-  **`FarGrasslandsLake`, the lake (2026-10-08, the user, the dumps and two warps):** from the bottom door (to
+  **`FarGrasslandsLake`, the lake (2026-10-08, seen, the dumps and two warps):** from the bottom door (to
   `FarGrasslands1`) the Lore Book behind a flower (flag 460) and the Hot Drink beside a tree (item 177, flag 736) need
   nothing; the dig spot in the middle (`DarkCherry`, data `0 0 121`: Dark Cherries, flag 632) Icicle or Bee Fly, then
   Beetle Dig. The Wasp Kingdom's front gate at the top (`loadzonewasp`, requires 555) is shut by `Base/grate` (hidden
@@ -1218,7 +1218,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   from 555) pushed the party past that gate into the patrol's `see area` (`Event138`, until 347), which puts the party
   back at `lastpos`, inside itself: a loop, freed by `unstick` then `nudge` onto the door. Arriving here through the gate
   pushes the party past the grate, no trap. The one grass drops only money.
-  **`FarGrasslandsOutsideVillage`, outside the Fishing Village (2026-10-08, the user, `Event176` and the battle code):**
+  **`FarGrasslandsOutsideVillage`, outside the Fishing Village (2026-10-08, seen, `Event176` and the battle code):**
   the left door (to `FarGrasslands3`) and the top right (to `FGOutsideSwamplands`) free between them; the village door
   (bottom right) down a ledge, Jump both ways. Riz (`riz`, `rizevent`, until 509) guards it: `Event176` checks
   `HasFollower(Maki)` first (yes: "Halt!", the party turns back); without Maki, from the left his exchange and a choice
@@ -1226,28 +1226,28 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   75 HP, def 0, Ground, no Flip, no summons, mini-boss music. Maki as a follower (`BattleControl.AddAI(46, 13)` in
   areas 8 and 9, the Far Grasslands clearing, or flag 594) hits for a fixed 6, piercing, plus one per medal 90
   (`AIAttack`), whatever the level. No items; the enemies for the enemy pass.
-  **`FarGrasslands3`, east of the crossroads (2026-10-08, the user and the dumps):** three parts: the left door (to
+  **`FarGrasslands3`, east of the crossroads (2026-10-08, seen and the dumps):** three parts: the left door (to
   `FarGrasslands1`) with the rest of the room; the bounce pad (`jumpspring`, no flags) past grass, the horn; the right
   door (to `FarGrasslandsOutsideVillage`) from the pad, Jump across platforms. From the right door back: Jump up rocks,
   then a drop into the left part. No items (the grass hides
   nothing); two Chompers and a jumping spider for the enemy pass.
-  **`FGOutsideSwamplands`, outside the swamp (2026-10-08, the user, the dumps and code):** the bottom (the door from
+  **`FGOutsideSwamplands`, outside the swamp (2026-10-08, seen, the dumps and code):** the bottom (the door from
   `FarGrasslandsOutsideVillage`, the save crystal, the door into `SwamplandsEntrance`) free; the top (the doors to
   `SwamplandsBoss` and `WaspKingdomOutside`'s right door) free between them, up with Jump, Icicle and Horn Dash, down a
   drop to the boulders then Icicle and Horn Dash. The Wasp Kingdom door (`loadzone wasp`) exists only from 359 (the
   swamp's boss, `Event137`), Maki's turn-back (`blocker`, `Event12`) before it until then. Only two places read 359:
   a save-load fix-up (`Event22`, flags 98 and 699) and the boss room's talk (`Event43`); the camp scene
-  (`tentevent`, `Event148`) sets only 360, read by the second save crystal. Kept open at the user's ask; arriving
+  (`tentevent`, `Event148`) sets only 360, read by the second save crystal. Kept open (decided); arriving
   through it on the Wasp Kingdom side the patrol (`see area`) caught the party once, no loop (`lastpos` outside it).
   Madeleine (375 until 389) for the quest pass; no items.
-  **`SwamplandsBoss`, the swamp boss's room (2026-10-08, the user, `Event137` and the battle code):** the bottom door
+  **`SwamplandsBoss`, the swamp boss's room (2026-10-08, seen, `Event137` and the battle code):** the bottom door
   (to `SwamplandsBridge`), the save crystal and the healing flower (`venus`, berries for a heal) free; the top door (to
   `FGOutsideSwamplands`' top) across lily pads, Jump, past the boss in the middle: its trigger (`event`, until 359)
   starts `Event137` from either side (seen from the top), the Centipede (enemy 69, 76 HP, a 10-HP scripted end:
   Vi and Leif knocked out, Kabbu healed and boosted), which burrows (Leif), no summons. Maki, following, steps aside for
   it; the room's own Maki (until 359) is the injured one. `kabbuevent` (555 until 645) and `Base/DigMound` (hidden
   from 645) for the quest pass; no items.
-  **`FarGrasslands4`, above the west path (2026-10-08, the user, a sketch of the room and the dumps):** the bottom
+  **`FarGrasslands4`, above the west path (2026-10-08, seen, a sketch of the room and the dumps):** the bottom
   right (the door from `FarGrasslands2`'s top door) an island ringed with thorns (`WalkableSpike`), left only with the
   Shield or Bee Fly. The top right: where the door from `FGClearing` puts the party, past a boulder before the door (a
   `BreakableRock`, regional flag 24), Horn Dash back to it; nothing else reached from there with nothing; to and from
@@ -1260,7 +1260,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   right, up ledges and platforms to the left's path, Jump at least either way; with Horn Dash alone nothing past the
   middle. The middle is safe ground and holds nothing, so it's no part of its own. No items; three field enemies for
   the enemy pass.
-  **`WizardTowerBasement`, the tower's basement (2026-10-08, the user, the dumps and code):** the floor (height 0)
+  **`WizardTowerBasement`, the tower's basement (2026-10-08, seen, the dumps and code):** the floor (height 0)
   takes the hole's landing from `FarGrasslandsWizard` (`Event166` sets the party down near (-8, 0, -1); after 449 the
   door's walk-in ends at (-10, 0, -1)), and the Burly Tea behind the stairs (item 81, flag 547), nothing needed. The
   door to `WizardTowerStairs` (`loadzone`) is up on a ledge at the top right (height 4): a drop down, Jump up; in and
@@ -1268,7 +1268,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   left, crystal berry #37 on the bookshelf (height 7.5), Jump and Bee Fly or the Beemerang. The fall's scene is the
   hole's trigger outside (`basementevent`), so arriving through the stairs' door starts no scene. A diary to read
   (`notesDiary`) gives nothing; no enemies. The attic's wizard still unlocked the front door on a file that never saw
-  the fall's scene (the user, the same day), and the door led outside; but outside, the way back in wasn't there (its
+  the fall's scene (seen the same day), and the door led outside; but outside, the way back in wasn't there (its
   `loadzonetower` needs 449). The basement's wizard and the scene kept away in a seed (below).
   **The tower's flags, 449 and 450 (2026-10-08: the code and the dumps swept, every claim checked; the lines read with
   the dev `line`):** `Event166`'s outside branch checks nothing, loads the basement itself (`LoadMap(186)`, not
@@ -1283,16 +1283,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   come back that way (seen, above), and before 449 the first drop lands in the basement whatever a door shuffle says.
   The game has no cutscene skip, only faster text. In a seed the tower is kept open (`apimplementation.md`, build
   step 59).
-  **`WizardTowerAttic`, the tower's attic (2026-10-08, the user and the dumps):** one part, its door (`loadzone`, to
+  **`WizardTowerAttic`, the tower's attic (2026-10-08, seen and the dumps):** one part, its door (`loadzone`, to
   `WizardTowerStairs`) free both ways. The Bad Book beside the wizard's cauldron (`badbook`, key item 174, flag 620;
   its `data[1]` 206 starts `Event206` once taken, one remark, line 18) and the capsule machine (`Fixedgachapon`, line
   14 runs `Event166`'s attic branch: 10-19 berries, `flagvar[50]`, a Longleg Summoner, item 107, each time, no flag)
   need nothing; the wizard (`wizard`, at height 1) needs Jump to talk to, up a small ledge. His lines: 3 (first talk,
   the locked door, sets 450), 4 from 450 (the ingredients, sets 543, adds quest 52), 5 from 543, 11 from 544.
-  **`WizardTowerStairs`, the tower's stairs (2026-10-08, the user and the dumps):** the bottom (the doors to
+  **`WizardTowerStairs`, the tower's stairs (2026-10-08, seen and the dumps):** the bottom (the doors to
   `WizardTowerBasement` on the left and outside at the bottom, the save crystal) free between them; the attic's door
   at the top (height 19) up with Jump, a drop down without it. No items; entering the room records discovery 36.
-  **`BroodmotherLair` (2026-10-08, the user, the dumps and code):** one part, its two doors (`loadzoneFG` from
+  **`BroodmotherLair` (2026-10-08, seen, the dumps and code):** one part, its two doors (`loadzoneFG` from
   `FGCave`'s left door, `LoadzoneBack` to `PowerPlant`'s top) free between them. Its trigger (`event`, `Event171`,
   until 459, data `171 0 1`) has `data[2]` 1, so it starts by itself the moment nothing else runs (`NPCControl`'s
   per-frame check), not on touch: entering by either door starts the scene at once (seen from the border cave's
@@ -1308,7 +1308,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   sets 226. So never posted, it stays Done only; posted but untaken, it stays Open and Done together, offered on every
   board and, if taken, left in Taken for good (no other line or code completes 31; the game's per-frame clean-up of
   Open covers only the five bounties). Cosmetic, never stuck. The berries and medal come from the scene either way.
-  **`FGClearing`, the clearing (2026-10-08, the user, the dumps and code):** one door (`loadzone`, from
+  **`FGClearing`, the clearing (2026-10-08, seen, the dumps and code):** one door (`loadzone`, from
   `FarGrasslands4`'s top right) at the bottom, free both ways. The Mechanical Claw (`mecharm`, key item 175, flag 623)
   at the top right behind a small bush, nothing needed; its one use is `DefiantRoot3`'s trade, lines 189-190
   (`checkvar,0,175` then `removeitem,1,175` and medal 61). The middle platform, up with Jump: Maki and Kina (from 608,
@@ -1316,12 +1316,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   clearing branch: a fight with no escape and the mini-boss music against nine Leafbugs (Ninja 65, Archer 66,
   Clubber 67, all on the ground), then `giveitem,1,4` and `giveitem,1,5`, 609 set, quest 55 completed. Two NPCs under
   the ground (`yinmoth`, `Fixedleafbugforce`) for that scene. Nothing else: no enemies, grass, hazard or save crystal.
-  **`SwamplandsEntrance`, the swamp's first room (2026-10-08, the user and the dumps):** its two doors (`loadzoneexit`
+  **`SwamplandsEntrance`, the swamp's first room (2026-10-08, seen and the dumps):** its two doors (`loadzoneexit`
   to `FGOutsideSwamplands`, `loadzonenorth` to `Swamplands2`) free between them. A talk trigger (`initialmessage`,
   until 357, data `1 0 1`: `data[2]` 1 starts it by itself) plays line 1 on entering by either door (seen both): it
   sets 357 and shows a bubble, nothing else, and nothing else reads 357. Nine grass tufts hiding nothing; a Madesphy
   for the enemy pass; no items.
-  **`Swamplands2`, the lily pad pond (2026-10-08, the user, the dumps and code):** two parts. The bottom (the door from
+  **`Swamplands2`, the lily pad pond (2026-10-08, seen, the dumps and code):** two parts. The bottom (the door from
   `SwamplandsEntrance`, ground level) and the top (the door to `Swamplands3`, height 6): up across water (a hazard),
   three moving lily pads (`PathPlatform`s, height 4.65), two bounce pads and ledges blocked by grass, Jump and the
   horn, or Jump and Bee Fly; back down the horn or Bee Fly, no Jump. The Leafbug ambush (`ambush trigger`, `Event128`,
@@ -1334,7 +1334,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`CutGrass` calls `ActivateRegion`) and handed to its drop (`tempitem.activationflag`): cutting one on a file
   before the first boss set 41, the mod counted an artifact, and the seed's goal (one artifact) was sent (seen,
   2026-10-08). The fix: `apimplementation.md`, build step 60.
-  **`Swamplands3`, Leafbug Crossing (2026-10-08, the user, the dumps and code):** three parts in a row. The bottom (the
+  **`Swamplands3`, Leafbug Crossing (2026-10-08, seen, the dumps and code):** three parts in a row. The bottom (the
   door from `Swamplands2`, bottom left) free. The middle, to and from it with Jump or Bee Fly: the tree there knocked
   down with the horn (a hidden `Switch`, `eventhit`, data `1 129 0 0 1`, until 335, hit only by the horn or the Dash,
   starts `Event129`: the switch and the three Leafbugs on the right destroyed, then 335; no fight), down for good (the
@@ -1361,8 +1361,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   swamp's switch was hit. To see on screen. Also here: `eventtrigger2` at the bottom (`Event131`, until 39) teaches the
   Horn Dash and breaks the bottom `rock` (until 39); a save crystal at the bottom (one entity until 359, another from).
   That `rock` is a `BreakableRock` with `eventtrigger2` just in front of it, yet a Horn Dash doesn't break it: seen
-  2026-10-09 (the user, the Horn Dash in hand); only the scene removes it.
-  **Seen on screen (2026-10-08, the user, a vanilla file and then a seed):** with the bridge up, its left and right
+  2026-10-09 (the Horn Dash in hand); only the scene removes it.
+  **Seen on screen (2026-10-08, a vanilla file and then a seed):** with the bridge up, its left and right
   doors are free between them. From the right side, a drop down a path to the top right (a green bounce pad, the small
   bridge's switch, knocked down by the horn), Jump back up; from there, across to the top door's platform (to the boss),
   by Bee Fly, or over ledges by Jump once the small bridge is down, both ways. Down a small ledge from the top door, a
@@ -1377,16 +1377,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Leif broke it in his place). The bottom's bounce pad (`spring - Duplicate - Duplicate`, made from 359, the swamp's
   boss; kept present in a seed) sends the party to the bridge's left end, where the top door's red pad lands too: a
   one-way up. The green pad is on the way between the top door and the right door; the top door's red pad is reached
-  only from the top door (or the left end's boulder). The user's sketch (2026-10-09): the left door's platform (its
+  only from the top door (or the left end's boulder). A sketch (2026-10-09): the left door's platform (its
   boulder and pad), the bridge across to the right side, a path up from there to the top right, the small bridge across
   to the top door's platform (its pad), and the bottom below the bridge.
-  **`Swamplands4`, the long swamp room (2026-10-09, the user):** flat, left to right. Its left door (from the bridge's
+  **`Swamplands4`, the long swamp room (2026-10-09, seen):** flat, left to right. Its left door (from the bridge's
   bottom) in a tiny part of its own, past a boulder (Horn Dash both ways; it stays broken once broken). From there to
   the middle, Jump and Freeze, or Bee Fly; back the other way everything but Freeze, so without it a one-way. The
   middle to the right side, grass and a boulder (the horn and Horn Dash), then a jump (Jump), or Bee Fly for both,
   both ways. The right door (to Swamplands5) in a part of its own, Horn Dash and Beetle Dig both ways. No locations;
   a flower enemy, a Leafbug Archer and a Leafbug Ninja for the enemy pass.
-  **`Swamplands5`, the Junction (2026-10-09, the user; named by the user):** four doors. The left door's side: past a
+  **`Swamplands5`, the Junction (2026-10-09, seen; named then):** four doors. The left door's side: past a
   boulder (Horn Dash) the top left; past thorns (the Shield, or Bee Fly) the bottom left, whose lever (`switch`, any
   attack, a toggle with no flag: reset each visit) moves the top left's platform out of the way. The right side (the
   bottom door to Swamplands6, crystal berry #27 dug up under a boulder, Horn Dash and Beetle Dig; a lever, `switch -
@@ -1402,7 +1402,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   one). The centipede scene (`Event147`, the map's auto-start, until 383) plays on the first entry by any door and
   leaves the party at the left door (`EventControl.cs:24624-24706`). A Leafbug Clubber, a Madesphy and two Chompers
   for the enemy pass.
-  **`Swamplands6`, Crank Pond (2026-10-09, the user; named by the user):** its door from the Junction (top left) and
+  **`Swamplands6`, Crank Pond (2026-10-09, seen; named then):** its door from the Junction (top left) and
   the left side walked between with nothing; a Crunchy Leaf in the bottom left's grass (regional flag 19), the horn.
   The middle (a crank, `screw`) by Jump or Bee Fly, both ways. The lower right from the middle by the crank (Beemerang
   Halt) and Jump, or Bee Fly; back, the lily pad (`lilypad - Duplicate`, moving while its grass is cut: the horn on
@@ -1411,7 +1411,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a drop to the lower right; up, the lift: its crank (`screw - Duplicate`) behind a boulder (`ROTrock`, no flag:
   back each visit), Horn Dash and Beemerang Halt, then Jump on. A Leafbug Archer, a Madesphy and a Chomper for the
   enemy pass.
-  **`Swamplands7`, Ice Block Climb (2026-10-09, the user; named by the user):** six parts by height and side. An ice
+  **`Swamplands7`, Ice Block Climb (2026-10-09, seen; named then):** six parts by height and side. An ice
   block is frozen from a droplet (Freeze), knocked into place (the horn) and jumped on (Jump). The bottom right (the
   door to the Junction) to and from the bottom middle by an ice block or Bee Fly. The middle a drop down to the bottom
   middle; up, an ice block brought up on a platform, frozen from the droplet behind a boulder (`rock`, no flag: back
@@ -1424,7 +1424,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   nothing, one-way; down from the left to the bottom right with Jump, one-way. Six plates and an AND gate, two
   droplets (a third parked at y 999). Its map enemies (`ICEflowering`, `Archer - Duplicate - Duplicate`, `archertop`,
   `clubber`, a Madesphy) for the enemy pass.
-  **`Swamplands8`, Fenced Pond (2026-10-09, the user; named by the user):** a double fence (`Base/DoubleFence` and its
+  **`Swamplands8`, Fenced Pond (2026-10-09, seen; named then):** a double fence (`Base/DoubleFence` and its
   two children, hidden from 356) splits the room. The bottom (its door from Crank Pond, a healing flower `venus`) to
   and from the middle with Jump or Bee Fly. The lever (`gateswitch`, any attack, data `1 136 0 0 0`) on a ledge above
   the middle: up past a boulder (`breakrock`, no flag) and a rock pushed with the horn (`rock`, two `PushRock`s), then
@@ -1435,7 +1435,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   pad by the top door, five grass patches with nothing; the dig spot is its only item. Seb's talk (line 4 sets 390,
   opening the Outskirts house, and loads a map; line 7 warps to `BugariaOutskirtsOutsideCity`, the ScriptDump) is for
   the quest pass. Its map enemies (a Leafbug Clubber, a Madesphy, a Leafbug Ninja, `enemy`) for the enemy pass.
-  **`DefiantRoot1`, the Square (2026-10-09, the user; named by the user):** the ground and its four doors (the elevator
+  **`DefiantRoot1`, the Square (2026-10-09, seen; named then):** the ground and its four doors (the elevator
   left, the commercial street top, outside right, the well down a hole, out again with nothing) free, with the save
   crystal, every NPC, the houses and the museum (`insideid` 1, discovery 29 from its signs, lines 59-60). On the ground:
   a Lore Book behind a box at the far left (`lorebook`, key item 52, flag 142). The Bed Bug (key item 89) is Pibu,
@@ -1447,7 +1447,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   berry #15 on the left (`crystalberryskip`, below), the Spicy Berry seller beside it (`hidden merchant`, line 8, 16
   berries; seen on screen), the mayor's front door (`doormayor`), and the storage's back door (`doormayorback`), locked
   (`DoorLock`, `Event59` with `dialogues[0].y` 3: key list index 3, the Desert Key, 92, taken when used; hidden from
-  560). Inside (`insideid` 0, the user with a dev `give key 92`): a Lore Book (flag 489) and Dark Cherries (item 121,
+  560). Inside (`insideid` 0, seen with a dev `give key 92`): a Lore Book (flag 489) and Dark Cherries (item 121,
   flag 490). The Desert Key is the mayor's, given in the Wacka Worm room (`Event55`, line 15, once 558 is set and not
   559, with 20 worms or more, `flagvar[1]`; `Event188` sets 558), completing his quest 46, which joins the boards only
   at flags 276 and 348 (chapter 5's start). Three bushes drop nothing; no dig spots. The first-visit talk (line 52,
@@ -1459,20 +1459,20 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `crystalbflags[data[3]]`). 201 is set on entering `DesertDRSouthEntrance` (`MapControl`, with 170) and at the end of
   the caravan robbery (`Event93`), whose dialogue gives #15 itself (`giveitem,3,15`). A crystal berry pickup never
   writes its `activationflag` (`NPCControl.CheckItem` writes it only for `animid != 3`): taking the rooftop berry left
-  201 off (the user took it, then `flag 201` read False). In a seed its limit is repointed to -1 (build step 64): seen
-  on the rooftop with 201 on and `crystalbflags[15]` off (the user, with `liveslot`). The robbery's gift: for item
+  201 off (taken, then `flag 201` read False). In a seed its limit is repointed to -1 (build step 64): seen
+  on the rooftop with 201 on and `crystalbflags[15]` off (with `liveslot`). The robbery's gift: for item
   type 3 `Giveitem` raises the count (`flagvar[14]`) and sets `crystalbflags[n]` with no window, sprite or list add
   (`MainManager.cs`), so none of the mod's give hooks saw it (the review, 2026-10-09).
   **The Bed Bug (2026-10-09, code):** key item 89, used from the pause menu's key items on open ground
   (`PauseMenu.cs`): a rest like an inn (`Event82`), which takes it back (`items[1].Remove(89)`) and clears 150. No
   other code or line reads it.
-  **`DefiantRootWell`, the Well (2026-10-09, the user; named by the user):** its bottom left the landing from the town,
+  **`DefiantRootWell`, the Well (2026-10-09, seen; named then):** its bottom left the landing from the town,
   a green bounce pad (`bounceshroom`) back up to the town's door (`loadzone`, y 12), and Astotheles (from 300 until 239,
   line 3: the Rusty Key, 111, for 30 berries). Its right side (the door to `HideoutGarden`, `loadzonehideout`) to and
   from it by burrowing, Beetle Dig. A Leaf Croissant (item 148, flag 734) on boxes on the right side, Jump. `Base/Quad`
   is hidden from flag 18 (the story's Beetle Dig); with 18 off on the test file it was shown and the burrow still went
   across.
-  **`DefiantRoot3`, the Market (2026-10-09, the user; named by the user):** one door (to the Square), everything on the
+  **`DefiantRoot3`, the Market (2026-10-09, seen; named then):** one door (to the Square), everything on the
   ground and free: every NPC, every shop, the bakery and the smithy (insides of the same map). No pickups, bushes or dig
   spots. Kali's shop (`door shop`) exists from flag 265, the taking of board quest 36; until then its sign (`kalisign`,
   "Under renovation") stands in front. Inside (`insideid` 1) Kali, a cook (`Event3`), takes the Stolen Silk (key item
@@ -1482,7 +1482,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Shroom, Poison Bomb, Poison Dart: 64, 26, 31, 88) and, inside the bakery (`insideid` 0), `sirfy` (Honey Drop, Bag of
   Flour, Nutty Cake: 1, 68, 73); in a seed their slots are locations 217-228. The ice seller (`iceseller`, from 345)
   sells Magic Ice (item 42) for 10 berries by dialogue (line 130).
-  **`DefiantRoot2`, the Beehive Lift (2026-10-09, the user; named by the user):** the ground free: both doors (the
+  **`DefiantRoot2`, the Beehive Lift (2026-10-09, seen; named then):** the ground free: both doors (the
   Square, `DesertDRSouthEntrance`), the inn's ground door (`door low`), Diana's ant tunnel (75) and every NPC. The
   elevator bee's platform (`Elevator Bee`, y 2.5) up with Jump or Bee Fly, a drop down. Upstairs at the inn (`doorhigh`,
   y 5.5) up with Jump or Bee Fly, a drop down; its door is shut by `Base/DoorLock` until flag 408, set only by the
@@ -1491,19 +1491,19 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   0), up inside with Jump or Bee Fly (seen with the lock hidden by `liveslot`, the door open); from upstairs the medal
   Fortify (medal 39, flag 149) on the inn's roof, flown around to with Bee Fly (not from the ground). The innkeeper's
   rest costs 12 berries (line 5), the daughter's line 27 7 berries. No bushes or dig spots.
-  **`SandCastleEntrance`, the castle's entrance (2026-10-09, the user):** its left door (from `DesertSandCastle`) and
+  **`SandCastleEntrance`, the castle's entrance (2026-10-09, seen):** its left door (from `DesertSandCastle`) and
   its right door (to `SandCastleMainRoom`) on either side of a gap. The bridge across shows only while the crystal is
   lit: `crystal`, a `StencilSwitch`, toggled by the Beemerang, a horn or Dash tag or ice (`NPCControl.cs`, its trigger),
   lights a radius (`MapControl.CheckStencilSwitch`) and resets each visit. Seen: the Beemerang Toss lights it from
   either side; Bee Fly crosses without it. Its first light plays `Event157` (the `eventcaller` AND gate, with the
   hidden `switch`, until 416). A Krawler (enemy pass), a pit (`Hole`); no items.
-  **`SandCastleSlidePuzzle`, the Slide Puzzle (2026-10-09, the user; named by the user):** its bottom right door (to
+  **`SandCastleSlidePuzzle`, the Slide Puzzle (2026-10-09, seen; named then):** its bottom right door (to
   the main room) free; the puzzle's floor a drop down a small ledge, Jump or Bee Fly back up (Bee Fly seen later the
   same day). The puzzle: the block (`icepillar`,
   a `PushRock`, there until 284), knocked by the horn onto the plate (`pressureplate`, data `0 1 113`), runs `Event113`,
   which sets 284 for good: the pillar shown in place (`Base/IcePillarObj` from 284) fills the upper gap, and the upper
   left door (to `SandCastlePressurePuzzle`) opens (`Base/Tablet` hidden from 284). Before that, arriving through that
-  door pushes the party past it (seen, with 284 turned off). Solved or not, the floor has no way up (the user,
+  door pushes the party past it (seen, with 284 turned off). Solved or not, the floor has no way up (seen
   2026-10-09): the upper part is entered from the main room's middle left. The upper right (its door from the main
   room) and the upper
   left across the gap, once solved or with Bee Fly; both drop to the floor, with no way back up inside the room. The
@@ -1511,15 +1511,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   upper left door, burrowed into and out of with Beetle Dig. A crystal (`freezeswitch - Duplicate`) by the plate from
   284; a hint tablet; a Krawler (enemy pass). `platform` (a `PathPlatform`) and `platformswitch` (flag 283, read by
   nothing) sit at depth -52 and -58, outside the camera's limits (-5.9 to 10.3): out of play, not seen.
-  **`SandCastleStatueRoom`, the Statue Room (2026-10-09, the user; named by the user):** its left door (from the main
+  **`SandCastleStatueRoom`, the Statue Room (2026-10-09, seen; named then):** its left door (from the main
   room) and right door (to `SandCastleRockRoom`) on either side of a block in the middle, gone over on platforms. From
   the left, the crystals' puzzle (two `StencilSwitch`es, one lit at a time) and the way across take Icicle and Jump, the
   ice also lighting the crystals; or Bee Fly alone. From the right, Jump or Bee Fly. Two enemies in the bottom left
   (`enemy1`, `enemy2`, at y 3 in the data, their hover) and one in the bottom right (`cape`), seen; for the enemy
   pass. No items.
-  **`SandCastleBasement`, the Basement (2026-10-09, the user; named by the user):** one door (from the main room) on an
+  **`SandCastleBasement`, the Basement (2026-10-09, seen; named then):** one door (from the main room) on an
   isolated ledge; its second door (`loadzoneright`) parked at y 99, as is its other end (`SandCastleMainRoom`'s
-  `loadzonebasementright`): arriving through it (the dev warp, the user's ask) falls into a pit and respawns behind the
+  `loadzonebasementright`): arriving through it (the dev warp, as asked) falls into a pit and respawns behind the
   sandpile right of the real door, a softlock (seen 2026-10-09). The door export drops both (`door-graph.py`, y 90 and
   up); no save point, so no random start. The middle (a safe platform by the big crystal, `crystal - Duplicate`, a
   `StencilSwitch` drawn as a crystal) across with Jump or Bee Fly. Around it the moving
@@ -1533,13 +1533,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a pit. The castle's two Ancient Keys (here and `SandCastlePressurePuzzle`, flag 289) each open one of the main room's
   locks (`key1`, `key2`, until 292 and 293, `Event59` key index 7, used up); the boss key (115, `SandCastleBossKeyRoom`,
   flag 294) the roof's (`bosslock`, until 295).
-  **`SandCastleRoof`, the Roof (2026-10-09, the user; named by the user):** its left and right doors (both to the main
+  **`SandCastleRoof`, the Roof (2026-10-09, seen; named then):** its left and right doors (both to the main
   room) and the save crystal free between them; a Frost Bomb (`Item Bomb`, item 44, flag 732) behind the left statue,
   nothing needed. The boss door in the middle (`loadzoneboss`, to `SandCastleBossRoom`) is locked from the roof by
   `bosslock` (`Event59` key index 8, the Big Ancient Key, 115, used up; gone from 295); arriving from the boss room
   pushes the party past it (seen, through the dev warp, which reported the door's own arrival spot as over a hole and
   stepped to safe ground). A Cursed Cloth (left) and a Krawler (right) for the enemy pass.
-  **`SandCastleMainRoom`, the Main Room (2026-10-09, the user; named by the user):** the castle's hub, at three
+  **`SandCastleMainRoom`, the Main Room (2026-10-09, seen; named then):** the castle's hub, at three
   heights (the doors at y 0, 8 and 22), in five parts. The bottom: the entrance (`loadzoneentrance`), the Slide
   Puzzle's lower door, the basement's left door, the save crystal and the healing flower, free; the statue room's door
   (`loadzone statue`) behind `key1`. The middle left (`loadzoneslideup`, the Slide Puzzle's upper door) cut off, a drop
@@ -1549,32 +1549,32 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   291) starts the upper lift (`platform2`) for good, boarded from the bottom with Jump, which also lets the party off
   at the middle right; a jump across to the top left, one-way. The top left (`loadzone roof left`, `loadzonepressure`)
   cut off but for that, a drop to the bottom by the save crystal with Jump. The middle right and the middle left are
-  joined by a ledge outside behind the windows, up onto it with Jump, or Bee Fly across (found by the user,
-  2026-10-09): the way to the top, the middle left's door leading into the Slide Puzzle's upper part, on to the Pressure
-  Puzzle and the top left. The lifts are vertical only (`platform1` between y 3 and 8 at x 10, `platform2` between 3 and
+  joined by a ledge outside behind the windows, up onto it with Jump, or Bee Fly across (found 2026-10-09): the way to
+  the top, the middle left's door leading into the Slide Puzzle's upper part, on to the Pressure Puzzle and the top
+  left. The lifts are vertical only (`platform1` between y 3 and 8 at x 10, `platform2` between 3 and
   22.5 at x 15, each cycling once its switch is hit, `NPCControl` PathPlatform). Both locks (`Event59` key index 7, each
   using up an Ancient Key, hidden from 292 and 293): arriving through either door pushes the party past the lock
   (seen). The statue room's is the first one a party reaches with a key. The sand-filled door on the bottom's right is
-  the parked `loadzonebasementright`. In vanilla the top is
-  reached through the castle's other rooms (the user: "you are not supposed to reach everything from within this
-  room"). Discovery 16 up top (`discovery`, line 2, flag 306); a Psicorp and an enemy up top (enemy pass).
-  **`SandCastleBossKeyRoom`, the Boss Key Room (2026-10-09, the user; named by the user):** one door (from the main
+  the parked `loadzonebasementright`. In vanilla the top is reached through the castle's other rooms (not everything
+  is meant to be reached from within this room). Discovery 16 up top (`discovery`, line 2, flag 306); a Psicorp and
+  an enemy up top (enemy pass).
+  **`SandCastleBossKeyRoom`, the Boss Key Room (2026-10-09, seen; named then):** one door (from the main
   room's top right). Round the room's edge, nothing needed: a Cold Salad behind a block (`ITEM - Duplicate`, item 53,
   flag 641). Below, the puzzle area (two crystals and an ice block, `icecube`, a `PushRock` at y 12), a drop, Jump or
   Bee Fly back up. The right side, across a gap: the block pushed into it with the horn from the puzzle, then Jump, or
   Bee Fly; back, Jump or Bee Fly (its bounce pad, `spring`, falls short). There the Big Ancient Key (`bosskey`, key item
   115, flag 294, its `data[1]` 115 starting `Event115`): three Wardens (enemy 61, flying, 11 HP) come out of the three
-  statues and fight the party (`StartBattle`, no escape); `Base/GameObject` gone from 294. Seen: the user.
-  **`SandCastlePressurePuzzle`, the Pressure Puzzle (2026-10-09, the user; named by the user):** one floor between its
+  statues and fight the party (`StartBattle`, no escape); `Base/GameObject` gone from 294. Seen.
+  **`SandCastlePressurePuzzle`, the Pressure Puzzle (2026-10-09, seen; named then):** one floor between its
   bottom left door (`loadzoneslide`, to the Slide Puzzle's upper left), free both ways, and its right door
   (`loadzonemain`, to the main room's top left), shut from inside until its plates are played for it, which then stays
   open; arriving through it before then pushes the party past it (seen). The plates (four `PressurePlate`s, arms and
   legs; the AND gate `eventcheck`, data `113 1 2 -5`, until 296, runs `Event113`, which sets 296; `Base/CastlePlatform`
   hidden from 296) take Freeze and the horn (the crystal hit, enemies frozen, ice knocked about); for the door nothing
-  more (the user's corrections, the same day). Played the other way they raise the platforms to the Ancient Key
+  more (corrected the same day). Played the other way they raise the platforms to the Ancient Key
   (`item - Duplicate`, key item 114, flag 289), on a ledge by a statue in the top right, then Jump or Bee Fly across;
   too far to fly to without them. Two hint tablets; two Psicorps and a Warden (enemy pass).
-  **`SandCastleRockRoom`, the Rock Room (2026-10-09, the user; named by the user):** four parts. The bottom left (the
+  **`SandCastleRockRoom`, the Rock Room (2026-10-09, seen; named then):** four parts. The bottom left (the
   door to the main room, `loadzone main`) and its switch (`platformswitch - Duplicate`, any attack, flag 283, for
   good), which starts the platform (`platform - Duplicate`) to the bottom right (the door to the Statue Room,
   `loadzonestatue`); without it, the bottom right reaches the left only round the top. The top left up from the bottom
@@ -1586,7 +1586,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   data index 24) in a hidden alcove off the top right (`respawnerhiddenroom`, a camera change), in and out with Shield,
   Jump or Bee Fly up to it. Two bounce pads parked at y 99; a pit, two spike strips; a Worm, two Cursed Cloths and a
   Psicorp (enemy pass).
-  **`SandCastleBossRoom`, the boss room (2026-10-09, the user):** one floor between its left door (to the Roof,
+  **`SandCastleBossRoom`, the boss room (2026-10-09, seen):** one floor between its left door (to the Roof,
   `loadzoneoutside`) and its right door (to the treasure room, `loadzonetreasure`), nothing needed for either. A little
   way in, from either side at the same spot (seen), its trigger (`eventtrigger`, until flag 38) starts `Event117`: the
   Watcher (enemy 54, `ZombieRoach`, on the ground), no escape. At the end the scene lowers the wall before the right
@@ -1597,10 +1597,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   and the coffin and its base stayed; the fight and its scene then ran as before, the lowering played with the way
   already open (seen, build step 68). The coffin swaps (`Base/Coffin/Coffin2` until 38,
   `Coffin2 (1)` from 38). No pickups, discoveries, hazards, auto-start scenes or map enemies.
-  **`SandCastleTreasureRoom`, the treasure room (2026-10-09, the user):** one door (to the boss room, `loadzone`),
+  **`SandCastleTreasureRoom`, the treasure room (2026-10-09, seen):** one door (to the boss room, `loadzone`),
   nothing needed in or out. The castle's artifact (map child 2, `artifacts_0` moved away from 345) on a platform, Jump
   or Bee Fly; examined (`event`, until 345) it starts `Event118`: the artifact to Vi (`ArtifactGet`), the ice
-  (`icecrystal`, a `StencilSwitch` until 345, only scenery: the user) melted, flag 345 set, quest 14 moved from
+  (`icecrystal`, a `StencilSwitch` until 345, only scenery, seen) melted, flag 345 set, quest 14 moved from
   `boardquests[1]` into `boardquests[2]` at index 3, Luckier Day (76) onto Shades's shelf, then the save menu through
   the hidden save point (`save`, at y 50). **Out of story order it crashes:** with fewer than 3 done quests,
   `boardquests[2].Insert(3, 14)` threw `ArgumentOutOfRangeException` after 345 was set, and the scene died with the
@@ -1611,8 +1611,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   branch after 346 is set; `Event203` already wraps its insert, `try { Insert(6, 17) } catch { Add(17) }`. The game
   reads `boardquests[1]` and `[2]` only by contents (`Contains`, `Count`, `Remove`, the quests page in stored order),
   never by position (a review, 2026-10-09). Used by `ChapterQuests.cs`. No pickups, discoveries, hazards or map enemies.
-  **`BeehiveOutside`, Outside the Beehive (2026-10-09, the user; named by the user):** two parts with no way between
-  them inside the room (the user). The bottom: the elevator bee's guard (`elevatorguard`, talked to) sends the party
+  **`BeehiveOutside`, Outside the Beehive (2026-10-09, seen; named then):** two parts with no way between
+  them inside the room (seen). The bottom: the elevator bee's guard (`elevatorguard`, talked to) sends the party
   down to Defiant Root's Beehive Lift, nothing needed; the hive's main door at the same spot is two doors,
   `loadzonecorridor` to `BeehiveScannerRoom` until flag 160 and `loadzoneinside` to `BeehiveMainArea` from 160, so one
   is always there. The left, a bridge: the hive's side door (`loadzone inside factory side`, no flag) and, at its far
@@ -1625,15 +1625,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (hidden from 169) and `Base/DoorE` on the factory side (from 299): with both halves of the door kept present and both
   models hidden, it looked open from both sides and worked both ways (seen, build step 69). No pickups, hazards or map
   enemies.
-  **`BeehiveThroneRoom`, the Throne Room (2026-10-09, the user; named by the user):** one floor and one door
+  **`BeehiveThroneRoom`, the Throne Room (2026-10-09, seen; named then):** one floor and one door
   (`loadzone`, to `BeehiveMainArea`, no flag), nothing needed; arriving, the game walks the party in, and an NPC inside
-  may push it too (the user), but walking back out is free. The main area's half of the door (`loadzone throne`) exists
+  may push it too (seen), but walking back out is free. The main area's half of the door (`loadzone throne`) exists
   only from flag 169, with its closed model (`Base/ThroneDoors`) until 169 and its open one (`Base/ThroneDoors (1)`)
   from 169; shut, arriving through it pushes the party out past it. With that half kept present, the closed model hidden
   and the open one shown, the door looked open and was walked both ways (seen, build step 70). Two guards and the Queen
   (until 299, then her later self), and story NPCs by flag (Gen and Eri, Zasp, Mothiva, HB, a soldier, a bulk bee). No
   pickups, flag-switched scenery, hazards, auto-start scenes or map enemies.
-  **`JaunesGallery`, Jaune's Gallery (2026-10-09, the user; named by the user):** one floor and one door (`loadzone`, to
+  **`JaunesGallery`, Jaune's Gallery (2026-10-09, seen; named then):** one floor and one door (`loadzone`, to
   `BeehiveMainArea`, no flag), nothing needed in or out. A Bad Book (`badbook`, key item 174, flag 622) on the left side
   behind paintings lying on the floor, nothing needed (taken, seen). Jaune herself, and two triggers of `Event162`
   (`event1` from 444 until 446, `event2` from 446 until 445), her quest. The main area's half of the door
@@ -1641,7 +1641,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   cube (`Base/Cube`, a `ConditionChecker` hiding it from 299) shutting the way: with the door kept present and the sign
   kept away the way stayed shut; with the cube hidden too it opened, walked both ways (seen, build step 71). No hazards,
   auto-start scenes or map enemies.
-  **`BeehiveScannerRoom`, the Scanner Room (2026-10-09, the user; named by the user):** a corridor with one door, the
+  **`BeehiveScannerRoom`, the Scanner Room (2026-10-09, seen; named then):** a corridor with one door, the
   bottom (`loadzoneoutside`, to `BeehiveOutside`, which reaches it only until flag 160: its `loadzonecorridor`), nothing
   needed to cross it. At the top a gate, a closed model (`Base/Door`) hidden from 159, and no door: the way on is
   `Event84`. Walking in, `eventtrigger1` (until 159) plays the scan and sets 159, opening the gate; at the top,
@@ -1658,12 +1658,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   spot, 10.3, it takes 1.8 s door to control. Arriving at the top with 159 off, the scan started at once: its trigger
   reaches well up the corridor. No pickups, hazards, auto-start scenes or map enemies. Used by `DoorRows.cs`,
   `HiveScan.cs`.
-  **`BeehiveMainArea`, the Main Area (2026-10-09, the user; named by the user):** one floor, every door reachable from
+  **`BeehiveMainArea`, the Main Area (2026-10-09, seen; named then):** one floor, every door reachable from
   anywhere with nothing: the Throne Room's (`loadzone throne`, from 169, kept open), Jaune's Gallery's (`loadzonejaune`,
   from 299, kept open with its sign and cube), HB's Lab (`loadzonehb`), the balcony (`loadzone balcony`), Honeycomb's
   lab (`loadzonehonyecomb`), the factory-side bridge's (`loadzoneoutside - Duplicate - Duplicate`) and the bottom exit
   (`loadzoneoutside - Duplicate`, sent into the Scanner Room's top); a save crystal. Mothiva on her stage, a crowd
-  before it (`beeaudience`, until 173) that the party walks through (the user; not checked with a dev tool while it
+  before it (`beeaudience`, until 173) that the party walks through (seen; not checked with a dev tool while it
   stood); talking to her plays `Event86`, which sets 173 (seen). The clothing stall (`clothingshop`, from 173 until 252)
   sells the Bee Hat (key 99, line 48: checkmoney 40, money -40, flag 251), then the Pretty Ribbon (key 94, line 54: 50
   berries, flag 252); its display swaps with them (`Base/BeeHat` until 251, `Base/BeeHat (1)` from 251 until 252,
@@ -1673,7 +1673,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   his lab (`hbevent`, until 160). In a seed the stall's two sales are locations 209 and 210, each after Mothiva's scene
   (a story event that needs nothing, so the trackers, which collect every reachable event, show both as soon as the room
   is reachable). No pickups, hazards or map enemies.
-  **`HBsLab`, HB's Lab (2026-10-10, the user; named by the user):** one floor and one door (`loadzone`, to
+  **`HBsLab`, HB's Lab (2026-10-10, seen; named then):** one floor and one door (`loadzone`, to
   `BeehiveMainArea`), nothing needed; a gate at its top is only the room's model, no door behind it. HB (`HB`) talks by
   flag: line 47 from the start, 48 from 169, 49 from 299, 50 from 219, 31 from 161 (the last line whose flag is set).
   Line 50 asks for something with crystals that recorded the party's fights and has a key item picked: the Explorer
@@ -1685,8 +1685,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   say their names, `Event218`). In a seed HB asks line 50 from the start (seen: asked at once, the permit shown, then
   the computer offered Single Battles and Rush Mode; build step 75). The assistant crow talks by flags 231, 246, 247,
   234. No pickups, hazards or map enemies.
-  **`BeehiveBalcony`, the Balcony (2026-10-10, the user; named by the user):** one floor and one door (`laodzone`, to
-  `BeehiveMainArea`), everything reachable with nothing (the user). Beette (`smug bee`, made from flag 299) talks by
+  **`BeehiveBalcony`, the Balcony (2026-10-10, seen; named then):** one floor and one door (`laodzone`, to
+  `BeehiveMainArea`), everything reachable with nothing (seen). Beette (`smug bee`, made from flag 299) talks by
   flag: line 19 from the start, which ends by setting 227 (the game's text, `textsearch`); 20 from 227, her offer; 24
   from 228, which her line 23 sets after the sale (`|flag,228,true|`). The telescope (`telescope`, `Event127`) shows a
   view of Bugaria and records discovery 26 the first time; it sets no flag. NPCs by flag: two ladybugs (until 299), Gen
@@ -1695,41 +1695,41 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   judge bee and the telescope's owner. In a seed Beette is kept present and sells at her price again (seen: "So...? 150
   berries for the house", refused with 115 in the bag; build step 76). No pickups, flag-switched scenery, hazards,
   auto-start scenes or map enemies.
-  **`HoneycombsLab`, Honeycomb's Lab (2026-10-10, the user; named by the user):** one floor and one door (`loadzone`, to
-  `BeehiveMainArea`), nothing needed anywhere (the user). Its auto-start scene (`autoevent` 175:80) plays on first
+  **`HoneycombsLab`, Honeycomb's Lab (2026-10-10, seen; named then):** one floor and one door (`loadzone`, to
+  `BeehiveMainArea`), nothing needed anywhere (seen). Its auto-start scene (`autoevent` 175:80) plays on first
   entry: `Event80`'s lab part, Honeycomb's two lines, then flag 175; the party isn't moved. Honeycomb talks by flag:
   line 2 from the start, 13 from 344, 26 from 341. His line 6 ("HAND IT OVER!") has an item picked and line 8 sends
   the Chomper Seed (item 38) on to line 10; line 5 ("Hawk is back") gives the A.D.B.P. Enhancer (medal 28) and sets
   352; line 32 runs `Event135`. The hawk (`hawk`, needs 343 and 302), Chompy (`chompy`, needs 341 and 405, until 402 or
   405) and her scene's trigger (`chompyevent`, `Event134`, needs 341). No pickups, flag-switched scenery, hazards or map
   enemies.
-  **`HoneyFactoryEntrance`, the Lobby (2026-10-10, the user; named by the user):** two floors. The upper area: a save
+  **`HoneyFactoryEntrance`, the Lobby (2026-10-10, seen; named then):** two floors. The upper area: a save
   crystal and the doors to the outside (`loadzoneoutside`, from 299, kept open), the core (`looadzonecore`), processing
   (`loadzone processing`) and the storage (`loadzonestorage`, from 211). The bottom: the doors to the worker rooms
   (`loadzoneoffice`, `loadzonesleep`) and a shop. From the bottom up, Jump or Bee Fly; down, a drop, a one-way without
-  either (the user). The processing door is locked by `keything` (a `LockedDoor`, `Event59` key index 4, the Factory
+  either (seen). The processing door is locked by `keything` (a `LockedDoor`, `Event59` key index 4, the Factory
   Pass, key item 95, used up) until flag 179, which `Event89` sets after the pass; its closed model `Base/DoorP` until
   179. Arriving through it from the first room with the lock there, the game pushes the party past it into the upper
   area (seen). The storage door's closed model is `Base/DoorS` (until 211, `Event98`); the Storage Elevator's half
   (`FactoryStorageElevator`'s `loadzonetop`) has no flag (EntityDump). Kept present with the model hidden, the door was
   walked through into the Storage Elevator (seen, build step 77). The shop's bee (`shopbee`, until 176)
   talks at line 5, which runs `Event80`'s factory part: flag 176 and the room loaded again, the shop then open (its
-  seller, a storage ant, a door, `Base/DoorLock` gone), nothing needed (the user). Its keeper (`shopbee - Duplicate`,
+  seller, a storage ant, a door, `Base/DoorLock` gone), nothing needed (seen). Its keeper (`shopbee - Duplicate`,
   a `Shop`, from 176) stocks items 10, 9, 20, 49 and 43 (Honey'd Leaf, Leaf Omelet, Glazed Honey, Honey Ice Cream,
   Shock Berry); in a seed its five slots are locations 212-216. A material pile (`Base/materialpile`,
-  until 218) blocks nothing (the user). NPC lines ask for the overseer: "she", stuck in the storage (a worker until
+  until 218) blocks nothing (seen). NPC lines ask for the overseer: "she", stuck in the storage (a worker until
   211), the only one who opens the core's door (its guard's line 7). Story NPCs by flag: Gen and Eri (until 179, then
   211 to 299), Zasp and Mothiva (until 177, then 221 to 299), HB and the crow (until 218), guides, workers. No pickups,
   auto-start scenes or map enemies.
-  **`HoneyFactoryWorkerRooms`, the Worker Rooms (2026-10-10, the user; named by the user):** two parts with no way
+  **`HoneyFactoryWorkerRooms`, the Worker Rooms (2026-10-10, seen; named then):** two parts with no way
   between them inside the room, each with one door to the Lobby's bottom floor. The office (`loadzoneoffice`): nothing
-  needed in, out or to the portrait (`portrait`, line 7, discovery 15 and flag 223) or the PC (the user). A Shock Candy
+  needed in, out or to the portrait (`portrait`, line 7, discovery 15 and flag 223) or the PC (seen). A Shock Candy
   (`Item - Shock`, item 75, flag 728) on the desk, Jump or Bee Fly; the Factory Pass (`card`, key item 95, flag 178,
-  location 235) up high, Jump and the Beemerang Toss, or Bee Fly alone (the user). The overseer from 299 until 324,
+  location 235) up high, Jump and the Beemerang Toss, or Bee Fly alone (seen). The overseer from 299 until 324,
   then Malbee (324 to 330, her line 24 gives the medal Power Exchange, 49) and the overseer's second spot (from 324).
-  The sleeping quarters (`loadzonebeds`): three workers, nothing needed in or out (the user); one line (11) sells a
+  The sleeping quarters (`loadzonebeds`): three workers, nothing needed in or out (seen); one line (11) sells a
   Magic Seed (item 11) for 25 berries. No hazards, auto-start scenes or map enemies.
-  **`HoneyFactoryCore` (2026-10-10, the user):** one door (`loadzone`, to the Lobby), nothing needed in or out; the
+  **`HoneyFactoryCore` (2026-10-10, seen):** one door (`loadzone`, to the Lobby), nothing needed in or out; the
   machine has nothing to interact with. A gate at the top (`Base/FrontWall/Gate`, until 299) shuts off the boss arena,
   empty but for the boss's and a bee-bot's parked models (seen, warped behind it). From 218 until 299 the overseer, HB
   and the assistant stand here (218 from the storage's last room, `FactoryStorageOverseer`'s `end event`, `Event102`);
@@ -1737,24 +1737,24 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   arena, then 299, 176 and 75 set, prize medal 6, two medals added to a shop, and a save prompt, the party still in the
   room. From 299 the three are gone and the gate hidden: the arena open and empty. No pickups, hazards, auto-start
   scenes or map enemies.
-  **`FactoryProcessingFirstRoom`, the First Room (2026-10-10, the user; the name kept):** three areas. The right: the
+  **`FactoryProcessingFirstRoom`, the First Room (2026-10-10, seen; the name kept):** three areas. The right: the
   door to the Lobby (`loadzonemainarea`) and a switch (`switch`, data `1 95`) hit with a basic attack, which plays
   `Event95` (the Shield taught, flag 20; it moves all three party members) and starts the moving platforms
   (`PathPlatform` x3) for good. The left: the door on (`loadzoneforward`, to `FactoryProcessing2`). Between them a gap
   over the bottom: once the switch is hit, crossing either way takes the platforms and the Shield, nothing else; before
-  it, Bee Fly crosses from the right, and the switch, once hit, takes that away (the user). The bottom: a drop from
-  either side, a one-way; Jump or Bee Fly back up to the right only, platforms running or not, never to the left (the
-  user). The tram bot (`trambot`) rides to `FactoryProcessingMalbee` (Malbee's Room) only from flag 211 (line 9, then
+  it, Bee Fly crosses from the right, and the switch, once hit, takes that away (seen). The bottom: a drop from
+  either side, a one-way; Jump or Bee Fly back up to the right only, platforms running or not, never to the left
+  (seen). The tram bot (`trambot`) rides to `FactoryProcessingMalbee` (Malbee's Room) only from flag 211 (line 9, then
   line 10 runs `Event68`, the elevator scene's factory part), to Malbee's Room's tram platform, both ways once her fight
   is done (mapped with that room); `Base/Tram` stands until 211. Map enemies: a Turret by the left door, a Denmuki and a
   bee-bot on the bottom. No pickups or auto-start scenes.
-  **`FactoryProcessing2`, the Second Room (2026-10-10, the user; named by the user):** two areas. The bottom right: the
+  **`FactoryProcessing2`, the Second Room (2026-10-10, seen; named then):** two areas. The bottom right: the
   door back to the first room (`loadzoneback`). The top left, a level up (y 7): the door to the pump room
   (`loadzone pump`). Up from the bottom right: Jump or Bee Fly, a basic attack for a switch (`switch1`), the Shield,
   and Beemerang Halt or Bee Fly (two cranks, `ScrewSwitch`, and two moving platforms on the way); down from the top
-  left a drop, a one-way (the user). Map enemies: a bee-bot below, a Denmuki and a Turret up top; a hole. No pickups,
+  left a drop, a one-way (seen). Map enemies: a bee-bot below, a Denmuki and a Turret up top; a hole. No pickups,
   flag-switched scenery or auto-start scenes.
-  **`FactoryProcessingPump`, the Pump Room (2026-10-10, the user; named by the user):** the factory's hub. The floor:
+  **`FactoryProcessingPump`, the Pump Room (2026-10-10, seen; named then):** the factory's hub. The floor:
   the doors to the Second Room (`loadzoneright`) and to Malbee's room (`loadzonemalbee`), the save crystal and two
   cranks (`ScrewSwitch`). Malbee's door sits behind `key scanner` (a `LockedDoor`, `Event59` key index 4, the Factory
   Pass): each pass put in counts `flagvar[24]` up; at 3, `Event96` sets 217 and the closed model `Base/DoorE` goes. The
@@ -1764,72 +1764,72 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Jump and the Shield, to the upper left (the door to puzzle 3, `loadzonepuzzle3`) or the upper right (the door to
   puzzle 2, `loadzonepuzzle2`). The upper right's two parts: its door's and, across, a Shell Ointment
   (`Ointment - Duplicate`, item 97, regional flag 4, respawning) behind boxes; between them the Shield or Bee Fly. Down:
-  a drop, free from the upper left, Bee Fly from either part of the upper right (the user). A robot (talks; line 3 from
+  a drop, free from the upper left, Bee Fly from either part of the upper right (seen). A robot (talks; line 3 from
   211), a Venus healer (from 130 until 299), the broken Mender (325 to 327); sticky honey; map enemies (a Denmuki on the
   floor, a bee-bot and a Turret up top). No auto-start scenes.
-  **`FactoryProcessingPuzzle1`, Gen and Eri's Room (2026-10-10, the user; named by the user):** a dead end with one door
+  **`FactoryProcessingPuzzle1`, Gen and Eri's Room (2026-10-10, seen; named then):** a dead end with one door
   (`loadzone`, to the Pump Room). From it, up to the top right with Freeze (the geysers, `Geizer`) and Jump; there Gen
   and Eri's scene (`eventtrigger`, `Event97`, until 216) fights two Bee-Boops (enemy 43, position Random), then their
   switch and flag 216; after it the help key, with nobody in front, hollers to them to press the switch (the map's help
   line; the key needs Tattle, flag 10, and in the game Kabbu: mod step 52 lifts both in a seed; seen with Vi alone).
   Across the moving platforms to the Factory Pass (`keycard - Duplicate`, key item 95, flag 213) on the bottom left, by
-  the lever ("By the Lever", the user's name, location 236, held out): Jump, Freeze, the Shield and a basic attack for
-  a lever, which opens a shortcut back to the start (the user). Gen and Eri exist only until flag 211 (`Event98`, the
+  the lever ("By the Lever", location 236, held out): Jump, Freeze, the Shield and a basic attack for
+  a lever, which opens a shortcut back to the start (seen). Gen and Eri exist only until flag 211 (`Event98`, the
   storage), the trigger until 216: with 211 set first, the scene would look for them (Next 68). An entity past its
   limit is switched off, not destroyed (`SetActive(false)`, `NPCControl.cs:438-441`), and `GetEntity` returns it all
   the same (`MainManager.cs:18510-18594`), so the scene would find them; what it, their switch and the holler then do
   is not seen. Sticky honey; no other pickups.
-  **`FactoryProcessingPuzzle2`, the Training Grounds (2026-10-10, the user; named by the user after its sign):** a dead
+  **`FactoryProcessingPuzzle2`, the Training Grounds (2026-10-10, seen; named then, after its sign):** a dead
   end with one door (`loadzone`, to the Pump Room), nothing needed in or out. The Factory Pass (`keycard`, key item 95,
-  flag 212) on a platform behind a gate, far upper right ("Behind the Gate", the user's name, location 237): Beemerang
+  flag 212) on a platform behind a gate, far upper right ("Behind the Gate", location 237): Beemerang
   Halt (two cranks, `ScrewSwitch`), Jump, the Shield, and a basic attack for a lever, reached only
-  with Halt anyway (the user). The drop right of the door is a one-way without Jump; a fall below puts the party back at
+  with Halt anyway (seen). The drop right of the door is a one-way without Jump; a fall below puts the party back at
   `respawnerleft`. Two bee-bots below, a sign by the door, the broken Mender (325 to 328). No other pickups.
-  **`FactoryProcessingPuzzle3`, the Pressure Plate Room (2026-10-10, the user; named by the user):** a dead end with one
+  **`FactoryProcessingPuzzle3`, the Pressure Plate Room (2026-10-10, seen; named then):** a dead end with one
   door (`loadzone`, to the Pump Room), nothing needed in or out; down the stairs to the puzzle floor a one-way without
   Jump or Bee Fly back up. The puzzle: two pressure plates (`PressurePlate`, through an `ANDGate`), two droplets up high
   (`Dropplet`, frozen into blocks) and a honey platform (`PathPlatform`); done with Jump, Freeze and the horn, it opens
   a gate and takes the party up to both pickups: crystal berry #16 (`cberry`) behind a pipe by the door ("Behind the
   Pipe", location 231) and the Factory Pass (`keycard - Duplicate`, key item 95, flag 215) behind the gate ("Behind the
-  Gate", location 238) (the user). Map enemies: a Turret and a Denmuki.
-  **`FactoryProcessingMalbee`, Malbee's Room (2026-10-10, the user; named by the user):** the floor: one door
+  Gate", location 238) (seen). Map enemies: a Turret and a Denmuki.
+  **`FactoryProcessingMalbee`, Malbee's Room (2026-10-10, seen; named then):** the floor: one door
   (`loadzone`, to the Pump Room), nothing needed from it; walking a bit left starts `Event98` (`eventtrigger`, until
   211): Malbee (`Fixedmalbee`) and a mini-boss fight with three Abomihoneys (enemy 48, Ground, no escape), then flags
-  211 and 214 and the room loaded again. The tram's platform above: Jump or Bee Fly up, a drop down, a one-way (the
-  user). The tram (`Event68`) runs between this platform and the first room's right side (its door and switch), both
-  ways, only from 211: its bots there (`trambot`, line 9 there, line 4 here, then `Event68`) offer it only then (the
-  user: inactive until the fight). From 211 Malbee stands here (`malbee2`, until 324); the pump models swap at 211; the
+  211 and 214 and the room loaded again. The tram's platform above: Jump or Bee Fly up, a drop down, a one-way
+  (seen). The tram (`Event68`) runs between this platform and the first room's right side (its door and switch), both
+  ways, only from 211: its bots there (`trambot`, line 9 there, line 4 here, then `Event68`) offer it only then
+  (seen: inactive until the fight). From 211 Malbee stands here (`malbee2`, until 324); the pump models swap at 211; the
   broken Mender (325 to 326); Malbee again from 330. No pickups or map enemies.
-  **`FactoryStorageElevator`, the Storage Elevator (2026-10-10, the user; named by the user):** two levels: the top
+  **`FactoryStorageElevator`, the Storage Elevator (2026-10-10, seen; named then):** two levels: the top
   (`loadzonetop`, to the Lobby) and the bottom, 19 down (`loadzonebottom`, to the Storage Maze). An elevator between
   them (`Event100`, no flag), there whichever door the party comes in by; a switch on each level (`switch`, `ROTswitch`)
-  hit with a basic attack rides it, both ways (the user). No pickups, scenery, hazards or map enemies.
-  **`FactoryStorageMaze`, the Storage Maze (2026-10-10, the user; named by the user):** the right side and the floor:
+  hit with a basic attack rides it, both ways (seen). No pickups, scenery, hazards or map enemies.
+  **`FactoryStorageMaze`, the Storage Maze (2026-10-10, seen; named then):** the right side and the floor:
   the doors to the Storage Elevator (`loadzoneelevator`, nothing needed) and to the Overseer's room (`loadzoneos`, top
   right), a save crystal. The Overseer's door sits behind a Factory Pass lock (`keycard`, `Event59` key index 4, then
   `Event96`, flag 222; the closed model `Base/DoorE` until 222); arriving from her room the game pushes the party past
-  it (seen), a one-way without the pass. Up onto the box tops in the middle: Jump or Bee Fly (the user: the lever is
+  it (seen), a one-way without the pass. Up onto the box tops in the middle: Jump or Bee Fly (seen: the lever is
   only the berry's); off them, walking right or dropping anywhere, free, and back up costs that again. From the box tops
   two holes with a green bounce pad back up each, free both ways: the bottom left pocket with the door to the mini-boss
   room (`loadzoneboss`), and the medal Shock Trooper (`shocktrooperMedal`, medal 34, flag 220) among the boxes. Crystal
-  berry #17 (`crystal berry`) on top of a box, by a lever puzzle: a basic attack, Jump and Beemerang Halt (the user).
+  berry #17 (`crystal berry`) on top of a box, by a lever puzzle: a basic attack, Jump and Beemerang Halt (seen).
   Spikes; a Venus healer (130 to 299); map enemies, a Denmuki and a Turret.
-  **`FactoryStorageMiniboss`, the Storage Mini-boss Room (2026-10-10, the user; named by the user):** one door
+  **`FactoryStorageMiniboss`, the Storage Mini-boss Room (2026-10-10, seen; named then):** one door
   (`loadzone`, to the Storage Maze) and a save crystal, nothing needed. A respawning Magic Seed (`seed`, item 11,
   regional flag 20) on top of the boxes by the door: Jump or Bee Fly. To the left side, Jump and Beemerang Halt: the
   trigger (`event`, until 221, up at y 4) plays `Event101`, a mini-boss fight with Ahoneynation (enemy 42, Ground; Zasp
-  and Mothiva in the scene), after which it gives a Factory Pass (`giveitem,1,95`; location 239) and sets 221 (the user;
+  and Mothiva in the scene), after which it gives a Factory Pass (`giveitem,1,95`; location 239) and sets 221 (seen;
   the code). A
   switch, a diary to read (`notesDiary - Duplicate`), a bee-bot; sticky honey.
-  **`FactoryStorageOverseer`, the Storage Overseer Room (2026-10-10, the user; named by the user):** three parts. The
+  **`FactoryStorageOverseer`, the Storage Overseer Room (2026-10-10, seen; named then):** three parts. The
   right: the door (`loadzone`, to the Storage Maze). The middle: across between the right and the left, Beemerang Halt
   or Bee Fly; fallen into it, stuck without Bee Fly (or Halt and Jump); only the left side has stairs up. The left: a
   green bounce pad and the overseer (until 218, up at y 6.5). Talking to her starts the escort (`Event102`): she
   follows, Tattle goes off (flag 10, and `entitytouchevent` 102), 14 bees patrol (`honeye`, battle 48), one touching her
   puts her back; the end trigger by the door (`end event`, raised until the escort starts) sets 218 and flag 10. Seen
   twice (reset each time with flag 218 off and a reload): bringing her back takes Jump and Beemerang Halt (on top of
-  some boxes, past the bees), with Freeze, which makes it much easier and without which it is "pretty hard" (the user),
-  so the logic asks for it as the vanilla party has it; or Bee Fly alone (the user). No pickups.
+  some boxes, past the bees), with Freeze, which makes it much easier and without which it is pretty hard, so the
+  logic asks for it as the vanilla party has it; or Bee Fly alone (seen). No pickups.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
@@ -1840,7 +1840,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`loadzonechomper`, `LockedDoor`, requires flag 20) has an invisible wall before it (`Base/Cube`, a
   `ConditionChecker` with limit 20, found with `solids`): both gone only once the story teaches the Shield (`Event95`).
   Seen open in a seed with the door kept present and the wall hidden. **A trick:** a drop with Bee Fly also reaches
-  the bottom door without the Shield, a one-way unless Shield and Jump climb back; kept for a harder logic (the user,
+  the bottom door without the Shield, a one-way unless Shield and Jump climb back; kept for a harder logic (decided,
   after counting it for a moment).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
@@ -2151,7 +2151,8 @@ tester guessed. The wiki is a lead, not proof: each entry is checked against the
 The game's name for the `BarrenLands*` maps is the Forsaken Lands (the names dump: the Squash, "native to the
 Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
 
-- **What the user sees:** "the fog maze just sends you back every now and then unless you walk the right path".
+- **What the player sees** (an account of play): the fog maze just sends you back every now and then unless you walk
+  the right path.
 - **Each wrong turn is a `DoorOtherMap` at a room's edge, named `return...`, with no door back near where it lands.**
   There are 12 in 8 maps.
   - **Four lead into their own map**, landing at that room's own entrance: `BarrenLandsEntrance`'s right
@@ -2207,7 +2208,7 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
   `CaveOfTrials` line 11). Which item they accept is decided by a dialogue command ScriptDump doesn't keep, so the
   permit there is the wiki's word only. Until measured, every B.O.S.S. and Cave of Trials location requires the
   permit: cautious, never wrong. **The Cave of Trials, measured 2026-10-05: the permit is refused** ("the key does not
-  fit", the user); its opening scene, Event156, sets the Mysterious Piece (item 109, `TrialKey`, from Neolith) into
+  fit", seen); its opening scene, Event156, sets the Mysterious Piece (item 109, `TrialKey`, from Neolith) into
   the altar, so that's its key. Line 12's `checkvar,0,27` is the permit's own refusal.
 
 ## All medals by source (2026-09-24, entity dump, ScriptDump, code read, matched to the Bug Fables wiki)
@@ -2276,9 +2277,9 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
   counts flag 704, which adds no entry. Where 391 and 189 are set, and which characters these entity ids are, isn't
   read yet. Not seen in game.
 
-## The cooks (2026-10-07, code read and EntityDump; the user's count)
+## The cooks (2026-10-07, code read and EntityDump; a count from play)
 
-Some items are only cooked (the user: four or five cooks and a microwave, needed for some items, for recipes and quests
+Some items are only cooked (four or five cooks and a microwave, needed for some items, for recipes and quests
 later). Fry, Kut and Kali share the cooking scene `Event3`, which picks each map's cook (`chefid`: 0
 `BugariaCommercial`, 1 `GoldenSettlement1` and its night map, 2 `DefiantRoot3`); the microwave has its own, `Event174`.
 
@@ -2606,7 +2607,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   discovery 0 (EventControl.cs:3095); Event6 (fall room EventTrigger, data 6, limit 27) records discovery 1 at its end
   (EventControl.cs:2293); Event13 (entity `HiddenEvent` on `SnakemouthBridgeRoom`) records discovery 2
   (EventControl.cs:3278); Event27, started by examining the old statue (entity `AncientHouseDiscovery`, object
-  type BeetleGrass, interact Event, at 4:0:-3.04; corrected 2026-10-04: seen by the user, a piece of grass there
+  type BeetleGrass, interact Event, at 4:0:-3.04; corrected 2026-10-04: seen, a piece of grass there
   only drops berries) on `SnakemouthUndergrondDoor`, records discovery 3 the first time, with the team's lines about
   the roaches' statue (map line 5; after, line 6 "An old statue.") (EventControl.cs:5001) (location ids 28-31). Used
   by `logic/outskirts.py`, `logic/snakemouth_den.py`.
@@ -2866,10 +2867,10 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 - Used by `WarpButton.cs` (map travel).
-- **Where each area's marker sits** (2026-10-03/04, code read and the user's screenshot): `MapSetup` places it at a
+- **Where each area's marker sits** (2026-10-03/04, code read and a screenshot): `MapSetup` places it at a
   fixed `(x, z)` on the map object for each `MainManager.Areas` value (`PauseMenu.cs:2786-2864`; e.g. the Outskirts
   `(0.92, 2.11)`, the Honey Factory `(5.32, -2.73)`). On screen **+x is to the left and +z down**, one scale for both:
-  fitted to the user's screenshot of a save with 22 areas visited, every marker within a few pixels of
+  fitted to a screenshot of a save with 22 areas visited, every marker within a few pixels of
   `(999 - 112.4 x, 504 + 112 z)` at 2000 px wide. `SetMapLines` (`PauseMenu.cs:2913-3062`) draws 23 lines, each
   between two visited areas; none goes to the Fishing Village. Each map's area is its prefab's `MapControl.areaid`,
   a field set in the game's data, not in code (`MapControl.cs:62`), written by the mod's `MapDump` for all 246 maps
@@ -3074,7 +3075,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **The confirm button never reaches a crystal:** `PlayerControl` calls `npc[0].Interact(null)` only for the NPC and
   SemiNPC types, and jumps (`DoJump`, private, called only from there) otherwise; each frame it also drops a non-NPC
   `npc[0]` from its list. The icon over the player for something to check is `entity.emoticonid = 1` with
-  `emoticoncooldown = 2`: a "?", the same as at a discovery (seen by the user, 2026-10-01, at a save crystal).
+  `emoticoncooldown = 2`: a "?", the same as at a discovery (seen 2026-10-01, at a save crystal).
 - **The game's own word** (`textsearch crystal`, 2026-09-28): "ancient crystal"; the yellow one "will heal our HP and
   TP too. Try smacking it sometime." (SnakemouthFallRoom:19). No name for a save crystal as such.
 - **Saving:** `MainManager.Save(pos)` is only `InputIO.Save(pos)`: `SaveFile` builds the text (line 0 the position
@@ -3086,7 +3087,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   it; `insideid` is reset to -1.
 - **Death is only a party wipe in battle.** Hazards and falls never cost HP: `Hazards.HazardAction` puts the party back
   at `player.lastpos` (after 3 tries `lastloadzone`), falling below `map.ylimit` too.
-- **Where the party comes back, in detail** (2026-10-02, code read; a loop seen by the user the same day, map travel
+- **Where the party comes back, in detail** (2026-10-02, code read; a loop seen the same day, map travel
   to the swamp then a jump into the water by the crystal). Used by `RespawnLoop.cs`.
   - **The hazard's respawn:** `Hazards.OnTriggerEnter` starts `HazardAction` for the player only, during `minipause`
     too (it skips only others then). `HazardAction` holds `minipause` while it runs (unless one was already on, then
@@ -3110,7 +3111,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     `lastpos` and `lastloadzone`. Map travel landed beside a save point that way until 2026-10-02 (the dev console's
     `oldtravel` replays it; at the swamp's crystal, `SwamplandsBridge` entity 6, it loops, seen 2026-10-04). Since
     then it, and Warp to Start, use the 4-argument form with a real door's appear and walk-to spots; map travel that
-    way seen at every destination with nothing odd (the user, 2026-10-03). Used by `WarpButton.cs`.
+    way seen at every destination with nothing odd (2026-10-03). Used by `WarpButton.cs`.
   - **`TransferMap` waits on the walk-in** (`while (player.entity.forcemove)`) with no time limit, so a walk to a spot
     it can't reach (over water) never ends and the transfer holds `minipause` (`DevConsole.Warp.cs`, `unstick`).
   - **Not yet seen:** which of these the chapter-2 door's loop was.
@@ -3169,26 +3170,26 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   entity by map and `activationflag` when its line is shown, its ground scan finds entities made after the map
   loads, and `LocationChecks` watches the flag; so a held key's drop needs only a location entry
   `{map, flag}`.
-- **The Rubber Prison yard's rock** (2026-10-04, EntityDump and code read; reported by the user): `rock`
+- **The Rubber Prison yard's rock** (2026-10-04, EntityDump and code read; reported from play): `rock`
   (`BreakableRock`) on `RubberPrisonPier`, just inside the left door from `RubberPrisonCheckpointCorridor`, until flag
   589; a breakable rock breaks only on a hit tagged `BeetleDash` (Horn Dash) or, with conditions, `BeetleHorn`
   (`NPCControl.cs`, the BreakableRock case).
-- **The Rubber Prison's checkpoint corridor** (2026-10-04, EntityDump and code read; the user's account of play): its
+- **The Rubber Prison's checkpoint corridor** (2026-10-04, EntityDump and code read; an account of play): its
   gates (`gate1 - Duplicate` and its copy, `ANDBlock`s) open and shut by switches; from the yard's side the only
   switch (`switch - Duplicate - Duplicate`, entity 8) exists from flag 79, the far side's two have no flag. The
-  `PrisonDoor` (entity 6, until flag 538) by the way to the spike room opens with the Explorer Permit (the user,
-  2026-10-04). A switch takes the Beemerang, a hit tagged `BeetleHorn`/`BeetleDash`, or ice (`Icefall`/`Icecle`)
+  `PrisonDoor` (entity 6, until flag 538) by the way to the spike room opens with the Explorer Permit
+  (2026-10-04). A switch takes the Beemerang, a hit tagged `BeetleHorn`/`BeetleDash`, or ice (`Icefall`/`Icecle`)
   (`NPCControl.cs`, Switch).
-- **The Rubber Prison's gate levers flip every gate in the prison** (2026-10-10, EntityDump; the user's account of
-  play: "this is the main mechanic of the rubber prison"). One flag, 535, toggled by every gate lever (a `Switch` with
+- **The Rubber Prison's gate levers flip every gate in the prison** (2026-10-10, EntityDump; an account of
+  play: the main mechanic of the Rubber Prison). One flag, 535, toggled by every gate lever (a `Switch` with
   `data[1]` 1, back and forth on each hit): the Pier's `actualswitch`, the checkpoint corridor's three, and a
   `globalswitch` in Cells 1, Cells 2 (two), Security and the Third Floor (made from 79). Each up/down gate (`ANDBlock`)
   is down on one side of the flag (activation flag 535 or -535, or linked to its room's lever, as the Pier's two by
   `data[1]` 7), so each hit raises some gates and lowers others in every room, and the next hit reverses them all (the
-  Pier's lever moves the checkpoint corridor's gates next door, the user); in vanilla the player goes back and forth
-  between rooms to set them. The Pier's two gates are the levers' tutorial and
-  the only ones that can be jumped or flown round while up (the user).
-- **The Pier** (`RubberPrisonPier`, 2026-10-10, the user's account on screen; EntityDump): bridges stacked above each
+  Pier's lever moves the checkpoint corridor's gates next door, an account of play); in vanilla the player goes back
+  and forth between rooms to set them. The Pier's two gates are the levers' tutorial and the only ones that can be
+  jumped or flown round while up.
+- **The Pier** (`RubberPrisonPier`, 2026-10-10, seen on screen; EntityDump): bridges stacked above each
   other. The top floor: the door to Security on the left, the Library's on the right, two swinging platforms between
   crossed with nothing. The third floor: the Third Floor's door left, the Office's right. The second floor: Cells 2's
   door left, the Giant's Lair Bridge's right, and on the right the Wasp Driller holding a Prison Key (`ShwKEY wasp`,
@@ -3201,15 +3202,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   platforms, up from the stairs to the upper left, round the gates to the upper right, onto the lift from the dock.
   Its two doors to the Giant's Lair Bridge start shut: the second floor's right one behind `Base/Gate` until 583,
   set by the Office's crank (`crankcheck`, Event59 key index 2, then the ScrewSwitch: the Wooden Crank and Beemerang
-  Halt, as every crank, the user), whose scene (Event193, `EventControl.cs:31716`) plays on the Pier, breaking the
+  Halt, as every crank; seen), whose scene (Event193, `EventControl.cs:31716`) plays on the Pier, breaking the
   gate and dropping the third floor's bridge (`Base/BrokenBridge`, hidden from 583); the ground floor's right one
   behind two `PrisonDoor/SlideDoor`s until 567, set on the bridge's side (its `PrisonDoor`, a switch and a Prison Key
-  lock). Arriving through either while shut pushes the party past it (seen, 2026-10-10). A seed keeps the bridge (the
-  user: "i don't want the bridge to collapse"); the mod's `scenery_present` marker answers "exists" before the limit
-  is read (`KeptOpen.cs`). From flag 79 a bridge guard (`bridgeguard`, a talk NPC) stands on the third floor's
-  middle left; he doesn't block the way (seen, 2026-10-10). The third floor's right save crystal (`SavePoint  -
-  Duplicate`, two spaces) is there only until flag 41, the first boss's artifact flag, so in vanilla never by the
-  prison; a seed keeps it (seen with 41 on).
+  lock). Arriving through either while shut pushes the party past it (seen, 2026-10-10). A seed keeps the bridge
+  (decided); the mod's `scenery_present` marker answers "exists" before the limit is read (`KeptOpen.cs`). From flag 79
+  a bridge guard (`bridgeguard`, a talk NPC) stands on the third floor's middle left; he doesn't block the way (seen,
+  2026-10-10). The third floor's right save crystal (`SavePoint  - Duplicate`, two spaces) is there only until flag 41,
+  the first boss's artifact flag, so in vanilla never by the prison; a seed keeps it (seen with 41 on).
 - **Around the Pier, from a sweep of the code** (2026-10-10, not seen in game): flag 79 is written only by the Giant's
   Lair Bridge's scene (`Event193`'s second branch, `EventControl.cs:32078`; its trigger the bridge's `event`, limit
   79), which also sets 584, 567, 551 and 545 (`:32136-32139`) and removes every Prison Key (161) from the bag
@@ -3220,7 +3220,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   it isn't yet (`MapControl.cs:607-612`, one of 17 such arrival discoveries in `AreaSpecific`), for the discovery sweep.
   The first arrival by submarine plays `Event185`, which speaks a line from `GetEntity(-5)`, Kabbu (`:31151`), null
   without him (`MainManager.cs:18594`): out of logic only, since the logic's submarine needs the whole party.
-- **The Checkpoint Corridor** (`RubberPrisonCheckpointCorridor`, 2026-10-10, the user on screen, flags 79, 535 and 538
+- **The Checkpoint Corridor** (`RubberPrisonCheckpointCorridor`, 2026-10-10, seen on screen, flags 79, 535 and 538
   off; EntityDump): the right (the door to the Pier), the two gates with the middle lever between them, the left (its
   lever, the Wasp Driller, the locked `PrisonDoor` before the top left door to the spike room). Arriving from the spike
   room, the game pushes the party past the locked door, and the Wasp Driller comes at it shortly after, not at once.
@@ -3228,12 +3228,12 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   1.07, 0, 2.1, made from 79) shown through `kept_present` (the dev `liveslot`) was there, and its hit swapped the gates.
   Only flag 79 makes or removes a gate lever: this one and the Third Floor's (entity 17); no other prison lever has a
   `requires` or `limit` (the dump). Used by `logic/rubber_prison.py`.
-- **The Spike Room** (`RubberPrisonSpikeRoom`, 2026-10-10, the user on screen): the bottom (the corridor's door) and the
+- **The Spike Room** (`RubberPrisonSpikeRoom`, 2026-10-10, seen on screen): the bottom (the corridor's door) and the
   top (the door to the cells, behind the `PrisonDoor` Prison Key lock, until 537) across a spiked floor, Bee Fly or the
   Shield; nothing reached from either without one. Its Prison Key (`Fixedkey`, 536) sits in a cage of three gates its
   own lever drops (no saved flag): Bee Fly and an attack. Arriving through the top door with the lock shut, the game
   pushes the party past it.
-- **The Cell Block Crossroads** (`RubberPrisonCells1`, 2026-10-10, the user on screen): the bottom 535 lever is in a
+- **The Cell Block Crossroads** (`RubberPrisonCells1`, 2026-10-10, seen on screen): the bottom 535 lever is in a
   cell dug into (Beetle Dig); it opens the bottom left cell, whose rock the horn knocks out as the step up (Jump or Bee
   Fly). The two wood levers up top take Bee Fly, the left first, then the right, whose scene (`Event186`) sets 540 for
   good: the bottom right gate (`rightgate`) down, and the rock's copy at its knocked spot (`rock - Duplicate`,
@@ -3241,48 +3241,48 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   barrier, whose lever (`ROTshortcutswitch`, 541) lowers it for good. Both bottom doors push the party past their lock
   (539) or gate (540). Its sign (its dialogue line 2, read with the console's `line`, not seen): "⇦ Cafeteria ⇨
   Giant's Lair Bridge".
-- **Electric Cells** (`RubberPrisonCells2`, 2026-10-10, the user on screen and drawings): three rows of cells; an
+- **Electric Cells** (`RubberPrisonCells2`, 2026-10-10, seen on screen and drawings): three rows of cells; an
   electric floor between the two bottom doors (the Shield or Bee Fly across, Bee Fly over the thorns between the bottom
   cells); two electric moving platforms from the bottom to the top, ridden with the Shield only; from the top or the
   middle a drop down, stuck without the Shield (only the bottom cells in reach). Both 535 levers (the bottom one in a
   cell dug into, the top one free) swap the bottom right cell (the Poison Cake, item 74, 631) and the middle cells' 535
   gates. The middle left cell's wood lever (400, cleared on every map load, `MainManager.cs:9615`) opens the key cell
   (545); the key cell's own lever only lets you out. A cell whose gate is down can be dropped into from above. The top
-  door pushes the party past its lock (542). Its sign (the user's screenshot, and its line 4): "⇦ Cafeteria, Cells / ⇧
+  door pushes the party past its lock (542). Its sign (a screenshot, and its line 4): "⇦ Cafeteria, Cells / ⇧
   Gym, Security / ⇨ Giant's Lair Bridge".
-- **The Library** (`RubberPrisonLibrary`, 2026-10-10, the user on screen): up the stairs, Jump or Bee Fly. The
+- **The Library** (`RubberPrisonLibrary`, 2026-10-10, seen on screen): up the stairs, Jump or Bee Fly. The
   bookshelf (`Event191`, until 554) takes the four History Books (163 blue, 164 green, 165 yellow, 166 red) one by one
   in a list and wants them in that order: a wrong order hands them back at the scene's end (`EventControl.cs:31506`),
   the right one keeps them, slides the shelf aside and sets 554, behind it the Wooden Crank (561). The right staircase's
   rail (`Base/fence`) has two invisible collider copies above it (`fence (2)`, `fence (3)`: mesh and collider, no
   renderer; `fence (1)` the rail's own), found with `solids`; with those two off (the console's `hide`), the rail was
   jumped over onto the shelves. Nothing else in the game reads 163-166 (only `Event191`).
-- **The Cafeteria** (`RubberPrisonCafeteria`, 2026-10-10, the user on screen): its door on the right, raised; the left
+- **The Cafeteria** (`RubberPrisonCafeteria`, 2026-10-10, seen on screen): its door on the right, raised; the left
   a drop down, back up with Jump or Bee Fly; the blue History Book there (548), past the cannons, needs nothing. The
   cannons (the game's word, in its line 2, read with the console's `textsearch`, not seen: "Those cannons are used to
   keep order around here!") fire rolling rocks
   (`RollingRock`); their lever (`cannonswitch`, 549) turns them off and on, each hit, and stays as left after
   re-entering (549 seen on): it only makes the way back up easier, never needed.
-- **The Gym** (`RubberPrisonGym`, 2026-10-10, the user on screen): its door free; the top left (the Prison Key, 551, and
-  a Wasp Driller until 79) up the room's crank puzzle with Beemerang Halt alone, no Jump (corrected by the user from
-  Jump and Halt); back down a drop. Loading it sets 535 off (`MapControl.cs:686-687`).
-- **The Security Room** (`RubberPrisonSecurity`, 2026-10-10, the user on screen; code read): its right (the door to the
+- **The Gym** (`RubberPrisonGym`, 2026-10-10, seen on screen): its door free; the top left (the Prison Key, 551, and
+  a Wasp Driller until 79) up the room's crank puzzle with Beemerang Halt alone, no Jump (corrected from Jump and
+  Halt); back down a drop. Loading it sets 535 off (`MapControl.cs:686-687`).
+- **The Security Room** (`RubberPrisonSecurity`, 2026-10-10, seen on screen; code read): its right (the door to the
   Pier, the 535 lever, the PC `ITAHcomputer`) and left (the crank, three trapped guards until 79) joined by Beetle Dig;
   the bottom right (the save crystal, the door to the Guard Floor) a drop down a ledge, Jump or Bee Fly back up. The PC
   (`Event190`): the crank (Beemerang Halt) starts it with no caller, setting 552 (backup power); powered, a hit sets 553;
   then talking flips 550, which raises the Cafeteria's tables against its cannons' rocks (seen), never needed there.
   The guards' lines (read with the console's `line`, not seen) only hint at the crank and the hit.
-- **The Warden's Office** (`RubberPrisonOffice`, 2026-10-10, the user's account; EntityDump and code read): one area.
+- **The Warden's Office** (`RubberPrisonOffice`, 2026-10-10, an account of play; EntityDump and code read): one area.
   Its crank slot (`crankcheck`, `Event59` key index 2, the Wooden Crank, until 565) then its crank, Beemerang Halt
-  (the user), play `Event193`'s first branch, 583 (code read): the Pier's second floor right door opens (and its third
-  floor bridge breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf up the top left:
-  Freeze, the horn, Jump and Bee Fly (the user). The room's geyser and droplet are probably on that way (INFERRED from
-  the dump). Its only dialogue line: "even a prison needs a normal office" (line 0); its name from the Guard Floor's
-  sign, "⇨ Warden's Office" (its line 3); both read with the console's `line`, not seen.
-- **The Guard Floor** (`RubberPrisonThirdFloor`, 2026-10-10, the user on screen and screenshots; EntityDump): the
+  (an account of play), play `Event193`'s first branch, 583 (code read): the Pier's second floor right door opens
+  (and its third floor bridge breaks, kept in a seed). The green History Book (563) sits on top of an empty bookshelf
+  up the top left: Freeze, the horn, Jump and Bee Fly (an account of play). The room's geyser and droplet are probably
+  on that way (INFERRED from the dump). Its only dialogue line: "even a prison needs a normal office" (line 0); its
+  name from the Guard Floor's sign, "⇨ Warden's Office" (its line 3); both read with the console's `line`, not seen.
+- **The Guard Floor** (`RubberPrisonThirdFloor`, 2026-10-10, seen on screen and screenshots; EntityDump): the
   bottom right (the doors to Electric Cells and the Pier) and its ground lever behind a 535 gate it can't reach; a
   pocket left of it across spikes (the Shield), its 535 gate to the bottom left; the bottom left (the door to the Cell
-  Block Crossroads) and stairs up to the middle left, Jump or Bee Fly (corrected by the user; with the pocket's gate
+  Block Crossroads) and stairs up to the middle left, Jump or Bee Fly (corrected; with the pocket's gate
   up, the bottom left's only way in); the middle left (the Gym door behind a 535 gate, the kept
   upper lever between it and the stairs to the upper right, those stairs behind another 535 gate, then Jump or Bee Fly);
   the upper right (the door to the Security Room) a drop to the bottom right, nothing back up its stairs. Dropping into
@@ -3290,7 +3290,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   past on arrival. A copied gate lever in the pocket (at -32.6, 0, 9.2) dropped its gate when hit; a copied green bounce
   pad (the Gym's `jumpspring`, at -35.8, 0, 7.5) sent the party up to the middle left, so the Shield alone reached the
   middle left from the right door.
-- **The Giant's Lair Bridge** (`RubberPrisonGiantLairBridge`, 2026-10-10, the user on screen; code read): its left
+- **The Giant's Lair Bridge** (`RubberPrisonGiantLairBridge`, 2026-10-10, seen on screen; code read): its left
   (the door to the Pier's second floor, the top left door behind its Prison Key lock, `PrisonDoor` 567, pushed past on
   arrival, the save crystal, the Venus flower) free to walk; walking from it towards the middle starts `Event193`'s
   bridge branch: the Wasp King breaks the sealed wall to the Giant's Lair and leaves, then the ULTIMAX Tank (enemy 95,
@@ -3299,8 +3299,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   right, the Wasp Queen waiting, a plain walk. `Event194` (the right's trigger `eventgl`, until 568): its first visit
   a talk from entity 11 (Vanessa, from 79) handing over the Flame Brooch, "the Wasp Kingdom's royal heirloom" (its
   lines 15-16, read with the console's `line`), and setting 346, the sixth of the game's seven artifact flags in
-  `SaveProgressIcons`' order (the goal flags, below; its artifact in the pause menu after, the user's screenshot); its
-  next the walk off right, a chapter title (`ChapterName(5)`, shown as chapter 7, the user), `LoadMap(232)`, then 568
+  `SaveProgressIcons`' order (the goal flags, below; its artifact in the pause menu after, a screenshot); its
+  next the walk off right, a chapter title (`ChapterName(5)`, shown as chapter 7, seen), `LoadMap(232)`, then 568
   (the bridge's right door). Played in order: no freeze (seen).
   Arriving through the Giant's Lair's door before 79: pushed past the sealed wall (`Base/Gate`, no collider; the Wasp
   King standing there), and the trigger froze the game. With build step 85 (the trigger held, the door kept, the wall
@@ -3318,9 +3318,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **The bridge scene's IL** (2026-10-10, the installed DLL, ilspycmd, `<Event193>d__240.MoveNext`): the four flag
   writes in a row, each `ldsfld instance; ldfld flags; ldc.i4 N; ldc.i4.1; stelem.i1` (584, 567, 551, 545), then the
   sweep loop, its one `Remove(161)` and the method's only `Contains` (on 161). Used by `KeptKeys.cs`.
-- **The Giant's Lair Entrance** (`GiantLairEntrance`, 2026-10-11, the user on screen; EntityDump, code read): the
+- **The Giant's Lair Entrance** (`GiantLairEntrance`, 2026-10-11, seen on screen; EntityDump, code read): the
   left door (to the bridge) on a ledge, back up by the bounce pad (`jumpspring`) and the rock beside it, nothing else
-  needed (the user); the Venus bud's scene in the middle (`venusevent`, until 569) needs nothing; the right door (to
+  needed (seen); the Venus bud's scene in the middle (`venusevent`, until 569) needs nothing; the right door (to
   the Giant's Hand, `loadzonedl`) and a save crystal, nothing needed. `Event194`'s first branch (on this map), in
   order: entity 3 (`Fixedbud`, until 569, parked at y -5) shrunk to nothing; line 1 spoken; the camera moved and the
   bud set at (39, 0, 8), an empty line; it grows; line 2 or 3 (by flag 278); it shrinks; then it is set 5 above its
@@ -3328,18 +3328,18 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   same spot. A scene
   trigger to the Roach Village (`loadzoneroachvillage`, from 586, `Event201`); 586 is set by `Event199` and
   `Event203`. The game's name for the next rooms: "the Dead Lands" (`GiantLairRoachVillage` line 45, `textsearch`).
-- **The Giant's Hand** (`GiantLairDeadLands1`, 2026-10-11, the user on screen, named by the user; EntityDump, code
+- **The Giant's Hand** (`GiantLairDeadLands1`, 2026-10-11, seen on screen, named then; EntityDump, code
   read): the left (the door to the Entrance, a dig spot) free; the dig spot (`digspot`, data `1 49 0`: `data[0]` 1
   buries crystal berry `data[1]`, gone once `crystalbflags[49]` is set, `NPCControl.cs` DigSpot) needs Beetle Dig, its
   only item. The middle's platforms need Bee Fly to cross to the lower right. From there to the right door's ledge
   (`loadzoneforward`, to `GiantLairDeadLands2`): a bounce pad (`jumpspringbox`) up to a rock (`rock`, a `PushRock`),
   Jump, the rock knocked with the horn into the hand (`handenemy`), then the next bounce pad (`jumpspringbook`). The
   hand lets go whenever the room is left, so the rock is needed every time; the ledge's drop to the lower right is
-  free, a dead end without Bee Fly or Jump and Horn Slash (the user). Four map enemies: three Dead Landers
+  free, a dead end without Bee Fly or Jump and Horn Slash (seen). Four map enemies: three Dead Landers
   (`DeadLanderA`, `DeadLanderB`, a copy) and the hand itself, a respawning Dead Lander γ (entity 1, enemy 89, parked at
   y -10; the apworld's encounter table, Enemysanity's "Dead Lander γ 1"). The party calls the giant ones "those giant
   eyes" (`GiantLairDeadLands2` line 0).
-- **Crane Crossing** (`GiantLairDeadLands2`, 2026-10-11, the user on screen, named by the user; EntityDump, code
+- **Crane Crossing** (`GiantLairDeadLands2`, 2026-10-11, seen on screen, named then; EntityDump, code
   read): the left door (`loadzoneback`, to the Giant's Hand) on a ledge, a drop down and back up by a bounce pad
   (`jumpspring`), free. From the left up to the silver coin stack in the middle: the droplet by the flower
   (`dropplet`) frozen, the ice knocked with the horn to climb a gold coin pile, then Bee Fly to the silver coins; from
@@ -3347,21 +3347,21 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   right: a Mystery Berry (`MysteryB`, item 156, regional flag 9, a respawning pickup) by a spear stuck in the ground,
   Jump or Bee Fly. On to the right: Bee Fly and an attack on the switch (`switch`, data `0 1 0 0 0`: a toggle with no
   flag of its own, `NPCControl.cs` Switch), which moves a toy crane's platform across; Bee Fly alone also crosses,
-  harder, left out of the base logic (the user). Back from the right by a red bounce pad (`mushroom`, an aimed
+  harder, left out of the base logic (decided). Back from the right by a red bounce pad (`mushroom`, an aimed
   `JumpSpring`, `data[0]` 1), free. The Status Mirror (`statusmirror`, medal 75, flag 611) on a small ledge on the
-  right side (a book, a pipe, a stone and a big teddy around it, the user's screenshot), reached only from the middle
-  right with Bee Fly, no attack needed, never from the right door (the user). The right (the door
+  right side (a book, a pipe, a stone and a big teddy around it, a screenshot), reached only from the middle
+  right with Bee Fly, no attack needed, never from the right door (seen). The right (the door
   to the fridge outside, `loadzonenext`) also has a red save crystal (`redcrystal`) that heals but doesn't save, up
   with Freeze, the horn and Jump (the second droplet). The game's text names none of the coins, the book, the spear or
   the crane (`textsearch`). Four map enemies: three Dead Landers (copies of `DeadLanderA` and `DeadLanderB`) and a
   hand like the Giant's Hand's, a respawning Dead Lander γ (`handenemy - Duplicate`, entity 5, parked at y -10; the
   encounter table), not mentioned on screen.
-- **Outside the Fridge** (`GiantLairFridgeOutside`, 2026-10-11, the user on screen, named by the user; EntityDump,
+- **Outside the Fridge** (`GiantLairFridgeOutside`, 2026-10-11, seen on screen, named then; EntityDump,
   code read): the left door (to Crane Crossing) and a save crystal; walking towards the middle from either door starts
   `Event198` (`event`, until 593): talk, then a fight with Dead Landers α, β and γ (enemies 87-89, `canescape: false`;
   β starts Flying and is `cantfall`, so only Vi's attacks reach it, the enemy table and "Who can hit what" above),
   talk, 594 off, 593 on, `LoadMap()`. The explorers (Elizant, Maki, Kina, Yin, Mothiva, Zasp) stand by the fridge from
-  593 until 586. The right door (the fridge's, `fridgeloadzone`); nothing else needed either way (the user). Roy's
+  593 until 586. The right door (the fridge's, `fridgeloadzone`); nothing else needed either way (seen). Roy's
   quest ends here: `royevent` (from 703 until 704) runs `Event223`, the same fight, then 704, a Bond Berry
   (`giveitem,1,84`) and `CompleteQuest(62)`; quest 62 is "A New Hope", on the boards from 555 (`QuestDump`); from 704
   Roy, a warden and two Krawlers stand there. No pickup.
@@ -3503,7 +3503,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `Base/WoodenGate2 (2)` and `(3)` from 83; `gateswitch` (a Switch, an attack hits it) starts `Event50`, which swings it.
   Behind it `Base/Cube`, an invisible wall, stands until flag 170, set on first entering `DesertDRSouthEntrance` from
   the desert (`MapControl.cs`). **Seen 2026-10-04:** the gate swung open by its switch, the wall still stopped the
-  party. **2026-10-07 (the user):** the lever is behind the gate, reached only through the desert door, with a basic
+  party. **Seen 2026-10-07:** the lever is behind the gate, reached only through the desert door, with a basic
   attack.
 - **Eetl's blocker has two triggers** (2026-10-04, EntityDump and code read; seen in play): on
   `BugariaOutskirtsOutsideCity`, `eetlblocker1 - Duplicate` (41) stands from flag 41 and `eetlblocker1` (40) from flag
@@ -3725,7 +3725,7 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   for 17.
 - Used by `MedalAssist.cs` (the Spy Specs row, the mod guide, step 39).
 
-## The Settings list's arrows (2026-09-30, code read; the game's screen in the user's screenshots)
+## The Settings list's arrows (2026-09-30, code read; the game's screen in screenshots)
 
 - **The Settings window** (pause window 4, `PauseMenu.cs:2702-2710`): `boxes[0]` is `Create9Box((0, -1), 13.5 x 7.25,
   type 1)`, the Archipelago panel's own box, and its list (`ShowItemList(17)`, `listammount` 9) is placed at
@@ -3829,14 +3829,14 @@ Read for build step 79 (the Factory Pass). Used by `KeptKeys.cs`.
   `|giveitem,1,95,7|` with no caller (`EventControl.cs:17337`), then flag 221 (`:17368`) and prize medal 11
   (`:17369`). Nothing else in the decompiled game adds, checks or removes 95; `Event197`'s `Remove(spt)` is another
   item (`spt` is 135, 136 or 137, `:32687-32689`).
-- **Seen (2026-10-10, the user, a new file, the one kept pass):** the Lobby's lock and the Storage Maze's lock each
+- **Seen (2026-10-10, a new file, the one kept pass):** the Lobby's lock and the Storage Maze's lock each
   opened on one show; the pump room's scanner opened on the third show of the same pass (the game's count), then, reset
   (`flag 217 off`, `flagvar[24]` 0) with the count filled by the mod, on the first. The pass stayed in the bag each time.
 - **Not every key removal is `Event59`:** `Event193` empties the bag of Prison Keys in a loop, `while
   (items[1].Contains(161)) items[1].Remove(161);` (`:32140-32143`), and `Event72`'s slot removes its picked item
   (`:11383`).
 
-## Rooms seen on screen (2026-10-05, the user, every ability in hand)
+## Rooms seen on screen (2026-10-05, every ability in hand)
 
 Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), vanilla only.
 
@@ -3857,12 +3857,13 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
 - **`OutsideSnakemouth` (2):** from the den's door (left), a small ledge is dropped from freely and climbed back only
   with Jump. Below it, the crystal berry (location 19) and the dig spot need nothing. The grass between there and the
   corridor's door (right) needs Kabbu's horn, both ways. The arrival discovery (location 28) is the map's auto-start
-  scene (event 11, flag 22, `MapControl` starts it on load whatever the door), so either door records it (the user's
-  read, matched in code). The dig spot `Mound` buries a Spicy Berry (item 2) behind flag 683: dug with Beetle Dig, the
-  flag went off to on (read with the console), and the berry was granted locally, no check sent. Now location 79.
+  scene (event 11, flag 22, `MapControl` starts it on load whatever the door), so either door records it (a reading
+  from play, matched in code). The dig spot `Mound` buries a Spicy Berry (item 2) behind flag 683: dug with Beetle
+  Dig, the flag went off to on (read with the console), and the berry was granted locally, no check sent. Now location
+  79.
 - **`BugariaOutskitsSnakemouthCorridor1` (17):** between its two ends, two gaps (right side) and two ledges (left
   side): crossing needs Jump, both ways. Its door to Seedling Haven needs nothing to walk out of, but reaching the other
-  two doors from it, or it from them, needs Jump and Icicle (the user: "top/right, going up/down across the water").
+  two doors from it, or it from them, needs Jump and Icicle (seen: top/right, going up/down across the water).
   Nothing in it is a location or reads a story flag (the dump: no item, flag or `requires`; its enemies' regional
   flags only).
 - **`BugariaOutskirtsSnakemouthCorridor2` (18):** grass across the middle needs Kabbu's horn, both ways; nothing else.
@@ -3896,40 +3897,40 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   to the lower ground is a drop, Jump back up. The Cave of Trials' door down there sits inside grass: the horn, in and
   out. The Drowsy Cake on the stone (location 25): the horn and Jump. The Dark Cherry dig spot (flag 633), across
   water: Icicle and Jump, there and back. The HP Plus medal (flag 137), inside the waterfall on the lower ground:
-  the Beemerang alone (corrected 2026-10-07, the user: no Icicle).
+  the Beemerang alone (corrected 2026-10-07: no Icicle).
 - **`BugariaOutskirtsEast2` (56):** left to right needs nothing. The way up to the Lost Sands' door: the crank between
   the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump. **Corrected the same
-  day (the user): no drop down.** The top is across the water; the crank can't be turned from there, so the way back is
+  day: no drop down.** The top is across the water; the crank can't be turned from there, so the way back is
   only the ice, and a party arriving there without it is stuck. The Tangy Berry dig spot (flag 669): Icicle and Jump,
-  there and back. **Added 2026-10-07 (the user):** Bee Fly crosses the room freely, both ways, and reaches the dig
+  there and back. **Added 2026-10-07 (seen):** Bee Fly crosses the room freely, both ways, and reaches the dig
   spot.
 - **`BOLostSandsEntrance` (57):** a guard (`antguardclosed`, lim 130) blocks the north door to the desert until flag
   130 (Gen and Eri's chapter 3 story), seen on screen; the logic had no rule on that door. Kept open now (the guard
   away, `antguardopen` present, `Base/WoodenGate2` hidden, `(2)` shown, as 130 leaves them; the flag itself never
-  set). With it open, nothing is needed across the room, seen from both doors (the user).
-- **`Blank` (115):** seen with a plain warp: black, empty, in the void (the user). One entity (an empty NPC slot), no
+  set). With it open, nothing is needed across the room, seen from both doors.
+- **`Blank` (115):** seen with a plain warp: black, empty, in the void. One entity (an empty NPC slot), no
   door, save point or item. Only Event111 loads it, as a backdrop for a flashback (`LoadMap(115)`, the "Sad" song,
   three characters placed), then moves on: never a start (starts come only from doors; it has none).
 - **`BugariaAssociationAttack` (130):** chapter 3's copy of the area outside the city. Two ways in: its one door, from
   the plaza attack map (123), and Event119's landing at about (2, 0, -1.6), where control comes back. From either,
-  only that door is reached; the town's cast stands around (the user). No item, dig spot, grass item, discovery or
+  only that door is reached; the town's cast stands around (seen). No item, dig spot, grass item, discovery or
   quest board in it or in 123-125 (the dump); its caravan (`Crickerly`, from flag 41) and medal slot sell the vanilla
   way, the shop locations being the regular caravan's.
-- **`SeedlingHaven` (136):** a dead end with a save crystal; nothing needed in or out (the user). The Seedling King
+- **`SeedlingHaven` (136):** a dead end with a save crystal; nothing needed in or out (seen). The Seedling King
   (lim 143) is one of Event124's five bounties; beating him gives the Crystal Fruit (item 118, `SeedlingCrystal`,
-  seen in the user's bag), granted locally in a seed today, no location: for the quest pass, with the other four
+  seen in the bag), granted locally in a seed today, no location: for the quest pass, with the other four
   bounties' prizes. **A grass patch's drop
   is one entry of its vector data at random** (`NPCControl.CutGrass`), and any grass may add a `MoneySmall` 12% of the
   time. `grassitem` here lists items 6, 7 and 77: `MoneySmall`, `MoneyMedium` (berries, the money) and a Tangy Berry,
-  so it drops berries mostly; seen dropping only money (the user). Not a location.
-- **`CaveOfTrials` (185):** nothing needed in or out (the user). Its altar (`hole`, line 11) opens the trials with the
+  so it drops berries mostly; seen dropping only money. Not a location.
+- **`CaveOfTrials` (185):** nothing needed in or out (seen). Its altar (`hole`, line 11) opens the trials with the
   Mysterious Piece (Event156, flag 411); the Explorer Permit is refused (seen). Two items on slabs, a Tangy Berry (flag
   507) and a Dark Cherry (508), with copies from flags 503 and 504: behind the altar, for the quest/chain pass.
 - **`GoldenPathTunnel2` (200):** its bottom door (to `BarrenLandsSideGPT`) needs nothing. Up to its top door (down to
   the Golden Path tunnel's upper ledge): Jump, Icicle, the Horn Dash, Bee Fly and an attack for a lever; dropped down
-  from (the user). Its `Fixedlifecast` sits at (100, 999, 100), off the map: the Life Cast's only reachable spot is the
+  from (seen). Its `Fixedlifecast` sits at (100, 999, 100), off the map: the Life Cast's only reachable spot is the
   tunnel's ledge. Its grass drops `MoneySmall` only.
-- **`HermitCave` (227):** nothing needed in or out (the user); no item. Talking to the hermit (line 4, Event195) adds
+- **`HermitCave` (227):** nothing needed in or out (seen); no item. Talking to the hermit (line 4, Event195) adds
   board quest 54 as taken with no board (`ChangeBoardQuest(54, 1)`) and sets flag 576; a girl appears and a red flower
   goes from flag 578: for the quest pass.
 

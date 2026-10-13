@@ -18,7 +18,7 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
   the first artifact reached on a dev file, the spider fight ended with the console's `killall`, `[goal] sent: 1 of 1
   artifacts`; the server logged the release and "Team #1 has
   completed all of their games")
-- [x] Sends a location check when one is detected in the game (2026-09-24: seen by the user, build step 6)
+- [x] Sends a location check when one is detected in the game (2026-09-24: seen, build step 6)
 - [x] Checks made while offline are sent on connect, recovered from the save's own flags (2026-09-24: a save with
   flag 15 already set sent its check on load, seen, and the server logged it; build step 6)
 - [x] Items can be given on demand, at any time (2026-10-04: the server console's `/send` and `/send_multiple`
@@ -28,7 +28,7 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
 - [x] Items with no player or location attached (admin or server commands) are handled (2026-10-04: a Crystal Berry
   and three Mushrooms from the cheat console arrived, each with its hold-up, seen on screen; build step 7)
 - [x] Keeps a received-item index for resyncing (in the save, since items are remote only) (2026-09-24: slot 60
-  holds the count, seen by the user, build step 7)
+  holds the count, seen, build step 7)
 - [x] Items sent while disconnected are received on connect (2026-09-24: two items the server already held arrived
   at the next login, seen on screen; build step 7)
 - [ ] Room messages (`PrintJSON`) are shown to the player, or `NoText` is sent (review 18)

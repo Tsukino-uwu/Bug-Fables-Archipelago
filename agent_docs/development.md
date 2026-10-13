@@ -191,7 +191,7 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
 
 Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
 
-**Tracker Addons, for checking a room's logic in the tracker** (installed 2026-10-08, the user's yes; optional): its
+**Tracker Addons, for checking a room's logic in the tracker** (installed 2026-10-08, once approved; optional): its
 `tracker_addons.apworld`, from the same repository's release `Tracker_Addons_v0.1.2`, goes next to `tracker.apworld` in
 your checkout's `custom_worlds`. It was put in with its source and metadata only, both compared with the repository at
 that tag, and the zip's `__pycache__` left out, so what runs is the source read. It adds commands to Universal
@@ -231,14 +231,14 @@ step 3. Beside it (since 2026-10-03), the `tracker` job puts Universal Tracker's
 was released from (`TRACKER_COMMIT`; the same files as the release's `tracker.apworld`, line endings aside, compared
 2026-10-03), makes the `Players` folder, and runs `test-apworld.ps1 -TrackerOnly`, also stopping after 30 minutes; a
 failed run keeps `fuzz_output_tracker` as `tracker-fuzz-failures-<shard>`. **Both run as five shards of 2000 seeds**
-(since 2026-10-04, the user: ten minutes a push was too slow): side by side, each draws its own seeds (fuzz.py's
+(since 2026-10-04: ten minutes a push was too slow): side by side, each draws its own seeds (fuzz.py's
 `random.randint`, unseeded), so 10000 each as before; only the first fuzz shard also runs the tests and the Logic Test
 check (the others pass `-FuzzOnly`). Five, not ten: each shard spends about a minute on setup, and a free account runs
 20 jobs at once. **When seeds get heavier** (more locations, the room-by-room areas, the entrance randomizer; a seed
 took about 0.2 s on CI's 4 cores, 2026-10-04): more shards first; fewer seeds per push with the full 10000 only at
-release is the user's call, since the rule is 10000 every run (the user: "might eventually want to split it up more or
-run smaller").
-**Nobody waits on CI** (the user, 2026-09-29): after a push, work goes on. GitHub emails whoever pushed when a run
+release is the maintainer's call, since the rule is 10000 every run (splitting it up more or running smaller may
+come later).
+**Nobody waits on CI** (decided 2026-09-29): after a push, work goes on. GitHub emails whoever pushed when a run
 fails, and the agent reads `gh run list` once when a session starts and fixes anything red first. Only `release.ps1`
 waits for green, on purpose.
 
@@ -291,7 +291,7 @@ downloading it is not yet seen.
 ## What each item gates: a report to read against the game
 
 The tests prove the logic agrees with itself; this shows what it says, item by item, so a person can hold it against
-the game (the user, 2026-09-30: "exclude 1 or a few certain progression items to see what/if they break anything").
+the game (asked 2026-09-30: "exclude 1 or a few certain progression items to see what/if they break anything").
 From your Archipelago checkout, with the world linked:
 
 ```sh
@@ -344,12 +344,12 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   checks the ground under the party and moves it beside a save point or a door when it isn't safe, and an `@name`
   warp with no safe side to its entity uses that too, never the entity's own spot over water. **A sub dock** (`warp
   <map> @Fixedsub...`) and a plain warp to Mystery Island land where the sub's own landing puts the party (the dock
-  scene's six spots, Event153; seen on Mystery Island 2026-10-04, the user: "this is where i arrived").
+  scene's six spots, Event153; seen on Mystery Island 2026-10-04).
   An `@name` entity counts as there when it's active or when the game's own existence test (`CheckIfCanExist`: its
   flags and regional flag) lets it be, since the game culls entities far from the camera (2026-10-05: Seedling
   Haven's grass, 45 units from the save crystal). When it isn't, the message says why (active state, the test, its
   regional flag). It doesn't start the room's music, so a test that needs it lands next door and walks in; starting
-  it, and a command to play any track by name, are parked (the user, 2026-10-04).
+  it, and a command to play any track by name, are parked (decided 2026-10-04).
 - `warp <map> from <map> [door]`: arrive as the named map's door into this one does: appear at the door's spot and
   walk in, with no safe-ground move (the appear spot is often off the ground). The door's name picks one where there
   are several. Seen 2026-10-05, each entrance of the room outside the city.
@@ -381,12 +381,12 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   pump room's scanner for a retry (the mod guide, step 54). Test files only.
 - `killall [hp]`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a
   boss a test party can't hit, such as the spider in the air). With a number, every enemy above it brought down to it
-  (2026-10-08, the user: to test a scripted HP end, such as the swamp boss's at 10). Test files only.
+  (2026-10-08: to test a scripted HP end, such as the swamp boss's at 10). Test files only.
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
 - `give <item|key> <id>`: `take`'s other half: a key item only if not held (as a received ability's key is added), an
   item only if the bag has room. With `take`, an ability's key item (`Abilities.Keys`: the Dash 206, the Horn Slash
-  202) goes and comes back one at a time (2026-10-09, the user: "nice to have something for giving/taking the
-  abilities away for testing"). Test files only.
+  202) goes and comes back one at a time (2026-10-09: for taking the abilities away and giving them back in tests).
+  Test files only.
 - `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu
   opens.
 - `warpcolor orange|pink|lime|<hue>`: the drawn backdrop's colour, for `warpicon scroll` (a design test).
@@ -517,8 +517,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   not on every drop: a refill hid purchases from the item shops, which see a purchase as berries going down
   (2026-09-27).
 - `medalprices [0-10]`: shows or sets the `[Debug]` cheat `MedalPrices`, medal shop prices in tenths of the normal
-  price (10 normal, the default; 0 free). Moved off the Gameplay page on 2026-10-09 (the user: "that one feels a bit
-  to cheaty"); the release build has no such key, so its shops charge the full price.
+  price (10 normal, the default; 0 free). Moved off the Gameplay page on 2026-10-09 (too much of a
+  cheat for the panel); the release build has no such key, so its shops charge the full price.
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code; `copy-dev.ps1
   -DebugOn InfJump` turns it on for a dev test session), so it survives reloads. Only while the field player is active:
   in battles it's off and never on the ground, so each press of jump played its sound on a disabled source (three to

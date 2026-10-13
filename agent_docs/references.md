@@ -1,17 +1,17 @@
 # References: how other projects and games do things
 
-Two kinds, kept apart (the user, 2026-09-30):
+Two kinds, kept apart (decided 2026-09-30):
 - **Compared with ours:** a project read side by side with this one (its code, repository or docs), as Tevi's and
   Crystal's were. Its licence is read first and it has a row in `licensing.md`. We take facts and approach only, never
   code. A project read only for one fact or a name has its row in `licensing.md` and no entry here.
-- **From playing other apworlds:** how the user knows another apworld works from playing it, with no code or
-  repository read, so no licence row. It may be vague: that game's way of doing a thing, in the user's words. An idea
+- **From playing other apworlds:** how another apworld is known to work from playing it, with no code or
+  repository read, so no licence row. It may be vague: that game's way of doing a thing, as remembered. An idea
   or a mechanic belongs to no one; code, text and art do. So this holds even for a project with no licence, whose
-  repository we may never open (Pseudoregalia's, the user, 2026-09-30).
-- **The user's own work** is compared without a licence row (the user, 2026-09-30): it is theirs to use. It stays
+  repository we may never open (Pseudoregalia's, decided 2026-09-30).
+- **The maintainer's own work** is compared without a licence row (decided 2026-09-30): it is theirs to use. It stays
   unnamed, with no path.
 
-**Another Bug Fables project is never looked at** (the user, 2026-10-02): a randomizer, a modding framework or any
+**Another Bug Fables project is never looked at** (decided 2026-10-02): a randomizer, a modding framework or any
 other. They were never read, looked at or used in any way while making this project, not even their public docs, and
 never will be. Not compared with ours, not borrowed from: no row in `licensing.md` and no entry here of either kind.
 This project was built blind and ran into nothing that needed them. They stay unnamed.
@@ -73,7 +73,7 @@ item count is memory-only by design. Bug Fables saves items, so ours must be sav
 
 ## From playing other apworlds
 
-The user's own experience; anything read afterwards is marked, with its row in `licensing.md`.
+Experience from playing them; anything read afterwards is marked, with its row in `licensing.md`.
 - **Pokémon Emerald:** Mirage Island is always shown; Shoal Cave switches between high and low tide each
   time you go in or out, so both versions of the cave can be reached; custom roadblocks spread Surf's reach; a
   dexsanity makes each Pokémon a location once caught, not just seen; and *Remote Items* has every item come from the
@@ -91,12 +91,12 @@ The user's own experience; anything read afterwards is marked, with its row in `
 - **Super Metroid Map Rando (not an apworld):** rooms with the same number of entrances swap places, on a grid.
   **We take:** Room Swap, on the game's own map (build step 30).
 - **Metroid Fusion:** its story strip, and points of no return in its logic: "you can jump down into a room to get an
-  item with no way to get out forcing you to warp back to spawn"; the user finds the constant warping makes for pretty
+  item with no way to get out forcing you to warp back to spawn"; the constant warping was judged to make for
   bad gameplay, though it "does open up for the logic to place things in more/weird places" (2026-09-30). **Not taken:**
   the story strip, since every Bug Fables cutscene also changes the world through flags (build step 9). **We take:**
   points of no return as *Points of No Return*, a yaml option, off by default, the Warp to Start as the way back
   (build step 37).
-- **Super Metroid (the apworld):** the user remembered its bosses as checks that track whether you've beaten them
+- **Super Metroid (the apworld):** its bosses were remembered as checks that track whether you've beaten them
   (2026-09-30, asking what a death without saving costs). Its code was then read (`licensing.md`): its bosses are
   events, logic only, which the server never hears of. **We take:** the idea, bosses the server remembers so a reload
   never means beating one again (Next 53, an idea), on a real location or the data storage, not an event.

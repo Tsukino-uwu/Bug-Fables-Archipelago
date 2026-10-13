@@ -74,7 +74,7 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
 12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`). **Done
     2026-10-13** (build step 98).
 13. **The Rule Builder:** Jump's blanket rule as an `OptionFilter` (`rule builder.md:80, 92, 103-110`; ours an `if` in
-    `rules.py:35-42`; **done 2026-10-03**, build step 42: `rules.py`'s `JUMP`, on the user's yes to the
+    `rules.py:35-42`; **done 2026-10-03**, build step 42: `rules.py`'s `JUMP`, approved for the
     preflight); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so
     they print their argument (`:501, 506`); `@override` on `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld`
     and record the decision (`:177`; `apquest/rules.py`, main only).
@@ -91,15 +91,15 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
     nothing redraws a map per seed. Universal Tracker's map tab reads the same PopTracker JSON, takes all logic from
     the apworld, and with entrance tracking colours each door pin and shows where it leads once found; it advises
     against shipping map images in an apworld (its `docs/map-integration.md`).
-    **Decided (the user, 2026-10-01), plans only for now:** full support for both, every feature their docs offer.
+    **Decided (2026-10-01), plans only for now:** full support for both, every feature their docs offer.
     Universal Tracker generates with no yaml (options and the seed's choices from slot_data) and always shows every
     location in logic: no deferred entrances. The PopTracker pack lives in its own folder, its own repo later, never
-    here: a map drawn by code (no AI art, no game art, its look picked by the user on screen), Room Swap rooms shown
+    here: a map drawn by code (no AI art, no game art, its look picked on screen), Room Swap rooms shown
     in their new slot, Coupled/Decoupled rooms at their normal place with no lines, and an optional fog of war (on by
     default) that only PopTracker has. The mod would write three data storage keys for them (rooms visited, the
     current room, doors taken). The step-by-step plans are local files, not in the repo.
     **Universal Tracker with no yaml built 2026-10-03** (build step 40): its docs re-read that day (they had gained
-    `explain_rule`, `explain_more` and fuzzer hooks since 2026-10-01). Decided then (the user): `/explain` as
+    `explain_rule`, `explain_more` and fuzzer hooks since 2026-10-01). Decided then: `/explain` as
     Archipelago's standard has it (our rules resolve to built-in rules, which explain themselves; `rule builder.md`,
     the `ComplicatedFilter` example), so item 13's `__str__` is no longer tied to it; the map tab and the mod's keys
     wait for the PopTracker pack's map.
@@ -109,7 +109,7 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
     36), `ability_items` and `item_kinds` (and since build step 36 `submarine_item`), the same in every seed
     (`slot_data.py:59-65, 78, 80`), and every location's detection data (`:41-57`), all fixed per location id. Measured
     (2026-09-29, doors shuffled): 65 KB, 56 KB of it the seed's own door shuffle, 3.3 KB the same-in-every-seed
-    tables. **Decided (the user, 2026-09-29): follow it, and fix what it risks properly:**
+    tables. **Decided (2026-09-29): follow it, and fix what it risks properly:**
     - slot_data keeps the world version, the option results (`options.as_dict`, item 11) and the seed's own rolls
       (doors, enemies, the start, a random starting member);
     - the fixed tables (each location's detection, the entity lists, item kinds) are built into the mod from the
@@ -135,8 +135,8 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
 ## Recommended: the client
 
 18. **Room messages:** nothing in the mod shows `PrintJSON` ("sent to clients purely to display a message to the
-    player", `network protocol.md:173, 189`), and it doesn't send `NoText` (`:779`). **Chosen (the user,
-    2026-09-29): show them**, in the in-game text client already planned (`apimplementation.md`, Next 9; the design in
+    player", `network protocol.md:173, 189`), and it doesn't send `NoText` (`:779`). **Chosen
+    (2026-09-29): show them**, in the in-game text client already planned (`apimplementation.md`, Next 9; the design in
     the mod guide, step 2): a feed in the bottom-left corner (items sent and received, joins and leaves, DeathLinks),
     a filter per kind of message, and hints and commands typed in game, built on the library's message log and `Say`.
     Until it exists, the player docs are to point to the Launcher's Text Client for `!hint`, `!release` and `!collect`
@@ -177,7 +177,7 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
     Since done: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; build step
     38), and Menu joined to the random start's region (build step 96, 2026-10-13). Connection
     plando (`plando_en.md:283-318`, `Options.PlandoConnections`): optional in the guide ("Support for connection plando
-    may vary"), built all the same (2026-09-30, the user: every optional feature, plando included; build step 32).
+    may vary"), built all the same (decided 2026-09-30: every optional feature, plando included; build step 32).
 
 ## A second look at what we kept (2026-09-29)
 
@@ -186,7 +186,7 @@ After the slot_data decision, each kept item was checked again for a way Archipe
 24. **The enemy shuffle stays in `generate_early`** (reversed 2026-09-30). `generate_basic` is "Useful for randomizing
     things that don't affect logic … i.e. … randomizing enemies" (`AutoWorld.py:408-413`), and ours runs in
     `generate_early` (`world.py:61-63`). The first reading was that map fights can always be fled, so the shuffle
-    doesn't affect the logic. **The user, 2026-09-30:** it is logic. Bosses and other fights that can't be fled limit
+    doesn't affect the logic. **Decided 2026-09-30:** it is logic. Bosses and other fights that can't be fled limit
     what may be placed there to enemies the party can beat (build step 14's party rule). *Shuffle Bestiary* checks
     (Next 44) would follow `enemy_swaps`. So the shuffle must be decided before the rules. What doesn't touch the
     logic, *Music Shuffle*, goes in `generate_basic` (build step 33).
@@ -194,15 +194,15 @@ After the slot_data decision, each kept item was checked again for a way Archipe
     `DequeueItem` (`docfx/helpers/helpers.md:55-68`); the mod polls `AllItemsReceived` against the count in the save
     (`ItemReceiver.cs:81-123`), and the library's queue is never read. The queue restarts each session, so it has to
     work with the save's count: read the library before changing it.
-26. **DeathLink: Archipelago's yaml option too.** Decided (the user, 2026-09-29): both. Archipelago's `DeathLink`
+26. **DeathLink: Archipelago's yaml option too.** Decided (2026-09-29): both. Archipelago's `DeathLink`
     option (`DeathLinkMixin`, `Options.py:1495-1498, 1726-1728`) sets it for the seed and turns the panel switch on or
     off at login; the panel switch stays, to change it mid-seed. **Done 2026-10-13** (build step 99; the yaml's value
     applied once per seed, so a mid-seed change on the main menu stays).
 27. **The library's cache bug, reported upstream** (checked in its source, 6.7.1
     and `main`): `GetFileSystemSafeFileName` returns its input unchanged, and the read uses the checksum uncleaned. No
     issue or pull request mentions it (six searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124
-    touches the same file but not this. Decided (the user, 2026-09-29): if reported, a text-only issue the user posts;
-    never code from us. Our patch stays until a fixed release. **Reported:** the user posted it as
+    touches the same file but not this. Decided (2026-09-29): if reported, a text-only issue the maintainer posts;
+    never code from us. Our patch stays until a fixed release. **Reported:** the maintainer posted it as
     [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29).
 28. **One of our workarounds has a fix waiting upstream** (checked in each pull request's diff, 2026-09-29): #141,
     opened by someone else, turns on websocket-sharp's compression in the websocket-sharp helper and the DLL our net40

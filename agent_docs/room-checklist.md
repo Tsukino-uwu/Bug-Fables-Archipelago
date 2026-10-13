@@ -89,7 +89,7 @@ as it is, a frozen record.
 - [x] DesertTrenchSouth (8)
 - [x] DesertDREastEntrance (76)
 - [x] DesertFGBorder (77)
-- [x] DesertDRSouthEntrance (78) — for the quest pass: every caravan shop, checked with the quests (the user)
+- [x] DesertDRSouthEntrance (78) — for the quest pass: every caravan shop, checked with the quests (decided)
 - [x] DesertBadgeAlcove (79)
 - [x] DesertCaravanMap (80) — for the enemy pass: the caravan robbery scene (Event93, until flag 201), its fight
   needing logic once bosses and enemies are shuffled
@@ -128,7 +128,7 @@ as it is, a frozen record.
 - [x] GoldenPitcher1 (203)
 - [x] GoldenPitcher2 (205)
 - [x] PitcherPlantArena (239) — for the quest pass: the pitcher's bounty fight (Event124, flag 494), with the other
-  bounties: it gives the Crystal Fang; what the fight needs, tested then (the user)
+  bounties: it gives the Crystal Fang; what the fight needs, tested then (decided)
 
 ## Golden Path
 
@@ -136,7 +136,7 @@ as it is, a frozen record.
   Block+ medal (flag 534, Jump)
 - [x] GoldenHillsPath2 (38) — for the quest pass: the sleepy NPC (the CableCar quest, until flag 182)
 - [x] GoldenSettlementEntrance (39) — for the quest pass: the horn quest and Tanjerin (the minigame door's rock, flags
-  274-275); the caravan's other stalls, one at a time (the user)
+  274-275); the caravan's other stalls, one at a time (decided)
 - [x] GoldenHillsPath3 (44)
 - [x] GoldenSMinigame (114) — for the quest pass: the mayor's late visit (20 worms, the Desert Key, quest 46, flags
   557-559)
@@ -197,7 +197,7 @@ as it is, a frozen record.
   ledge); for the sellers' pass: the capsule machine (a Longleg Summoner, 10-19 berries, each time)
 - [x] BroodmotherLair (198) — for the enemy pass: the Broodmother fight (Event171, on entering by either door until 459;
   flying, summons Midges); for the quest pass: its 40 berries (line 4), quest 31 completed even untaken (posted but
-  untaken, it stays on the boards: the user's call), prize medal 18
+  untaken, it stays on the boards: the maintainer's call), prize medal 18
 - [x] FGClearing (201) — for the quest pass: Maki and Kina's quest 55 (Event207 on the platform, Jump: nine Leafbugs,
   two gifts); the Mechanical Claw's trade at DefiantRoot3 (lines 189-190, medal 61), which makes the claw progression
 
@@ -229,18 +229,18 @@ as it is, a frozen record.
   innkeeper's daughter (`TermiteIndustrial` line 21 sets 408, she comes home), Kenny (599-600), the ant guard's warp
   to the Lost Sands entrance (line 38, from 300); for the sellers' pass: the inn's rest (12 berries) and the daughter's
   service (7 berries, from 408)
-- [x] DefiantRoot3 (61) — the Market (named by the user); its three shops' slots, locations 217-228 (added
-  2026-10-10); for the quest pass: Kali's shop, shut until her board quest 36 is taken (flag 265; left so, the user),
+- [x] DefiantRoot3 (61) — the Market (named 2026-10-09); its three shops' slots, locations 217-228 (added
+  2026-10-10); for the quest pass: Kali's shop, shut until her board quest 36 is taken (flag 265; left so, decided),
   her Stolen Silk turn-in (a Lore Book, prize medal 13), Zasp's doll trade, Butomo's and Geno's trades, the Mechanical
   Claw's (medal 61); for the sellers' pass: its one-item sellers (the Heart Berry, the Magic Ice seller from 345, the
   charms) and the smithy
 
 ## Ancient Castle
 
-- [x] SandCastleEntrance (116) — the Entrance (named by the user, for the enemy pass: no location carries it yet);
+- [x] SandCastleEntrance (116) — the Entrance (named 2026-10-09, for the enemy pass: no location carries it yet);
   its crystal's first light plays a short scene (`Event157`, flag 416)
 - [x] SandCastleSlidePuzzle (117) — the Slide Puzzle
-- [x] SandCastleStatueRoom (118) — the Statue Room (named by the user, for the enemy pass: no location carries it yet)
+- [x] SandCastleStatueRoom (118) — the Statue Room (named 2026-10-09, for the enemy pass: no location carries it yet)
 - [x] SandCastleBasement (119) — the Basement; its spots pending with the castle (build step 67)
 - [x] SandCastleRoof (120) — the Roof; its spot pending with the castle; the boss door's rule refined with the boss
   key room
@@ -258,7 +258,7 @@ as it is, a frozen record.
 
 - [x] BeehiveOutside (62) — Outside the Beehive; its factory door kept open (build step 69); for the
   quest pass: Event88 at that door from 169 until 299 (the factory's story scene); for the discovery sweep: discovery
-  25 (Event104, the left bridge, from 299 until 224; the user: keep it but faster, skip the warning line before it)
+  25 (Event104, the left bridge, from 299 until 224; decided: keep it but faster, skip the warning line before it)
 - [x] BeehiveThroneRoom (63) — the Throne Room; its door kept open from the main area (build step 70)
 - [x] BeehiveScannerRoom (64) — the Scanner Room; kept between the outside and the inside, its gate open, its scan
   location 208 with flag 160 (build steps 72-74)
@@ -286,9 +286,9 @@ as it is, a frozen record.
   Beemerang Toss or Bee Fly); for the quest pass: Malbee's Power Exchange (324 to 330); for the discovery sweep: the
   portrait (discovery 15); for the sellers' pass: the quarters' Magic Seed (25 berries, line 11)
 - [x] HoneyFactoryCore (75) — one region, its door free; for the quest and enemy passes: the chapter 3 finale
-  (`Event99`, from 218, enemy 46, prize medal 6, sets 299), its gate open only then; to check again (the user,
+  (`Event99`, from 218, enemy 46, prize medal 6, sets 299), its gate open only then; to check again (asked
   2026-10-10): the finale from the start, researched (Known issues, chapter 4's opening): left to the story, or open
-  from the start played once, the fight a location (the user's pick pending); in game, three things to look at: the
+  from the start played once, the fight a location (a pick pending); in game, three things to look at: the
   cube the finale hides in `DesertTrenchMiddle`, quest 28's Madeleine scenery at the Golden Hills dungeon entrance,
   and leaving the storage escort midway
 - [x] FactoryProcessingFirstRoom (83) — the First Room; its switch (location 70, the Shield's) a basic attack, the
@@ -386,23 +386,23 @@ as it is, a frozen record.
 
 ## Giant's Lair
 
-- [x] GiantLairEntrance (232) — the Giant's Lair Entrance (named by the user); one region: its left door on a ledge,
+- [x] GiantLairEntrance (232) — the Giant's Lair Entrance (named 2026-10-11); one region: its left door on a ledge,
   back up by a bounce pad and the rock beside it (seen); the Venus bud's scene in the middle (Event194, 569; then a
   healing bud), fast-forwarded with *Skip cutscenes* (seen); the right door and a save crystal; a scene to the Roach
   Village from 586 (Event201); no location
-- [x] GiantLairDeadLands1 (233) — the Giant's Hand (named by the user); its left (the Entrance's door, the dig spot,
+- [x] GiantLairDeadLands1 (233) — the Giant's Hand (named 2026-10-11); its left (the Entrance's door, the dig spot,
   Crystal Berry 49, Beetle Dig: "Giant's Lair: Giant's Hand, Dig Spot") the map's own region; the lower right across
   the platforms with Bee Fly, both ways; the right door's ledge up by the hand's rock only (Jump and Horn Slash, the hand
   letting go whenever the room is left), a free drop down; for the enemy pass: three Dead Landers and the hand, a
   respawning Dead Lander γ
-- [x] GiantLairDeadLands2 (234) — Crane Crossing (named by the user); its left (the Giant's Hand's door on a ledge,
+- [x] GiantLairDeadLands2 (234) — Crane Crossing (named 2026-10-11); its left (the Giant's Hand's door on a ledge,
   a bounce pad back up) the map's own region; up the coin stacks to the silver coins (Freeze, Horn Slash, Bee Fly), a
   drop back; down to the middle right, back up with Jump; the middle right's Mystery Berry by the spear (respawning,
   Jump or Bee Fly: "By the Spear") and the Status Mirror on a ledge by the crossing (Bee Fly: "Ledge by the
   Crossing"); on to the right (the door to the fridge outside) with Bee Fly and the switch's crane platform, back by
   a red bounce pad; Bee Fly alone across, harder, left out (Next 71); a red crystal that only heals; for the enemy
   pass: three Dead Landers and a hand, a respawning Dead Lander γ
-- [x] GiantLairFridgeOutside (235) — Outside the Fridge (named by the user); its left (Crane Crossing's door, a save
+- [x] GiantLairFridgeOutside (235) — Outside the Fridge (named 2026-10-11); its left (Crane Crossing's door, a save
   crystal) the map's own region; the right (the fridge's door) past the explorers' fight (Event198: Dead Landers α, β
   and γ, β flying for good, so Vi; no fleeing; flag 593), started from either side (seen); nothing else needed; its
   scene fast-forwarded with *Skip cutscenes*; Roy's quest's last step here (quest 62, Event223, from 703: the same

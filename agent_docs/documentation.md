@@ -137,7 +137,7 @@ attribution (its neighbour `.githooks/pre-commit` runs the preflight, which refu
 built code ends with a short *Code:* line naming the files and methods to read, just after its **Status:** line. Each
 new step also gets a line in the index above.
 
-**Titles say what a step does, and links can't break** (2026-09-30, the user: titles like "the Boat Ticket" or "six
+**Titles say what a step does, and links can't break** (2026-09-30: titles like "the Boat Ticket" or "six
 questions" didn't tell a newcomer where the logic was done, or which step covers the entrance randomizer). A step's
 title names what it adds or decides, and the yaml option or panel row by its own name; its number never changes, as
 prose everywhere cites "build step 16" or "the mod guide, step 11". So a title can be reworded at any time, the
@@ -145,11 +145,11 @@ pre-commit's `doc-coverage.py` checks both guides' indexes against their heading
 every link into a Markdown heading anywhere in the repo, refusing one that leads nowhere. Since 2026-09-30 it resolves
 every plain link to a file or folder too, as MeshGhost's preflight does: all 213 led somewhere on the first run.
 
-**The session log's index** (2026-09-29, the user: the log will become the longest file, and an index makes it
-"easy to read, and also easier to search/grep"): `log.md` opens with a Contents list, one line per entry with its
+**The session log's index** (2026-09-29: the log will become the longest file, and an index makes it easy to
+read and easier to search or grep): `log.md` opens with a Contents list, one line per entry with its
 link. The pre-commit's `doc-coverage.py` works out each heading's link the way GitHub does and refuses a commit whose
 list doesn't match the entries one to one, in order, printing the line to add. **Headings are the date and a title,
-nothing else** (the user, 2026-09-29: "later, morning, end of session… there is already a date"): the check refuses
+nothing else** (decided 2026-09-29: "later", "morning" or "end of session" add nothing to the date): the check refuses
 anything between the date and the colon, and a date earlier than the entry above it (newest last).
 
 ---
@@ -180,7 +180,7 @@ A few decisions made first, because they shape everything after:
     there**: a Bug Fables item (yours, or another Bug Fables player's in the same room) with the game's own
     sprite, and any other game's item as the **Archipelago icon**. To know what's there before it's found,
     the mod asks the server first, a "scout", without creating hints (`create_as_hint` 0, see
-    `client-requirements.md`). **Seen items are never sent as hints** (the user, 2026-10-06: "way too many hints").
+    `client-requirements.md`). **Seen items are never sent as hints** (decided 2026-10-06: far too many hints).
     Archipelago allows it: a scout with `create_as_hint` set tells the server of a location the player has seen but not
     checked, a free hint like ALttP's ledge items (`network protocol.md`, LocationScouts, 0.6.8), and Archipelago's
     own `UndertaleClient.py` and `MMBN3Client.py` send `create_as_hint: 2` when their game shows an item. Here every
@@ -192,26 +192,26 @@ A few decisions made first, because they shape everything after:
     on/off switch in the Archipelago panel. Items arriving from the server show up only there, never as a
     popup. **Later, it becomes a real text client** (2026-09-24): a key opens a text line over
     the feed, so server commands like `!hint` work in game. The game's controls pause while typing, and the
-    server's replies show in the feed. **Also** (2026-09-29, the user: so "people won't have to use the archipelago
-    launcher text client"): DeathLinks show in the feed too, and each kind of message can be hidden (a filter per
+    server's replies show in the feed. **Also** (2026-09-29, so players won't need the Archipelago
+    launcher's text client): DeathLinks show in the feed too, and each kind of message can be hidden (a filter per
     kind), with hints and the server's other commands typed from the text line. Built the Archipelago way: the client
     library's message log (the server's `PrintJSON`), its kinds as the filter's categories (item sent, hint, join,
     leave, chat, goal, release, collect, countdown and the rest), its message parts for the colours, and `Say` for
-    chat and commands. **The key and the menu** (2026-09-29, the user): Enter opens the text line in the field (the
+    chat and commands. **The key and the menu** (decided 2026-09-29): Enter opens the text line in the field (the
     overworld) and in battles; Enter again sends and closes it, and Enter on an empty line just closes it. No
     gamepad button: typing needs a keyboard anyway. In the field this replaces the game's own use of Enter there
     (action 9, the "help": a party member talks about what's in front; `MEASURED.md`, Input); in the pause and start
-    menus Enter keeps the game's uses. **Open, to decide when built** (found 2026-10-10 by the user, in the Honey
+    menus Enter keeps the game's uses. **Open, to decide when built** (found 2026-10-10 in play, in the Honey
     Factory's first puzzle room): action 9 is a mechanic too: in the factory's first puzzle room (Gen and Eri's Room),
     with nobody in front, it hollers to Gen and Eri to press the room's switch (the map's own help line), the only way
     through, so the chat can't take Enter there (or must give action 9 another key) without leaving a seed stuck. A
     **Chat menu** in the Archipelago panel holds the chat's on/off switch, the filters and its other options; with the
     chat off, Enter is the game's everywhere, and with Archipelago off nothing changes (vanilla stays vanilla). **While
-    it's open, nothing reaches the game** (2026-09-29, the user): no key or gamepad button acts in the game until you
+    it's open, nothing reaches the game** (decided 2026-09-29): no key or gamepad button acts in the game until you
     leave, by Enter on an empty line, Enter to send, or Esc (which
     drops what was typed, and never opens the pause menu while the chat is open). In the field the dev console already
     holds the game this way (`player.lockkeys` and `minipause`, as an item-get does, so the world waits too); battles
-    read their input their own way, to be read in the code before building. **The look** (2026-09-29, the user: "like
+    read their input their own way, to be read in the code before building. **The look** (decided 2026-09-29: "like
     a twitch chat where old msgs eventually become invisible unless you press enter"): closed, the newest few lines
     stack in the bottom-left corner with no box, in the game's font with a shadow, and each fades out a while after it
     arrives; open, a semi-transparent dark panel shows the history (scrolled with the wheel or Page Up and Down) with
@@ -221,8 +221,8 @@ A few decisions made first, because they shape everything after:
     (`MEASURED.md`, the text letter pool). The font is borrowed from the running game, never copied into the mod.
     Other games' names can hold characters the game's fonts lack: each is checked as the game checks its own
     (`GetCharacterInfo`), and a missing one is drawn in a fallback font made from the computer's own fonts
-    (`Font.CreateDynamicFontFromOSFont`), scaled to the game's letters: it looks different but stays readable (the
-    user, 2026-09-29: better than "gf798?? recieved from play????"). Only a character no font has becomes "?".
+    (`Font.CreateDynamicFontFromOSFont`), scaled to the game's letters: it looks different but stays readable
+    (decided 2026-09-29: better than "gf798?? recieved from play????"). Only a character no font has becomes "?".
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE` (later the *Item colors*
     row, Rarity by default, with Archipelago's colours darkened for the box: step 20).
@@ -408,7 +408,7 @@ ends a stuck walk now.
 line to `BepInEx/bugfablesap-reload.txt`, the loaded build's hash (as `copy-dev.ps1` prints it) or what a new copy
 waits for; `copy-dev.ps1 -Status` prints it. One read instead of watching the log.
 
-**An apworld change, live** (2026-10-04, the user: "i want to hotswap/live edit things, for faster dev"). Hot
+**An apworld change, live** (2026-10-04: to hot swap and live edit things, for faster development). Hot
 reload swaps the mod, but what the apworld decides (blockers, flags, gives) reaches the game only through a seed's
 `slot_data`, so every apworld fix meant a new seed and a new file. Now `dev-scripts/live-slot-data.py` generates the
 player file twice with the apworld on disk and keeps the keys both seeds agree on: what the apworld decides, never what
@@ -425,8 +425,8 @@ door re-entered the room mid-transfer, and the game's own transfer threw in its 
 
 **Items one at a time** (2026-10-09): testing what each learned ability does alone needs them to come and go one by
 one, which a seed starting with all of them can't do. `take` already removed one; `give` adds it back as a received
-ability's key is added (only if not held; an item only if the bag has room). The user: "probly nice to have
-something for giving/taking the abilities away for testing anyway". First used to hand the Desert Key over for a look
+ability's key is added (only if not held; an item only if the bag has room), for taking the abilities away and
+giving them back in tests. First used to hand the Desert Key over for a look
 inside the Defiant Root storage.
 
 **Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` seen working
@@ -650,7 +650,7 @@ frees every letter and replaces `DestroyText` everywhere in the mod, and left / 
 
 **The status line cut short (2026-09-30):** on the Quality of life page opened from the main menu's Settings, the
 bottom line lost its end, "Cancel goes back to Sett", "Setti" or "Settin", only with Fast text, Detector or Uncap FPS
-highlighted (the user's screenshots; the Gameplay page never). Those three have the longest help lines on the page
+highlighted (screenshots; the Gameplay page never). Those three have the longest help lines on the page
 with the most rows. The console's `letters`, sent with the page open, counted **500 of 500 taken**: about 300 by the
 page, 135 by the Settings screen's hidden boxes and bars, 46 by the main menu's four options still drawn. A text that
 asks for more than are free just ends, and the status line is drawn last. Freeing everything first (`TextPool.Free`)
@@ -663,30 +663,30 @@ pages do. The log says it once: `[text] letter pool 500 -> 1000 slots (the game 
 highlighted, and the log's line once.
 
 **Nine rows at a time, scrolled the game's way (2026-09-30):** the Spy Specs row (step 39) made the Quality of life
-page twelve rows, and spreading them ever closer stops being readable; the user asked for "the up/down scroll that the
-games normal "settings" menu have". **How the game does it, read first:** its Settings screen (pause window 4) shows
+page twelve rows, and spreading them ever closer stops being readable, so the pages scroll up and down as the game's
+own Settings menu does. **How the game does it, read first:** its Settings screen (pause window 4) shows
 `listammount` 9 rows, 0.7 apart (`PauseMenu.cs:2168`), and `MainManager.UpdateList` moves the view only when the
 cursor steps past its top or bottom row. The pause menu draws `guisprites[1]` at 1.25 as the list's arrows, turned for
 up, 0.3 over the first row while rows are hidden above and 0.2 under the last while rows are hidden below
 (`MainManager.cs:15583-15604`, `:16364-16385`). **Ours:** a settings page showed nine rows (seven since, the next
 paragraph) between the same top and bottom row as before (the Gameplay page's look, which already had nine), `Scroll`
 keeps the cursor's row in view by the game's rule, rows out of view aren't drawn, and each row's value arrows follow
-it. **The list arrows:** first placed right of the value arrows and scaled to the panel's spacing; the user, with
-screenshots of the game's Settings screen: "the normal settings menu have them more to the side". The panel's box is the
+it. **The list arrows:** first placed right of the value arrows and scaled to the panel's spacing; screenshots of
+the game's Settings screen showed its arrows more to the side. The panel's box is the
 Settings screen's own box (same type, place and size, `PauseMenu.cs:2707`), so the game's spots carry over unchanged:
 the box's top-right and bottom-right corners, over the border, at 1.25 (`MEASURED.md`, the Settings list's arrows). Up
 from the top row still wraps to the bottom, as the panel always did. The main page is unchanged. **Seen on screen
 (2026-09-30):** "yee the scroll works", and the arrows in the corners: "yes this worked correctly".
 
-**The rows at the game's own size (2026-09-30):** the user, "we have scaled down the left/right arrows & the sound bar
-things in qol & gameplay as well compared to how the normal settings menu does it". They were (0.75 and 0.68 of the
-game's), to fit the panel's closer rows. In the shared box a Settings row is: rows 0.7 apart, arrows at 1 on x 0.4 and
-5.4, the value centred at 2.9, ten pips from 1.1 at the game's size (`MEASURED.md`, a Settings row). At that spacing
-nine rows fill the whole box, where the panel also keeps its help and status lines; asked, the user chose **seven rows
-at the game's size**, both pages scrolling (Gameplay by two rows), the help and status lines staying under them. The
-list arrows keep the corners just seen. A value now fits about 11 letters before it shrinks. The main page keeps its
-own narrower row. **Seen on screen (2026-09-30):** "yee it works, feels a bit cramped but its how the game does it so
-fits in better": kept as the game has it.
+**The rows at the game's own size (2026-09-30):** noticed on screen: the left/right arrows and the sound bars on the
+Quality of life and Gameplay pages looked scaled down compared to the game's own Settings menu. They were (0.75
+and 0.68 of the game's), to fit the panel's closer rows. In the shared box a Settings row is: rows 0.7 apart,
+arrows at 1 on x 0.4 and 5.4, the value centred at 2.9, ten pips from 1.1 at the game's size (`MEASURED.md`, a
+Settings row). At that spacing nine rows fill the whole box, where the panel also keeps its help and status lines;
+asked, the choice was **seven rows at the game's size**, both pages scrolling (Gameplay by two rows), the help and
+status lines staying under them. The list arrows keep the corners just seen. A value now fits about 11 letters
+before it shrinks. The main page keeps its own narrower row. **Seen on screen (2026-09-30):** "yee it works, feels a
+bit cramped but its how the game does it so fits in better": kept as the game has it.
 
 **Achievements (2026-09-26; seen held back 2026-10-04, the first boss on Seed A, achievement 5):** an
 *Achievements* row on the main page, off by default. While Archipelago is enabled and it's off, Steam achievements
@@ -860,7 +860,7 @@ key items' descriptions for the Boat Ticket; not yet seen fixed in game.
 **Long names fitted to the box (2026-09-30).** Seen in play: "You got a Poison Resistance Medal from BugTester!" ran
 past both edges of the box. The game never wraps that box: it draws the line centred, at full size, however long
 (`MEASURED.md`, how a line is laid out). The pickup's box does wrap, but before the name is filled in, so a name is
-never measured there either. The user chose **two lines, squashed only if one is still too wide**:
+never measured there either. Decided: **two lines, squashed only if one is still too wide**:
 
 - The line is measured the way the game lays it out, letter by letter with its own `GetLetterOffset`, against the
   box's own sprite (the pickup's: the game's wrap width).
@@ -1070,8 +1070,8 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    gate's hook from inside (`TermiteGate.cs`, build step 36) now also marks 384 and lets 96 go as the scene starts
    outside, with *Skip cutscenes* on. Setting 384 from the start was weighed and left: the flag also turns
    `BarrenLandsCD`'s left edge into its shortcut, clears a mushroom on an unmapped room and opens Patton's services,
-   all earlier than the game does (the user: "option 1 is easier, and breaks less things"). **Seen (2026-10-07):**
-   384 cleared, the gate walked up to: "it just faded and put me inside". **Then its trigger** (the user: "can we stop
+   all earlier than the game does (the hook is easier, and breaks fewer things). **Seen (2026-10-07):**
+   384 cleared, the gate walked up to: "it just faded and put me inside". **Then its trigger** (asked: "can we stop
    the cutscene from warping you inside?"): the trigger in front of the gate (`event`, limit 384) that starts the
    first opening as the party walks up is kept away in a seed (`kept_open`, `logic/forsaken_lands.py`), so the gate
    opens only when talked to, as every later time. **Seen (2026-10-07):** "had to walk up to and use the gate. didn't
@@ -1083,10 +1083,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    both entreances properly, but don't think it does or give anything"). A `DialogueTrigger` with `data[2]` 1 opens
    its line from its own per-frame check (`NPCControl.Update`) as soon as nothing else runs, with no `StartEvent`, then
    destroys itself, so the scene list never sees it. `SwamplandsEntrance`'s (`initialmessage`, until 357): line 1
-   sets 357 and shows a bubble, nothing else; nothing else reads 357. The user's pick, over keeping it away in every
+   sets 357 and shows a bubble, nothing else; nothing else reads 357. Picked over keeping it away in every
    seed: with *Skip cutscenes*. So a second list, `TalkScenes` (map, entity, flags), is applied as the room's entities
    are made (a postfix on `MapControl.CreateEntities`): the flags set and the trigger kept away the mod's usual way
-   (`KeptOpen.KeepAway`), before its first frame. The rule the user set with it: a scene that changes the logic goes in
+   (`KeptOpen.KeepAway`), before its first frame. The rule set with it: a scene that changes the logic goes in
    the seed (the wizard's tower, the Archipelago guide's build step 59); one that is only story goes here.
    **The Defiant Root's first visit** (2026-10-09, mapping `DefiantRoot1`: "think we should just add it to the skip
    cutscene panel"): `first visit auto dialogue trigger` (until 170), seen playing from two of its doors; line 52 is a
@@ -1097,7 +1097,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    parked below ground (`Fixedbud`) is moved into view and grows, talks, shrinks and is moved back up to its spot,
    then 569 and 278 are set, and the healing bud (`bud`, from 569) stands there. A skip by its flags would leave the
    room as it stood until the map is built again, so it is fast-forwarded (a `Scenes` row, `Flags = null`). **Seen
-   (2026-10-11):** "the speedup cutscene worked" (the user), the log's `[qol] scene over: normal speed`.
+   (2026-10-11):** "the speedup cutscene worked", the log's `[qol] scene over: normal speed`.
    **Outside the Fridge's fight** (2026-10-11, mapping the room: "can we speedup the cutscene before & after the
    fight?"): `Event198` talks, starts a fight with three Dead Landers, talks again, sets 593 and builds the map again;
    fast-forwarded (a `Scenes` row), the fight at the game's own speed as in every sped-up scene. **Seen (2026-10-11):**
@@ -1166,7 +1166,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    opening's three checks (`quiet_locations` in `slot_data`, marked `quiet` in the apworld's `logic/`) arrive with no
    hold-up. A party member placed at any other location still gets its box. The opening skip used to queue its own box
    for Maki and Eetl's Gift, standing in for the gift scene it skips; it now skips that too when the check is quiet.
-   **An item from the server console is held up (2026-10-04, the user's choice):** a `/send` also comes from slot 0,
+   **An item from the server console is held up (decided 2026-10-04):** a `/send` also comes from slot 0,
    so the quiet start kept it silent too (seen: a Crystal Berry arrived with no box). Archipelago's protocol tells
    them apart (`network protocol.md`, 0.6.7: location `-1` is `Cheat Console`, `-2` is `Server`, "typically Remote
    Start Inventory"), so only `-2` stays quiet now. Seen the same day: three Mushrooms from `/send_multiple`, a box
@@ -1180,7 +1180,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    number), as the old one held a word. **Renamed *Medal prices*** (2026-09-26: more accurate): it scales
    the medal table, so every medal on sale anywhere, never an item shop's consumables. If item shops are ever scaled,
    they get their own row (*Item prices*), as their prices sit on another scale. **Moved to the dev cheats
-   (2026-10-09, the user: "that one feels a bit to cheaty"):** off the Gameplay page and out of the player guide; the
+   (2026-10-09, too much of a cheat for the panel):** off the Gameplay page and out of the player guide; the
    dev build's `[Debug] MedalPrices` (the same 0 to 10, 10 by default) and the console's `medalprices [0-10]`. The
    release build binds no such key, so its shops charge the full price; a value set under `[Gameplay]` before is
    left unread.
@@ -1241,21 +1241,21 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    it, and Yes landed the party beside the start's save point ("a good location"); then back and forth between the
    Outskirts and Defiant Root (after a dev warp there), both working. The other areas' spots are starting choices,
    checked as they're reached.
-   **Through a door, since 2026-10-02.** The swamp's spot looped (the user):
+   **Through a door, since 2026-10-02.** The swamp's spot looped (seen):
    - map travel there, then a jump into the water by the crystal: the party came back over the water, again and again,
      with the pause menu out of reach.
    - The cause, read in the code (`MEASURED.md`, "Where the party comes back"): the travel used `TransferMap(map,
      spot)`. Its spot, beside a save point, was the mod's guess, and the game took it as the place to put the party
      back after a fall. The swamp's crystal sits low by the water.
 
-   The user's fix: "any warp/map/teleport, always acts as if you are coming in from an entrance".
+   The fix, decided: "any warp/map/teleport, always acts as if you are coming in from an entrance".
    - Map travel and Warp to Start now arrive the way a door does, `TransferMap(map, here, appear, walk to)` read from a
      real door's entity data (`QualityOfLife.DoorInto`, which gained a door name). The game itself then sets where a
      fall comes back, where the walk-in ends.
    - Each destination's door is in `AreaDoors`, the Outskirts (area 0) also Warp's. `dev-scripts/door-graph.py
      --travel` picks it from the entity dump, and `--travel --check` checks the table. It's a mode of the door tool,
-     not a script of its own: a new script loading another by path is a new row in `docs/capabilities.md`, the user's
-     call. The rule: of the doors into the map, the one whose walk-in ends nearest
+     not a script of its own: a new script loading another by path is a new row in `docs/capabilities.md`, the
+     maintainer's call. The rule: of the doors into the map, the one whose walk-in ends nearest
      the old save point, among doors with no camera change or jump on arrival (a transfer without the door can't copy
      those) and no flags of their own (a door that exists only in some story state may land on scenery that does
      too).
@@ -1265,7 +1265,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
      (designed, not built) logs an error instead of landing beside a save point.
    - The dev console's `travel <area>` runs the same path to any area, visited or not, to check every spot.
    - The respawn-loop guard (step 40) catches any loop left.
-   - **Seen (the user, 2026-10-03):** every map travel destination, one by one, from the pause menu's map with its
+   - **Seen (2026-10-03):** every map travel destination, one by one, from the pause menu's map with its
      Yes / No box: "All map fast travel locations work
      properly now", nothing odd since arriving through a door "instead of random spawn next to crystals".
    **Skip confirm: Off / Warp / Map / Both (2026-09-26; seen on screen the same day: on Map, map travel went at once and
@@ -1797,7 +1797,7 @@ those flags are the save's own. If any of the three hooks (save, load, new game)
 nothing rather than risk a save.
 
 **Status:** the Detector row's effect seen on screen through step 14 (the Detector beeping for checks left in a room,
-2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen, waived by the user (2026-10-04:
+2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen, waived (2026-10-04:
 assumed fine until an issue shows); the Detector's reworded help line seen whole (2026-10-04).
 
 *Code: `MedalAssist.cs`.*
@@ -1835,7 +1835,7 @@ right point in the story. It is a balance setting, not a challenge setting.
     easier, rushing harder. A `chapter` mode was dropped: the chapter ends *are* the artifact flags, so it would be
     the same number. It counts those flags, the chapters' artifact scenes played; since step 57 an artifact item can
     arrive without its scene (Artifact Shuffle), so "found" now means the scenes, not the items (the setup guide says
-    so; the in-game row's text and whether it should follow the items instead are still to ask the user).
+    so; the in-game row's text and whether it should follow the items instead are still to be asked).
 - Both up and down. **Normal / Hard / Hardest** (step 15) stays the challenge setting, on top.
 - The **bestiary** shows the scaled numbers, as the enemy would be if met now. Spy in a fight already shows the live
   ones.
@@ -1853,8 +1853,8 @@ the game, so nothing is from memory; everything is from the game's own data:
    The intro spider (can't be won), tutorial and test fights, and the Everlasting King's keys and tablet (parts of his
    fight) are left alone. **Corrected (2026-09-30):** this list first held the ids the game leaves out of a x1.5 read
    as Hard Mode's; that x1.5 is the hologram machine's hard rematch (flag 166, `MainManager.cs:6282`), and it also
-   kept the Wasp General (72) unscaled. The user: "the Wasp General is more like a mini boss, its not as hard as the
-   actual boss but it was a harder fight than just normal enemies"; the game's own `minibosslist` holds it, and every
+   kept the Wasp General (72) unscaled. The Wasp General is more of a mini-boss, not as hard as the actual boss but a
+   harder fight than normal enemies; the game's own `minibosslist` holds it, and every
    other mini-boss there scales from its chapter, so it does too (chapter 5).
 3. **Artifacts' target:** the level of the areas vanilla opens after that many artifacts: 1, 6, 9, 13, 16, 19, 23, 27.
 
@@ -1891,22 +1891,22 @@ that floor the same day (below).
 **Per-hit attack felt fair (2026-09-26):** the same Dead Lander G at level 1 (hits x0.19, the dev cheat
 `onehit` off) landed 1-2 attacks at "fair damage" and died in two hits, like any other enemy there.
 
-**A scripted end at 10 HP keeps the whole fight** (2026-09-30). **The user asked** whether the Beast's scripted end
-is a percentage or an amount of HP, "so we don't start the fight and instantly get the scripted end", and wanted "a
-fight + end with the scripted thing even when scaling is enabled".
+**A scripted end at 10 HP keeps the whole fight** (2026-09-30). **Asked:** whether the Beast's scripted end is a
+percentage or an amount of HP, so a fight never starts at its scripted end; wanted: a fight, then the scripted end,
+even with scaling on.
 - **Read in the code:** it's an amount. `SurviveWith10` floors every hit at 10 HP (`BattleControl.cs:7491-7494`), and
   the Beast's own turn plays its script at `hp <= 10` (`:18361`); the Everlasting King's phases start the same way
   (`:20826`, the floor in its data). Scaling alone could never start it at once (the Beast has 76 HP, at least 21 after
   scaling), but at level 1 the real fight shrank from 66 HP to 11.
-- **The user's choice:** only the HP above the 10 scales, `10 + round((hp − 10) × ratio)`, and the game's 10 isn't
+- **Decided:** only the HP above the 10 scales, `10 + round((hp − 10) × ratio)`, and the game's 10 isn't
   patched. The Beast at level 1 has 28 HP, 18 of them before its script, as other enemies' HP scales; then the game's
   own finale. At its home level (17) it keeps 76; at 27, 106.
 - **Which fights:** an enemy whose data has `SurviveWith10` (the King), and the Beast while its scene runs (`Event137`
   adds the floor after the enemy is made; a hologram rematch has none). The bestiary shows the same numbers (the
   Beast always, the King by its data's column 23). Logged: `[scale] Centipede (69): home 17, target 1: hp 76 -> 28
   (only the HP above its scripted end at 10 scaled), …`.
-- **The other fixed numbers in enemy scripts, surveyed** (2026-09-30; the user: "can we scale the scripted things in
-  fights as well, so they actually work/are fun"). `dev-scripts/enemy-numbers.py` lists every fixed HP number in
+- **The other fixed numbers in enemy scripts, surveyed** (2026-09-30; asked: the scripted numbers in
+  fights scaled too, so they still work and stay fun). `dev-scripts/enemy-numbers.py` lists every fixed HP number in
   `BattleControl.cs` with its enemy: 39 fixed, 30 relative (a share of `maxhp`), which scale by themselves. Each was
   read and classified in `MEASURED.md` ("Fixed numbers in the enemies' scripts").
   - **Scale:** fixed heals (an ally's 4 to 15), an HP set outright (a revived partner at 7, a summoned ally at 10), the
@@ -1930,7 +1930,7 @@ fight + end with the scripted thing even when scaling is enabled".
   once per fight: `[scale] Stratos (111) heals 15 -> 9 (x0.58)`.
   **To see:** a fight whose script heals, far from its home level with Party level scaling (for example `enemyfight`
   with Kali and Kenny's ids at a low level): the heal's number is the scaled one, and the log line says so.
-- **Maki's hits** (2026-10-08, the user: "maki always hits really hard, unrelated to the party level"): as a follower
+- **Maki's hits** (2026-10-08, seen: Maki always hits really hard, whatever the party level): as a follower
   in the Far Grasslands and the swamp (`BattleControl.AddAI(46, …)` in those areas) he attacks for a fixed 6, piercing,
   plus one per medal 90 (`AIAttack`), so scaled-down enemies fell to him in a hit or two. His hit is now scaled by the
   ratio its target gets, as its HP was (`FollowerHits`): a prefix on the `DoDamage` overload every hit ends in, the
@@ -1964,8 +1964,8 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
   Detector, Spy Specs (step 39), Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24), skipping
   the game's 5-second forced collection (step 25), Attack boost (step 27), Healing crystals (step 30), Auto-save
   (step 31), and the guards against missing animations and glow colours (step 11).
-  **Added (2026-09-29):** the user saw the animation warnings on a normal save with the row on, in the Barren Lands,
-  where the game warns on its own; asked, they chose the guards follow the row. Nothing changes on screen.
+  **Added (2026-09-29):** the animation warnings turned up on a normal save with the row on, in the Barren Lands,
+  where the game warns on its own; asked, it was decided the guards follow the row. Nothing changes on screen.
 - **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
   seed's start), items, checks, the shuffles, the Detector's check beeps, boss prizes paid on any difficulty (they are
   checks), Item animation (only items from the server), and the achievement guard.
@@ -2139,15 +2139,15 @@ where draw order goes by distance. So the backdrop now takes its item's queue, a
 inside the house, the same day.
 
 **Scenery cutting into a backdrop (2026-10-04):** at Madame Butterfly's shelf (`BugariaCommercial`,
-`ButterflyShopkeeper`) a flower behind the shelf cut into the second slot's starburst (the user's screenshot). The game
+`ButterflyShopkeeper`) a flower behind the shelf cut into the second slot's starburst (a screenshot). The game
 draws no backdrop behind a shelf item (its own starburst only appears in the hold-up, `NPCControl.cs:5646`), so there
-was nothing of its to copy. Pulling the backdrop from 0.05 to 0.01 behind its item still clipped. The user's idea,
+was nothing of its to copy. Pulling the backdrop from 0.05 to 0.01 behind its item still clipped. The idea
 kept: every slot of that shelf a small step toward the camera together, so no one item sticks out: 0.1, through each
 slot's sprite holder depth (which the backdrop rides on), for the shop's own items and restocks too. Seen clear the
 same day, the row even on the shelf. `ItemShops.ShelvesForward` lists such shelves; dev `shelfforward` tunes a step
 live, and dev `mark` takes the backdrop's depth as well.
 
-**Lost against the sky (found 2026-10-08, the Badlands' rock ledge):** the user's screenshot showed the item over the
+**Lost against the sky (found 2026-10-08, the Badlands' rock ledge):** a screenshot showed the item over the
 sky but only a sliver of its backdrop, where ground was behind it: "the starburst goes away with some layers". The
 game sorts every entity's sprite by its distance from the camera every other frame (`EntityControl.UpdateGeneralAnim`:
 its viewport depth times 1000), so the item's sort order is in the thousands, while the backdrop kept Unity's default,
@@ -2190,8 +2190,8 @@ into those below, as in the logo. Item-sized, like the party members' icons (the
 items), on the class-coloured backdrop of step 22; and the Jump item's own look, as it belongs to no member
 (`CustomItems.cs`).
 
-**Next: thicker outlines** (the user, 2026-09-30, with screenshots of a shop shelf, the icon next to a vanilla leaf and
-egg: "it has pretty thin outlines while the vanilla items have really thick and visible ones"). Plan only; the look is
+**Next: thicker outlines** (2026-09-30, screenshots of a shop shelf, the icon next to a vanilla leaf and egg: its
+outlines thin, the vanilla items' really thick and visible). Plan only; the look is
 picked on screen. Measured on the game's sprite sheet (`MEASURED.md`, item sprites' outline): the game's outline is
 about 4 to 5 sheet pixels, the icon's rim about 2.1 and its lines between circles about 1.5, so both are half as thick.
 A rim share of about 0.14 to 0.19 matches (today 0.07); a thicker rim also shrinks the circles a little, since the
@@ -2201,33 +2201,33 @@ drawing is fitted to the same size. How it will be picked:
 2. On a shop shelf next to vanilla items (the screenshot's leaf and egg), rims 0.14, 0.16 and 0.18 against gaps 0.05,
    0.08 and 0.10, close up and at a distance, then as hold-ups; `holdup ap` first learns the four current class
    colours (today it shows two fixed ones).
-3. The user picks; `Rim` and `Gap` in `ApIcon.cs` change, and this step's status says what was seen.
+3. One is picked on screen; `Rim` and `Gap` in `ApIcon.cs` change, and this step's status says what was seen.
 
 **Thicker outlines, picked on screen (2026-10-04).** `shelflook` first gained a gap share, then every share (rim,
 gap, the middle's outline, circle radius and spread) and `#n` for a medal shelf's slots, so each look was a console
-line with no rebuild (the user asked why every change needed one: only code changes do). On the Caravan's shelf beside
+line with no rebuild (asked why every change needed one: only code changes do). On the Caravan's shelf beside
 a vanilla leaf, then on Bugaria's medal shelf beside two medals and the leaf, each on its class backdrop:
 
 1. Rim 0.16, gaps 0.08: about the leaf's outline, but the flower shrank and the open middle closed to a pinhole.
 2. The middle carved as a fixed round hole: "the middle circle looks unnatural now". Dropped: the middle's edge must
    be the circles' arcs. So the outline round the middle became its own share, kept at 0.07, and the circles spread
-   wider (0.64 to 0.70) to keep the middle as open as the first look's while the gaps thickened. The user, comparing:
-   "i like the middle one, where it actually has a proper gap/hole in the middle now".
+   wider (0.64 to 0.70) to keep the middle as open as the first look's while the gaps thickened. Compared, the middle
+   one was preferred, with a proper hole in the middle now.
 3. Thicker "to match other items", then "a bit more like the medal": rim 0.20 / gaps 0.14 / spread 0.68 against rim
-   **0.22 / gaps 0.16 / spread 0.70**, the user's pick "for now".
+   **0.22 / gaps 0.16 / spread 0.70**, picked "for now".
 4. Tried after the pick and dropped (2026-10-04): thinner lines between the circles (0.10, 0.12, 0.14 with the circles
    pulled in to keep the middle): "they just look off". Then those lines in a dark shade of each circle's colour, as
    the game draws a sprite's inner lines (the mushroom's spots, the leaf's veins), the edge and the middle still
    black: "it just looks weird/transparent ish", the overlaps reading as see-through. The black lines stay.
 5. Size and colour (2026-10-04, two new numbers on a look: `scale`, the drawn size, and `sat`, the circles' colour
    strength in HSV). 15% bigger: "i like the current size more than the large ones". Colours ×1.5: "looks to vibrant";
-   **×1.2**, at today's size, the user's pick "for now". Then 7% bigger, since the thick lines leave the circles
+   **×1.2**, at today's size, picked "for now". Then 7% bigger, since the thick lines leave the circles
    smaller than the first look's: "still looks/feels a bit to big". The size stays at 1.
 
 `ApIcon.Look` holds a look's five shares, its size and its colour strength: `Current` (rim 0.22, gap 0.16, middle
 0.07, radius 0.39, distance 0.70, scale 1, colours ×1.2) is the icon everywhere; `First` (0.07, 0.05, 0.07, 0.39,
 0.60, scale 1, colours ×1, the look since 2026-09-26) is kept to go back to or test against (`shelflook #n black
-first`), as the user asked. A thicker rim shrinks the circles, since the flower is fitted
+first`), as asked. A thicker rim shrinks the circles, since the flower is fitted
 to an item's size; making it bigger is the next knob if wanted.
 
 **Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground. Thicker outlines:
@@ -2293,7 +2293,7 @@ place it counts frames instead of time first.
   as the platforms: not interpolated while frozen, one decision for both cases so neither undoes the other. **Seen on
   screen (2026-09-27):** knocked around properly, every time. The first fix stays; the second was replaced 2026-09-30,
   when interpolation went for every character (below).
-- **Pitfall, Vi's flight in slow motion** (the user, 2026-09-29, at 240). While Vi flies, `PlayerControl.LateUpdate`
+- **Pitfall, Vi's flight in slow motion** (seen 2026-09-29, at 240). While Vi flies, `PlayerControl.LateUpdate`
   lifts her by writing her whole position every frame (the rise), read from the drawn pose, which trails the physics
   one under interpolation: the frozen enemy's second fault again. Her flying speed itself is a velocity, the same at
   any frame rate. The console's `interp off` can no longer isolate it: since the platform fix, the ground check
@@ -2302,13 +2302,13 @@ place it counts frames instead of time first.
   player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. **Seen on screen
   (2026-09-29, Monitor at 240 Hz):** "fly works now"; Kabbu and Leif following her, "they look the same as Vi".
   Replaced 2026-09-30 with the rest (below).
-- **Pitfall, drawn at physics steps: blurry at 240** (the user, 2026-09-30). Everywhere interpolation had been
+- **Pitfall, drawn at physics steps: blurry at 240** (seen 2026-09-30). Everywhere interpolation had been
   turned off (platforms, flight, frozen enemies) the leader looked "really blurry/bad" while moving; the party
   following looked fine. The camera is smoothed, so a body drawn only 50 times a second jumps against it. The first
   fix smoothed only those bodies and changed nothing on screen. The console's `bodytrace` (the leader's place on screen
-  each frame) showed why: the user was on a **conveyor**, with interpolation *on*, and the leader still jumped about
+  each frame) showed why: the tester was on a **conveyor**, with interpolation *on*, and the leader still jumped about
   22 px every physics step (spread 11.3 px), because the conveyor moves her by writing her position inside the step
-  (`PlayerControl.OnTriggerStay`), which Unity's interpolation doesn't smooth. **The fix, the user's idea: split
+  (`PlayerControl.OnTriggerStay`), which Unity's interpolation doesn't smooth. **The fix: split
   movement from drawing.** Unity's interpolation is no longer used; every character has `None` (the player's in the
   game, which never sets it) and is drawn as the camera is. Right after each physics step (a `WaitForFixedUpdate`
   coroutine, which Unity runs after the step's trigger messages) its pose is read. Before drawing, it is set back by the
@@ -2321,8 +2321,8 @@ place it counts frames instead of time first.
   frame (`EntityControl.Follow`), so he ran ahead of her drawn pose. A character the game copies another into every
   frame (Kabbu in flight; a temporary follower in flight or while digging) now takes that one's offset: "kabbu looks
   good during flight now". A safety net puts poses back before a physics step, should the last camera not draw.
-- **Pitfall, scenery swung inside physics steps: the Rubber Prison's swinging platforms** (the user, 2026-10-01, at
-  240: "the platform itself + the chains get a bit blurred when its moving"). Standing on one, the console's `solids`
+- **Pitfall, scenery swung inside physics steps: the Rubber Prison's swinging platforms** (seen 2026-10-01, at
+  240: the platform and its chains a bit blurred while it moves). Standing on one, the console's `solids`
   named it: `swingingplatform`, a `StaticModelAnim`, holding `CranePlatform`, which the party stands on as its
   children. `StaticModelAnim` writes its swing and bob in `FixedUpdate`, 50 times a second, so against the smoothed
   camera the platform jumped at each step. The party on it looked smooth only because a character's step move
@@ -2354,14 +2354,14 @@ place it counts frames instead of time first.
   every 1/60 s") answers the same way. **Pitfall, the opposite test** (2026-09-30, found with `bodytrace`): a follower's
   walk-or-brake decision, `EntityControl.DoFollow`, *skips* its work when the count divides (`if (Time.frameCount %
   2 == 0) return;`). Given 1 in between, it ran on every frame there: about 210 times a second at 240 against 30 at 60.
-  The party following the leader on a conveyor then started and stopped at once: "a bit choppy", the user said, once the
+  The party following the leader on a conveyor then started and stopped at once, "a bit choppy" once the
   leader was sharp. The trace showed the follower's speed changing every frame, 13.2 to 3.1 to 7.7 to 0.7 within a
   second and a half. Such a method gets 0 in between instead, which every n divides, so it skips there too. Read in
   context, every other site does its work on the divided count or returns on `!= 0`, so only `DoFollow` has the opposite
   test. The site that had scaled its braking (`StopForceMove`, whose only smooth brake is `DoFollow`'s) was compensating
   for the same bug and came out. After both: walk, brake by half every 1/30 s, walk, a steady rhythm about every 0.1 s,
   as at 60.
-- **The mod's own frame counts, counted the same way** (2026-10-01; the user: "don't we match the game when doing
+- **The mod's own frame counts, counted the same way** (2026-10-01; asked: "don't we match the game when doing
   uncap fps?"). The row had patched only the game's counts. The hold-ups' waits (30 free frames before the first of a
   burst, 3 before each of the rest, 5 after each one shows; step 10) and the auto-save's 20 free frames (step 31)
   still counted rendered frames, so at 240 they waited a quarter as long: the half second between chained scenes an
@@ -2415,7 +2415,7 @@ do. Monitor was the default from 2026-09-28 (once shaky text was fixed and no od
 The first frame with the row on installs the frame sites (a few seconds). Rates above 240 are untested. **Seen on screen
 (2026-09-28):** the ten pips look and work fine.
 
-**Off by default again (2026-09-29, the user).** A fresh config and the panel's reset give Off, the game's own frame
+**Off by default again (decided 2026-09-29).** A fresh config and the panel's reset give Off, the game's own frame
 rate; Monitor stays the last pip. As before, a config that already stores a value keeps it (no migration), so a
 config that says Monitor stays at Monitor until the row is changed. **Seen (2026-10-04):** the panel's Reset to
 defaults puts the row at OFF.
@@ -2423,7 +2423,7 @@ defaults puts the row at OFF.
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill;
-waived by the user (2026-10-04: assumed fine until an issue shows).
+waived (2026-10-04: assumed fine until an issue shows).
 Platforms and bridges: the slow motion fixed and seen (2026-09-27). Vi's flight: fixed and seen (2026-09-29). Every
 character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her, and on the
 Rubber Prison's swinging platform (2026-10-01); bridges, a knocked frozen enemy, the "!" over NPCs and shadows during
@@ -2474,7 +2474,7 @@ whether a garbage collection ran. Two clocks showed up:
    made the most, warning under 10 s; after the fix, collections came 62 s apart in the plaza.
 
 **Status:** works, measured (2026-09-27). The tester's FPS counter dipping to 220 was that stall; confirmation on screen
-that it's gone waived by the user (2026-10-04: assumed fine until an issue shows). The receiver's regrowth fixed and
+that it's gone waived (2026-10-04: assumed fine until an issue shows). The receiver's regrowth fixed and
 measured (2026-10-11); seen the same day: no hitch dashing round the plaza.
 
 *Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames`
@@ -2743,7 +2743,7 @@ on a shelf (its description naming them), in the "You got" box and in the hold-u
 
 **Found by the review (2026-09-29, apimplementation.md build step 28):** MultiClient.Net, the library the mod connects
 with, caches each game's item and location names. The file goes
-in `Archipelago\Cache\datapackage\<game>\<checksum>.json` in the user's local application data, and both names come from
+in `Archipelago\Cache\datapackage\<game>\<checksum>.json` in your local application data, and both names come from
 the server:
 - **The "safe name" function returns its input unchanged** in the version the mod ships (6.7.1). It cleans a copy and
   hands back the original (`MEASURED.md`).
@@ -2785,7 +2785,7 @@ a new `Bug Fables\<checksum>.json` at the seed's first login); another game's it
 
 ## 35. Shuffle Shop Inventories in the game: shelf slots and pickups swapped
 
-**The idea (the user, 2026-09-30):** once an item shop slot's check is bought, or a respawning pickup's check is found,
+**The idea (2026-09-30):** once an item shop slot's check is bought, or a respawning pickup's check is found,
 the spot sells or gives another spot's item, as the seed says (apimplementation.md, build step 34). It's never a check.
 
 **How the game already does it:** a medal pickup under the random-medal cheat becomes another medal as it's taken
@@ -2834,9 +2834,8 @@ location in the same shop. A respawning pickup is known by its map and regional 
 
 **The ask (2026-09-30):** fights written for the whole party must not freeze or crash when the seed's party lacks a
 member, as scenes and talks already manage with stand-ins (step 11); the example, the Beast at the end of chapter 5,
-where Vi and Leif are knocked out and Kabbu fights on powered up. **The user's choice:** the members you have play
-the parts, never a temporary member you don't own yet ("if you do the beast fight with only Vi, or just with Leif,
-it's more fun to show it that way").
+where Vi and Leif are knocked out and Kabbu fights on powered up. **Decided:** the members you have play the parts,
+never a temporary member you don't own yet: a Beast fight with only Vi, or just with Leif, is more fun shown that way.
 
 **Why battles need their own way:** a fight's scripted parts read `playerdata[k]` directly, k meaning member k, since
 in vanilla the party is Vi, Kabbu and Leif in that order. An array index can't be answered by a lookup patch, as
@@ -2904,7 +2903,7 @@ changes anything:
 `ScriptedScenes` does the two scenes (3 reads of slot 1 in `Event137`, 1 of slot 2 in `Event182`). Logged once per
 fight: `[party] the Beast: member 1's part played by member 0 (slot 0)`.
 
-**To see** (warps only when the user asks; `onehit` is a dev cheat, so ask before turning it on): at the Beast's
+**To see** (warps only when asked; `onehit` is a dev cheat, so ask before turning it on): at the Beast's
 map, `flag 359 off` replays the scene. Try all three in arrival order, Vi alone, Vi and Leif, Kabbu and Leif. Bring it
 to 10 HP: who is revived, who says the lines, who falls (nobody when alone), the boost, and the scene ending. Zommoth:
 Leif frozen until the beam, or with Leif missing nobody frozen. The King: who speaks each line.
@@ -2916,7 +2915,7 @@ Leif frozen until the beam, or with Leif missing nobody frozen. The King: who sp
 ## 37. The submarine's docks follow its key item
 
 The game side of the Archipelago guide's build step 36: the submarine, the Subaquatic Maritime Neotransport, is an
-item. **The user's ask (2026-09-30):** "you need the item for it to appear/be useable". The docks appear and sail only
+item. **The ask (2026-09-30):** "you need the item for it to appear/be useable". The docks appear and sail only
 with it, wherever the story is, and the story's own scenes keep playing.
 
 **What the game does** (read first, `MEASURED.md`, "The submarine"): no item, only flags. Six docks, one scene
@@ -2927,7 +2926,7 @@ Landing reads 448, and without it every dock but the Termite and Bugaria piers r
 **How the mod does it:**
 1. **The key items** (`CustomItems.cs`), written into the game's item table as the Boat Ticket is:
    - 212, the Subaquatic Maritime Neotransport, the description "It is impossible for it to sink! ...Probably." (the
-     king's line, then the team's doubt), and the Big Gear's look (item 159), lent until the user picks one on screen;
+     king's line, then the team's doubt), and the Big Gear's look (item 159), lent until one is picked on screen;
    - 213, the Progressive Boat, the ticket's look: never in the bag, only a row so a hold-up, a shelf or a spot on the
      ground can name and draw it, one look for both copies, as the progressive abilities have one each.
 2. **Receiving** (`ItemReceiver.cs`): a Progressive Boat copy adds the next of the Boat Ticket (200) and the submarine
@@ -2956,7 +2955,7 @@ follow the story.
 - **The story before the item:** the throne-room scene plays and sends its check (location 76). The Termite pier's
   dock, scientist and queen wait for the item; they appear at the next load of the map once it arrives.
 
-**To see** (the user; warps only when asked):
+**To see** (warps only when asked):
 - the log's install lines (`2 of 2`, the docks' `[open]` lines) and the item's look in the Key Items menu;
 - both Progressive Boat copies from `send-as-player.py`, one at a time: the Boat Ticket, then the submarine;
 - the Bugaria pier's dock absent before the submarine and there after (`take key 212` to remove it again);
@@ -2965,13 +2964,13 @@ follow the story.
 - the throne-room scene sending its check.
 
 **The name in the Key Items list (2026-10-04):** "Subaquatic Maritime Neotransport" ran past the list's right edge
-(the user's screenshot). The game draws a list's rows with no fitting (`MainManager.ShowItemList`, its row's
-`SetText`); its only fitting is `|sizemulti,0.7,1|` on the rows of long-worded languages. Asked, the user chose to
+(a screenshot). The game draws a list's rows with no fitting (`MainManager.ShowItemList`, its row's
+`SetText`); its only fitting is `|sizemulti,0.7,1|` on the rows of long-worded languages. Asked, the choice was to
 keep the full name everywhere and narrow it in lists only: a prefix on `ShowItemList` swaps the name for one between
 `|sizemulti,0.7,1|` and `|sizemulti,1.4286,1|` (the command multiplies the current size, so the selected item's
 "name - Worth..." header after it keeps its size), and a finalizer puts it back. Seen fitting the same day.
 
-**The boat stays (the user, 2026-10-04):** with the submarine the boat still runs, both docked side by side; never a
+**The boat stays (decided 2026-10-04):** with the submarine the boat still runs, both docked side by side; never a
 boat flag cleared for the submarine (the Archipelago guide, Next 40).
 
 **Status:** built (2026-09-30); seen (2026-10-04): the item's look and text in Key Items, its name fitted, the Bugaria
@@ -2993,7 +2992,7 @@ Island's docks, nothing special on leaving and coming back. Every dock seen.
 
 The game side of the Archipelago guide's build step 37. With *Points of No Return* on, the logic may leave the player
 where only the pause menu's Warp to Start gets them out, so the Warp must always be there, whatever the Travel setting
-says (the user, 2026-09-30: forced "similar to how it is for entrance, spawn etc").
+says (decided 2026-09-30: forced, as it is for the entrances, the spawn and the rest).
 
 **How the mod does it:** `SeedData` reads `slot_data` `points_of_no_return` (inside `options` since step 41);
 `Plugin.cs` hands it to `QualityOfLife` as `PointsOfNoReturn`, only while Archipelago is enabled;
@@ -3004,7 +3003,7 @@ apworld (step 41: no support for older versions). The dev seed dump lists it.
 In today's seeds the abilities are always items, which already forces the Warp on; this case keeps it on by its own
 reason, so it holds whatever the other options become.
 
-**To see** (the user): with a seed made with it on and Travel set to Off, the Warp is in the pause menu.
+**To see:** with a seed made with it on and Travel set to Off, the Warp is in the pause menu.
 
 **Status:** built (2026-09-30); seen (2026-10-04): with it on and Travel OFF, the Warp is in the pause menu. That
 can't single out this option yet: abilities as items force the Warp on in every seed today (`WarpOn`).
@@ -3014,7 +3013,7 @@ can't single out this option yet: abilities as items force the Warp on in every 
 
 ## 39. Spy Specs: the medal's effects as a Quality of life row
 
-**Asked (the user, 2026-09-30):** "similar to detector in qol, spy spec could maybe be a on/off thing (the automatic
+**Asked (2026-09-30):** "similar to detector in qol, spy spec could maybe be a on/off thing (the automatic
 spy, it does not take up a turn to spy)". **Decided:** built now, off by default (an opt-in that makes fights easier,
 as Attack boost is).
 
@@ -3035,10 +3034,10 @@ it uses the turn." Only while Archipelago is enabled, or with *Use on normal sav
 depend on it. The HP bars follow from the next battle, since the game reads the medal as a battle starts.
 
 The page grew to twelve rows (eleven settings under the two buttons). Squeezing them closer was the first plan; the
-user asked for the game's own way instead ("not better to just add the up/down scroll that the games normal
-"settings" menu have ?"): a settings page now scrolls, seven rows at the game's own size (step 8).
+game's own way was asked for instead ("not better to just add the up/down scroll that the games normal "settings"
+menu have ?"): a settings page now scrolls, seven rows at the game's own size (step 8).
 
-**Split in four (2026-10-04, the user):** "split up the spy specs into off/hp/free(free turn+no aim)/both". The row
+**Split in four (decided 2026-10-04):** "split up the spy specs into off/hp/free(free turn+no aim)/both". The row
 now reads *Spy Specs: OFF / HP / FREE / BOTH* (config `[QualityOfLife] SpySpecs` holds `Off`, `HP`, `Free` or
 `Both`), and its help line follows the value. HP is every enemy's HP bar; Free is Spy with no aim and the turn kept,
 which the game ties to one answer (`Tattle` asks once and both hang on it), so they stay together. The icon beside Spy
@@ -3052,13 +3051,13 @@ works. The log names each yes: `[medals] Spy Specs: every enemy's HP bar shows t
 Spy with no aim, keeping the turn`. A config that stored the old ON or OFF reads Off now (BepInEx falls back to a
 list's first value), so ON has to be picked again as BOTH.
 
-**To see** (the user): in a battle after picking each value, HP shows every enemy's HP and Spy as the game has it;
+**To see:** in a battle after picking each value, HP shows every enemy's HP and Spy as the game has it;
 Free has Spy with no aiming, the icon beside it, and the same member able to act after spying, while unspied enemies
 show no HP; Both is all of it; Off is as the game has it.
 
 **Status:** built (2026-09-30), split in four (2026-10-04), the build succeeds; the row seen on its page while the
 scrolling was checked (2026-09-30); its four values and their help lines seen (2026-10-04, the old ON read as OFF);
-HP's, Free's and Off's battle effects seen (2026-10-04, HP and Free each with its log line); Both waived by the user
+HP's, Free's and Off's battle effects seen (2026-10-04, HP and Free each with its log line); Both waived
 ("'both' should just work"), not seen.
 
 *Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix, `SpyAsks`), `Gameplay/QualityOfLife.cs` (`SpySpecs`,
@@ -3066,7 +3065,7 @@ HP's, Free's and Off's battle effects seen (2026-10-04, HP and Free each with it
 
 ## 40. No respawn loop: a fall that only leads back into itself ends with the Warp
 
-**Seen (the user, 2026-10-02):**
+**Seen (2026-10-02):**
 
 - Map travel to the swamp, then a jump into the water next to the crystal: the party came back over the water, fell
   in again, and again, forever.
@@ -3087,7 +3086,7 @@ transfers"):
 So when both spots are over water, or nobody holds a direction, nothing ends the loop. A respawn holds the game paused
 (`minipause`) while it runs, so the pause menu stays out of reach.
 
-**Decided (2026-10-02, the user):** fix the landings at their source (map travel arriving through a door, step 10),
+**Decided (2026-10-02):** fix the landings at their source (map travel arriving through a door, step 10),
 and make sure nothing can lock the game hard again.
 
 **How the mod does it** (`Guards/RespawnLoop.cs`, with Archipelago on or *Use on normal saves*, step 18):
@@ -3117,24 +3116,24 @@ and make sure nothing can lock the game hard again.
    - the last transfer: from where, through which door, and whether `door_targets` had rewritten it
      (`DoorShuffle.Rewrote`).
 
-   The next loop the user meets says which door caused it.
+   The next loop the tester meets says which door caused it.
 
 **Testing it:** once map travel lands through doors, the swamp no longer loops. So the dev console's `hazardloop`
 sets `lastpos` and `lastloadzone` above the middle of the nearest water or hole (`development.md`, the dev console),
 and the next fall there loops on purpose.
 
-**To see** (the user):
+**To see:**
 
 - after `hazardloop`, a fall into the water ends with the warp to the start, after the 6th respawn;
 - falling in a few times with a moment on ground between still respawns as the game does, with no warp;
 - in a shuffled seed, the chapter-2 area again: any loop ends in a warp, and the log names the door.
 
-**Normal falls warped, found and fixed (2026-10-04).** The user jumped into the river in Snakemouth Den's bridge room a
-few times, and the sixth fall warped them to the start. Twice: the first time the guard logged only "6 in a row
-without standing on ground", so its log line gained what it measured, and the user fell in again. The numbers: free
-1.03 to 1.57 s between falls, but at most 0.14 to 0.39 s on ground, since the user jumped straight back in. Half a
+**Normal falls warped, found and fixed (2026-10-04).** The tester jumped into the river in Snakemouth Den's bridge room
+a few times, and the sixth fall warped them to the start. Twice: the first time the guard logged only "6 in a row
+without standing on ground", so its log line gained what it measured, and the tester fell in again. The numbers: free
+1.03 to 1.57 s between falls, but at most 0.14 to 0.39 s on ground, since the tester jumped straight back in. Half a
 second of *standing* was the wrong test; touching ground at all, with half a second free, is the right one: the same
-user's falls then logged "play" twelve times in a row (on ground 0.14 to 0.34 s, free 1.05 to 1.23 s).
+tester's falls then logged "play" twelve times in a row (on ground 0.14 to 0.34 s, free 1.05 to 1.23 s).
 
 **The loop tests, made faithful (2026-10-04):**
 
@@ -3147,7 +3146,7 @@ user's falls then logged "play" twelve times in a row (on ground 0.14 to 0.34 s,
   loop again 1 s after the last warp", until the walk-in ended). Those are no longer counted, and the spot is 3 above.
 - `oldtravel <map> <entity>` replays map travel's landing from before 2026-10-02 (beside a save point, through the
   2-argument `TransferMap`). At the swamp's crystal (`oldtravel SwamplandsBridge 6`) it gives the original loop: the
-  user jumped in, came back over the water at once (free 0.00 s) five times more, and was warped to the start; the
+  tester jumped in, came back over the water at once (free 0.00 s) five times more, and was warped to the start; the
   respawns during the warp's transfer weren't counted.
 
 **When the start is the loop (2026-10-04).** A seed's random start landed behind the desert border's shut gate (the
@@ -3157,12 +3156,12 @@ warp warps once more, to the **game's own start** outside the city (`WarpToStart
 over the seed's start); only a loop after that is left to the log. The start itself is fixed at its source too (no
 start lands at a door the game hasn't made yet).
 
-**Walking back into thorns warped, found and fixed (2026-10-08).** While mapping `FarGrasslands4`, the user walked
+**Walking back into thorns warped, found and fixed (2026-10-08).** While mapping `FarGrasslands4`, the tester walked
 into its thorns over and over, and the sixth time warped them to the start: "nothing the guard should catch as its not
 a softlock". The log: each time on ground 0.09 to 0.15 s and free 0.10 to 0.16 s, so under the half second. Free time
 can't tell the two apart here, since the thorns sat right beside where each respawn put the party. How the game
 respawns tells them apart (`Hazards.HazardAction`, read first): it holds `minipause` until the fade back in ends, and
-a party put back onto the hazard is hit again during that fade, where it lands, before it can walk. The user's party
+a party put back onto the hazard is hit again during that fade, where it lands, before it can walk. The tester's party
 walked about half a unit each time (the walk is 5 a second). So walking a quarter unit on the ground from where the
 respawn left it now counts as play too, and the log line says how far the party walked.
 
@@ -3186,8 +3185,8 @@ four values from it with two small helpers in `SlotData.cs`: `On` for a JSON boo
 and 22), `points_of_no_return` (the Warp forced on, step 38) and `artifacts_required` (the goal). Everything
 that used them reads them through `SeedData` as before, so nothing else changed.
 
-**No support for older versions** (the user, 2026-10-03: "people are expected to use the latest release for all of
-them"): the old keys are never read. A seed with no `options` still connects, and the main menu's status line says
+**No support for older versions** (decided 2026-10-03: players are expected to use the latest release of
+everything): the old keys are never read. A seed with no `options` still connects, and the main menu's status line says
 "this seed comes from an older apworld: use the latest release of everything and generate a new seed"; the log adds
 that its goal and option rules won't apply.
 
@@ -3195,7 +3194,7 @@ that its goal and option rules won't apply.
 `points_of_no_return`, `artifacts_required`), so a dump of a new seed reads exactly as one of an old seed with the same
 options did.
 
-**To see** (the user), on a fresh seed with Shuffle Field Moves, Shuffle Jump and Points of No Return on, Travel set
+**To see**, on a fresh seed with Shuffle Field Moves, Shuffle Jump and Points of No Return on, Travel set
 to Off:
 
 - each attack refused with the short "can't" sound until its item arrives, and the jump refused until Jump arrives;
@@ -3337,7 +3336,7 @@ ran to its save menu with no freeze, the log saying quest 14 filed at 1, not 3 (
 The pause menu counts the artifact flags (`SaveProgressIcons`) and draws that many icons from the first chapter's on
 (`PauseMenu.BuildWindow`), and the quests page blacks out a chapter's artifact until the count reaches that chapter
 (`UpdateText`). Right only in story order: with only the castle's artifact (flag 345), the menu showed the first
-chapter's icon (seen 2026-10-09, `MEASURED.md`). Asked and decided (the user, 2026-10-09): in a seed, the pause menu
+chapter's icon (seen 2026-10-09, `MEASURED.md`). Asked and decided (2026-10-09): in a seed, the pause menu
 shows each artifact you have; the file select keeps the game's count, since a save stores only the number.
 
 With Archipelago on, `BuildWindow`'s read of `StartMenu.psprite` returns the same seven icons with the set flags'
@@ -3355,7 +3354,7 @@ page not yet seen.
 ## 49. Doors a seed adds or sends elsewhere
 
 Found mapping the Bee Kingdom's Scanner Room (2026-10-09): the room has one door, and its way on is a scene that warps
-the party into the hive. The user wanted it kept as a room between the outside and the inside: "copy the bottom
+the party into the hive. Decided: kept as a room between the outside and the inside, "copy the bottom
 entrance/door how it works, place it where the gate is, and redirect how you come in/out of it". A door in this game is
 an entity row: its target map (`data[0]`), where the party walks into it (`vectordata[0]`), and where it appears and
 walks to on the other side (`[1]`, `[2]`).
@@ -3388,11 +3387,11 @@ walked both ways several times.
 ## 50. The Bee Kingdom's scan sets flag 160 too
 
 `Event84`'s first part, the scan, writes flag 159 once; its second part, which warps the party to the main area and HB's
-Lab, wrote 160. In a seed the second part is kept away (`apimplementation.md`, build step 73), and the user decided 160
-comes with the scan ("lets just give 160 alongside the scan in the scanner room, so its not missable"). With Archipelago
-on, a transpiler after the 159 write calls a method that sets every flag the seed's `flags_with` names for event 84 and
-flag 159: 160. That teaches Leif Bubble Shield Lite at the game's next skill refresh (the game's own, as Pep Talk is at
-the farm), takes HB from beside his lab door, and switches Outside the Beehive's main door, which the kept lists hold on
+Lab, wrote 160. In a seed the second part is kept away (`apimplementation.md`, build step 73), and it was decided
+that 160 comes with the scan in the scanner room, so it isn't missable. With Archipelago on, a transpiler after the
+159 write calls a method that sets every flag the seed's `flags_with` names for event 84 and flag 159: 160. That
+teaches Leif Bubble Shield Lite at the game's next skill refresh (the game's own, as Pep Talk is at the farm), takes
+HB from beside his lab door, and switches Outside the Beehive's main door, which the kept lists hold on
 the Scanner Room. The log says `[scan] installed in Event84`, and at each scan what it set, or why nothing.
 
 With **Skip cutscenes** the scan is fast-forwarded (the game's own fast-forward, in the setting's scene list): it
@@ -3425,13 +3424,13 @@ tries in all, each logging off like Cancel, never freezing.
 
 ## 52. Tattle from the start, with any party
 
-Found 2026-10-10 by the user in the Honey Factory's first puzzle room: the game's help key (action 9, Enter on a
+Found 2026-10-10 in play, in the Honey Factory's first puzzle room: the game's help key (action 9, Enter on a
 keyboard) is also how you holler to Gen and Eri to press the room's switch, and it did nothing on a test file. The key
 answers only with flag 10 set, which the Tattle tutorial (`Event2`, Snakemouth's bridge room) sets, and with Kabbu in
 the party (`PlayerControl.GetInput`, `HasPlayer(1)`), whose character speaks the line (`GetEntity(-5)`). A seed may
 never play that tutorial (a random start, shuffled doors) or have Kabbu (Starting Party Member), so the factory's
-first puzzle room could be stuck. The user: "we should probly have it active from the start of a seed", and "can't we
-make tattle work without kabbu, any 1/random party member ? just always available/working no matter what".
+first puzzle room could be stuck. Decided: active from the start of a seed, and working without Kabbu, with any
+party member: always available, whatever the party.
 
 With Archipelago on, the places that read flag 10 for Tattle read it as set: a transpiler in `GetInput` turns its
 `flags[10]` into a call that answers yes in a seed, and so does one in `PauseMenu.CanDig`, behind the pause menu's dig
@@ -3453,7 +3452,7 @@ holler had Gen and Eri press the switch. The rebuild (the flag read as set) seen
 
 ## 53. Strategy and Relay in battle from the start
 
-Asked 2026-10-10 by the user, with step 52: the battle menu counts Strategy from flag 15 (the opening's end, the
+Asked 2026-10-10, with step 52: the battle menu counts Strategy from flag 15 (the opening's end, the
 Explorer Permit's scene) and Relay from flag 16 (Leif joined) (`BattleControl.SetMaxOptions`); the options come in
 order, Relay only after Strategy. "Just include these from the start, guaranteed not even as locations." The flags
 themselves can't be set early: 15 is the limit of the opening's tutorial battle trigger (location 75) and 16 of the
@@ -3465,8 +3464,8 @@ taunted), and choosing it acts only with more than one member. With one member S
 (the game greys them only while someone is down and more than one is alive): what they do alone is to see. The log
 says `[relay] installed in BattleControl.SetMaxOptions`.
 
-**Status:** built (2026-10-10), installed (the log); not yet seen in game: a battle with one member waits for the
-user's later check (TO-CHECK).
+**Status:** built (2026-10-10), installed (the log); not yet seen in game: a battle with one member waits for a
+later check on screen (TO-CHECK).
 
 *Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*
 
@@ -3483,9 +3482,9 @@ has three locks, and the pump room's scanner counts each pass shown in a saved n
 
 With Archipelago on, and only for the key items the seed's `kept_keys` lists, a transpiler in `Event59` turns that one
 removal into a call that leaves the key in the bag. Any other key, a seed without the list, or Archipelago off: taken,
-as in the game. The lock's flag, its scene and its sound stay the game's. **The scanner opens on one show** (the user,
-2026-10-10, after showing the one pass three times: a player "might just assume its broken" when the first show
-doesn't open it): at the pump room, the same call raises the scanner's count (`flagvar[24]`, the game's own saved
+as in the game. The lock's flag, its scene and its sound stay the game's. **The scanner opens on one show** (decided
+2026-10-10, after showing the one pass three times: a player might think it broken when the first show doesn't open
+it): at the pump room, the same call raises the scanner's count (`flagvar[24]`, the game's own saved
 counter, used nowhere else) to 2 when it's lower, and the game's own increment then makes 3: its `Slot3` sound, its
 opening scene (`Event96`, flag 217). The count is never taken past where three passes would leave it. The console's
 `flagvar 24 0` with `flag 217 off` resets the scanner for a retry. Only `Event59` is patched: under a patch on every
@@ -3495,7 +3494,7 @@ hook does: the first lock would then take the seed's one pass. The log says `[ke
 N)`, and at each lock which key was kept or taken, and why (Archipelago off, no seed, no `kept_keys`, not a kept key);
 at the scanner, the count it raised from and to.
 
-**Status:** seen (2026-10-10, the user, a new file on a new seed, the pass from the server): the hook installed, the
+**Status:** seen (2026-10-10, a new file on a new seed, the pass from the server): the hook installed, the
 pass still in the bag after the Lobby's and the Storage Maze's locks, each opening; the scanner opening on its third
 show (the first build), then on its first (reset with the console).
 
@@ -3520,9 +3519,9 @@ stay the game's. If the IL no longer has exactly one such `Contains` and three s
 as it is and logs an error. The log says `[keys] installed in EventControl.Event193 (...)` and, in the scene, what it
 spared.
 
-**Status:** seen (2026-10-10, the user fought the bridge's fight through the dev `liveslot`): the log's "leaves flag 584
+**Status:** seen (2026-10-10, the bridge's fight fought through the dev `liveslot`): the log's "leaves flag 584
 as it is (False)", 545 the same, 551 already taken, and "the sweep leaves key item 161 in the bag"; the Prison Key
-still in the key items (the user's screenshot).
+still in the key items (a screenshot).
 
 *Code: `World/KeptKeys.cs` (`BridgeScene`, `StillToSweep`, `SetFlag`).*
 
@@ -3536,8 +3535,8 @@ The day/night switch's copy already did this for one list (step 52): `DayNight.A
 `MapControl.CreateEntities`' two splits, adds another entity's data row and name to the map's, and the copy is then
 placed. Now `entities_moved` takes the same optional `copy` (map, entity) as `time_switches`, and `AddCopies` reads both
 lists. The pocket got a copy of its room's ground lever first (`globalswitch - Duplicate`, seen working: the same 535
-toggle, synced with the room's others), then, the user's choice, a copy of the Gym's green bounce pad instead
-(`jumpspring`, a plain bounce) as `jumpspring - Archipelago`, at the spot the user stood on: the game's pad in every way.
+toggle, synced with the room's others), then, as chosen, a copy of the Gym's green bounce pad instead (`jumpspring`,
+a plain bounce) as `jumpspring - Archipelago`, at the spot the tester stood on: the game's pad in every way.
 The log says `[night] <map>: <map>'s <entity> added as <name>` and `<name> stands at <spot>`.
 
 Also found the same day: the Library's two invisible rail walls (build step 83) needed no new hook, since
@@ -3545,7 +3544,7 @@ Also found the same day: the Library's two invisible rail walls (build step 83) 
 earlier that day was removed. The dev console's `hide` takes a path too, to try one live (`development.md`).
 
 **Status:** built (2026-10-10); seen the same day through the dev `liveslot`: the copied lever there, its hit dropping
-the pocket's gate, then the copied pad there, up to the middle left (the user).
+the pocket's gate, then the copied pad there, up to the middle left.
 
 *Code: `World/DayNight.cs` (`AddCopies`), `Core/SeedData.cs` (`EntitiesMoved`), `Dev/DevConsole.cs` (`hide`).*
 
@@ -3620,7 +3619,7 @@ and `<entity> on layer <n>`. The console's new `tagged <tag>` lists a map's obje
 changes one's layer until the map reloads (`development.md`).
 
 **Status:** built (2026-10-11); seen the same day through the dev `liveslot`: no way past the twig without digging,
-dug under both ways, the lever and Dig in and out of the top (the user).
+dug under both ways, the lever and Dig in and out of the top.
 
 *Code: `World/DayNight.cs` (`Copy`, `Layer`), `Core/SeedData.cs` (`SceneryCopied`, `SceneryLayers`), `Dev/DevConsole.cs`
 (`tagged`, `layer`).*
@@ -3638,8 +3637,8 @@ that flag, so its look and its check work as any pickup's. `scenery_fitted` (`[{
 object's box collider to its own mesh: the altar's stood 7.9 high over a short model, an invisible wall. The log says
 `[night] <map>: item <type>/<id> placed on <path> at <spot>, flag <n>` and `<path> collider fitted to its mesh`.
 
-**Status:** built (2026-10-12); seen through the dev `liveslot`: the item on the altar, reached by Jump or Bee Fly
-(the user). Its swap to the seed's item needs a seed that has the location.
+**Status:** built (2026-10-12); seen through the dev `liveslot`: the item on the altar, reached by Jump or Bee Fly.
+Its swap to the seed's item needs a seed that has the location.
 
 The same day, the Dining Hall's Bond Berry (made from the start, build step 90's room) lay under a display copy that is
 the table food group's own sprite (`Base/items0_84`, the food stands its children): `scenery_sprite_off`

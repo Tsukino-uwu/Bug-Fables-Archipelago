@@ -311,7 +311,7 @@ same person wrote both. Here is what can be checked.
     across rooms;
   - how each answer is confirmed on screen and then tested.
 
-  Each rule carries who decided it and when. Every room has been through it (the last on 2026-10-12); the entrance
+  Each rule carries the date it was decided. Every room has been through it (the last on 2026-10-12); the entrance
   randomizer and a random start stay labelled experimental until that logic is tested, and a random start also until
   every room's spawns are checked on screen.
 - **[licensing.md](../agent_docs/licensing.md)** lists every outside project the code uses or was read for, with its

@@ -1,9 +1,9 @@
 # Mapping a room for the logic
 
 **Every plan for how the logic is written, checked and tested, room by room, lives here and only here** (gathered
-2026-09-30, the user: "to have it all in 1 place"). `apimplementation.md` keeps the history of each decision (build
-steps 8, 12, 15, 24, 36 and 37 point here), and `MEASURED.md` keeps the game facts (listed at the end); neither holds a
-plan of its own. Written with the user, 2026-09-27, and grown since.
+2026-09-30). `apimplementation.md` keeps the history of each decision (build steps 8, 12, 15, 24, 36 and 37 point
+here), and `MEASURED.md` keeps the game facts (listed at the end); neither holds a plan of its own. Written 2026-09-27,
+and grown since.
 
 The logic is what Archipelago uses to prove a seed can be finished, and some options lean on it hard: **one party
 member** (random party), **a random start** (any actual room in the game), **the entrance randomizer** (any door may
@@ -22,7 +22,7 @@ seed must be completable.
 
 ## The rules
 
-Set 2026-09-27 ("the logic has to be precise"); 1 to 4 the user's, 2026-09-29, "to simplify things". How regions and
+Set 2026-09-27 ("the logic has to be precise"); 1 to 4 decided 2026-09-29, "to simplify things". How regions and
 rules work in Archipelago: `apimplementation.md`, How it works §11.
 
 1. **A location says what it needs; an item never says what it opens.** Every need is written on what it guards: the
@@ -33,20 +33,19 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 2. **A need is what the vanilla game expects:** what the game asks of a player going the intended way, with no tricks,
    skips or clever routes. The rules stay simple, players stay free to go out of logic, and every seed stays
    completable (rule 5). **An ability used for what it's made for counts too,** even where the vanilla game hands it
-   out later than the way it opens (the user, 2026-10-05, Icicle platforms across East Road 2's water beside the crank:
-   "its nothing hard to excecute or do, and its that the ice platform is made for anyway (crossing water)"). Written
-   as a second way, `|`.
+   out later than the way it opens (decided 2026-10-05, Icicle platforms across East Road 2's water beside the crank:
+   nothing hard to do, and crossing water is what the ice platform is made for). Written as a second way, `|`.
 3. **And, or, never not.** Everything one way needs is an *and* (`&`). When there are several ways, each is written
    and any one will do (*or*, `|`): a second way into an area is a second exit into its region (the region graph does
    the *or*); two ways to one spot inside an area are an `|` in the spot's own rule. Never a *not* on an item or a story
    event: in Archipelago, receiving something may never make anything harder to reach (the same reason the tiered shop
    rule was wrong, `apimplementation.md`, build step 11). An option may decide a rule, since it's fixed when the seed
    is made.
-4. **No point of no return in the logic** (the user: never expected "to go past a point of no return, where they can't
+4. **No point of no return in the logic** (never expected "to go past a point of no return, where they can't
    logically go back"). A one-way (a ledge dropped without Jump, a door with no way back, a transfer that leaves you
    somewhere) counts in the logic only together with what it takes to get back. So the player can always retrace their
    steps to the start, which is what Archipelago assumes of its origin region. The Warp is never that way back.
-   **Unless the player turns on Points of No Return** (the user, 2026-09-30, off by default): then a one-way counts on
+   **Unless the player turns on Points of No Return** (decided 2026-09-30, off by default): then a one-way counts on
    its own need, and the Warp to Start is the way back, as Archipelago's "save and quit" is for its origin (`world
    api.md`). Every one-way is written with `one_way(rule, way_back)`, so the option drops only the way back (build
    step 37); a one-way with no way back in the logic yet (`False_()`) counts only with it on.
@@ -58,7 +57,7 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
    generation, never at runtime.
 8. **Combat stays basic:** only each member's plain attack, never a battle skill or a medal. It keeps fights simple
    and leaves room to play out of logic for fun.
-9. **The Warp is a safety net, never logic** (the user, 2026-09-29). It always takes you back to the seed's spawn, and
+9. **The Warp is a safety net, never logic** (decided 2026-09-29). It always takes you back to the seed's spawn, and
    it's forced on with a random start, the entrance randomizer, Shuffle Jump and the abilities as items, so a player
    who leaves the logic is never stuck. The logic never counts it, nor the map's fast travel, to reach anything, the
    start included. (Until 2026-09-29 build step 15 counted it to re-enter a random start; rule 4 does that job now.)
@@ -97,11 +96,11 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 - **Where it stands today** (2026-09-30): each map is one region with its doors as entrances (build step 12), and what
   the old large areas needed is kept on each spot as its `reach`. Mapping a room splits its region into areas and
   replaces its spots' `reach` with the room's own rules.
-- **Story-only copies of rooms stay out of the shuffle** (the user, 2026-10-05): rooms there for one scene (chapter 3's
+- **Story-only copies of rooms stay out of the shuffle** (decided 2026-10-05): rooms there for one scene (chapter 3's
   attack maps, `STORY_ONLY_MAPS`) keep their doors as the game has them and are never a start; the logic keeps them
   only as the story reaches them. The Warp and map travel aren't offered there (`no_travel_maps`), so a story chain
   can't be left half done (question C9).
-- **Unused and test maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of
+- **Unused and test maps are never part of anything** (decided 2026-09-30): no region, no logic, never the target of
   a door, a transfer or a spawn, never reachable. They are `UNUSED_MAPS` (`data_tables.py`): `SnakemouthEmpty` and
   `TestRoom`; `TestUnusedMaps` proves no region, entrance, transfer, spot, encounter, start or shuffled door names
   either. `Blank`, the only other map named like one, isn't unused:
@@ -112,7 +111,7 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 
 A door's arrival is only one of the places the party can appear, and each is checked like an entrance: a spot can sit
 where no entrance shows it, between obstacles, behind a roadblock, above a ledge without Jump, or on the far side of a
-one-way (the user, 2026-09-30: "check the spawn location … not just all the entrances").
+one-way (decided 2026-09-30: "check the spawn location … not just all the entrances").
 
 **The kinds of spawn:**
 
@@ -125,24 +124,23 @@ one-way (the user, 2026-09-30: "check the spawn location … not just all the en
   its own, and one that names none leaves the party at the coordinates it had (`MEASURED.md`, "Save crystals, saving,
   Game Over and room transfers": "No map has a spawn spot of its own").
 - **A save point's spot** (Starting Location's *Save Points* value, designed, build step 15).
-- **The random start:** a door's arrival or a transfer's spot in any actual room (the user, 2026-09-30: both kinds, "i
-  want random spawn to actually be random not just 'semi random'"). As built today it isn't yet a door's arrival (build
-  step 15).
+- **The random start:** a door's arrival or a transfer's spot in any actual room (decided 2026-09-30: both kinds, truly
+  random, not "semi random"). As built today it isn't yet a door's arrival (build step 15).
 - **Where Warp to Start lands:** the start's own spot.
 - **Where a fall or a hazard puts you back** (`lastpos`), **and where a loaded save puts you:** never a way through or
   out (question 17).
 - **Past a blocked walk-in:** when a door's walk-in point is behind a barrier, the game moves the party past it after a
   timer (`MEASURED.md`, "Chapters", "A blocked walk-in ends in a teleport"). **Counted as a one-way** where it pushes
-  the party through (the user, 2026-10-05: "the ones that just push you trough normally are probly fine to keep"),
-  written `one_way(...)` with the barrier's need as its way back (the first: the Explorer Permit gate, an `Area`'s
-  `out`). Where the party gets stuck instead, the mod opens the way (a door, a flag), decided per room.
+  the party through (decided 2026-10-05), written `one_way(...)` with the barrier's need as its way back (the first:
+  the Explorer Permit gate, an `Area`'s `out`). Where the party gets stuck instead, the mod opens the way (a door, a
+  flag), decided per room.
 
 **The questions, per spawn:**
 
 - **S1. Is it an actual room?** The vanilla game lets the party walk around there as themselves: never a test room, a
-  minigame, the submarine's lake, or a room only a scene passes through (the user, 2026-09-30: "random spawn should
-  only be for actual rooms"). Read from the scenes that load it: does control come back in that map, or does the scene
-  move on? A room that fails is no start, and stays in the logic as the transfer it already is.
+  minigame, the submarine's lake, or a room only a scene passes through (decided 2026-09-30). Read from the scenes
+  that load it: does control come back in that map, or does the scene move on? A room that fails is no start, and
+  stays in the logic as the transfer it already is.
 - **S2. Which area does it land in?** Can the walk-in itself be blocked?
 - **S3. In which story state?** A random start is a new file, so every blocker the story removes later is still there.
   The Warp brings you back in any later state.
@@ -156,10 +154,10 @@ one-way (the user, 2026-09-30: "check the spawn location … not just all the en
 - **S7. Can it be boxed in?** The Warp can't rescue a boxed-in spawn: it lands on the same spot. A spawn from which no
   exit and no location can be reached with nothing is denied.
 
-**The verdict:** every room's spawns are *confirmed* or *denied*, each with its date, its reason and the user's
-confirmation on screen. Denied ones leave the start pool; a room with no working spawn is denied only with the user's
-word. Unchecked ones stay in while Starting Location is experimental (stuck starts are accepted until then); the label
-comes off when none is left unchecked.
+**The verdict:** every room's spawns are *confirmed* or *denied*, each with its date, its reason and its
+confirmation on screen. Denied ones leave the start pool; a room with no working spawn is denied only with the
+maintainer's word. Unchecked ones stay in while Starting Location is experimental (stuck starts are accepted until
+then); the label comes off when none is left unchecked.
 
 **The logic starts where the spawn is** (built 2026-10-13, `apimplementation.md`, build step 96): Menu joined to the
 spawn's area, the start table naming the exact door, never just a pair of maps. A random start the seed can't begin from
@@ -170,7 +168,7 @@ every item (S7 asked by the generator, for every spawn).
 
 A room's state is set by flags, and most are set somewhere else: a scene in one room opens a door, moves an NPC, removes
 a blocker or makes a location appear in another. So besides the rooms, every chain is checked across the game, step by
-step (the user, 2026-09-30: "check every cutscene chain & quest chain, to account for other rooms affecting things";
+step (decided 2026-09-30: "check every cutscene chain & quest chain, to account for other rooms affecting things";
 "look across rooms, too", 2026-09-28).
 
 **What counts as a chain:**
@@ -178,7 +176,7 @@ step (the user, 2026-09-30: "check every cutscene chain & quest chain, to accoun
 - **The story**, chapter by chapter: each scene and the flags it sets.
 - **Board quests, and taking one:** a quest shows on a board only once its unlock is met (its `QuestChecks` row: flags,
   a visited area, or a dialogue line that adds it; `MEASURED.md`, "The quest board").
-- **Requests that aren't on the board:** someone who wants something (the user's example: the kid given the G-Bug
+- **Requests that aren't on the board:** someone who wants something (an example: the kid given the G-Bug
   Ranger Plushie). Found in the dialogue data, not in the board table.
 - **Followers who walk with the party from another room** (the throne room needs Maki, from two rooms away).
 - **Joining scenes:** Leif's, Event4 → 5 → 6 → 18 → 14; each expects the one before, and a file that skipped part of
@@ -233,7 +231,7 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 1. Where does each entrance put you (its arrival area)?
 2. Is it a one-way? Can you leave the way you came? Does it only work in one direction (a drop, a door that opens
    from one side, a transfer made by a scene)? **A transfer that isn't a door** (decided 2026-09-25): one the player
-   chooses (the bar's hatch, elevators, the boat, the submarine's docks, the user, 2026-09-30) is a door in all but
+   chooses (the bar's hatch, elevators, the boat, the submarine's docks; decided 2026-09-30) is a door in all but
    name, shuffled like one and coupled with its way back where it has one, behind its own toggle at first; one the game
    sends you through (caught by guards, a fall, a story scene) keeps its destination and is a one-way in the logic,
    which must make sure you can leave where it puts you.
@@ -254,9 +252,9 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 7. Does anything move you one way (wind, water, conveyors, moving or rotating platforms, a spring)?
 8. Is there a fight you can't avoid? It must be winnable with the members' plain attacks (rule 8): an enemy in the air
    needs Vi, a burrowed one Leif, one that can be flipped over Kabbu, expected even where the others could win without
-   him (the user, 2026-09-27; the five are in `MEASURED.md`, "Who can hit what"). **Every enemy that can be in the
-   fight counts, not only those it starts with** (the user, 2026-10-07: "has to consider every enemy that can or will
-   be in the fight itself"): read each enemy's battle code (`BattleControl.cs`) for `SummonEnemy` and add what it calls.
+   him (decided 2026-09-27; the five are in `MEASURED.md`, "Who can hit what"). **Every enemy that can be in the
+   fight counts, not only those it starts with** (decided 2026-10-07): read each enemy's battle code
+   (`BattleControl.cs`) for `SummonEnemy` and add what it calls.
 9. Does a scene move you? A cutscene can put the party somewhere else in the same map or on another map (the
    trapdoor: the door room to the fall room): from which area, to which, once or every time, on what flag. It's an edge
    like any other, often a one-way.
@@ -287,29 +285,26 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 ## How a room gets mapped
 
 Every room, in the order they're worked through, is in [`room-checklist.md`](room-checklist.md) (2026-10-05, every
-box unchecked: each room is mapped from scratch, vanilla only). **Quests wait until every room is mapped** (the user,
-2026-10-05: "map out all room logic first, and then look at all quests individually afterwards as they require
-multiple rooms sometimes"): a room is done without its quests, which are then gone through one by one as chains.
-**Enemy locations wait too** (the user, 2026-10-05: "similar to how we are waiting with quests, lets do the same for
-enemy locations/reachability"): Enemysanity's spots and what reaching each enemy needs are gone through after the
-rooms, room by room. The berry rule is built in the same pass (`apimplementation.md`, Next 63): each ordinary enemy's
-area and fight, and which map enemies are bosses or mini-bosses, kept out of the respawn and the rule. **A normal
-field enemy never blocks a way** (the user, 2026-10-06): it can always be walked around; only mini-boss, boss and
-scene fights stand in the path. What side of the room an enemy is on matters only in the enemy pass. **So do
-discoveries** (the user, 2026-10-05: "similar to the quest and enemy things, we might have to do the same with
-discoveries ( if i miss any while we are mapping out rooms )"): one sweep after the rooms checks every discovery's spot
-and need against the mapped rooms. **And respawning and static items** (the user, 2026-10-06, after a fixed-drop bush
-with a regional flag was first missed: "in case we have missed any static/respawning items anywhere"): a sweep of the
-entity dump for every pickup and fixed-drop bush (one-time or regional flag) against the locations, hidden items
-included (the user, 2026-10-07): every `BeetleGrass` whose vectordata names an item (what `CutGrass` drops) or whose
-`data[1]` is a crystal berry, every `DigSpot`, and every item a scene drops (`EntityControl.CreateItem` in
-`EventControl.cs`, as the pink spider's berry). **And the doors** (the user, 2026-10-07: "after we are done mapping out
-logic for all rooms, we need to check all the unused or not randomized entrances for entrance rando"): every door the
-shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
-shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2). The same pass takes the
-doors that leave Coupled shuffle short of spare doors, one at a time (the user, 2026-10-10; Known issues).
+box unchecked: each room is mapped from scratch, vanilla only). **Quests wait until every room is mapped** (decided
+2026-10-05, since a quest sometimes needs several rooms): a room is done without its quests, which are then gone
+through one by one as chains. **Enemy locations wait too** (decided 2026-10-05): Enemysanity's spots and what reaching
+each enemy needs are gone through after the rooms, room by room. The berry rule is built in the same pass
+(`apimplementation.md`, Next 63): each ordinary enemy's area and fight, and which map enemies are bosses or
+mini-bosses, kept out of the respawn and the rule. **A normal field enemy never blocks a way** (decided 2026-10-06): it
+can always be walked around; only mini-boss, boss and scene fights stand in the path. What side of the room an enemy
+is on matters only in the enemy pass. **So do discoveries** (decided 2026-10-05, in case any is missed while mapping
+the rooms): one sweep after the rooms checks every discovery's spot and need against the mapped rooms. **And
+respawning and static items** (decided 2026-10-06, after a fixed-drop bush with a regional flag was first missed, in
+case any other was missed): a sweep of the entity dump for every pickup and fixed-drop bush (one-time or regional
+flag) against the locations, hidden items included (decided 2026-10-07): every `BeetleGrass` whose vectordata names an
+item (what `CutGrass` drops) or whose `data[1]` is a crystal berry, every `DigSpot`, and every item a scene drops
+(`EntityControl.CreateItem` in `EventControl.cs`, as the pink spider's berry). **And the doors** (decided
+2026-10-07): every door the shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with
+the maintainer, each joining the shuffle unless the maintainer agrees a reason (`apimplementation.md`, Where it stands,
+Next 2). The same pass takes the doors that leave Coupled shuffle short of spare doors, one at a time (decided
+2026-10-10; Known issues).
 
-**Nothing in a seed ever goes away** (the user, 2026-10-10, after flag 79 took the Rubber Prison Pier's enemies: "we
+**Nothing in a seed ever goes away** (decided 2026-10-10, after flag 79 took the Rubber Prison Pier's enemies: "we
 can never intentionally or by accident remove anything, that is a location/check. everything has to permanently stay
 reachable once its in a seed/logically required"). Every entity a room's flags make or remove is checked against it:
 a location's own entity (a pickup, an enemy with Enemysanity, a seller, a quest's character), or anything on the way
@@ -320,13 +315,12 @@ Astotheles fight, kept present, replayed on every visit past its own 301). For s
 (a fight, a scene, a pickup), use `PRESENT_FROM` instead: it replaces only `requires`, so the entity's own limit still
 ends it. A pickup kept present is kept away anyway once its location is checked (`KeptOpen`).
 
-**One room at a time** (the user, 2026-10-09, Outside the Beehive, after I traced which scenes in other rooms
-set its doors' flags and where its factory scene leads: "we should assume and work room per room, not
-different/neightbouring rooms. I want to map out 'THIS' specific room, and then do the other rooms afterwards"; "we
-work on things 1 room at a time"). The room is drafted from its own data (its entities, doors and flag-switched
-scenery, the flags as they stand on the test file) and the user's description, nothing else. A gate whose flag
-another room's story sets goes on the room's checklist line, "for the quest pass: ...", and is followed when that
-room, or the quest pass, comes up; it isn't researched now. The warp into the room comes first, before any of it.
+**One room at a time** (decided 2026-10-09, Outside the Beehive, after I traced which scenes in other rooms
+set its doors' flags and where its factory scene leads: "we work on things 1 room at a time"). The room is drafted
+from its own data (its entities, doors and flag-switched scenery, the flags as they stand on the test file) and the
+tester's description, nothing else. A gate whose flag another room's story sets goes on the room's checklist line,
+"for the quest pass: ...", and is followed when that room, or the quest pass, comes up; it isn't researched now. The
+warp into the room comes first, before any of it.
 
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
@@ -339,7 +333,7 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
    (`gate-table.py`), the transfers scenes make (`event-transfers.py`), the flag cross-reference (planned, see
    Chains), each spawn's spot, and, still to script, the scenes that move the party within a map (story events that
    set the player's position).
-   **Jump, drafted from the ground itself (planned; the user, 2026-09-27: Madeleine's rocks look walkable and aren't):**
+   **Jump, drafted from the ground itself (planned; seen 2026-09-27: Madeleine's rocks look walkable and aren't):**
    a dev tool loads a map's collision, samples the ground on a grid (as the console's `solids` reads colliders), and
    links neighbouring spots by height: within the walkable step height, walk; above it but within the jump height,
    jump; higher, or a wall between, no way; down always, so a jump-only way up is a one-way down. From every door,
@@ -351,20 +345,19 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
    intended one (rule 2). A script turns those into the room's checklist with a guess at each requirement.
    **Which rooms first:** those with early spots that need no Jump (the fill error with *minimal* accessibility and
    Shuffle Jump, `apimplementation.md`, Known issues: more early spots is its fix).
-2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
+2. **Checked on screen by the tester**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance and at each spawn, and try each way across without the ability or without Jump.
    Record what was seen, with the date, in `MEASURED.md`.
-   **Reading the user's descriptions** (the user, 2026-10-05, after a misread "top"): a room is on even ground unless
+   **Reading the tester's descriptions** (decided 2026-10-05, after a misread "top"): a room is on even ground unless
    jumping up or falling down is said; "top" and "upper" mean the top of the screen, never height. A one-way with no up
    or down said is a mechanism usable from one side only (a crank, water to cross), not a ledge: write it by what blocks
    the way back, and ask which when unclear.
-   **Checking what each entrance reaches** (the user, 2026-10-06, `SnakemouthLake`: "a good way for you to double
-   check with me what is reachable from X entrance"): where a description leaves a spot's area unclear, ask one
-   tick-box question per entrance and missing ability: "Coming in from *the door* without *the ability*: what can
-   you reach?", one option per location, switch and door in the room, plus "Nothing past the door". The ticks place
-   each spot in its area at once, with no round of follow-ups.
-   **Describing a room area by area** (the user, 2026-10-09, `Swamplands7`: "it made it a bit easier to explain the
-   room, than what is needed to/from everywhere"): the user names each area by its place on the screen, a row and a
+   **Checking what each entrance reaches** (decided 2026-10-06, `SnakemouthLake`): where a description leaves a
+   spot's area unclear, ask one tick-box question per entrance and missing ability: "Coming in from *the door*
+   without *the ability*: what can you reach?", one option per location, switch and door in the room, plus "Nothing
+   past the door". The ticks place each spot in its area at once, with no round of follow-ups.
+   **Describing a room area by area** (decided 2026-10-09, `Swamplands7`: easier to explain the room this way than
+   by what is needed to and from everywhere): the tester names each area by its place on the screen, a row and a
    column ("bottom/right", "middle/middle", "upper/left", or just "left"), then gives each area its own paragraph:
    - what's in it: its doors, locations, pads, switches;
    - for each area next to it, what getting there takes and what getting back takes, "to/from" when both are the
@@ -374,10 +367,10 @@ room, or the quest pass, comes up; it isn't researched now. The warp into the ro
    Ways that skip across the room (a drop from one side to the far corner) come last, each with its one-way. It turns
    straight into the model: each area an `Area`, the one most ways touch the map's own region, each to/from an edge
    pair, each one-way `one_way(...)` with its way back, a second link out of an area an in-map `Transfer`. What's left
-   unclear (a way back, a Bee Fly shortcut) is asked as tick boxes, then the graph goes back to the user as a text
-   diagram in the chat to check. Not every room may split this neatly (the user wasn't sure it fits every room): a
-   room on even ground still takes a sentence, and an area that has no clear row and column can be named by what's in
-   it. An example, the user's `Swamplands7` trimmed to three areas and one way across, and what it becomes:
+   unclear (a way back, a Bee Fly shortcut) is asked as tick boxes, then the graph goes back to the tester as a text
+   diagram in the chat to check. Not every room may split this neatly: a room on even ground still takes a sentence,
+   and an area that has no clear row and column can be named by what's in it. An example, the `Swamplands7`
+   description trimmed to three areas and one way across, and what it becomes:
 
    ```text
    bottom/right area: the bottom door.
