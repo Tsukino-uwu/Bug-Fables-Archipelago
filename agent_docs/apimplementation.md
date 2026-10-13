@@ -961,7 +961,8 @@ be wrong.
     measure (build step 95 absorbs them). Matching sides gives the feel of a map, not one drawable on a grid with no
     overlaps (that needs rooms placed by size, a far bigger job). After the named start (Next 18).
 79. **Every Universal Tracker feature, its map tab as plain diagrams** (decided 2026-10-13): every feature Universal
-    Tracker offers a world, optional ones included, and its map tab drawn from our own data, never the game's art (no
+    Tracker offers a world, optional ones included, and its map tab drawn by code from our own data (a dev script:
+    shapes, lines and text, the same picture from the same data), never the game's art and never AI-generated art (no
     asset in this repo). Its map tab takes its logic from the rebuilt seed, so each door can show where it led once
     taken, and the tab can follow the player's map (build step 57's key); its rooms stay where the diagrams put them,
     since it reads positions and pictures from files at connect (`TrackerClient.load_pack`, read 2026-10-13). The
