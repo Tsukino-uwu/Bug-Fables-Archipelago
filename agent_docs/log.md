@@ -110,6 +110,7 @@ said them.
 - [2026-10-13: the logic from the spawn, a tight start's way on placed early](#2026-10-13-the-logic-from-the-spawn-a-tight-starts-way-on-placed-early)
 - [2026-10-13: the PopTracker pack with every room and the game's own pictures](#2026-10-13-the-poptracker-pack-with-every-room-and-the-games-own-pictures)
 - [2026-10-13: attributions out of the docs and code, ruff on the apworld, each release checked by its own preflight](#2026-10-13-attributions-out-of-the-docs-and-code-ruff-on-the-apworld-each-release-checked-by-its-own-preflight)
+- [2026-10-13: the room pictures from the front, nine rooms picked by look](#2026-10-13-the-room-pictures-from-the-front-nine-rooms-picked-by-look)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -4370,3 +4371,28 @@ said them.
   last push's red CI (4 of 10000 under Coupled, 2026-10-12) predates the door shuffle's retry and pins (build step
   95, 2026-10-13); its tracker shards failed only on those same seeds, a failed generation counting as ignored there.
   `reviewing.md`'s test count updated from this run.
+
+## 2026-10-13: the room pictures from the front, nine rooms picked by look
+
+- **From the front** (build step 100, `documentation.md` §7): `roomshot` renders each room from the front, 30° down
+  (decided 2026-10-13, over straight down and the game's own 10°), five rooms straight down by look; lit by the room's
+  own lights (the title screen's sun doubled every room's light); rendered over black and over white for real
+  transparency, its black shell and any thick black area cleared, which replaced the fill with the room's fog colour;
+  only the faces turned toward the camera drawn, the view cut 4 units before the entity nearest it; the room's
+  `MaterialColor` and `RenderQueue` applied before its scripts go; light beams, wind trails, particles and placeholder
+  cubes left out; Stream Mountain 2 and 4 drained, the Sand Castle risen (flag 280), its rooms with their outlines.
+- **Nine rooms picked from renders side by side**, after sheets of all 242 pictures were seen: the top of a room's
+  walls floated over it, its dark lid between hiding the room's back (Cave of Trials, Upper Snek Entrance, Broodmother
+  Lair, Wasp Kingdom Throne, and Factory Processing Puzzle 1's band): cut above a height, faces wholly above it dropped
+  (`Capped`); the cut took the front of three rooms' ground (`Uncut`); Barren Lands Cloud's near-white floor plane,
+  under fog particles in the game, left out (`Hidden`). Giant's Lair Dead Lands' ground before the cliff, black and
+  cleared, is never on screen in the game, so it stays cleared.
+- **How they were found:** `list` names each object with its height; renders with `nocut` and with `noclear` beside
+  the picture showed what made each hole: with no cut the tops vanished behind the black front, and without the
+  clearing the black came back between them and the room. `cap=` and `hide=` then tried each fix in the running game
+  before it went into the tables. The switches tried and never needed (`noface`, `noshadow`, `flatambient`, `unlit`)
+  are gone; the rest are in `development.md`.
+- **Known cost:** the clearing also takes a black object that thick (Giant's Lair Dead Lands 2's markers), left so.
+- **The pack** (its `ecf9fe1`): each picture cut to what the game's camera shows (`MapControl`'s camera limits), pins
+  at their height, crystal berries found in their dig spots (520 of 614 at their own spot); its tests pass against
+  `4fc3410` (parity on 200 seeds, pack-checker). The pictures not yet seen in PopTracker.
