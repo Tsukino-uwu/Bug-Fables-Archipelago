@@ -917,7 +917,8 @@ be wrong.
     its draft (walks, jumps, drops between spots) compared with the hand-mapped logic, room by room. A way it finds that
     the logic lacks is shown to the user, who decides; the hand-mapped logic stays the truth (stricter, more correct).
 76. **A Python linter next to the preflight** (decided 2026-10-13; before v0.4.0): ruff with Archipelago's own
-    `ruff.toml` (its checkout's root), a check that only reports, never changes files, to catch slips such as unused
+    `ruff.toml` (its checkout's root; at 0.6.8 a config only: no workflow of Archipelago's runs it and its docs don't
+    name it, `style.md` asks for PEP 8 with its exceptions), a check that only reports, never changes files, to catch slips such as unused
     imports, `zip()` without `strict=` and overwritten loop variables. Measured the same day (ruff 0.17.0): 255 findings
     in `apworld/bug_fables`, 138 of them RUF012 on the tests' `options` dicts (Archipelago's own test pattern, to be
     ignored for tests). First a one-time cleanup (`--fix` for the safe ones, the rest by hand, the tests after), then
