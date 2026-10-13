@@ -487,6 +487,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   game art, kept out of the repo.
 - `roomstates [file]`: a slot_data file's `scenery_hidden` and `scenery_present` (default `bugfablesap-live.json`;
   `dev-scripts/live-slot-data.py` writes one), applied by `roomshot` as a seed applies them.
+- `apicon`: the mod's own Archipelago icon (drawn in code) to `bugfablesap-apicon.png`, for the PopTracker pack's Jump.
 - `holdup long`: four "You got" lines too wide for the box (the one seen, a longer one, the longest server name with a
   player and alone), to check the fitting (the mod guide, step 9).
 - `shelflook <slot> <white|black> [current|first] [key=value ...]`: a shop slot shows the drawn icon in that look, to

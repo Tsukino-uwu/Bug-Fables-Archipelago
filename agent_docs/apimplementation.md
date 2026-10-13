@@ -172,6 +172,7 @@ this file and that doc disagree, that doc is right.
 97. [Build step 97: a tight start's way on placed early](#build-step-97-a-tight-starts-way-on-placed-early)
 98. [Build step 98: Start Inventory from Pool](#build-step-98-start-inventory-from-pool)
 99. [Build step 99: DeathLink in the yaml too](#build-step-99-deathlink-in-the-yaml-too)
+100. [Build step 100: the PopTracker pack with every room, the game's own pictures, a tab per room](#build-step-100-the-poptracker-pack-with-every-room-the-games-own-pictures-a-tab-per-room)
 
 **How it works**
 
@@ -6970,6 +6971,48 @@ pack's parity tests).
 
 *Code: `options.py` (`BugFablesDeathLink`), `slot_data.py` (`SLOT_OPTIONS`); the mod's side `documentation.md`, step
 66.*
+
+## Build step 100: the PopTracker pack with every room, the game's own pictures, a tab per room
+
+**Why:** with every room mapped (614 locations in 182 rooms), the pack had rooms without pins, its logic began at the
+game's start where a seed's spawn now begins it (build step 96), and its maps were drawn by code. Decided 2026-10-13:
+the game's own pictures, laid out as crystal-ap-tracker lays out its rooms (its row in `licensing.md`): a tab per
+room, tabs in story order, the player followed into the room they are in.
+
+**How it was built** (the pack's repo unless named):
+
+1. **The export at every room mapped:** the start from slot_data's `start` (each room start's region, the opening's
+   quiet checks in Menu), and the last fight's artifact gate, exported since build step 94 moved it into `spot_rule`
+   (`HasFromListUnique` with `FromWorldAttr`). The parity tests found two apworld bugs on the way: build step 99's
+   misplaced `@dataclass` and that gate outside the exported rule.
+2. **The game's pictures:** the mod's dev console renders the pause map and every room from above (`worldmap`,
+   `roomshot all`; `documentation.md` §7): each room as a seed shows it (its scenery as a new file has it, then a
+   seed's `scenery_hidden` and `scenery_present` through `roomstates`), ceilings and outline shells left out, water in
+   its own colour. The pack's `tools/world_map.py` and `tools/room_pictures.py` copy them in, cut to each room
+   (Pillow, its row in `licensing.md`). Item icons the same way (`tools/item_icons.py`): the sprites the mod's own
+   looks use, and its Archipelago icon for Jump (the console's `apicon`). The game's art in the pack, not MIT.
+3. **Tabs:** World, the game's own map, an area pin where the pause map puts it; then eight regions grouping the
+   game's areas as the world map's picture does, in story order (`data/area_pips.json`); then each area by its game
+   name (`MainManager.areanames`); then each room, a pin at each check's own entity (an enemy's index, a pickup's
+   flag, a regional flag, a crystal berry's number, a shop's keeper, a character's name): 508 of 614.
+4. **What blocks the way:** a pin on each gated door and on each part of a room on a way onward that a key item, a
+   story step or one clearing ability opens (77), saying what it needs from the apworld's rule.
+5. **Following the player and fog of war:** a setting, on by default, opens the room's tabs on each map change (the
+   mod's map key, build step 57; PopTracker's tab sets each switch only to a tab of that name, read in its
+   `src/ui/trackerview.cpp` and `src/uilib/tabs.cpp`); with the doors shuffled, a pin shows once its room is visited.
+6. **The bar along the bottom,** as Crystal's: the items with the game's icons, the Goal (artifacts against the
+   requirement), the story's milestones as hand-marked events, the settings.
+
+**Tests:** parity on 200 seeds (with the start, the gate and each gated door against Archipelago's own entrance),
+the autotracking tests (following, fog of war, the Goal's count, events), pack-checker.
+
+**Status:** built (2026-10-13), the pack's tests pass. The pictures seen in chat as files; not yet seen in PopTracker.
+Still to do: Metal Lake's lake and a few stray white blocks in the pictures, the doors' pins for the door shuffle, a
+Bosses tab, room names for the rooms only Enemysanity names (`BugariaOutskitsSnakemouthCorridor1`).
+
+*Code: the mod: `Dev/MapShots.cs`, `Dev/EntityDump.cs` (`Positions`), `Dev/DevConsole.cs`; the apworld: `rules.py`
+(`ARTIFACT_GATE`). The pack: `tools/export.py`, `tools/world_map.py`, `tools/room_pictures.py`, `tools/item_icons.py`,
+`scripts/logic.lua`, `scripts/autotracking.lua`.*
 
 # How it works
 

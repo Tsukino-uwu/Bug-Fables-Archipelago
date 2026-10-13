@@ -1162,6 +1162,11 @@ namespace BugFablesAP
                             .Select((name, i) => i + " " + name).ToArray()));
                         return $"areas: {MainManager.areanames.Length} logged";
                     case "worldmap": return MapShots.World(log);
+                    case "apicon":
+                        // The mod's own Archipelago icon (drawn in code), for the PopTracker pack's Jump.
+                        SpriteDump.Save(ApIcon.Get().texture,
+                            System.IO.Path.Combine(BepInEx.Paths.BepInExRootPath, "bugfablesap-apicon.png"));
+                        return "apicon: bugfablesap-apicon.png written";
                     case "roomstates":
                         return MapShots.LoadStates(parts.Length > 1 ? string.Join(" ", parts.Skip(1).ToArray())
                             : LiveSlotData.DefaultPath);
