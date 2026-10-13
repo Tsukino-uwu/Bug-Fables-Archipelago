@@ -234,7 +234,7 @@ For each one it confirms the section fails. It also makes a real commit and a re
 checks that both are refused, and runs the coding agent's guard (`.claude/`) on what it must refuse, ask about and
 let through.
 
-**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need
+**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every release) need
 an Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test
 check and the fuzzer (10000 seeds), builds the apworld and its yaml and generates from them as a player would, and
 generates seeds with a second game, on every push.
