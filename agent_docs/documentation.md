@@ -518,30 +518,55 @@ settlement entrance's caravan stall with its three goods only.
 **The world map and the rooms as pictures** (2026-10-13, for the PopTracker pack): `Dev/MapShots.cs`, console
 commands. `worldmap` makes the pause menu's map (`Prefabs/Objects/map`) as `PauseMenu` does, plays its `Open`
 animation to the end in steps (one update of no time left the paper folded) and renders it from above. `roomshot
-<map>|all [pitch] [list]` copies a room's prefab inactive, sets its flag-switched scenery, removes its scripts and
-sounds before showing it, so nothing of the room runs, hides its insides as from outside, and renders it from above
-(or from `pitch` degrees) with its own ambient light and no fog; `all` takes one room a frame, `list` logs each object
-drawn. Each picture comes with where the game's (x, z) land in it, through the camera's viewport: first taken as
-screen points after the render target was released, they measured the game window instead (x and z at a 16:9 ratio).
-What a picture from above needed, each found by looking at the pictures:
+<map>|all [pitch] [switches]` copies a room's prefab inactive, sets its flag-switched scenery, gives its objects the
+colours and draw order its own `MaterialColor` and `RenderQueue` scripts give them on `Start`, then removes its scripts
+and sounds before showing it, so nothing of the room runs. It hides the room's insides as from outside and renders it
+with an orthographic camera from the front, 30° down (decided 2026-10-13, over straight down and the game's own 10°;
+`pitch` changes it, 90 straight down), with no fog; `all` takes one room a frame. Each picture comes with where the
+game's (x, y, z) land in it, through the camera's viewport: first taken as screen points after the render target was
+released, they measured the game window instead (x and z at a 16:9 ratio). What a picture needed, each found by
+looking at the pictures:
 - **The scenery a seed shows:** each `ConditionChecker` as the game's own check answers with no flags set (a
   requirement unmet takes it away, or moves one kept), then a seed's `scenery_hidden` and `scenery_present`
   (`roomstates <slot_data file>`, from `dev-scripts/live-slot-data.py`) as `KeptOpen` applies them. The start room
   first showed the boulders a seed removes.
+- **The room's own light:** every other light in the scene is off for the shot, the room's `globallight` its ambient:
+  the title screen's sun doubled every room's light and washed the dim ones out.
 - **Ceilings and roofs:** switched off when wholly above the room's highest entity plus 5 (`EntityDump.Positions`),
-  the rest kept whole, the view cut 10 higher still. A first try slicing at the ceiling showed logs' and rocks' dark
-  insides.
-- **The black outline shells** (`Outlined/Silhouette Only`, the larger black copy that outlines an object from the
-  side) dropped: from above they were black blobs.
+  plus 10 more from the front; the rest kept whole. A first try slicing at the ceiling showed logs' and rocks' dark
+  insides. A water droplet starts at a cave's ceiling, so droplets don't count for the highest entity.
+- **What stands before the room:** the game's camera stands inside a room and never sees its front wall, a dome or a
+  trunk before it. The view starts 4 units before the entity nearest the camera, and of each model only the faces
+  turned toward the camera are drawn: from outside, the backs of a ceiling and walls are black, and stood before it.
+- **Transparency:** each room is rendered over black and over white, a pixel's alpha from the difference, so a
+  see-through effect that never writes alpha (a pit's depths, a glow) still shows. A room's black shell (the dark
+  round a cave, reaching the picture's edge) is then cleared, and any black area too thick for an outline (4 pixels
+  from its middle to its edge). This replaced filling pits and the room's edge with its fog colour
+  (`MapControl.fogcolor`). Its cost: a black object that thick goes too (seen: Giant's Lair Dead Lands 2's markers).
+- **Left out:** the black outline shells (`Outlined/Silhouette Only`, the larger black copy that outlines an object
+  from the side), black blobs from above; light beams (a glowing cylinder reaching far under the floor, dark ends
+  below a tilted room); particles and trails (the wind's); builders' placeholders still on Unity's `Default-Material`
+  (plain white cubes). The Sand Castle's rooms keep their outlines from the front: their flat bright yellow reads only
+  with its line art.
 - **Water** (`Custom/WaterOutline`) draws white from above whatever the fog or the depth texture: drawn instead with
   the world map's own unlit shader in its texture's colour (`rawwater` keeps the game's).
-- **Pits and the room's edge** were transparent, black in the tracker: filled with the room's own fog colour
-  (`MapControl.fogcolor`), as the game shows them. Not yet seen.
-- **A water droplet** starts at a cave's ceiling, so it lifted the cut above Snakemouth's dark ceilings: droplets
-  don't count for the highest entity. Not yet seen.
+- **Picked by look, room by room** (decided 2026-10-13, from sheets of every picture): straight down, Beehive Main Area,
+  Mystery Island, Power Plant, Honey Factory Core and Beehive Scanner Room (a round town, checks behind a mountain, a
+  room whose front wall hides it, two tall narrow rooms); Stream Mountain 2 and 4 without their water, which a crystal
+  switch raises and lowers; the Sand Castle risen (flag 280); cut above a height, where a dark lid hid the room's back
+  and left the top of its walls floating over it (`Capped`: Cave of Trials, Broodmother Lair and Wasp Kingdom Throne at
+  8, Upper Snek Entrance at 12, Factory Processing Puzzle 1 at 6; faces wholly above it dropped, none sliced); seen
+  without the view's cut, which took the front of their ground (`Uncut`: Snakemouth Treasure Room, Desert Badlands,
+  Desert Jump Puzzle); Barren Lands Cloud without the near-white plane under its pillars, its fog particles left out
+  (`Hidden`). Giant's Lair Dead Lands' ground before the cliff, black and cleared, is never on screen in the game.
+- **Finding what a room needs:** `list` logs every object drawn or left out, with its material and height; `nocut`
+  and `noclear` show whether the cut or the clearing made a hole; `cap=` and `hide=` try a fix before it goes in the
+  tables (development.md, the console). The tables' rooms were found that way.
 
 Something left out is switched off on the copy: at first it was only left out of the framing, and still drawn. NPCs
-and other entities aren't in the pictures. Game art: written to the BepInEx folder only.
+and other entities aren't in the pictures. The pack cuts each picture to what the game's camera shows
+(`MapControl.camlimitneg` and `camlimitpos`, in `rooms.tsv`). Game art: written to the BepInEx folder only. Seen
+2026-10-13 on sheets of all 242 pictures, the nine rooms above picked from renders side by side.
 
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early seen (2026-09-25).
 

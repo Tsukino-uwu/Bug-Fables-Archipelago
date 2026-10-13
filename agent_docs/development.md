@@ -484,11 +484,14 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `MapControl.areaid`), the logic's one module per area (apimplementation.md, build step 29).
 - `worldmap`: the pause menu's world map, opened and seen from above, to `bugfablesap-worldmap.png`, its texture, and
   `bugfablesap-worldmap.tsv` (where the map's (x, z) land in the picture), in the BepInEx folder.
-- `roomshot <map> [pitch] [list] [rawwater]`: a room seen from above (or from `pitch` degrees), its scenery as a new
-  file shows it with the `roomstates` lists on top, none of its scripts run, to `bugfablesap-room-<map>.png` and
-  `.tsv`; `list` logs each object drawn (material, shader, place), `rawwater` keeps the game's water shader; `roomshot
-  all [pitch]` every map, one a frame, to `bugfablesap-rooms/` with one `rooms.tsv`. For the PopTracker pack's maps;
-  game art, kept out of the repo.
+- `roomshot <map> [pitch] [switches]`: a room seen from the front, 30° down by default (90 straight down; a few rooms
+  always are), its scenery as a new file shows it with the `roomstates` lists on top, none of its scripts run, to
+  `bugfablesap-room-<map>.png` and `.tsv`; `roomshot all [pitch]` every map, one a frame, to `bugfablesap-rooms/` with
+  one `rooms.tsv`, logging how many scenery the `roomstates` lists hide and show. The switches find what a room needs
+  (documentation.md, step 7): `list` logs each object drawn or left out (material, shader, place), `rawwater` keeps
+  the game's water shader, `hide=<path>` leaves that object out (`+` for a space), `cap=<height>` cuts above it,
+  `nocut` drops the cut before the nearest entity, `noclear` keeps the black. For the PopTracker pack's maps; game
+  art, kept out of the repo.
 - `roomstates [file]`: a slot_data file's `scenery_hidden` and `scenery_present` (default `bugfablesap-live.json`;
   `dev-scripts/live-slot-data.py` writes one), applied by `roomshot` as a seed applies them.
 - `apicon`: the mod's own Archipelago icon (drawn in code) to `bugfablesap-apicon.png`, for the PopTracker pack's Jump.

@@ -1174,9 +1174,10 @@ namespace BugFablesAP
                     {
                         if (parts.Length < 2)
                         {
-                            return "roomshot <map|all> [pitch, 90 straight down] [list]";
+                            return "roomshot <map|all> [pitch, 30 by default, 90 straight down] [list] [rawwater]"
+                                + " [hide=<path>] [cap=<height>] [nocut] [noclear]";
                         }
-                        float pitch = parts.Length > 2 && float.TryParse(parts[2], out float p) ? p : 90f;
+                        float pitch = parts.Length > 2 && float.TryParse(parts[2], out float p) ? p : 30f;
                         MapShots.Tries = new HashSet<string>(parts.Skip(2));
                         return parts[1] == "all" ? MapShots.All(pitch)
                             : MapShots.Room(log, parts[1], pitch, MapShots.Tries.Contains("list"));
