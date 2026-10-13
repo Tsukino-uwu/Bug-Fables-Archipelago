@@ -7006,9 +7006,11 @@ room, tabs in story order, the player followed into the room they are in.
 **Tests:** parity on 200 seeds (with the start, the gate and each gated door against Archipelago's own entrance),
 the autotracking tests (following, fog of war, the Goal's count, events), pack-checker.
 
-**Status:** built (2026-10-13), the pack's tests pass. The pictures seen in chat as files; not yet seen in PopTracker.
-Still to do: Metal Lake's lake and a few stray white blocks in the pictures, the doors' pins for the door shuffle, a
-Bosses tab, room names for the rooms only Enemysanity names (`BugariaOutskitsSnakemouthCorridor1`).
+**Status:** built (2026-10-13), the pack's tests pass. Seen in PopTracker 0.35.4 the same day, no seed connected:
+the tabs, the room pictures and their pins load and work; some rooms show black where the game shows a pit's fog or a
+cave's floor (Snakemouth's underground and Treasure Room, the Golden Hills' pits), fixed in the dump, not yet
+rendered again. Still to do: Metal Lake's lake and a few stray white blocks in the pictures, the doors' pins for the
+door shuffle, a Bosses tab, room names for the rooms only Enemysanity names (`BugariaOutskitsSnakemouthCorridor1`).
 
 *Code: the mod: `Dev/MapShots.cs`, `Dev/EntityDump.cs` (`Positions`), `Dev/DevConsole.cs`; the apworld: `rules.py`
 (`ARTIFACT_GATE`). The pack: `tools/export.py`, `tools/world_map.py`, `tools/room_pictures.py`, `tools/item_icons.py`,

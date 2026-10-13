@@ -535,6 +535,10 @@ What a picture from above needed, each found by looking at the pictures:
   side) dropped: from above they were black blobs.
 - **Water** (`Custom/WaterOutline`) draws white from above whatever the fog or the depth texture: drawn instead with
   the world map's own unlit shader in its texture's colour (`rawwater` keeps the game's).
+- **Pits and the room's edge** were transparent, black in the tracker: filled with the room's own fog colour
+  (`MapControl.fogcolor`), as the game shows them. Not yet seen.
+- **A water droplet** starts at a cave's ceiling, so it lifted the cut above Snakemouth's dark ceilings: droplets
+  don't count for the highest entity. Not yet seen.
 
 Something left out is switched off on the copy: at first it was only left out of the framing, and still drawn. NPCs
 and other entities aren't in the pictures. Game art: written to the BepInEx folder only.

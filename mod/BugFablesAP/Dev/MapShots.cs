@@ -122,7 +122,7 @@ namespace BugFablesAP
                     }
                 }
                 // The pause map's pips stand at (x, 2, z) in the map's own frame.
-                Shot? shot = Shoot(renderers, Quaternion.identity, 2048f, 0f, null,
+                Shot? shot = Shoot(renderers, Quaternion.identity, 2048f, 0f, null, new Color(0f, 0f, 0f, 0f),
                     Path.Combine(Paths.BepInExRootPath, "bugfablesap-worldmap.png"),
                     p => map.transform.TransformPoint(new Vector3(p.x, 2f, p.y)));
                 if (shot == null)
@@ -292,7 +292,9 @@ namespace BugFablesAP
                 if (Mathf.Approximately(pitch, 90f) && Enum.IsDefined(typeof(MainManager.Maps), name))
                 {
                     float top = float.MinValue;
-                    foreach (Vector3 p in EntityDump.Positions((int)Enum.Parse(typeof(MainManager.Maps), name)))
+                    // A water droplet starts at a cave's ceiling, not where the party stands.
+                    foreach (Vector3 p in EntityDump.Positions((int)Enum.Parse(typeof(MainManager.Maps), name),
+                        "Dropplet"))
                     {
                         if (p.y < Parked)
                         {
@@ -390,8 +392,11 @@ namespace BugFablesAP
                     }
                 }
                 // A room whose floor, walls and ceiling are one model still needs a slice, higher up.
+                // What no object fills (a pit, the room's edge) in the room's own fog colour, as the game shows it.
+                Color background = control != null ? control.fogcolor : Color.black;
+                background.a = 1f;
                 shot = Shoot(renderers, Quaternion.Euler(pitch, 0f, 0f), 0f, pixelsPerUnit,
-                    ceiling + ClipAbove + RoomAway.y, png, p => new Vector3(p.x, 0f, p.y) + RoomAway);
+                    ceiling + ClipAbove + RoomAway.y, background, png, p => new Vector3(p.x, 0f, p.y) + RoomAway);
                 if (list)
                 {
                     log.LogInfo($"[dev] roomshot {name}, renderers drawn:" + listing);
@@ -419,7 +424,7 @@ namespace BugFablesAP
         // pixelsPerUnit), to png; the shot says where game points (x, z) of 0 and 1 land, from the picture's top left.
         // A ceiling (straight down only) puts the camera at that height, so what stands above it is behind the camera.
         private static Shot? Shoot(List<Renderer> renderers, Quaternion rotation, float width, float pixelsPerUnit,
-            float? ceiling, string png, Func<Vector2, Vector3> point)
+            float? ceiling, Color background, string png, Func<Vector2, Vector3> point)
         {
             if (renderers.Count == 0)
             {
@@ -468,7 +473,7 @@ namespace BugFablesAP
                 }
                 cam.cullingMask = layers;
                 cam.clearFlags = CameraClearFlags.SolidColor;
-                cam.backgroundColor = new Color(0f, 0f, 0f, 0f);
+                cam.backgroundColor = background;
                 rt = RenderTexture.GetTemporary(w, h, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default,
                     8);
                 cam.targetTexture = rt;

@@ -115,8 +115,9 @@ namespace BugFablesAP
             log.LogInfo($"[dump] {rows} entities from {maps} maps ({bad} unreadable) -> {outPath}");
         }
 
-        // Where each of a map's entities starts (Data/EntityData), for MapShots' ceiling cut.
-        internal static List<Vector3> Positions(int map)
+        // Where each of a map's entities starts (Data/EntityData), those of the object types skipped left out, for
+        // MapShots' ceiling cut.
+        internal static List<Vector3> Positions(int map, params string[] skipped)
         {
             var positions = new List<Vector3>();
             TextAsset data = Resources.Load<TextAsset>("Data/EntityData/" + map);
@@ -128,8 +129,8 @@ namespace BugFablesAP
             for (int i = 0; i < lines.Length - 1; i++)
             {
                 string[] f = lines[i].Split('}');
-                if (f.Length > Position + 2 && Number(f[Position], out float x) && Number(f[Position + 1], out float y)
-                    && Number(f[Position + 2], out float z))
+                if (f.Length > Position + 2 && Array.IndexOf(skipped, f[1].Trim()) < 0 && Number(f[Position], out float x)
+                    && Number(f[Position + 1], out float y) && Number(f[Position + 2], out float z))
                 {
                     positions.Add(new Vector3(x, y, z));
                 }
