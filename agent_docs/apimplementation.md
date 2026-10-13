@@ -6735,6 +6735,14 @@ its own, so another player's artifacts are untouched). The mod's side is `docume
 `TestNoArtifactsRequired`, `TestArtifactsProgression`; not yet run (at push time). A seed generated with the default
 options.
 
+**Exported to the PopTracker pack** (2026-10-13): the gate is `ARTIFACT_GATE`, `HasFromListUnique` of the artifact
+items with `count=FromWorldAttr("artifacts_required")`, Rule Builder's own field resolver (`rule builder.md`, Field
+resolvers), joined into the last fight's `spot_rule`. It was built in `set_all_rules` before, outside the rule the pack
+exports, so the pack showed the fight open without the artifacts; its parity tests found it. The pack reads the count
+from slot_data's `options`, whose `artifacts_required` is the capped value. The preflight's import list gains
+`rule_builder.field_resolvers` (`FromWorldAttr`), and `test_rule_export.py` compares a rule as it arrives through JSON
+(a tuple of names arrives as a list). The apworld's tests and Archipelago's general tests pass.
+
 **Status:** works, seen in seed `AP_27984714237781193432` (2026-10-13, the defaults): the fight held with 0 of 6, open
 once the six arrived and the map was entered again, then won; the Wasp King's Crown arriving in Bugaria; the goal sent
 and the world released as the credits started.

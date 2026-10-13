@@ -5,6 +5,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
+from rule_builder.field_resolvers import FromWorldAttr
 from rule_builder.options import OptionFilter
 from rule_builder.rules import CanReachRegion, Has, HasFromListUnique, Rule
 from worlds.generic.Rules import add_item_rule
@@ -21,6 +22,9 @@ SHOP_CATEGORIES = ("shop", "item_shop")
 FINAL_FIGHT = "Giant's Lair: Sapling Plains, Final Fight"
 # Jump's blanket rule: with Shuffle Jump on, a spot needs Jump unless it was seen reachable without (no_jump).
 JUMP = Has("Jump", options=[OptionFilter(ShuffleJump, 1)], filtered_resolution=True)
+# The last fight, held by the client until the seed's count of artifact items have arrived (none needed at 0).
+ARTIFACT_GATE = HasFromListUnique(*(vanilla_item(loc) for loc in ARTIFACTS),
+                                  count=FromWorldAttr("artifacts_required"))
 
 
 def _no_progression(item: Item) -> bool:
@@ -57,22 +61,20 @@ def set_all_rules(world: BugFablesWorld) -> None:
             location.progress_type = LocationProgressType.EXCLUDED
         elif world.options.shop_contents == ShopContents.option_no_progression:
             location.item_rule = _no_progression
-    # The last fight, held by the client until that many artifact items have arrived (none needed at 0).
-    artifacts = (HasFromListUnique(*(vanilla_item(loc) for loc in ARTIFACTS), count=world.artifacts_required)
-                 if world.artifacts_required > 0 else None)
     for spot in (*world.included_locations, *world.included_events):
-        rule = _joined(spot_rule(spot), artifacts if spot.name == FINAL_FIGHT else None)
+        rule = spot_rule(spot)
         if rule is not None:
             world.set_rule(world.get_location(spot.name), rule)
-    # The goal: the last fight won, its artifacts in hand: its region, its own rule and theirs.
+    # The goal: the last fight won, its artifacts in hand: its region and its rule.
     fight = next(loc for loc in LOCATIONS if loc.name == FINAL_FIGHT)
-    world.set_completion_rule(_joined(CanReachRegion(f"{fight.region} ({fight.area})"), spot_rule(fight), artifacts))
+    world.set_completion_rule(_joined(CanReachRegion(f"{fight.region} ({fight.area})"), spot_rule(fight)))
 
 
 def spot_rule(spot: Location | StoryEvent) -> Rule | None:
-    """A spot's whole rule, the same in every seed (the options resolve it), so the PopTracker pack exports this one:
-    its reach, its own rule, and JUMP."""
-    return _joined(spot.reach, spot.rule, None if spot.no_jump else JUMP)
+    """A spot's whole rule, the same in every seed (the options and the world resolve it), so the PopTracker pack
+    exports this one: its reach, its own rule, JUMP, and the last fight's artifacts."""
+    return _joined(spot.reach, spot.rule, None if spot.no_jump else JUMP,
+                   ARTIFACT_GATE if spot.name == FINAL_FIGHT else None)
 
 
 def _joined(*rules: Rule | None) -> Rule | None:
