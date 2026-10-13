@@ -2,13 +2,11 @@
 yet."""
 from __future__ import annotations
 
-from rule_builder.rules import Has
+from rule_builder.rules import CanReachRegion, Has
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, WOODEN_CRANK, CanUse, one_way
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, WOODEN_CRANK, CanUse, Member, one_way
 from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
-# The Big Crank (key item 60), the Wooden Crank's way (custom_rules.py, WOODEN_CRANK).
-BIG_CRANK = LATER_CHAPTERS
 # The Sun and Moon Offerings (key items 55, 56), items since the festival's farm was mapped (2026-10-07; their spots
 # in golden_settlement.py).
 SUN_OFFERING = Has("Sun Offering")
@@ -16,6 +14,13 @@ MOON_OFFERING = Has("Moon Offering")
 # Across the right crank room, all of it (assume every need for the room), or Bee Fly alone.
 RIGHT_CRANK_ROOM = (CanUse("Shield") & CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
                     & CanUse("Beemerang Toss") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")
+# The Big Crank (key item 60), not an item yet (Next 62): both halves, the game's own pickups, taken in their rooms,
+# the top one across the right crank room, the bottom one up its hill (Jump, Beemerang Halt) past the Venus Buds'
+# fight (Vi).
+BIG_CRANK = (LATER_CHAPTERS
+             & CanReachRegion("GoldenHillsDungeonRightCrank") & RIGHT_CRANK_ROOM
+             & CanReachRegion("GoldenHillsDungeonLeftCrankHalf") & CanUse("Jump") & CanUse("Beemerang Halt")
+             & Member("Vi"))
 
 LOCATIONS = (
     # The Summit (GoldenHillsDungeonBoss; named 2026-10-12): the Venus' Guardian's fight up two ledges (Jump), then the

@@ -1,6 +1,9 @@
 """Rules from the room mapping that the generic tests don't reach: a trade's item, a gate kept shut, Riz's fight."""
+from BaseClasses import CollectionState
+
 from ..custom_rules import ItemOnHand
 from ..data_tables import DOOR_LABELS, game_door_name
+from ..logic import PRESENT_FROM
 from . import BugFablesTestBase
 
 PINK_SPIDER = "Forsaken Lands: Pink Spider, First Trade"
@@ -30,6 +33,33 @@ class TestItemOnHand(BugFablesTestBase):
     def test_the_pink_spiders_trade_needs_one(self) -> None:
         rule = self.multiworld.get_location(PINK_SPIDER, self.player).access_rule
         self.assertTrue(ITEM_SHOP_ROOMS <= set(rule.region_dependencies()))
+
+
+class TestRustyKeyFromTheWell(BugFablesTestBase):
+    # The Rusty Key's seller, in the game only from chapter 4's start, is at the well from the start: the hideout's
+    # badlands door counts once the well is reached.
+    def test_astotheles_is_there_from_the_start(self) -> None:
+        self.assertIn(("DefiantRootWell", "astotheles"), {(e.map, e.entity) for e in PRESENT_FROM})
+
+    def test_the_hideout_door_needs_the_well(self) -> None:
+        rule = self.multiworld.get_entrance("DesertBadlands to DesertBadlands (Hideout Door)", self.player).access_rule
+        self.assertIn("DefiantRootWell", set(rule.region_dependencies()))
+
+
+class TestBigCrankFromBothHalves(BugFablesTestBase):
+    # The Big Crank is the game's own, its top half across the right crank room: without the Shield and Bee Fly, the
+    # elevator it works never counts.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_the_elevator_needs_the_top_half(self) -> None:
+        state = CollectionState(self.multiworld)
+        for item in self.multiworld.itempool:
+            if item.player == self.player and item.name not in ("Shield", "Bee Fly"):
+                state.collect(item, prevent_sweep=True)
+        state.sweep_for_advancements()
+        self.assertFalse(state.can_reach_region("GoldenHillsDungeonUpperMain", self.player))
+        state.collect(self.world.create_item("Bee Fly"))
+        self.assertTrue(state.can_reach_region("GoldenHillsDungeonUpperMain", self.player))
 
 
 class TestWaspFrontGateShut(BugFablesTestBase):

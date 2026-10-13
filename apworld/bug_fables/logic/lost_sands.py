@@ -20,9 +20,9 @@ from ..data_types import (
                           Transfer,
 )
 
-# The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
-# item yet, so the later chapters' stand-in until its sale is a location.
-RUSTY_KEY = LATER_CHAPTERS
+# The Rusty Key, bought from Astotheles at the Defiant Root well (line 3, 30 berries, which also sets flag 239, making
+# the hideout door): not an item; he is there from the start (PRESENT_FROM, below), where the party lands in the well.
+RUSTY_KEY = CanReachRegion("DefiantRootWell")
 # The Sand Castle Key (113): in the game the Heaven Key (105, the roach village's hawk) and the Earth Key (106,
 # Astotheles) joined in Event109; in a seed one item, the halves' spots ordinary locations and the join kept away by
 # the client (sand_castle_key_item, 2026-10-12).
@@ -216,6 +216,9 @@ PRESENT_FROM = (
     # The Roach Village's hawk, there in the game only from chapter 4's start (300): from the start, his own limit (302)
     # ending him once his half is given (2026-10-12; flag 300 itself left alone).
     FlagEntity("DesertRoachVillage", "hawk", ALWAYS_SET),
+    # Astotheles at the Defiant Root well, there in the game only from chapter 4's start (300), selling the Rusty Key:
+    # from the start, his own limit (239) ending him once it's bought.
+    FlagEntity("DefiantRootWell", "astotheles", ALWAYS_SET),
     # The Scorpion fight (Event111) and its Venus healer, there in the game only once the halves are joined (303),
     # which a seed never does: from the start, the fight's own limit (298) ending them. Its trigger stands between
     # the bottom doors and the top one (no fleeing): for the enemy pass.

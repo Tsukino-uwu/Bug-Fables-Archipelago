@@ -184,6 +184,7 @@ this file and that doc disagree, that doc is right.
 106. [Build step 106: the PopTracker pack's releases, updates through versions.json](#build-step-106-the-poptracker-packs-releases-updates-through-versionsjson)
 107. [Build step 107: Map Shuffle, doors that match sides (experimental)](#build-step-107-map-shuffle-doors-that-match-sides-experimental)
 108. [Build step 108: the PopTracker pack's offline toggles, and its export at build step 105](#build-step-108-the-poptracker-packs-offline-toggles-and-its-export-at-build-step-105)
+109. [Build step 109: the Rusty Key's seller from the start, the Big Crank from both halves](#build-step-109-the-rusty-keys-seller-from-the-start-the-big-crank-from-both-halves)
 
 **How it works**
 
@@ -7410,6 +7411,40 @@ category's checks showing with its toggle on and no seed connected, and the gate
 *Code: the pack: `tools/export.py` (the settings, `door_entrances`, `check_rules`, `logic_only`), `scripts/logic.lua`
 (`option_value`, `bf_entrance_open`, `bf_door_led_to`), `tests/test_autotracking.py`, `tests/test_parity.py`,
 `PLAN.md`.*
+
+## Build step 109: the Rusty Key's seller from the start, the Big Crank from both halves
+
+**Why:** two `LATER_CHAPTERS` stand-ins asked less than the game, so a seed could be impossible (found 2026-10-13 by
+a release review, each confirmed with a script on a generated world before the fix):
+- **The Rusty Key** (`RUSTY_KEY`, the Bandit Hideout's badlands door): only Astotheles at the Defiant Root well sells
+  it, and he is there only from flag 300 (chapter 4's start, `Event105`, the only writer, `EventControl.cs`), which
+  nothing in a seed sets; the door itself is made only from 239, set by the sale. The logic opened the door anyway, so
+  four hideout spots counted as reachable without Beetle Dig (the well's own way in): Beetle Dig on the altar
+  (location 71) made a seed impossible.
+- **The Big Crank** (`BIG_CRANK`, the dungeon's middle elevator): its top half lies across the right crank room, whose
+  rule (`RIGHT_CRANK_ROOM`: the Shield, Freeze, the horn, Jump, the Toss and Beemerang Halt, or Bee Fly) the logic
+  already gave the room's Hustle Candy but not the crank. Without the Shield and Bee Fly, the logic still reached the
+  Summit (the artifact's spot), two Enemysanity spots and the Dash's scene behind the elevator.
+
+**How it was built:**
+1. **Astotheles at the well from the start** (`lost_sands.py`'s `PRESENT_FROM`), as the Roach Village's hawk is: his
+   own limit (239) ends him once the key is bought. He stands where the party lands in the well (the entity dump,
+   (4.32, 1.9)), so `RUSTY_KEY` is `CanReachRegion("DefiantRootWell")`; the 30 berries aren't counted, as no price is.
+   Decided 2026-10-13 ("make the npc appear early, like we did for hawks").
+2. **The Big Crank from both halves:** `BIG_CRANK` now needs each half's room reached (`CanReachRegion`, which covers
+   the Wooden Crank slots on their doors), `RIGHT_CRANK_ROOM` for the top half, and Jump, Beemerang Halt and Vi for
+   the bottom half's hill and the Venus Buds' fight (`MEASURED.md`, the Golden Hills dungeon). `LATER_CHAPTERS` stays
+   for the slot's own fight. The crank as one item stays Next 62, for after the release.
+
+**Tests** (`test_mapped_rooms.py`): `TestRustyKeyFromTheWell` (Astotheles in `PRESENT_FROM`; the badlands door's rule
+depends on the well) and `TestBigCrankFromBothHalves` (with every item but the Shield and Bee Fly the elevator never
+counts; with Bee Fly it does), the latter failing on the old rule (the review's script: the Summit reached without
+both).
+
+**Status:** built (2026-10-13), tests passing, the full suite and both fuzzers before the push; Astotheles at the well on
+a new file not yet seen in game.
+
+*Code: `logic/lost_sands.py` (`RUSTY_KEY`, `PRESENT_FROM`), `logic/golden_hills.py` (`BIG_CRANK`).*
 
 # How it works
 
