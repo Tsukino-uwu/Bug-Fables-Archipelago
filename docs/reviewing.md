@@ -6,8 +6,49 @@ points at what to read and what to run.
 
 ## How AI is used
 
-This project has been made with the help of AI (an LLM), for the code and its documentation. This repo will never
-contain any AI art, and AI has made no design, logic or naming decisions: it suggests, I decide.
+The questions of Archipelago's AI disclosure policy, answered one by one.
+
+**Q: Was AI used in any capacity?**
+
+A: Yes, a lot. All of the code in this repository, and nearly all of the documentation, has been written by AI under my
+direction; I've edited a few lines of the docs by hand. This repo will never contain any AI art, and AI has made no
+design, logic or naming decisions: it suggests, I decide.
+
+**Q: If so, what tools were used?**
+
+A: Only Claude, used through Claude Code, Anthropic's coding agent. No other AI tool has been used for this project.
+
+**Q: What was the purpose of your use of these tools?**
+
+A:
+- Writing the mod (C#, a BepInEx plugin) and the apworld (Python), and their tests.
+- Reading the game's decompiled code for facts: what a flag does, which scene gives an item, why something freezes.
+  That decompiled output stays on my machine and never enters the repo.
+- Reading the source and docs of Archipelago, Archipelago.MultiClient.Net and other projects, to follow Archipelago's
+  own way of doing things instead of reinventing it: a custom solution the AI comes up with can look right and still not
+  work. Other projects are read for their approach only, never their code: a project's licence is checked before
+  anything of it is read, and nothing is copied.
+- Running the checks meant to catch its mistakes: the builds, the apworld's tests, Archipelago's fuzzer, seed
+  generation, and the preflight (a strict automated gate, like a linter, that refuses anything unsafe or unpublishable);
+  and writing down what was measured.
+- Writing the documentation, including the two step-by-step guides of how it was built.
+
+**Q: How extensively were the tools used?**
+
+A: Nearly everything that is written is the agent's. What isn't:
+- **Every decision:** what the randomizer does, its options and their defaults, which items are progression, and every
+  location and item name. Each decision is recorded with its date.
+- **The logic:** I mapped all 244 rooms by playing each one and saying what is needed to reach what; the agent turns
+  that into rules, and I confirm them.
+- **What counts as working:** nothing in the game is done until I have seen it work on screen.
+
+**Q: How much human review was done?**
+
+A: I trust the code the AI writes, but not its result. Code can look right, and even run, without doing what it's meant
+to do. So I test, check and verify every single step in the game myself, and anything not yet confirmed on screen is
+assumed not to work. On top of that the code is checked by tools, not trust: the apworld's tests and Archipelago's
+fuzzer (10000 random seeds) on every push, a preflight that holds the code to an exact list of what it may do, and a mod
+build anyone with the game can rebuild byte for byte. The rest of this page says how to check each of those yourself.
 
 In practice:
 - **The agent** writes the code and the docs. It reads the game's decompiled code for facts. That output stays on the
