@@ -116,7 +116,8 @@
     "test.bases": ["WorldTestBase"],
     "test.general": ["setup_multiworld"],
     "worlds.AutoWorld": ["WebWorld", "World", "call_all"],
-    "worlds.generic.Rules": ["add_item_rule", "exclusion_rules"]
+    "worlds.generic.Rules": ["add_item_rule", "exclusion_rules"],
+    "worlds.tracker": ["TrackerException"]
   },
   "apworld_modules": {
     "json": ["dumps", "loads"],
@@ -128,6 +129,7 @@
     "AttributeError",
     "Exception",
     "FileNotFoundError",
+    "ImportError",
     "IndexError",
     "KeyError",
     "LookupError",

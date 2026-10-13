@@ -174,6 +174,7 @@ this file and that doc disagree, that doc is right.
 99. [Build step 99: DeathLink in the yaml too](#build-step-99-deathlink-in-the-yaml-too)
 100. [Build step 100: the PopTracker pack with every room, the game's own pictures, a tab per room](#build-step-100-the-poptracker-pack-with-every-room-the-games-own-pictures-a-tab-per-room)
 101. [Build step 101: Universal Tracker's map tab, plain diagrams drawn by code](#build-step-101-universal-trackers-map-tab-plain-diagrams-drawn-by-code)
+102. [Build step 102: Universal Tracker's own refusal for a seed of another version](#build-step-102-universal-trackers-own-refusal-for-a-seed-of-another-version)
 
 **How it works**
 
@@ -7118,6 +7119,29 @@ yet seen in Universal Tracker.
 
 *Code: `dev-scripts/ut-map.py`; the apworld: `universal_tracker.py`, `world.py`, `data_tables.py` (`MAP_AREA_IDS`),
 `data/map_areas.json`, `ut_map/`; tests `test_ut_map.py`.*
+
+## Build step 102: Universal Tracker's own refusal for a seed of another version
+
+**Why:** Next 79 (decided 2026-10-13): every feature Universal Tracker offers a world, its `TrackerException` among
+them. It isn't in its docs, only its source (`__init__.py`; `TrackerCore.py` catches it, v0.3.4, read 2026-10-13).
+
+**How it was built:**
+
+1. **The refusal:** a seed made with another version of the world, or with no `options` in its slot_data, was a
+   `ValueError`: Universal Tracker logs the traceback and says "Internal world was not able to be generated, check
+   your yamls and relaunch", which mentions yamls this world doesn't need. Raised as its `TrackerException(message=…)`
+   instead, its page says "The world has informed UT that your options are incompatible, for more information check
+   /faris_asked", where the reason shows. It also marks the tracker disabled, so its log then reads "World Author has
+   requested UT be disabled": used anyway, for completeness (decided 2026-10-13).
+2. **Only where Universal Tracker runs:** `TrackerException` is imported inside the refusal, from Universal Tracker's
+   own package (`worlds.tracker`), and the same message stays a `ValueError` where it isn't installed (CI's test jobs,
+   a generation never reaches the refusal). The preflight's apworld import list gains that one name, and its builtins
+   `ImportError` (`2026-10-13`, a gate commit of its own).
+3. **Test:** `test_another_version_is_refused` checks the refusal's message, whichever of the two it is.
+
+**Status:** built (2026-10-13), its test written, run with the next full suite. Not yet seen in Universal Tracker.
+
+*Code: `universal_tracker.py` (`_refused`, `apply_options`); tests `test_tracker.py`.*
 
 # How it works
 
