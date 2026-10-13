@@ -122,7 +122,7 @@ files is left out; everything else they do is listed.
 | `dev-scripts/door-graph.py` | writes files | `--export` writes `data/doors.json` for the apworld |
 | `dev-scripts/ut-map.py` | writes files | Universal Tracker's map tab into `apworld/bug_fables/ut_map/`: its JSON and diagrams, drawn from the apworld's data (never with `--check`) |
 | `dev-scripts/event-transfers.py` | loads a script by path | Loads `gate-table.py`, next to it, to share its reader |
-| `dev-scripts/enemy-table.py` | writes files | `--export` writes `data/enemies.json` for the apworld |
+| `dev-scripts/enemy-table.py` | writes files | `--export` writes `data/enemies.json` for the apworld, `--export-names` its fights' enemy names, `data/enemy_names.json` |
 | `dev-scripts/save-points.py` | writes files | `--export` writes `data/starts.json` for the apworld |
 
 ## CI workflows: what they reach

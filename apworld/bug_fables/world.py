@@ -85,6 +85,8 @@ class BugFablesWorld(World):
     # coupled doors the door each leads back through (universal_tracker.defer_doors).
     deferred_doors: dict[str, Any]
     way_back: dict[str, str]
+    # Universal Tracker's alias after an Enemysanity spot's name under Enemy Shuffle (universal_tracker.enemy_aliases).
+    location_id_to_alias: dict[int, str]
 
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
@@ -92,8 +94,9 @@ class BugFablesWorld(World):
         return slot_data
 
     def custom_ut_sort(self, region_label: str, location_label: str) -> int:
-        # Universal Tracker's list in the story's order (TRACKER_ORDER); anything else, such as an entrance, last.
-        return TRACKER_ORDER.get(location_label, len(TRACKER_ORDER))
+        # Universal Tracker's list in the story's order (TRACKER_ORDER), an alias after a name set aside; anything
+        # else, such as an entrance, last.
+        return TRACKER_ORDER.get(universal_tracker.without_alias(location_label, TRACKER_ORDER), len(TRACKER_ORDER))
 
     def reconnect_found_entrances(self, key: str, value: Any) -> None:
         # Universal Tracker, at connect and on each change of the key it was given (found_entrances_datastorage_key).
@@ -136,6 +139,8 @@ class BugFablesWorld(World):
             self.enemy_swaps = dict(self.passthrough["enemy_swaps"])
         elif self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
             self.enemy_swaps = shuffle_encounters(ENCOUNTERS, self.random)
+        # Universal Tracker's alias of each Enemysanity spot: its fight under Enemy Shuffle.
+        self.location_id_to_alias = universal_tracker.enemy_aliases(self)
         # The start too: a room picked here, sent in slot_data; empty is the game's own start.
         self.start = {}
         if self.passthrough is not None:

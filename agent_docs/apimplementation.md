@@ -175,6 +175,7 @@ this file and that doc disagree, that doc is right.
 100. [Build step 100: the PopTracker pack with every room, the game's own pictures, a tab per room](#build-step-100-the-poptracker-pack-with-every-room-the-games-own-pictures-a-tab-per-room)
 101. [Build step 101: Universal Tracker's map tab, plain diagrams drawn by code](#build-step-101-universal-trackers-map-tab-plain-diagrams-drawn-by-code)
 102. [Build step 102: Universal Tracker's own refusal for a seed of another version](#build-step-102-universal-trackers-own-refusal-for-a-seed-of-another-version)
+103. [Build step 103: Enemysanity's real fight after its name in Universal Tracker](#build-step-103-enemysanitys-real-fight-after-its-name-in-universal-tracker)
 
 **How it works**
 
@@ -7142,6 +7143,35 @@ them. It isn't in its docs, only its source (`__init__.py`; `TrackerCore.py` cat
 **Status:** built (2026-10-13), its test written, run with the next full suite. Not yet seen in Universal Tracker.
 
 *Code: `universal_tracker.py` (`_refused`, `apply_options`); tests `test_tracker.py`.*
+
+## Build step 103: Enemysanity's real fight after its name in Universal Tracker
+
+**Why:** Next 79 (decided 2026-10-13): with Enemysanity and Enemy Shuffle on, the enemy on the map still looks like the
+original while its fight is another; Universal Tracker's `location_id_to_alias` shows the real fight after the
+location's name, which itself never changes.
+
+**How it was built:**
+
+1. **The names:** `enemies.json` gives each fight's first enemy only, and two enemies are never first (108 and 109, in
+   the Ancient Castle's fights). `dev-scripts/enemy-table.py --export-names` writes every fight enemy's name from the
+   mod's enemy table dump (`bugfablesap-enemies.tsv`) into `data/enemy_names.json`: 55 names, read 2026-10-13
+   (`data_tables.ENEMY_NAMES`).
+2. **The alias** (`universal_tracker.enemy_aliases`, set in `generate_early` once the fights are decided, so the same
+   when Universal Tracker rebuilds the seed from slot_data's `enemy_swaps`): each Enemysanity spot's address to
+   "fights" and its fight's enemies, e.g. "fights Seedling, Seedling"; empty without Enemy Shuffle. Universal Tracker
+   reads it from the rebuilt world after generation (`TrackerCore.py`, v0.3.4) and puts it after the name in brackets.
+3. **The list's order:** Universal Tracker hands `custom_ut_sort` the name with its alias, so the sort sets a trailing
+   alias aside when the whole label isn't a location's name (`without_alias`).
+4. **Tests** (`test_tracker.py`): every enemy spot's alias is its swapped fight's names, the same after the rebuild,
+   ranked as its bare name; none without Enemy Shuffle. `test_enemysanity_with_its_area` (build step 41) checked for
+   ", Enemy " in a name, which no Enemysanity name holds (they read "Room, Seedling 1"): it now checks for the
+   Enemysanity locations themselves.
+
+**Status:** built (2026-10-13), its tests written, run with the next full suite. Not yet seen in Universal Tracker.
+
+*Code: `universal_tracker.py` (`enemy_aliases`, `without_alias`), `world.py` (`location_id_to_alias`,
+`custom_ut_sort`), `data_tables.py` (`ENEMY_NAMES`), `data/enemy_names.json`, `dev-scripts/enemy-table.py`; tests
+`test_tracker.py`.*
 
 # How it works
 

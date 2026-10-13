@@ -13,7 +13,7 @@ from test.general import setup_multiworld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import exclusion_rules
 
-from ..data_tables import TRACKER_ORDER
+from ..data_tables import ENEMY_LOCATIONS, ENEMY_NAMES, TRACKER_ORDER
 from ..world import BugFablesWorld
 from . import entrance_graph, generate_like_main
 from .test_doors import PLANDO
@@ -181,12 +181,28 @@ class TestTrackerHooks(TestCase):
         # Enemysanity's spots ranked among their area's own, each area one block, not all after every other spot.
         world = generate_like_main({"enemy_sanity": True}, 1)
         names = [loc.name for loc in world.get_locations() if loc.address is not None]
-        self.assertTrue(any(", Enemy " in name for name in names))
+        self.assertTrue(set(names) & {loc.name for loc in ENEMY_LOCATIONS})
         ranks = {name: world.custom_ut_sort("", name) for name in names}
         self.assertNotIn(len(TRACKER_ORDER), ranks.values())
         areas = [name.split(": ", 1)[0] for name in sorted(names, key=ranks.get)]
         blocks = [area for i, area in enumerate(areas) if i == 0 or areas[i - 1] != area]
         self.assertEqual(len(blocks), len(set(blocks)), "an area's spots split into more than one block")
+
+    def test_enemysanity_aliases_under_enemy_shuffle(self) -> None:
+        # Each enemy spot's real fight after its name, the same when Universal Tracker rebuilds the seed; the list's
+        # order sets the alias aside; none without Enemy Shuffle.
+        real = generate_like_main({"enemy_sanity": True, "enemy_shuffle": "enemies_only"}, 1)
+        aliases = real.location_id_to_alias
+        self.assertTrue(aliases)
+        for loc in ENEMY_LOCATIONS:
+            address = real.location_name_to_id[loc.name]
+            if loc.source.enemy in real.enemy_swaps:
+                fight = ", ".join(ENEMY_NAMES[i] for i in real.enemy_swaps[loc.source.enemy])
+                self.assertEqual(aliases[address], f"fights {fight}")
+                self.assertEqual(real.custom_ut_sort("", f"{loc.name} ({aliases[address]})"),
+                                 real.custom_ut_sort("", loc.name))
+        self.assertEqual(regenerate(as_sent(real.fill_slot_data()), 101).location_id_to_alias, aliases)
+        self.assertEqual(generate_like_main({"enemy_sanity": True}, 1).location_id_to_alias, {})
 
     def test_another_game_s_passthrough_is_not_read(self) -> None:
         multiworld = setup_multiworld(BugFablesWorld, steps=(), seed=4, options={"entrance_randomizer": "coupled"})

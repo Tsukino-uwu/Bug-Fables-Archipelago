@@ -9,7 +9,7 @@ import pkgutil
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import ONE_WAYS, door_name
+from .data_tables import ENEMY_LOCATIONS, ENEMY_NAMES, LOCATION_NAME_TO_ID, ONE_WAYS, door_name
 from .options import BugFablesOptions, EntranceRandomizer
 
 if TYPE_CHECKING:
@@ -105,6 +105,21 @@ def apply_options(world: BugFablesWorld, slot_data: Mapping[str, Any]) -> None:
     sent = slot_data["options"]
     world.options = BugFablesOptions(**{name: option.from_any(sent.get(name, option.default))
                                         for name, option in BugFablesOptions.type_hints.items()})
+
+
+def enemy_aliases(world: BugFablesWorld) -> dict[int, str]:
+    """With Enemysanity and Enemy Shuffle on, each enemy spot's real fight, which Universal Tracker shows after the
+    location's name (location_id_to_alias): "fights Seedling, Seedling". The names themselves never change."""
+    if not world.options.enemy_sanity or not world.enemy_swaps:
+        return {}
+    return {LOCATION_NAME_TO_ID[loc.name]: "fights " + ", ".join(ENEMY_NAMES.get(i, str(i))
+                                                                for i in world.enemy_swaps[loc.source.enemy])
+            for loc in ENEMY_LOCATIONS if loc.source.enemy in world.enemy_swaps}
+
+
+def without_alias(label: str, known: Mapping[str, Any]) -> str:
+    """A list line's location name, the alias Universal Tracker puts after it (" (fights …)") set aside."""
+    return label if label in known or " (" not in label else label.rsplit(" (", 1)[0]
 
 
 def defer_doors(world: BugFablesWorld) -> None:
