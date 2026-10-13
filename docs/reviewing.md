@@ -86,9 +86,10 @@ It checks:
 - **The apworld** holds exactly `apworld/bug_fables`, byte for byte, except for the repository's licence, which CI
   copies in before building, and the two version fields Archipelago's builder adds to `archipelago.json`.
 - **The three library DLLs** are the NuGet package's own files.
-- **For a release made after 2026-09-29,** the mod DLL passes the preflight's DLL checks (below).
+- **For a release made after 2026-09-29,** the mod DLL passes the preflight's DLL checks (below), run by that
+  release's own preflight.
 
-Both earlier releases pass (v0.1.0 and v0.2.0, checked 2026-09-29).
+Every release passes: v0.1.0 and v0.2.0 (checked 2026-09-29 and 2026-10-13), v0.3.0 (checked 2026-10-13).
 
 **Without that script**, with standard tools only:
 - `unzip -l` the zip, and compare with `git ls-tree -r --name-only vX.Y.Z release/mod`.

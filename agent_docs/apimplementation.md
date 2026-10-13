@@ -3877,10 +3877,14 @@ files and the tag, it checks:
   building, and the two version fields Archipelago's builder adds to the manifest;
 - the three libraries are the NuGet package's own files;
 - the yaml, which Archipelago writes from the options, carries no credential, home path or hidden character;
-- for a release made after the preflight, preflight's DLL sections pass on the zip's DLL.
+- for a release made after the preflight, preflight's DLL sections pass on the zip's DLL. **The tag's own preflight
+  runs them** (2026-10-13), taken from git into a temporary folder: run from main, today's preflight read v0.3.0's
+  older patterns file and refused it for the key `log_personal`, added after the tag. Each release is judged by the
+  rules it shipped with.
 
-It needs only git and Python, no network: download the files first. **Both earlier releases pass** (v0.1.0 and
-v0.2.0, run 2026-09-29). A zip with one byte changed in a library, and an apworld with a file added, both fail.
+It needs only git and Python, no network: download the files first. **Every release passes:** v0.1.0 and v0.2.0
+(run 2026-09-29, again 2026-10-13), v0.3.0 (2026-10-13; the script before the fix, run from a worktree at main,
+failed on it). A zip with one byte changed in a library, and an apworld with a file added, both fail.
 
 **CI and the release (2026-09-29):**
 - **Every push and pull request** (`.github/workflows/preflight.yml`), on Python 3.11 and 3.13: preflight on the

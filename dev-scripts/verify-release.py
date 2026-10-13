@@ -11,7 +11,7 @@ git, never the network. Standard library only.
 - The apworld must hold exactly apworld/bug_fables at the ref, byte for byte, but for the licence CI copies in
   (bug_fables/LICENSE, the repo's LICENSE) and the two version fields Archipelago's builder adds to archipelago.json.
 - The three library DLLs (in the zip, or at the ref) must be the NuGet package's own files.
-- When the ref has a preflight, its DLL sections run on the zip's DLL too.
+- When the ref has a preflight, its DLL sections run on the zip's DLL too: the ref's own preflight, as it shipped.
 """
 import argparse
 import hashlib
@@ -20,6 +20,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import zipfile
 
 sys.dont_write_bytecode = True
@@ -142,9 +143,16 @@ def main():
             path = os.path.join(os.path.dirname(os.path.abspath(args.zip)), 'BugFablesAP.from-zip.dll')
             with open(path, 'wb') as f:
                 f.write(mod_files[PLUGIN + 'BugFablesAP.dll'])
-            r = subprocess.run([sys.executable, '-B', os.path.join(REPO, 'dev-scripts', 'preflight.py'), '--rev', ref,
-                                '--dll', path, '--only', 'Shipped DLL structure', '--only', 'Shipped DLL reach',
-                                '--only', 'The DLL says only what its source says'], capture_output=True)
+            # The ref's own preflight: a later one reads pattern keys the ref's patterns file doesn't have.
+            with tempfile.TemporaryDirectory() as scripts:
+                for name, blob in files_at(ref, 'dev-scripts/').items():
+                    if name.endswith('.py') and '/' not in name:
+                        with open(os.path.join(scripts, name), 'wb') as f:
+                            f.write(blob)
+                r = subprocess.run([sys.executable, '-B', os.path.join(scripts, 'preflight.py'), '--repo', REPO,
+                                    '--rev', ref, '--dll', path, '--only', 'Shipped DLL structure', '--only',
+                                    'Shipped DLL reach', '--only', 'The DLL says only what its source says'],
+                                   capture_output=True)
             os.remove(path)
             output = r.stdout.decode(errors='replace')
             report.section('The zip\'s DLL passes preflight', [output] if r.returncode else [],
