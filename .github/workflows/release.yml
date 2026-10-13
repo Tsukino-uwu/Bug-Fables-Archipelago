@@ -134,7 +134,7 @@ jobs:
             dist/bug_fables.apworld
             dist/bug_fables.yaml
 
-      # The highlights only (the user, 2026-10-04: features, logic and bug fixes, then GitHub's Full Changelog link);
+      # The highlights only (features, logic and bug fixes, then GitHub's Full Changelog link);
       # what the code may do is docs/capabilities.md, whose history is git log -p on it.
       - name: The release notes
         env:

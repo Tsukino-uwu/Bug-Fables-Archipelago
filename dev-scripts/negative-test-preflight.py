@@ -959,8 +959,8 @@ def agent_guard_test(c, base, h):
 
     wrong = [f'{tool} {given!r}: {got}, not {want}' for tool, given, want in GUARD_CASES
              for got in [decide(tool, given)] if got != want]
-    # A commit asks only when it may carry what the user decides, whoever wrote it; other gate work asks nothing.
-    # A licence row permits reading its project only once the user lets the commit adding it through.
+    # A commit asks only when it may carry the maintainer's call, whoever wrote it; other gate work asks nothing.
+    # A licence row permits reading its project only once the maintainer lets the commit adding it through.
     row = f'| [Unlisted]({WEB}{GH}/someone/unlisted) | MIT | today | nothing |\n'
     for path, text, want in (('docs/capabilities.md', '\n', 'ask'), ('dev-scripts/preflight.py', '\n', None),
                              ('agent_docs/licensing.md', '\n', None), ('agent_docs/licensing.md', row, 'ask')):
