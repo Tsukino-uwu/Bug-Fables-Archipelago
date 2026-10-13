@@ -960,6 +960,13 @@ be wrong.
     door with a left one, so the counts balance) and a new Entrance Randomizer value; the shuffler's dead ends to
     measure (build step 95 absorbs them). Matching sides gives the feel of a map, not one drawable on a grid with no
     overlaps (that needs rooms placed by size, a far bigger job). After the named start (Next 18).
+79. **Every Universal Tracker feature, its map tab as plain diagrams** (decided 2026-10-13): every feature Universal
+    Tracker offers a world, optional ones included, and its map tab drawn from our own data, never the game's art (no
+    asset in this repo). Its map tab takes its logic from the rebuilt seed, so each door can show where it led once
+    taken, and the tab can follow the player's map (build step 57's key); its rooms stay where the diagrams put them,
+    since it reads positions and pictures from files at connect (`TrackerClient.load_pack`, read 2026-10-13). The
+    internal approach (the JSON and the diagrams inside the apworld) needs no host.yaml setting; the diagrams as image
+    files need the preflight widened for them (the maintainer's call). Researched first, then built in steps.
 
 **Known issues:**
 
