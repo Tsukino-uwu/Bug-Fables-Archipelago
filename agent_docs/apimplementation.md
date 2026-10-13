@@ -7105,6 +7105,10 @@ by code from our own data, never the game's art and never AI-generated art.
      Tracker colours it (red, green while the shuffled door is hidden, grey with "connects to" once taken); a line
      between two areas with one diamond holding both directions; the room's other ways out (transfers, fixed links)
      on its box's bottom edge.
+   - **The boxes' layout** (fixed 2026-10-13; seen: ways of very different lengths): each box in a grid cell
+     beside the box it joins, where its name points (Left, Right, Upper or Top, Lower or Bottom; else a side before a
+     corner), at most 4 columns wide, so every way crosses one gap. The first layout put the boxes in reading order,
+     so a way could span the picture or run behind a third box (7 did); the generator now refuses a way that does.
    - **An area's tab:** its rooms as boxes, one pin per room holding all its spots; **the World:** the 25 areas, one
      pin each. The areas from `data/map_areas.json`, each map's `MapControl.areaid` from the mod's map dump.
    - **Titles:** the approved "Area: Room" names (`enemysanity.room_names`); a room no spot names yet shows its map id.

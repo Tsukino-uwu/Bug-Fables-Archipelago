@@ -2269,7 +2269,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -2284,7 +2284,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -2299,7 +2299,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -2314,7 +2314,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -2329,7 +2329,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -2344,8 +2344,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -2359,8 +2359,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 56,
-      "y": 232
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -2378,7 +2378,7 @@
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -2395,8 +2395,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskitsSnakemouthCorridor1",
-      "x": 128,
-      "y": 200
+      "x": 512,
+      "y": 120
      }
     ]
    }
@@ -2450,7 +2450,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -2465,7 +2465,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -2480,7 +2480,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -2495,7 +2495,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -2510,7 +2510,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 192,
+      "x": 448,
       "y": 136
      }
     ]
@@ -2525,7 +2525,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -2540,8 +2540,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -2555,7 +2555,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 64,
+      "x": 320,
       "y": 296
      }
     ]
@@ -2570,8 +2570,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 312,
-      "y": 232
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -2588,8 +2588,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 256,
-      "y": 112
+      "x": 512,
+      "y": 120
      }
     ]
    },
@@ -2606,7 +2606,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 128,
+      "x": 384,
       "y": 200
      }
     ]
@@ -2624,8 +2624,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast1",
-      "x": 256,
-      "y": 272
+      "x": 243,
+      "y": 192
      }
     ]
    }
@@ -2645,7 +2645,7 @@
      {
       "map": "BugariaOutskirtsEast2",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -2660,7 +2660,7 @@
      {
       "map": "BugariaOutskirtsEast2",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -2675,7 +2675,7 @@
      {
       "map": "BugariaOutskirtsEast2",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -2690,7 +2690,7 @@
      {
       "map": "BugariaOutskirtsEast2",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -2705,7 +2705,7 @@
      {
       "map": "BugariaOutskirtsEast2",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -2719,7 +2719,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast2",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -2737,8 +2737,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsEast2",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -2757,7 +2757,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -2772,7 +2772,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -2787,7 +2787,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -2802,7 +2802,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -2817,7 +2817,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -2832,7 +2832,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 320,
+      "x": 576,
       "y": 136
      }
     ]
@@ -2847,7 +2847,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 312,
+      "x": 568,
       "y": 72
      }
     ]
@@ -2863,7 +2863,7 @@
      {
       "map": "BOGoldenPath",
       "x": 56,
-      "y": 232
+      "y": 88
      }
     ]
    },
@@ -2880,7 +2880,7 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 256,
+      "x": 512,
       "y": 120
      }
     ]
@@ -2898,8 +2898,8 @@
     "map_locations": [
      {
       "map": "BOGoldenPath",
-      "x": 128,
-      "y": 200
+      "x": 256,
+      "y": 120
      }
     ]
    }
@@ -2918,8 +2918,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 296
      }
     ]
    },
@@ -2933,8 +2933,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 296
      }
     ]
    },
@@ -2948,8 +2948,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 296
      }
     ]
    },
@@ -2963,8 +2963,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 296
      }
     ]
    },
@@ -2978,8 +2978,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 192,
-      "y": 136
+      "x": 448,
+      "y": 296
      }
     ]
    },
@@ -2993,8 +2993,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 224,
-      "y": 136
+      "x": 480,
+      "y": 296
      }
     ]
    },
@@ -3008,8 +3008,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 64,
-      "y": 168
+      "x": 320,
+      "y": 328
      }
     ]
    },
@@ -3023,8 +3023,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 232
      }
     ]
    },
@@ -3038,8 +3038,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 344,
-      "y": 72
+      "x": 56,
+      "y": 264
      }
     ]
    },
@@ -3053,8 +3053,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 64,
-      "y": 328
+      "x": 608,
+      "y": 136
      }
     ]
    },
@@ -3068,8 +3068,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 56,
-      "y": 264
+      "x": 600,
+      "y": 72
      }
     ]
    },
@@ -3083,8 +3083,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 352,
-      "y": 328
+      "x": 64,
+      "y": 136
      }
     ]
    },
@@ -3098,8 +3098,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 344,
-      "y": 264
+      "x": 56,
+      "y": 72
      }
     ]
    },
@@ -3116,8 +3116,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 288,
-      "y": 119
+      "x": 256,
+      "y": 296
      }
     ]
    },
@@ -3134,8 +3134,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 135,
-      "y": 232
+      "x": 548,
+      "y": 200
      }
     ]
    },
@@ -3152,8 +3152,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel",
-      "x": 416,
-      "y": 200
+      "x": 128,
+      "y": 216
      }
     ]
    }
@@ -3173,7 +3173,7 @@
      {
       "map": "GoldenPathTunnel2",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -3188,7 +3188,7 @@
      {
       "map": "GoldenPathTunnel2",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -3203,7 +3203,7 @@
      {
       "map": "GoldenPathTunnel2",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -3217,7 +3217,7 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel2",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -3235,8 +3235,8 @@
     "map_locations": [
      {
       "map": "GoldenPathTunnel2",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -3606,7 +3606,7 @@
      {
       "map": "BugariaOutskirtsOutsideCity",
       "x": 344,
-      "y": 72
+      "y": 120
      }
     ]
    },
@@ -3624,7 +3624,7 @@
      {
       "map": "BugariaOutskirtsOutsideCity",
       "x": 288,
-      "y": 126
+      "y": 152
      }
     ]
    }
@@ -3704,7 +3704,7 @@
      {
       "map": "BugariaPier",
       "x": 312,
-      "y": 136
+      "y": 152
      }
     ]
    },
@@ -3722,7 +3722,7 @@
      {
       "map": "BugariaPier",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -3852,7 +3852,7 @@
      {
       "map": "OutsideSnakemouth",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -3885,7 +3885,7 @@
      {
       "map": "OutsideSnakemouth",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -3922,7 +3922,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsSnakemouthCorridor2",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -3937,7 +3937,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsSnakemouthCorridor2",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -3952,7 +3952,7 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsSnakemouthCorridor2",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -3967,8 +3967,8 @@
     "map_locations": [
      {
       "map": "BugariaOutskirtsSnakemouthCorridor2",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -3986,7 +3986,7 @@
      {
       "map": "BugariaOutskirtsSnakemouthCorridor2",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -5056,7 +5056,7 @@
      {
       "map": "BugariaCommercial",
       "x": 344,
-      "y": 136
+      "y": 248
      }
     ]
    },
@@ -5073,8 +5073,8 @@
     "map_locations": [
      {
       "map": "BugariaCommercial",
-      "x": 297,
-      "y": 152
+      "x": 288,
+      "y": 216
      }
     ]
    }
@@ -5568,7 +5568,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -5583,7 +5583,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -5598,7 +5598,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -5613,7 +5613,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -5628,7 +5628,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -5643,7 +5643,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 320,
+      "x": 64,
       "y": 136
      }
     ]
@@ -5658,7 +5658,7 @@
     "map_locations": [
      {
       "map": "SnakemouthBridgeRoom",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -5757,7 +5757,7 @@
      {
       "map": "SnakemouthDoorRoom",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -5790,7 +5790,7 @@
      {
       "map": "SnakemouthDoorRoom",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -5873,7 +5873,7 @@
      {
       "map": "SnakemouthFallRoom",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -5891,7 +5891,7 @@
      {
       "map": "SnakemouthFallRoom",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -5911,7 +5911,7 @@
      {
       "map": "SnakemouthLake",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -5926,7 +5926,7 @@
      {
       "map": "SnakemouthLake",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -5941,7 +5941,7 @@
      {
       "map": "SnakemouthLake",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -5956,7 +5956,7 @@
      {
       "map": "SnakemouthLake",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -5971,7 +5971,7 @@
      {
       "map": "SnakemouthLake",
       "x": 192,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -5986,7 +5986,7 @@
      {
       "map": "SnakemouthLake",
       "x": 224,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -6001,7 +6001,7 @@
      {
       "map": "SnakemouthLake",
       "x": 64,
-      "y": 168
+      "y": 296
      }
     ]
    },
@@ -6016,7 +6016,7 @@
      {
       "map": "SnakemouthLake",
       "x": 96,
-      "y": 168
+      "y": 296
      }
     ]
    },
@@ -6031,7 +6031,7 @@
      {
       "map": "SnakemouthLake",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -6045,7 +6045,7 @@
     "map_locations": [
      {
       "map": "SnakemouthLake",
-      "x": 344,
+      "x": 72,
       "y": 72
      }
     ]
@@ -6063,8 +6063,8 @@
     "map_locations": [
      {
       "map": "SnakemouthLake",
-      "x": 288,
-      "y": 119
+      "x": 144,
+      "y": 168
      }
     ]
    }
@@ -6173,8 +6173,8 @@
     "map_locations": [
      {
       "map": "SnakemouthMushroomPit",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 232
      }
     ]
    },
@@ -6191,8 +6191,8 @@
     "map_locations": [
      {
       "map": "SnakemouthMushroomPit",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 200
      }
     ]
    }
@@ -6211,7 +6211,7 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundLeftA",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -6226,7 +6226,7 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundLeftA",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -6241,8 +6241,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundLeftA",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -6260,7 +6260,7 @@
      {
       "map": "SnakemouthUndergroundLeftA",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -6280,7 +6280,7 @@
      {
       "map": "SnakemouthUndergroundLeftB",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -6295,7 +6295,7 @@
      {
       "map": "SnakemouthUndergroundLeftB",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -6310,7 +6310,7 @@
      {
       "map": "SnakemouthUndergroundLeftB",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -6324,8 +6324,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundLeftB",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 216
      }
     ]
    },
@@ -6342,8 +6342,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundLeftB",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -6361,7 +6361,7 @@
      {
       "map": "SnakemouthUndergroundLeftB",
       "x": 256,
-      "y": 184
+      "y": 176
      }
     ]
    }
@@ -6426,7 +6426,7 @@
      {
       "map": "SnakemouthUndergroundRightA",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -6444,7 +6444,7 @@
      {
       "map": "SnakemouthUndergroundRightA",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -6499,7 +6499,7 @@
      {
       "map": "SnakemouthUndergroundRightB",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -6514,7 +6514,7 @@
      {
       "map": "SnakemouthUndergroundRightB",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -6529,7 +6529,7 @@
      {
       "map": "SnakemouthUndergroundRightB",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -6544,7 +6544,7 @@
      {
       "map": "SnakemouthUndergroundRightB",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -6558,8 +6558,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundRightB",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 216
      }
     ]
    },
@@ -6576,8 +6576,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergroundRightB",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -6595,7 +6595,7 @@
      {
       "map": "SnakemouthUndergroundRightB",
       "x": 256,
-      "y": 184
+      "y": 176
      }
     ]
    }
@@ -6614,8 +6614,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -6629,8 +6629,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -6644,8 +6644,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -6659,8 +6659,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 264
      }
     ]
    },
@@ -6674,8 +6674,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 192,
-      "y": 136
+      "x": 448,
+      "y": 264
      }
     ]
    },
@@ -6689,8 +6689,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -6704,8 +6704,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 320,
-      "y": 136
+      "x": 576,
+      "y": 264
      }
     ]
    },
@@ -6719,8 +6719,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 200
      }
     ]
    },
@@ -6734,8 +6734,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 576,
-      "y": 136
+      "x": 320,
+      "y": 424
      }
     ]
    },
@@ -6749,8 +6749,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 608,
-      "y": 136
+      "x": 352,
+      "y": 424
      }
     ]
    },
@@ -6764,8 +6764,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 568,
-      "y": 72
+      "x": 312,
+      "y": 360
      }
     ]
    },
@@ -6779,8 +6779,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 56,
-      "y": 232
+      "x": 824,
+      "y": 216
      }
     ]
    },
@@ -6794,8 +6794,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 312,
-      "y": 232
+      "x": 56,
+      "y": 216
      }
     ]
    },
@@ -6809,8 +6809,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 568,
-      "y": 232
+      "x": 824,
+      "y": 72
      }
     ]
    },
@@ -6827,8 +6827,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 256,
-      "y": 120
+      "x": 512,
+      "y": 248
      }
     ]
    },
@@ -6846,7 +6846,7 @@
      {
       "map": "SnakemouthUndergrondDoor",
       "x": 512,
-      "y": 120
+      "y": 328
      }
     ]
    },
@@ -6863,8 +6863,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 241,
-      "y": 200
+      "x": 768,
+      "y": 248
      }
     ]
    },
@@ -6881,8 +6881,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 497,
-      "y": 200
+      "x": 243,
+      "y": 320
      }
     ]
    },
@@ -6899,8 +6899,8 @@
     "map_locations": [
      {
       "map": "SnakemouthUndergrondDoor",
-      "x": 526,
-      "y": 200
+      "x": 782,
+      "y": 168
      }
     ]
    }
@@ -6940,7 +6940,7 @@
      {
       "map": "UpperSnekEntrance",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -6954,7 +6954,7 @@
     "map_locations": [
      {
       "map": "UpperSnekEntrance",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -6972,8 +6972,8 @@
     "map_locations": [
      {
       "map": "UpperSnekEntrance",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -7431,7 +7431,7 @@
      {
       "map": "DesertBadlands",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -7449,7 +7449,7 @@
      {
       "map": "DesertBadlands",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -7661,7 +7661,7 @@
     "map_locations": [
      {
       "map": "DesertDREastEntrance",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -7676,7 +7676,7 @@
     "map_locations": [
      {
       "map": "DesertDREastEntrance",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -7691,7 +7691,7 @@
     "map_locations": [
      {
       "map": "DesertDREastEntrance",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -7706,7 +7706,7 @@
     "map_locations": [
      {
       "map": "DesertDREastEntrance",
-      "x": 90,
+      "x": 346,
       "y": 72
      }
     ]
@@ -7721,7 +7721,7 @@
     "map_locations": [
      {
       "map": "DesertDREastEntrance",
-      "x": 320,
+      "x": 64,
       "y": 136
      }
     ]
@@ -7736,7 +7736,7 @@
     "map_locations": [
      {
       "map": "DesertDREastEntrance",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -7945,7 +7945,7 @@
      {
       "map": "DesertEntrance",
       "x": 322,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -7963,7 +7963,7 @@
      {
       "map": "DesertEntrance",
       "x": 266,
-      "y": 111
+      "y": 120
      }
     ]
    }
@@ -8028,7 +8028,7 @@
      {
       "map": "DesertJumpPuzzle",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -8046,7 +8046,7 @@
      {
       "map": "DesertJumpPuzzle",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -8141,7 +8141,7 @@
      {
       "map": "DesertOasisEntrance",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -8159,7 +8159,7 @@
      {
       "map": "DesertOasisEntrance",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -8178,8 +8178,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -8193,8 +8193,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -8208,8 +8208,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -8223,8 +8223,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 264
      }
     ]
    },
@@ -8238,8 +8238,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 192,
-      "y": 136
+      "x": 448,
+      "y": 264
      }
     ]
    },
@@ -8254,7 +8254,7 @@
      {
       "map": "DesertSandPitArea",
       "x": 312,
-      "y": 72
+      "y": 360
      }
     ]
    },
@@ -8268,8 +8268,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 568,
-      "y": 72
+      "x": 56,
+      "y": 216
      }
     ]
    },
@@ -8284,7 +8284,7 @@
      {
       "map": "DesertSandPitArea",
       "x": 56,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -8298,8 +8298,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 312,
-      "y": 232
+      "x": 568,
+      "y": 72
      }
     ]
    },
@@ -8314,7 +8314,7 @@
      {
       "map": "DesertSandPitArea",
       "x": 568,
-      "y": 232
+      "y": 216
      }
     ]
    },
@@ -8331,8 +8331,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 256,
-      "y": 112
+      "x": 384,
+      "y": 328
      }
     ]
    },
@@ -8349,8 +8349,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 384,
-      "y": 112
+      "x": 256,
+      "y": 248
      }
     ]
    },
@@ -8367,8 +8367,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 128,
-      "y": 200
+      "x": 241,
+      "y": 168
      }
     ]
    },
@@ -8385,8 +8385,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 270,
-      "y": 200
+      "x": 526,
+      "y": 168
      }
     ]
    },
@@ -8403,8 +8403,8 @@
     "map_locations": [
      {
       "map": "DesertSandPitArea",
-      "x": 512,
-      "y": 264
+      "x": 640,
+      "y": 176
      }
     ]
    }
@@ -8454,7 +8454,7 @@
      {
       "map": "DesertSouthern",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -8487,7 +8487,7 @@
      {
       "map": "DesertSouthern",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -8525,7 +8525,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -8540,7 +8540,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -8555,7 +8555,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -8570,7 +8570,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -8585,7 +8585,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -8600,7 +8600,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 124,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -8614,7 +8614,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchMiddle",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -8629,8 +8629,8 @@
     "map_locations": [
      {
       "map": "DesertTrenchMiddle",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 216
      }
     ]
    },
@@ -8644,8 +8644,8 @@
     "map_locations": [
      {
       "map": "DesertTrenchMiddle",
-      "x": 312,
-      "y": 232
+      "x": 56,
+      "y": 360
      }
     ]
    },
@@ -8662,8 +8662,8 @@
     "map_locations": [
      {
       "map": "DesertTrenchMiddle",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -8680,8 +8680,8 @@
     "map_locations": [
      {
       "map": "DesertTrenchMiddle",
-      "x": 128,
-      "y": 200
+      "x": 256,
+      "y": 248
      }
     ]
    },
@@ -8699,7 +8699,7 @@
      {
       "map": "DesertTrenchMiddle",
       "x": 256,
-      "y": 264
+      "y": 320
      }
     ]
    }
@@ -8894,7 +8894,7 @@
      {
       "map": "DesertOasis",
       "x": 56,
-      "y": 72
+      "y": 232
      }
     ]
    },
@@ -8908,8 +8908,8 @@
     "map_locations": [
      {
       "map": "DesertOasis",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 360
      }
     ]
    },
@@ -8923,8 +8923,8 @@
     "map_locations": [
      {
       "map": "DesertOasis",
-      "x": 64,
-      "y": 264
+      "x": 320,
+      "y": 136
      }
     ]
    },
@@ -8938,8 +8938,8 @@
     "map_locations": [
      {
       "map": "DesertOasis",
-      "x": 96,
-      "y": 264
+      "x": 352,
+      "y": 136
      }
     ]
    },
@@ -8953,8 +8953,8 @@
     "map_locations": [
      {
       "map": "DesertOasis",
-      "x": 56,
-      "y": 200
+      "x": 312,
+      "y": 72
      }
     ]
    },
@@ -8971,8 +8971,8 @@
     "map_locations": [
      {
       "map": "DesertOasis",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 328
      }
     ]
    },
@@ -8989,8 +8989,8 @@
     "map_locations": [
      {
       "map": "DesertOasis",
-      "x": 128,
-      "y": 168
+      "x": 241,
+      "y": 200
      }
     ]
    }
@@ -9169,7 +9169,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -9184,7 +9184,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -9199,7 +9199,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -9214,7 +9214,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 90,
+      "x": 346,
       "y": 72
      }
     ]
@@ -9229,8 +9229,8 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -9244,7 +9244,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 64,
+      "x": 320,
       "y": 296
      }
     ]
@@ -9259,7 +9259,7 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 56,
+      "x": 312,
       "y": 232
      }
     ]
@@ -9278,7 +9278,7 @@
      {
       "map": "DesertTrenchSouth",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -9295,8 +9295,8 @@
     "map_locations": [
      {
       "map": "DesertTrenchSouth",
-      "x": 267,
-      "y": 184
+      "x": 243,
+      "y": 192
      }
     ]
    }
@@ -9316,7 +9316,7 @@
      {
       "map": "GoldenHillsDungeonUpperSide",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -9331,7 +9331,7 @@
      {
       "map": "GoldenHillsDungeonUpperSide",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -9346,7 +9346,7 @@
      {
       "map": "GoldenHillsDungeonUpperSide",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -9360,7 +9360,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonUpperSide",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -9378,8 +9378,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonUpperSide",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -9608,8 +9608,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonLeftMain",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -9623,8 +9623,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonLeftMain",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -9638,8 +9638,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonLeftMain",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -9653,8 +9653,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonLeftMain",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -9668,8 +9668,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonLeftMain",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 216
      }
     ]
    },
@@ -9684,7 +9684,7 @@
      {
       "map": "GoldenHillsDungeonLeftMain",
       "x": 56,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -9702,7 +9702,7 @@
      {
       "map": "GoldenHillsDungeonLeftMain",
       "x": 256,
-      "y": 112
+      "y": 248
      }
     ]
    },
@@ -9719,8 +9719,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonLeftMain",
-      "x": 256,
-      "y": 184
+      "x": 128,
+      "y": 176
      }
     ]
    }
@@ -9740,7 +9740,7 @@
      {
       "map": "GoldenPitcher1",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -9755,7 +9755,7 @@
      {
       "map": "GoldenPitcher1",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -9770,7 +9770,7 @@
      {
       "map": "GoldenPitcher1",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -9785,7 +9785,7 @@
      {
       "map": "GoldenPitcher1",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -9800,7 +9800,7 @@
      {
       "map": "GoldenPitcher1",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -9832,8 +9832,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher1",
-      "x": 256,
-      "y": 112
+      "x": 270,
+      "y": 168
      }
     ]
    }
@@ -9967,8 +9967,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -9982,8 +9982,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -9997,8 +9997,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -10012,8 +10012,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 264
      }
     ]
    },
@@ -10027,8 +10027,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 192,
-      "y": 136
+      "x": 448,
+      "y": 264
      }
     ]
    },
@@ -10042,8 +10042,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 224,
-      "y": 136
+      "x": 480,
+      "y": 264
      }
     ]
    },
@@ -10057,8 +10057,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 64,
-      "y": 168
+      "x": 320,
+      "y": 296
      }
     ]
    },
@@ -10072,8 +10072,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -10087,7 +10087,7 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 344,
+      "x": 56,
       "y": 72
      }
     ]
@@ -10105,8 +10105,8 @@
     "map_locations": [
      {
       "map": "GoldenPitcher2",
-      "x": 288,
-      "y": 119
+      "x": 236,
+      "y": 168
      }
     ]
    }
@@ -10126,7 +10126,7 @@
      {
       "map": "GoldenHillsDungeonEntrance",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -10141,7 +10141,7 @@
      {
       "map": "GoldenHillsDungeonEntrance",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -10156,7 +10156,7 @@
      {
       "map": "GoldenHillsDungeonEntrance",
       "x": 124,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -10171,7 +10171,7 @@
      {
       "map": "GoldenHillsDungeonEntrance",
       "x": 56,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -10204,7 +10204,7 @@
      {
       "map": "GoldenHillsDungeonEntrance",
       "x": 256,
-      "y": 104
+      "y": 168
      }
     ]
    }
@@ -10224,7 +10224,7 @@
      {
       "map": "GoldenHillsDungeonUpperMain",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -10239,7 +10239,7 @@
      {
       "map": "GoldenHillsDungeonUpperMain",
       "x": 56,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -10268,7 +10268,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonUpperMain",
-      "x": 56,
+      "x": 312,
       "y": 200
      }
     ]
@@ -10287,7 +10287,7 @@
      {
       "map": "GoldenHillsDungeonUpperMain",
       "x": 256,
-      "y": 104
+      "y": 168
      }
     ]
    },
@@ -10304,8 +10304,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsDungeonUpperMain",
-      "x": 128,
-      "y": 168
+      "x": 256,
+      "y": 232
      }
     ]
    }
@@ -10344,7 +10344,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -10359,7 +10359,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -10374,7 +10374,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -10389,7 +10389,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -10404,7 +10404,7 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 192,
+      "x": 448,
       "y": 136
      }
     ]
@@ -10419,8 +10419,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -10435,7 +10435,7 @@
      {
       "map": "GoldenHillsCableCar",
       "x": 56,
-      "y": 232
+      "y": 88
      }
     ]
    },
@@ -10452,8 +10452,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 256,
-      "y": 112
+      "x": 512,
+      "y": 120
      }
     ]
    },
@@ -10470,8 +10470,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsCableCar",
-      "x": 128,
-      "y": 200
+      "x": 256,
+      "y": 120
      }
     ]
    }
@@ -10566,7 +10566,7 @@
      {
       "map": "GoldenHillsPath3",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -10629,7 +10629,7 @@
      {
       "map": "GoldenHillsPath3",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -10646,8 +10646,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath3",
-      "x": 267,
-      "y": 184
+      "x": 268,
+      "y": 192
      }
     ]
    }
@@ -10666,8 +10666,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -10681,8 +10681,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -10696,8 +10696,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -10711,8 +10711,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -10726,8 +10726,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 320,
-      "y": 136
+      "x": 64,
+      "y": 264
      }
     ]
    },
@@ -10741,8 +10741,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 200
      }
     ]
    },
@@ -10756,8 +10756,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 72
      }
     ]
    },
@@ -10771,8 +10771,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 56,
-      "y": 296
+      "x": 312,
+      "y": 136
      }
     ]
    },
@@ -10790,7 +10790,7 @@
      {
       "map": "GoldenHillsPath2",
       "x": 256,
-      "y": 120
+      "y": 248
      }
     ]
    },
@@ -10807,8 +10807,8 @@
     "map_locations": [
      {
       "map": "GoldenHillsPath2",
-      "x": 241,
-      "y": 200
+      "x": 270,
+      "y": 168
      }
     ]
    }
@@ -10933,7 +10933,7 @@
      {
       "map": "GoldenSettlementEntrance",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -10966,7 +10966,7 @@
      {
       "map": "GoldenSettlementEntrance",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -11209,7 +11209,7 @@
      {
       "map": "PowerPlant",
       "x": 56,
-      "y": 72
+      "y": 232
      }
     ]
    },
@@ -11223,7 +11223,7 @@
     "map_locations": [
      {
       "map": "PowerPlant",
-      "x": 320,
+      "x": 64,
       "y": 136
      }
     ]
@@ -11238,7 +11238,7 @@
     "map_locations": [
      {
       "map": "PowerPlant",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -11256,8 +11256,8 @@
     "map_locations": [
      {
       "map": "PowerPlant",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 200
      }
     ]
    }
@@ -11658,7 +11658,7 @@
     "map_locations": [
      {
       "map": "BarrenLandsMushrooms",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -11673,7 +11673,7 @@
     "map_locations": [
      {
       "map": "BarrenLandsMushrooms",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -11712,7 +11712,7 @@
      {
       "map": "AbandonedCity",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -11727,7 +11727,7 @@
      {
       "map": "AbandonedCity",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -11742,7 +11742,7 @@
      {
       "map": "AbandonedCity",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -11756,7 +11756,7 @@
     "map_locations": [
      {
       "map": "AbandonedCity",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -11774,8 +11774,8 @@
     "map_locations": [
      {
       "map": "AbandonedCity",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -11844,8 +11844,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsBeefly",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -11859,8 +11859,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsBeefly",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -11874,8 +11874,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsBeefly",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -11890,7 +11890,7 @@
      {
       "map": "BarrenLandsBeefly",
       "x": 312,
-      "y": 72
+      "y": 360
      }
     ]
    },
@@ -11905,7 +11905,7 @@
      {
       "map": "BarrenLandsBeefly",
       "x": 64,
-      "y": 296
+      "y": 264
      }
     ]
    },
@@ -11920,7 +11920,7 @@
      {
       "map": "BarrenLandsBeefly",
       "x": 56,
-      "y": 232
+      "y": 200
      }
     ]
    },
@@ -11935,7 +11935,7 @@
      {
       "map": "BarrenLandsBeefly",
       "x": 312,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -11950,7 +11950,7 @@
      {
       "map": "BarrenLandsBeefly",
       "x": 312,
-      "y": 296
+      "y": 136
      }
     ]
    },
@@ -11967,8 +11967,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsBeefly",
-      "x": 256,
-      "y": 112
+      "x": 384,
+      "y": 328
      }
     ]
    },
@@ -11985,8 +11985,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsBeefly",
-      "x": 267,
-      "y": 184
+      "x": 270,
+      "y": 328
      }
     ]
    },
@@ -12003,8 +12003,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsBeefly",
-      "x": 256,
-      "y": 272
+      "x": 270,
+      "y": 168
      }
     ]
    }
@@ -12024,7 +12024,7 @@
      {
       "map": "BarrenLandsCD",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -12039,7 +12039,7 @@
      {
       "map": "BarrenLandsCD",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -12054,7 +12054,7 @@
      {
       "map": "BarrenLandsCD",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -12069,7 +12069,7 @@
      {
       "map": "BarrenLandsCD",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -12083,7 +12083,7 @@
     "map_locations": [
      {
       "map": "BarrenLandsCD",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -12098,7 +12098,7 @@
     "map_locations": [
      {
       "map": "BarrenLandsCD",
-      "x": 346,
+      "x": 90,
       "y": 72
      }
     ]
@@ -12116,8 +12116,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCD",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -12357,7 +12357,7 @@
      {
       "map": "BarrenLandsPinkSpider",
       "x": 56,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -12390,7 +12390,7 @@
      {
       "map": "BarrenLandsPinkSpider",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -12410,7 +12410,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 64,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -12425,7 +12425,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 96,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -12440,7 +12440,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 128,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -12455,7 +12455,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 160,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -12470,7 +12470,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 56,
-      "y": 72
+      "y": 232
      }
     ]
    },
@@ -12485,7 +12485,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 90,
-      "y": 72
+      "y": 232
      }
     ]
    },
@@ -12529,8 +12529,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsPumpkins",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 248
      }
     ]
    },
@@ -12548,7 +12548,7 @@
      {
       "map": "BarrenLandsPumpkins",
       "x": 256,
-      "y": 120
+      "y": 200
      }
     ]
    },
@@ -12565,8 +12565,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsPumpkins",
-      "x": 241,
-      "y": 200
+      "x": 384,
+      "y": 208
      }
     ]
    }
@@ -12586,7 +12586,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -12601,7 +12601,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -12616,7 +12616,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -12631,7 +12631,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -12646,7 +12646,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -12661,7 +12661,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -12676,7 +12676,7 @@
      {
       "map": "BarrenLandsSideGPT",
       "x": 124,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -12690,7 +12690,7 @@
     "map_locations": [
      {
       "map": "BarrenLandsSideGPT",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -12708,8 +12708,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsSideGPT",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -12728,8 +12728,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -12743,8 +12743,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -12758,8 +12758,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -12773,8 +12773,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 264
      }
     ]
    },
@@ -12788,8 +12788,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -12819,7 +12819,7 @@
      {
       "map": "BarrenLandsCloud",
       "x": 56,
-      "y": 232
+      "y": 216
      }
     ]
    },
@@ -12834,7 +12834,7 @@
      {
       "map": "BarrenLandsCloud",
       "x": 320,
-      "y": 296
+      "y": 424
      }
     ]
    },
@@ -12849,7 +12849,7 @@
      {
       "map": "BarrenLandsCloud",
       "x": 312,
-      "y": 232
+      "y": 360
      }
     ]
    },
@@ -12864,7 +12864,7 @@
      {
       "map": "BarrenLandsCloud",
       "x": 312,
-      "y": 328
+      "y": 456
      }
     ]
    },
@@ -12881,8 +12881,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 256,
-      "y": 112
+      "x": 384,
+      "y": 168
      }
     ]
    },
@@ -12900,7 +12900,7 @@
      {
       "map": "BarrenLandsCloud",
       "x": 256,
-      "y": 184
+      "y": 176
      }
     ]
    },
@@ -12917,8 +12917,8 @@
     "map_locations": [
      {
       "map": "BarrenLandsCloud",
-      "x": 256,
-      "y": 272
+      "x": 243,
+      "y": 320
      }
     ]
    }
@@ -12937,7 +12937,7 @@
     "map_locations": [
      {
       "map": "TermiteOutside",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -12952,7 +12952,7 @@
     "map_locations": [
      {
       "map": "TermiteOutside",
-      "x": 56,
+      "x": 312,
       "y": 136
      }
     ]
@@ -12967,7 +12967,7 @@
     "map_locations": [
      {
       "map": "TermiteOutside",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -13040,7 +13040,7 @@
     "map_locations": [
      {
       "map": "FGCave",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -13055,7 +13055,7 @@
     "map_locations": [
      {
       "map": "FGCave",
-      "x": 312,
+      "x": 568,
       "y": 136
      }
     ]
@@ -13071,7 +13071,7 @@
      {
       "map": "FGCave",
       "x": 56,
-      "y": 200
+      "y": 72
      }
     ]
    },
@@ -13085,7 +13085,7 @@
     "map_locations": [
      {
       "map": "FGCave",
-      "x": 312,
+      "x": 568,
       "y": 200
      }
     ]
@@ -13103,7 +13103,7 @@
     "map_locations": [
      {
       "map": "FGCave",
-      "x": 256,
+      "x": 512,
       "y": 104
      }
     ]
@@ -13121,8 +13121,8 @@
     "map_locations": [
      {
       "map": "FGCave",
-      "x": 128,
-      "y": 168
+      "x": 256,
+      "y": 104
      }
     ]
    },
@@ -13139,7 +13139,7 @@
     "map_locations": [
      {
       "map": "FGCave",
-      "x": 256,
+      "x": 512,
       "y": 168
      }
     ]
@@ -13160,7 +13160,7 @@
      {
       "map": "FGOutsideSwamplands",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -13175,7 +13175,7 @@
      {
       "map": "FGOutsideSwamplands",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -13189,7 +13189,7 @@
     "map_locations": [
      {
       "map": "FGOutsideSwamplands",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -13204,7 +13204,7 @@
     "map_locations": [
      {
       "map": "FGOutsideSwamplands",
-      "x": 346,
+      "x": 90,
       "y": 72
      }
     ]
@@ -13222,8 +13222,8 @@
     "map_locations": [
      {
       "map": "FGOutsideSwamplands",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -13447,8 +13447,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands3",
-      "x": 56,
-      "y": 232
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -13462,8 +13462,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands3",
-      "x": 56,
-      "y": 296
+      "x": 568,
+      "y": 152
      }
     ]
    },
@@ -13481,7 +13481,7 @@
      {
       "map": "FarGrasslands3",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -13498,8 +13498,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands3",
-      "x": 256,
-      "y": 184
+      "x": 512,
+      "y": 120
      }
     ]
    }
@@ -13518,8 +13518,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -13533,8 +13533,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -13548,8 +13548,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -13563,8 +13563,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -13578,8 +13578,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 56,
-      "y": 168
+      "x": 312,
+      "y": 296
      }
     ]
    },
@@ -13593,8 +13593,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 216
      }
     ]
    },
@@ -13608,8 +13608,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 56,
-      "y": 296
+      "x": 312,
+      "y": 136
      }
     ]
    },
@@ -13623,8 +13623,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands4",
-      "x": 312,
-      "y": 232
+      "x": 56,
+      "y": 72
      }
     ]
    },
@@ -13642,7 +13642,7 @@
      {
       "map": "FarGrasslands4",
       "x": 256,
-      "y": 112
+      "y": 248
      }
     ]
    },
@@ -13660,7 +13660,7 @@
      {
       "map": "FarGrasslands4",
       "x": 256,
-      "y": 184
+      "y": 176
      }
     ]
    },
@@ -13678,7 +13678,7 @@
      {
       "map": "FarGrasslands4",
       "x": 256,
-      "y": 264
+      "y": 104
      }
     ]
    }
@@ -13697,7 +13697,7 @@
     "map_locations": [
      {
       "map": "FarGrasslandsOutsideCave",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -13712,7 +13712,7 @@
     "map_locations": [
      {
       "map": "FarGrasslandsOutsideCave",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -13727,7 +13727,7 @@
     "map_locations": [
      {
       "map": "FarGrasslandsOutsideCave",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -13742,8 +13742,8 @@
     "map_locations": [
      {
       "map": "FarGrasslandsOutsideCave",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -13775,8 +13775,8 @@
     "map_locations": [
      {
       "map": "FarGrasslandsOutsideCave",
-      "x": 256,
-      "y": 112
+      "x": 512,
+      "y": 120
      }
     ]
    },
@@ -13793,7 +13793,7 @@
     "map_locations": [
      {
       "map": "FarGrasslandsOutsideCave",
-      "x": 128,
+      "x": 241,
       "y": 200
      }
     ]
@@ -13889,7 +13889,7 @@
      {
       "map": "FarGrasslandsOutsideVillage",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -13907,7 +13907,7 @@
      {
       "map": "FarGrasslandsOutsideVillage",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -14052,7 +14052,7 @@
      {
       "map": "FarGrasslands2",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14067,7 +14067,7 @@
      {
       "map": "FarGrasslands2",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14082,7 +14082,7 @@
      {
       "map": "FarGrasslands2",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14097,7 +14097,7 @@
      {
       "map": "FarGrasslands2",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14112,7 +14112,7 @@
      {
       "map": "FarGrasslands2",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -14126,7 +14126,7 @@
     "map_locations": [
      {
       "map": "FarGrasslands2",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -14144,8 +14144,8 @@
     "map_locations": [
      {
       "map": "FarGrasslands2",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -14195,7 +14195,7 @@
      {
       "map": "FarGrasslandsWizard",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -14210,7 +14210,7 @@
      {
       "map": "FarGrasslandsWizard",
       "x": 346,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -14228,7 +14228,7 @@
      {
       "map": "FarGrasslandsWizard",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -14283,7 +14283,7 @@
      {
       "map": "WizardTowerBasement",
       "x": 64,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -14331,7 +14331,7 @@
      {
       "map": "WizardTowerBasement",
       "x": 256,
-      "y": 120
+      "y": 200
      }
     ]
    }
@@ -14351,7 +14351,7 @@
      {
       "map": "WizardTowerStairs",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -14366,7 +14366,7 @@
      {
       "map": "WizardTowerStairs",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -14380,7 +14380,7 @@
     "map_locations": [
      {
       "map": "WizardTowerStairs",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -14398,8 +14398,8 @@
     "map_locations": [
      {
       "map": "WizardTowerStairs",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -14419,7 +14419,7 @@
      {
       "map": "SwamplandsBoss",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -14433,7 +14433,7 @@
     "map_locations": [
      {
       "map": "SwamplandsBoss",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -14451,8 +14451,8 @@
     "map_locations": [
      {
       "map": "SwamplandsBoss",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -14472,7 +14472,7 @@
      {
       "map": "SwamplandsBridge",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -14487,7 +14487,7 @@
      {
       "map": "SwamplandsBridge",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -14501,7 +14501,7 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 576,
+      "x": 56,
       "y": 72
      }
     ]
@@ -14516,7 +14516,7 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 576,
+      "x": 56,
       "y": 136
      }
     ]
@@ -14531,7 +14531,7 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 56,
+      "x": 312,
       "y": 264
      }
     ]
@@ -14546,8 +14546,8 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 328,
-      "y": 264
+      "x": 64,
+      "y": 392
      }
     ]
    },
@@ -14561,8 +14561,8 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 320,
-      "y": 200
+      "x": 56,
+      "y": 328
      }
     ]
    },
@@ -14579,8 +14579,8 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 260,
-      "y": 104
+      "x": 258,
+      "y": 168
      }
     ]
    },
@@ -14597,7 +14597,7 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 520,
+      "x": 258,
       "y": 104
      }
     ]
@@ -14615,8 +14615,8 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 130,
-      "y": 168
+      "x": 256,
+      "y": 232
      }
     ]
    },
@@ -14633,8 +14633,8 @@
     "map_locations": [
      {
       "map": "SwamplandsBridge",
-      "x": 245,
-      "y": 168
+      "x": 128,
+      "y": 296
      }
     ]
    }
@@ -14728,7 +14728,7 @@
     "map_locations": [
      {
       "map": "Swamplands6",
-      "x": 56,
+      "x": 568,
       "y": 296
      }
     ]
@@ -14743,8 +14743,8 @@
     "map_locations": [
      {
       "map": "Swamplands6",
-      "x": 320,
-      "y": 296
+      "x": 576,
+      "y": 136
      }
     ]
    },
@@ -14758,8 +14758,8 @@
     "map_locations": [
      {
       "map": "Swamplands6",
-      "x": 312,
-      "y": 232
+      "x": 568,
+      "y": 72
      }
     ]
    },
@@ -14777,7 +14777,7 @@
      {
       "map": "Swamplands6",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -14794,8 +14794,8 @@
     "map_locations": [
      {
       "map": "Swamplands6",
-      "x": 256,
-      "y": 184
+      "x": 512,
+      "y": 192
      }
     ]
    },
@@ -14812,8 +14812,8 @@
     "map_locations": [
      {
       "map": "Swamplands6",
-      "x": 256,
-      "y": 272
+      "x": 640,
+      "y": 200
      }
     ]
    }
@@ -14833,7 +14833,7 @@
      {
       "map": "Swamplands8",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14848,7 +14848,7 @@
      {
       "map": "Swamplands8",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14863,7 +14863,7 @@
      {
       "map": "Swamplands8",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14878,7 +14878,7 @@
      {
       "map": "Swamplands8",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -14892,8 +14892,8 @@
     "map_locations": [
      {
       "map": "Swamplands8",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 360
      }
     ]
    },
@@ -14907,8 +14907,8 @@
     "map_locations": [
      {
       "map": "Swamplands8",
-      "x": 64,
-      "y": 296
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -14923,7 +14923,7 @@
      {
       "map": "Swamplands8",
       "x": 312,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -14940,8 +14940,8 @@
     "map_locations": [
      {
       "map": "Swamplands8",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 328
      }
     ]
    },
@@ -14958,8 +14958,8 @@
     "map_locations": [
      {
       "map": "Swamplands8",
-      "x": 384,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -14976,8 +14976,8 @@
     "map_locations": [
      {
       "map": "Swamplands8",
-      "x": 128,
-      "y": 200
+      "x": 256,
+      "y": 248
      }
     ]
    },
@@ -14994,8 +14994,8 @@
     "map_locations": [
      {
       "map": "Swamplands8",
-      "x": 256,
-      "y": 272
+      "x": 384,
+      "y": 168
      }
     ]
    }
@@ -15014,8 +15014,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 296
      }
     ]
    },
@@ -15029,8 +15029,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 296
      }
     ]
    },
@@ -15044,8 +15044,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 296
      }
     ]
    },
@@ -15059,8 +15059,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 296
      }
     ]
    },
@@ -15074,8 +15074,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 192,
-      "y": 136
+      "x": 448,
+      "y": 296
      }
     ]
    },
@@ -15090,7 +15090,7 @@
      {
       "map": "Swamplands7",
       "x": 568,
-      "y": 72
+      "y": 392
      }
     ]
    },
@@ -15104,8 +15104,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 320,
-      "y": 296
+      "x": 64,
+      "y": 136
      }
     ]
    },
@@ -15119,8 +15119,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 312,
-      "y": 328
+      "x": 56,
+      "y": 168
      }
     ]
    },
@@ -15134,8 +15134,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 568,
-      "y": 232
+      "x": 56,
+      "y": 248
      }
     ]
    },
@@ -15149,8 +15149,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 568,
-      "y": 296
+      "x": 56,
+      "y": 312
      }
     ]
    },
@@ -15167,8 +15167,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 256,
-      "y": 112
+      "x": 384,
+      "y": 360
      }
     ]
    },
@@ -15186,7 +15186,7 @@
      {
       "map": "Swamplands7",
       "x": 512,
-      "y": 104
+      "y": 424
      }
     ]
    },
@@ -15203,8 +15203,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 128,
-      "y": 200
+      "x": 384,
+      "y": 192
      }
     ]
    },
@@ -15222,7 +15222,7 @@
      {
       "map": "Swamplands7",
       "x": 256,
-      "y": 272
+      "y": 120
      }
     ]
    },
@@ -15239,8 +15239,8 @@
     "map_locations": [
      {
       "map": "Swamplands7",
-      "x": 384,
-      "y": 192
+      "x": 256,
+      "y": 280
      }
     ]
    }
@@ -15259,8 +15259,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -15274,8 +15274,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -15289,8 +15289,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -15304,8 +15304,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 160,
-      "y": 136
+      "x": 416,
+      "y": 264
      }
     ]
    },
@@ -15319,8 +15319,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 192,
-      "y": 136
+      "x": 448,
+      "y": 264
      }
     ]
    },
@@ -15334,8 +15334,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 224,
-      "y": 136
+      "x": 480,
+      "y": 264
      }
     ]
    },
@@ -15349,8 +15349,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -15364,8 +15364,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 344,
-      "y": 72
+      "x": 56,
+      "y": 216
      }
     ]
    },
@@ -15379,8 +15379,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 56,
-      "y": 232
+      "x": 600,
+      "y": 72
      }
     ]
    },
@@ -15394,8 +15394,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 90,
-      "y": 232
+      "x": 634,
+      "y": 72
      }
     ]
    },
@@ -15412,8 +15412,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 288,
-      "y": 111
+      "x": 256,
+      "y": 248
      }
     ]
    },
@@ -15430,8 +15430,8 @@
     "map_locations": [
      {
       "map": "Swamplands5",
-      "x": 135,
-      "y": 200
+      "x": 551,
+      "y": 168
      }
     ]
    }
@@ -15451,7 +15451,7 @@
      {
       "map": "Swamplands2",
       "x": 64,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -15466,7 +15466,7 @@
      {
       "map": "Swamplands2",
       "x": 96,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -15481,7 +15481,7 @@
      {
       "map": "Swamplands2",
       "x": 128,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -15496,7 +15496,7 @@
      {
       "map": "Swamplands2",
       "x": 160,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -15511,7 +15511,7 @@
      {
       "map": "Swamplands2",
       "x": 56,
-      "y": 72
+      "y": 232
      }
     ]
    },
@@ -15525,7 +15525,7 @@
     "map_locations": [
      {
       "map": "Swamplands2",
-      "x": 320,
+      "x": 64,
       "y": 136
      }
     ]
@@ -15540,7 +15540,7 @@
     "map_locations": [
      {
       "map": "Swamplands2",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -15558,8 +15558,8 @@
     "map_locations": [
      {
       "map": "Swamplands2",
-      "x": 256,
-      "y": 120
+      "x": 128,
+      "y": 200
      }
     ]
    }
@@ -15608,8 +15608,8 @@
     "map_locations": [
      {
       "map": "Swamplands3",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 232
      }
     ]
    },
@@ -15623,8 +15623,8 @@
     "map_locations": [
      {
       "map": "Swamplands3",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 88
      }
     ]
    },
@@ -15638,8 +15638,8 @@
     "map_locations": [
      {
       "map": "Swamplands3",
-      "x": 56,
-      "y": 296
+      "x": 312,
+      "y": 152
      }
     ]
    },
@@ -15656,8 +15656,8 @@
     "map_locations": [
      {
       "map": "Swamplands3",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 200
      }
     ]
    },
@@ -15674,8 +15674,8 @@
     "map_locations": [
      {
       "map": "Swamplands3",
-      "x": 128,
-      "y": 200
+      "x": 256,
+      "y": 120
      }
     ]
    }
@@ -15695,7 +15695,7 @@
      {
       "map": "Swamplands4",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -15710,7 +15710,7 @@
      {
       "map": "Swamplands4",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -15725,7 +15725,7 @@
      {
       "map": "Swamplands4",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -15739,7 +15739,7 @@
     "map_locations": [
      {
       "map": "Swamplands4",
-      "x": 568,
+      "x": 56,
       "y": 72
      }
     ]
@@ -15754,8 +15754,8 @@
     "map_locations": [
      {
       "map": "Swamplands4",
-      "x": 312,
-      "y": 232
+      "x": 568,
+      "y": 360
      }
     ]
    },
@@ -15773,7 +15773,7 @@
      {
       "map": "Swamplands4",
       "x": 256,
-      "y": 112
+      "y": 248
      }
     ]
    },
@@ -15790,8 +15790,8 @@
     "map_locations": [
      {
       "map": "Swamplands4",
-      "x": 512,
-      "y": 104
+      "x": 256,
+      "y": 176
      }
     ]
    },
@@ -15808,8 +15808,8 @@
     "map_locations": [
      {
       "map": "Swamplands4",
-      "x": 128,
-      "y": 200
+      "x": 270,
+      "y": 328
      }
     ]
    },
@@ -15826,8 +15826,8 @@
     "map_locations": [
      {
       "map": "Swamplands4",
-      "x": 256,
-      "y": 264
+      "x": 512,
+      "y": 392
      }
     ]
    }
@@ -16371,7 +16371,7 @@
      {
       "map": "DefiantRootWell",
       "x": 56,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -16419,7 +16419,7 @@
      {
       "map": "DefiantRootWell",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -16439,7 +16439,7 @@
      {
       "map": "SandCastleBasement",
       "x": 56,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -16502,7 +16502,7 @@
      {
       "map": "SandCastleBasement",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -16689,8 +16689,8 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 216
      }
     ]
    },
@@ -16704,8 +16704,8 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 360
      }
     ]
    },
@@ -16720,7 +16720,7 @@
      {
       "map": "SandCastleRockRoom",
       "x": 56,
-      "y": 264
+      "y": 136
      }
     ]
    },
@@ -16734,7 +16734,7 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 320,
+      "x": 576,
       "y": 264
      }
     ]
@@ -16749,7 +16749,7 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 312,
+      "x": 568,
       "y": 296
      }
     ]
@@ -16767,8 +16767,8 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 256,
-      "y": 104
+      "x": 512,
+      "y": 320
      }
     ]
    },
@@ -16785,8 +16785,8 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 128,
-      "y": 168
+      "x": 256,
+      "y": 176
      }
     ]
    },
@@ -16803,8 +16803,8 @@
     "map_locations": [
      {
       "map": "SandCastleRockRoom",
-      "x": 384,
-      "y": 168
+      "x": 640,
+      "y": 328
      }
     ]
    }
@@ -16941,8 +16941,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -16956,8 +16956,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 90,
-      "y": 72
+      "x": 346,
+      "y": 200
      }
     ]
    },
@@ -16971,8 +16971,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 124,
-      "y": 72
+      "x": 380,
+      "y": 200
      }
     ]
    },
@@ -16986,8 +16986,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 158,
-      "y": 72
+      "x": 414,
+      "y": 200
      }
     ]
    },
@@ -17001,8 +17001,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 322,
-      "y": 72
+      "x": 56,
+      "y": 200
      }
     ]
    },
@@ -17016,8 +17016,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 322,
-      "y": 136
+      "x": 56,
+      "y": 264
      }
     ]
    },
@@ -17032,7 +17032,7 @@
      {
       "map": "SandCastleMainRoom",
       "x": 578,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -17047,7 +17047,7 @@
      {
       "map": "SandCastleMainRoom",
       "x": 578,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -17061,8 +17061,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 56,
-      "y": 200
+      "x": 578,
+      "y": 72
      }
     ]
    },
@@ -17076,8 +17076,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 90,
-      "y": 200
+      "x": 612,
+      "y": 72
      }
     ]
    },
@@ -17091,8 +17091,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 56,
-      "y": 264
+      "x": 578,
+      "y": 136
      }
     ]
    },
@@ -17106,8 +17106,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 90,
-      "y": 264
+      "x": 612,
+      "y": 136
      }
     ]
    },
@@ -17121,8 +17121,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 322,
-      "y": 200
+      "x": 56,
+      "y": 72
      }
     ]
    },
@@ -17136,8 +17136,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 356,
-      "y": 200
+      "x": 90,
+      "y": 72
      }
     ]
    },
@@ -17154,8 +17154,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 266,
-      "y": 104
+      "x": 256,
+      "y": 232
      }
     ]
    },
@@ -17172,8 +17172,8 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 393,
-      "y": 104
+      "x": 522,
+      "y": 232
      }
     ]
    },
@@ -17190,7 +17190,7 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 130,
+      "x": 519,
       "y": 168
      }
     ]
@@ -17208,7 +17208,7 @@
     "map_locations": [
      {
       "map": "SandCastleMainRoom",
-      "x": 263,
+      "x": 258,
       "y": 168
      }
     ]
@@ -17282,7 +17282,7 @@
      {
       "map": "SandCastleSlidePuzzle",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -17296,8 +17296,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 320,
-      "y": 136
+      "x": 64,
+      "y": 392
      }
     ]
    },
@@ -17311,8 +17311,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 72
      }
     ]
    },
@@ -17326,8 +17326,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 56,
-      "y": 296
+      "x": 312,
+      "y": 136
      }
     ]
    },
@@ -17341,8 +17341,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 312,
-      "y": 232
+      "x": 56,
+      "y": 72
      }
     ]
    },
@@ -17356,8 +17356,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 312,
-      "y": 296
+      "x": 56,
+      "y": 136
      }
     ]
    },
@@ -17374,8 +17374,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 296
      }
     ]
    },
@@ -17392,8 +17392,8 @@
     "map_locations": [
      {
       "map": "SandCastleSlidePuzzle",
-      "x": 128,
-      "y": 184
+      "x": 256,
+      "y": 168
      }
     ]
    },
@@ -17411,7 +17411,7 @@
      {
       "map": "SandCastleSlidePuzzle",
       "x": 256,
-      "y": 264
+      "y": 104
      }
     ]
    }
@@ -17710,7 +17710,7 @@
     "map_locations": [
      {
       "map": "BeehiveOutside",
-      "x": 56,
+      "x": 312,
       "y": 136
      }
     ]
@@ -17725,7 +17725,7 @@
     "map_locations": [
      {
       "map": "BeehiveOutside",
-      "x": 90,
+      "x": 346,
       "y": 136
      }
     ]
@@ -17740,7 +17740,7 @@
     "map_locations": [
      {
       "map": "BeehiveOutside",
-      "x": 124,
+      "x": 380,
       "y": 136
      }
     ]
@@ -17755,7 +17755,7 @@
     "map_locations": [
      {
       "map": "BeehiveOutside",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -17770,7 +17770,7 @@
     "map_locations": [
      {
       "map": "BeehiveOutside",
-      "x": 346,
+      "x": 90,
       "y": 72
      }
     ]
@@ -17936,8 +17936,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageElevator",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 200
      }
     ]
    },
@@ -17954,8 +17954,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageElevator",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -18009,8 +18009,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessing2",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -18024,8 +18024,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessing2",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -18039,8 +18039,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessing2",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -18054,8 +18054,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessing2",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -18069,7 +18069,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessing2",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -18087,8 +18087,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessing2",
-      "x": 256,
-      "y": 112
+      "x": 241,
+      "y": 168
      }
     ]
    }
@@ -18337,7 +18337,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -18352,7 +18352,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -18367,7 +18367,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -18382,7 +18382,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -18397,7 +18397,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -18412,7 +18412,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 56,
+      "x": 312,
       "y": 168
      }
     ]
@@ -18427,8 +18427,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -18442,8 +18442,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 312,
-      "y": 136
+      "x": 56,
+      "y": 152
      }
     ]
    },
@@ -18461,7 +18461,7 @@
      {
       "map": "FactoryProcessingFirstRoom",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -18478,7 +18478,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingFirstRoom",
-      "x": 128,
+      "x": 384,
       "y": 200
      }
     ]
@@ -18563,8 +18563,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 340,
-      "y": 136
+      "x": 64,
+      "y": 264
      }
     ]
    },
@@ -18578,8 +18578,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 372,
-      "y": 136
+      "x": 96,
+      "y": 264
      }
     ]
    },
@@ -18593,8 +18593,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 404,
-      "y": 136
+      "x": 128,
+      "y": 264
      }
     ]
    },
@@ -18608,8 +18608,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 436,
-      "y": 136
+      "x": 160,
+      "y": 264
      }
     ]
    },
@@ -18623,8 +18623,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 468,
-      "y": 136
+      "x": 192,
+      "y": 264
      }
     ]
    },
@@ -18638,8 +18638,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 332,
-      "y": 72
+      "x": 56,
+      "y": 200
      }
     ]
    },
@@ -18653,8 +18653,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 366,
-      "y": 72
+      "x": 90,
+      "y": 200
      }
     ]
    },
@@ -18668,8 +18668,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 72
      }
     ]
    },
@@ -18686,8 +18686,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 266,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -18704,8 +18704,8 @@
     "map_locations": [
      {
       "map": "HoneyFactoryEntrance",
-      "x": 133,
-      "y": 184
+      "x": 256,
+      "y": 104
      }
     ]
    }
@@ -18804,8 +18804,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 64,
-      "y": 136
+      "x": 340,
+      "y": 296
      }
     ]
    },
@@ -18819,8 +18819,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 96,
-      "y": 136
+      "x": 372,
+      "y": 296
      }
     ]
    },
@@ -18834,8 +18834,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 128,
-      "y": 136
+      "x": 404,
+      "y": 296
      }
     ]
    },
@@ -18849,8 +18849,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 56,
-      "y": 72
+      "x": 332,
+      "y": 232
      }
     ]
    },
@@ -18864,8 +18864,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 90,
-      "y": 72
+      "x": 366,
+      "y": 232
      }
     ]
    },
@@ -18879,8 +18879,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 248
      }
     ]
    },
@@ -18894,8 +18894,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 56,
-      "y": 232
+      "x": 66,
+      "y": 88
      }
     ]
    },
@@ -18909,8 +18909,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 56,
-      "y": 296
+      "x": 66,
+      "y": 152
      }
     ]
    },
@@ -18924,8 +18924,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 320,
-      "y": 296
+      "x": 596,
+      "y": 136
      }
     ]
    },
@@ -18939,8 +18939,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 312,
-      "y": 232
+      "x": 588,
+      "y": 72
      }
     ]
    },
@@ -18954,8 +18954,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 312,
-      "y": 328
+      "x": 588,
+      "y": 168
      }
     ]
    },
@@ -18972,8 +18972,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 256,
-      "y": 112
+      "x": 276,
+      "y": 280
      }
     ]
    },
@@ -18990,8 +18990,8 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 128,
-      "y": 200
+      "x": 257,
+      "y": 192
      }
     ]
    },
@@ -19008,7 +19008,7 @@
     "map_locations": [
      {
       "map": "FactoryProcessingPump",
-      "x": 256,
+      "x": 532,
       "y": 200
      }
     ]
@@ -19028,8 +19028,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 296
      }
     ]
    },
@@ -19043,8 +19043,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 296
      }
     ]
    },
@@ -19058,8 +19058,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 232
      }
     ]
    },
@@ -19104,7 +19104,7 @@
      {
       "map": "FactoryStorageMaze",
       "x": 56,
-      "y": 232
+      "y": 248
      }
     ]
    },
@@ -19118,8 +19118,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 312,
-      "y": 232
+      "x": 568,
+      "y": 248
      }
     ]
    },
@@ -19136,8 +19136,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 256,
-      "y": 120
+      "x": 384,
+      "y": 200
      }
     ]
    },
@@ -19154,8 +19154,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 241,
-      "y": 200
+      "x": 243,
+      "y": 208
      }
     ]
    },
@@ -19172,8 +19172,8 @@
     "map_locations": [
      {
       "map": "FactoryStorageMaze",
-      "x": 270,
-      "y": 200
+      "x": 512,
+      "y": 280
      }
     ]
    }
@@ -19368,7 +19368,7 @@
      {
       "map": "HoneyFactoryWorkerRooms",
       "x": 312,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -19386,7 +19386,7 @@
      {
       "map": "HoneyFactoryWorkerRooms",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -19405,8 +19405,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -19420,8 +19420,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -19435,8 +19435,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 216
      }
     ]
    },
@@ -19451,7 +19451,7 @@
      {
       "map": "RubberPrisonCells2",
       "x": 568,
-      "y": 72
+      "y": 216
      }
     ]
    },
@@ -19465,8 +19465,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 64,
-      "y": 296
+      "x": 320,
+      "y": 424
      }
     ]
    },
@@ -19481,7 +19481,7 @@
      {
       "map": "RubberPrisonCells2",
       "x": 312,
-      "y": 296
+      "y": 136
      }
     ]
    },
@@ -19496,7 +19496,7 @@
      {
       "map": "RubberPrisonCells2",
       "x": 568,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -19514,7 +19514,7 @@
      {
       "map": "RubberPrisonCells2",
       "x": 256,
-      "y": 112
+      "y": 248
      }
     ]
    },
@@ -19531,8 +19531,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 384,
-      "y": 112
+      "x": 512,
+      "y": 248
      }
     ]
    },
@@ -19549,8 +19549,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 128,
-      "y": 200
+      "x": 384,
+      "y": 328
      }
     ]
    },
@@ -19567,8 +19567,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells2",
-      "x": 270,
-      "y": 200
+      "x": 384,
+      "y": 168
      }
     ]
    },
@@ -19586,7 +19586,7 @@
      {
       "map": "RubberPrisonCells2",
       "x": 512,
-      "y": 264
+      "y": 104
      }
     ]
    }
@@ -19605,8 +19605,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 216
      }
     ]
    },
@@ -19620,7 +19620,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -19635,8 +19635,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 56,
-      "y": 264
+      "x": 568,
+      "y": 280
      }
     ]
    },
@@ -19650,7 +19650,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 320,
+      "x": 832,
       "y": 264
      }
     ]
@@ -19665,7 +19665,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 312,
+      "x": 824,
       "y": 200
      }
     ]
@@ -19684,7 +19684,7 @@
      {
       "map": "RubberPrisonGiantLairBridge",
       "x": 256,
-      "y": 104
+      "y": 176
      }
     ]
    },
@@ -19701,8 +19701,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 128,
-      "y": 168
+      "x": 512,
+      "y": 248
      }
     ]
    },
@@ -19719,8 +19719,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGiantLairBridge",
-      "x": 256,
-      "y": 240
+      "x": 768,
+      "y": 248
      }
     ]
    }
@@ -19739,8 +19739,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGym",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 296
      }
     ]
    },
@@ -19754,8 +19754,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGym",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 296
      }
     ]
    },
@@ -19769,8 +19769,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonGym",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 232
      }
     ]
    },
@@ -19784,7 +19784,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonGym",
-      "x": 320,
+      "x": 64,
       "y": 136
      }
     ]
@@ -19803,7 +19803,7 @@
      {
       "map": "RubberPrisonGym",
       "x": 256,
-      "y": 120
+      "y": 200
      }
     ]
    }
@@ -19822,8 +19822,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 64,
-      "y": 136
+      "x": 703,
+      "y": 264
      }
     ]
    },
@@ -19837,8 +19837,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 96,
-      "y": 136
+      "x": 735,
+      "y": 264
      }
     ]
    },
@@ -19852,8 +19852,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 128,
-      "y": 136
+      "x": 767,
+      "y": 264
      }
     ]
    },
@@ -19867,8 +19867,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 160,
-      "y": 136
+      "x": 799,
+      "y": 264
      }
     ]
    },
@@ -19882,8 +19882,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 192,
-      "y": 136
+      "x": 831,
+      "y": 264
      }
     ]
    },
@@ -19897,7 +19897,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 368,
+      "x": 356,
       "y": 72
      }
     ]
@@ -19912,8 +19912,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 740,
-      "y": 136
+      "x": 56,
+      "y": 280
      }
     ]
    },
@@ -19927,8 +19927,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 56,
-      "y": 296
+      "x": 1020,
+      "y": 440
      }
     ]
    },
@@ -19942,8 +19942,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 90,
-      "y": 296
+      "x": 1054,
+      "y": 440
      }
     ]
    },
@@ -19957,8 +19957,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 368,
-      "y": 232
+      "x": 656,
+      "y": 72
      }
     ]
    },
@@ -19972,8 +19972,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 402,
-      "y": 232
+      "x": 690,
+      "y": 72
      }
     ]
    },
@@ -19987,8 +19987,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 368,
-      "y": 296
+      "x": 656,
+      "y": 136
      }
     ]
    },
@@ -20002,8 +20002,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 402,
-      "y": 296
+      "x": 690,
+      "y": 136
      }
     ]
    },
@@ -20017,8 +20017,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 436,
-      "y": 296
+      "x": 724,
+      "y": 136
      }
     ]
    },
@@ -20032,8 +20032,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 470,
-      "y": 296
+      "x": 758,
+      "y": 136
      }
     ]
    },
@@ -20047,8 +20047,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 504,
-      "y": 296
+      "x": 792,
+      "y": 136
      }
     ]
    },
@@ -20062,8 +20062,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 538,
-      "y": 296
+      "x": 826,
+      "y": 136
      }
     ]
    },
@@ -20077,8 +20077,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 740,
-      "y": 232
+      "x": 1026,
+      "y": 216
      }
     ]
    },
@@ -20092,8 +20092,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 774,
-      "y": 232
+      "x": 1060,
+      "y": 216
      }
     ]
    },
@@ -20107,8 +20107,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 740,
-      "y": 296
+      "x": 1026,
+      "y": 280
      }
     ]
    },
@@ -20122,8 +20122,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 774,
-      "y": 296
+      "x": 1060,
+      "y": 280
      }
     ]
    },
@@ -20137,8 +20137,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 808,
-      "y": 296
+      "x": 1094,
+      "y": 280
      }
     ]
    },
@@ -20152,8 +20152,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 842,
-      "y": 296
+      "x": 1128,
+      "y": 280
      }
     ]
    },
@@ -20167,8 +20167,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 876,
-      "y": 296
+      "x": 1162,
+      "y": 280
      }
     ]
    },
@@ -20182,7 +20182,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 64,
+      "x": 698,
       "y": 424
      }
     ]
@@ -20197,7 +20197,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 56,
+      "x": 690,
       "y": 360
      }
     ]
@@ -20212,7 +20212,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 56,
+      "x": 690,
       "y": 456
      }
     ]
@@ -20227,7 +20227,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 90,
+      "x": 724,
       "y": 456
      }
     ]
@@ -20242,7 +20242,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 124,
+      "x": 758,
       "y": 456
      }
     ]
@@ -20257,7 +20257,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 158,
+      "x": 792,
       "y": 456
      }
     ]
@@ -20272,8 +20272,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 368,
-      "y": 360
+      "x": 990,
+      "y": 520
      }
     ]
    },
@@ -20287,8 +20287,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 740,
-      "y": 360
+      "x": 378,
+      "y": 216
      }
     ]
    },
@@ -20305,8 +20305,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 284,
-      "y": 112
+      "x": 595,
+      "y": 170
      }
     ]
    },
@@ -20323,8 +20323,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 648,
-      "y": 104
+      "x": 300,
+      "y": 176
      }
     ]
    },
@@ -20341,8 +20341,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 143,
-      "y": 200
+      "x": 956,
+      "y": 333
      }
     ]
    },
@@ -20359,8 +20359,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 312,
-      "y": 195
+      "x": 767,
+      "y": 168
      }
     ]
    },
@@ -20377,8 +20377,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 470,
-      "y": 189
+      "x": 932,
+      "y": 248
      }
     ]
    },
@@ -20395,8 +20395,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 130,
-      "y": 264
+      "x": 767,
+      "y": 328
      }
     ]
    },
@@ -20413,8 +20413,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 289,
-      "y": 401
+      "x": 954,
+      "y": 484
      }
     ]
    },
@@ -20431,8 +20431,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonPier",
-      "x": 477,
-      "y": 259
+      "x": 608,
+      "y": 248
      }
     ]
    }
@@ -20451,7 +20451,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonCafeteria",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -20466,7 +20466,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonCafeteria",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -20485,7 +20485,7 @@
      {
       "map": "RubberPrisonCafeteria",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -20504,8 +20504,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -20519,8 +20519,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -20534,8 +20534,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 128,
-      "y": 136
+      "x": 384,
+      "y": 264
      }
     ]
    },
@@ -20549,8 +20549,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -20580,7 +20580,7 @@
      {
       "map": "RubberPrisonCells1",
       "x": 56,
-      "y": 232
+      "y": 216
      }
     ]
    },
@@ -20594,8 +20594,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 312,
-      "y": 232
+      "x": 568,
+      "y": 216
      }
     ]
    },
@@ -20612,8 +20612,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 256,
-      "y": 112
+      "x": 384,
+      "y": 168
      }
     ]
    },
@@ -20648,8 +20648,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 128,
-      "y": 200
+      "x": 256,
+      "y": 248
      }
     ]
    },
@@ -20666,8 +20666,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCells1",
-      "x": 270,
-      "y": 200
+      "x": 512,
+      "y": 248
      }
     ]
    }
@@ -20686,8 +20686,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCheckpointCorridor",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -20701,8 +20701,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCheckpointCorridor",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 216
      }
     ]
    },
@@ -20717,7 +20717,7 @@
      {
       "map": "RubberPrisonCheckpointCorridor",
       "x": 56,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -20734,8 +20734,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCheckpointCorridor",
-      "x": 256,
-      "y": 112
+      "x": 512,
+      "y": 248
      }
     ]
    },
@@ -20752,8 +20752,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonCheckpointCorridor",
-      "x": 128,
-      "y": 200
+      "x": 241,
+      "y": 168
      }
     ]
    }
@@ -20773,7 +20773,7 @@
      {
       "map": "RubberPrisonLibrary",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -20788,7 +20788,7 @@
      {
       "map": "RubberPrisonLibrary",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -20803,7 +20803,7 @@
      {
       "map": "RubberPrisonLibrary",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -20820,8 +20820,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonLibrary",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -20875,7 +20875,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonSecurity",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -20890,7 +20890,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonSecurity",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -20905,7 +20905,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonSecurity",
-      "x": 56,
+      "x": 568,
       "y": 232
      }
     ]
@@ -20924,7 +20924,7 @@
      {
       "map": "RubberPrisonSecurity",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -20941,7 +20941,7 @@
     "map_locations": [
      {
       "map": "RubberPrisonSecurity",
-      "x": 128,
+      "x": 526,
       "y": 200
      }
     ]
@@ -21037,7 +21037,7 @@
      {
       "map": "RubberPrisonThirdFloor",
       "x": 56,
-      "y": 232
+      "y": 360
      }
     ]
    },
@@ -21066,8 +21066,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonThirdFloor",
-      "x": 568,
-      "y": 232
+      "x": 312,
+      "y": 360
      }
     ]
    },
@@ -21081,8 +21081,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonThirdFloor",
-      "x": 568,
-      "y": 296
+      "x": 312,
+      "y": 424
      }
     ]
    },
@@ -21100,7 +21100,7 @@
      {
       "map": "RubberPrisonThirdFloor",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -21117,8 +21117,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonThirdFloor",
-      "x": 512,
-      "y": 104
+      "x": 256,
+      "y": 192
      }
     ]
    },
@@ -21135,8 +21135,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonThirdFloor",
-      "x": 384,
-      "y": 184
+      "x": 128,
+      "y": 328
      }
     ]
    },
@@ -21153,8 +21153,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonThirdFloor",
-      "x": 512,
-      "y": 184
+      "x": 256,
+      "y": 264
      }
     ]
    },
@@ -21171,8 +21171,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonThirdFloor",
-      "x": 640,
-      "y": 184
+      "x": 256,
+      "y": 328
      }
     ]
    }
@@ -21192,7 +21192,7 @@
      {
       "map": "RubberPrisonSpikeRoom",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21207,7 +21207,7 @@
      {
       "map": "RubberPrisonSpikeRoom",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21222,7 +21222,7 @@
      {
       "map": "RubberPrisonSpikeRoom",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -21236,8 +21236,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonSpikeRoom",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 72
      }
     ]
    },
@@ -21254,8 +21254,8 @@
     "map_locations": [
      {
       "map": "RubberPrisonSpikeRoom",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -21273,7 +21273,7 @@
      {
       "map": "RubberPrisonSpikeRoom",
       "x": 256,
-      "y": 184
+      "y": 104
      }
     ]
    }
@@ -21367,8 +21367,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands2",
-      "x": 64,
-      "y": 296
+      "x": 576,
+      "y": 136
      }
     ]
    },
@@ -21382,8 +21382,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands2",
-      "x": 96,
-      "y": 296
+      "x": 608,
+      "y": 136
      }
     ]
    },
@@ -21397,8 +21397,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands2",
-      "x": 312,
-      "y": 232
+      "x": 824,
+      "y": 88
      }
     ]
    },
@@ -21416,7 +21416,7 @@
      {
       "map": "GiantLairDeadLands2",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -21433,8 +21433,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands2",
-      "x": 267,
-      "y": 184
+      "x": 512,
+      "y": 120
      }
     ]
    },
@@ -21451,8 +21451,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands2",
-      "x": 256,
-      "y": 272
+      "x": 768,
+      "y": 120
      }
     ]
    }
@@ -21561,8 +21561,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands1",
-      "x": 56,
-      "y": 232
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -21580,7 +21580,7 @@
      {
       "map": "GiantLairDeadLands1",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -21597,8 +21597,8 @@
     "map_locations": [
      {
       "map": "GiantLairDeadLands1",
-      "x": 256,
-      "y": 184
+      "x": 512,
+      "y": 120
      }
     ]
    }
@@ -21722,7 +21722,7 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss2",
-      "x": 56,
+      "x": 72,
       "y": 232
      }
     ]
@@ -21741,7 +21741,7 @@
      {
       "map": "GiantLairBeforeBoss2",
       "x": 288,
-      "y": 111
+      "y": 120
      }
     ]
    },
@@ -21758,8 +21758,8 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss2",
-      "x": 272,
-      "y": 184
+      "x": 280,
+      "y": 192
      }
     ]
    }
@@ -21779,7 +21779,7 @@
      {
       "map": "GiantLairFridgeInside",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21794,7 +21794,7 @@
      {
       "map": "GiantLairFridgeInside",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21809,7 +21809,7 @@
      {
       "map": "GiantLairFridgeInside",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21824,7 +21824,7 @@
      {
       "map": "GiantLairFridgeInside",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -21839,7 +21839,7 @@
      {
       "map": "GiantLairFridgeInside",
       "x": 320,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21853,8 +21853,8 @@
     "map_locations": [
      {
       "map": "GiantLairFridgeInside",
-      "x": 312,
-      "y": 296
+      "x": 568,
+      "y": 280
      }
     ]
    },
@@ -21872,7 +21872,7 @@
      {
       "map": "GiantLairFridgeInside",
       "x": 256,
-      "y": 120
+      "y": 248
      }
     ]
    },
@@ -21889,8 +21889,8 @@
     "map_locations": [
      {
       "map": "GiantLairFridgeInside",
-      "x": 241,
-      "y": 200
+      "x": 384,
+      "y": 168
      }
     ]
    },
@@ -21907,8 +21907,8 @@
     "map_locations": [
      {
       "map": "GiantLairFridgeInside",
-      "x": 256,
-      "y": 264
+      "x": 512,
+      "y": 176
      }
     ]
    }
@@ -21928,7 +21928,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21943,7 +21943,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21958,7 +21958,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21973,7 +21973,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -21988,7 +21988,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 192,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -22003,7 +22003,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 224,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -22018,7 +22018,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 64,
-      "y": 168
+      "y": 296
      }
     ]
    },
@@ -22033,7 +22033,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 96,
-      "y": 168
+      "y": 296
      }
     ]
    },
@@ -22048,7 +22048,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -22062,8 +22062,8 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss",
-      "x": 56,
-      "y": 264
+      "x": 344,
+      "y": 392
      }
     ]
    },
@@ -22077,8 +22077,8 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss",
-      "x": 344,
-      "y": 264
+      "x": 72,
+      "y": 72
      }
     ]
    },
@@ -22096,7 +22096,7 @@
      {
       "map": "GiantLairBeforeBoss",
       "x": 288,
-      "y": 119
+      "y": 264
      }
     ]
    },
@@ -22113,8 +22113,8 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss",
-      "x": 544,
-      "y": 104
+      "x": 280,
+      "y": 344
      }
     ]
    },
@@ -22131,8 +22131,8 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss",
-      "x": 400,
-      "y": 200
+      "x": 280,
+      "y": 424
      }
     ]
    },
@@ -22149,8 +22149,8 @@
     "map_locations": [
      {
       "map": "GiantLairBeforeBoss",
-      "x": 307,
-      "y": 232
+      "x": 144,
+      "y": 168
      }
     ]
    }
@@ -22169,7 +22169,7 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -22184,7 +22184,7 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -22199,7 +22199,7 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 128,
+      "x": 384,
       "y": 136
      }
     ]
@@ -22214,7 +22214,7 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 160,
+      "x": 416,
       "y": 136
      }
     ]
@@ -22229,7 +22229,7 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 56,
+      "x": 312,
       "y": 168
      }
     ]
@@ -22244,8 +22244,8 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -22259,8 +22259,8 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 56,
-      "y": 296
+      "x": 568,
+      "y": 152
      }
     ]
    },
@@ -22278,7 +22278,7 @@
      {
       "map": "GiantLairRoachVillage",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -22295,8 +22295,8 @@
     "map_locations": [
      {
       "map": "GiantLairRoachVillage",
-      "x": 128,
-      "y": 200
+      "x": 512,
+      "y": 120
      }
     ]
    }
@@ -22316,7 +22316,7 @@
      {
       "map": "GiantLairSaplingPlains",
       "x": 56,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -22364,7 +22364,7 @@
      {
       "map": "GiantLairSaplingPlains",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -22701,8 +22701,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 56,
-      "y": 136
+      "x": 312,
+      "y": 152
      }
     ]
    },
@@ -22716,8 +22716,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 312,
-      "y": 72
+      "x": 568,
+      "y": 88
      }
     ]
    },
@@ -22731,8 +22731,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 320,
-      "y": 264
+      "x": 64,
+      "y": 136
      }
     ]
    },
@@ -22746,8 +22746,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 352,
-      "y": 264
+      "x": 96,
+      "y": 136
      }
     ]
    },
@@ -22764,8 +22764,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 256,
-      "y": 104
+      "x": 512,
+      "y": 120
      }
     ]
    },
@@ -22782,8 +22782,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 128,
-      "y": 168
+      "x": 384,
+      "y": 192
      }
     ]
    },
@@ -22800,8 +22800,8 @@
     "map_locations": [
      {
       "map": "MysteryIsland",
-      "x": 241,
-      "y": 168
+      "x": 256,
+      "y": 120
      }
     ]
    }
@@ -22821,7 +22821,7 @@
      {
       "map": "MysteryIslandInside",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -22838,8 +22838,8 @@
     "map_locations": [
      {
       "map": "MysteryIslandInside",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -22934,7 +22934,7 @@
      {
       "map": "MetalIsland1",
       "x": 312,
-      "y": 136
+      "y": 152
      }
     ]
    },
@@ -22949,7 +22949,7 @@
      {
       "map": "MetalIsland1",
       "x": 346,
-      "y": 136
+      "y": 152
      }
     ]
    },
@@ -22967,7 +22967,7 @@
      {
       "map": "MetalIsland1",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -23055,7 +23055,7 @@
      {
       "map": "MetalIslandAuditorium",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -23069,7 +23069,7 @@
     "map_locations": [
      {
       "map": "MetalIslandAuditorium",
-      "x": 312,
+      "x": 56,
       "y": 136
      }
     ]
@@ -23087,8 +23087,8 @@
     "map_locations": [
      {
       "map": "MetalIslandAuditorium",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -23398,7 +23398,7 @@
      {
       "map": "TermiteIndustrial",
       "x": 352,
-      "y": 136
+      "y": 152
      }
     ]
    },
@@ -23413,7 +23413,7 @@
      {
       "map": "TermiteIndustrial",
       "x": 384,
-      "y": 136
+      "y": 152
      }
     ]
    },
@@ -23428,7 +23428,7 @@
      {
       "map": "TermiteIndustrial",
       "x": 344,
-      "y": 72
+      "y": 88
      }
     ]
    },
@@ -23446,7 +23446,7 @@
      {
       "map": "TermiteIndustrial",
       "x": 288,
-      "y": 128
+      "y": 136
      }
     ]
    }
@@ -23606,7 +23606,7 @@
      {
       "map": "TermitePier",
       "x": 312,
-      "y": 136
+      "y": 152
      }
     ]
    },
@@ -23624,7 +23624,7 @@
      {
       "map": "TermitePier",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -23959,7 +23959,7 @@
      {
       "map": "WaspKingdom5",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -23974,7 +23974,7 @@
      {
       "map": "WaspKingdom5",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -23989,7 +23989,7 @@
      {
       "map": "WaspKingdom5",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -24003,8 +24003,8 @@
     "map_locations": [
      {
       "map": "WaspKingdom5",
-      "x": 56,
-      "y": 232
+      "x": 312,
+      "y": 216
      }
     ]
    },
@@ -24021,8 +24021,8 @@
     "map_locations": [
      {
       "map": "WaspKingdom5",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -24040,7 +24040,7 @@
      {
       "map": "WaspKingdom5",
       "x": 256,
-      "y": 184
+      "y": 176
      }
     ]
    }
@@ -24077,8 +24077,8 @@
     "map_locations": [
      {
       "map": "WaspKingdom1",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -24098,7 +24098,7 @@
      {
       "map": "WaspKingdom2",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -24113,7 +24113,7 @@
      {
       "map": "WaspKingdom2",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -24127,7 +24127,7 @@
     "map_locations": [
      {
       "map": "WaspKingdom2",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -24142,7 +24142,7 @@
     "map_locations": [
      {
       "map": "WaspKingdom2",
-      "x": 56,
+      "x": 312,
       "y": 200
      }
     ]
@@ -24160,8 +24160,8 @@
     "map_locations": [
      {
       "map": "WaspKingdom2",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -24199,7 +24199,7 @@
      {
       "map": "WaspKingdom4",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -24213,7 +24213,7 @@
     "map_locations": [
      {
       "map": "WaspKingdom4",
-      "x": 56,
+      "x": 312,
       "y": 200
      }
     ]
@@ -24231,8 +24231,8 @@
     "map_locations": [
      {
       "map": "WaspKingdom4",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    },
@@ -24270,7 +24270,7 @@
      {
       "map": "WaspKingdomMainHall",
       "x": 312,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -24285,7 +24285,7 @@
      {
       "map": "WaspKingdomMainHall",
       "x": 56,
-      "y": 200
+      "y": 328
      }
     ]
    },
@@ -24299,8 +24299,8 @@
     "map_locations": [
      {
       "map": "WaspKingdomMainHall",
-      "x": 312,
-      "y": 200
+      "x": 56,
+      "y": 72
      }
     ]
    },
@@ -24318,7 +24318,7 @@
      {
       "map": "WaspKingdomMainHall",
       "x": 256,
-      "y": 104
+      "y": 232
      }
     ]
    },
@@ -24336,7 +24336,7 @@
      {
       "map": "WaspKingdomMainHall",
       "x": 128,
-      "y": 168
+      "y": 296
      }
     ]
    },
@@ -24353,7 +24353,7 @@
     "map_locations": [
      {
       "map": "WaspKingdomMainHall",
-      "x": 256,
+      "x": 128,
       "y": 168
      }
     ]
@@ -24373,7 +24373,7 @@
     "map_locations": [
      {
       "map": "WaspKingdomOutside",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -24388,7 +24388,7 @@
     "map_locations": [
      {
       "map": "WaspKingdomOutside",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -24403,8 +24403,8 @@
     "map_locations": [
      {
       "map": "WaspKingdomOutside",
-      "x": 56,
-      "y": 200
+      "x": 568,
+      "y": 72
      }
     ]
    },
@@ -24454,8 +24454,8 @@
     "map_locations": [
      {
       "map": "WaspKingdomOutside",
-      "x": 128,
-      "y": 168
+      "x": 512,
+      "y": 104
      }
     ]
    },
@@ -24472,7 +24472,7 @@
     "map_locations": [
      {
       "map": "WaspKingdomOutside",
-      "x": 256,
+      "x": 384,
       "y": 168
      }
     ]
@@ -24528,7 +24528,7 @@
      {
       "map": "WaspKingdomThrone",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -24542,7 +24542,7 @@
     "map_locations": [
      {
       "map": "WaspKingdomThrone",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -24560,8 +24560,8 @@
     "map_locations": [
      {
       "map": "WaspKingdomThrone",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -24763,8 +24763,8 @@
     "map_locations": [
      {
       "map": "HideoutGarden",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 88
      }
     ]
    },
@@ -24778,8 +24778,8 @@
     "map_locations": [
      {
       "map": "HideoutGarden",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 232
      }
     ]
    },
@@ -24794,7 +24794,7 @@
      {
       "map": "HideoutGarden",
       "x": 64,
-      "y": 264
+      "y": 136
      }
     ]
    },
@@ -24809,7 +24809,7 @@
      {
       "map": "HideoutGarden",
       "x": 56,
-      "y": 200
+      "y": 72
      }
     ]
    },
@@ -24824,7 +24824,7 @@
      {
       "map": "HideoutGarden",
       "x": 56,
-      "y": 296
+      "y": 168
      }
     ]
    },
@@ -24842,7 +24842,7 @@
      {
       "map": "HideoutGarden",
       "x": 256,
-      "y": 104
+      "y": 192
      }
     ]
    },
@@ -24859,8 +24859,8 @@
     "map_locations": [
      {
       "map": "HideoutGarden",
-      "x": 270,
-      "y": 168
+      "x": 128,
+      "y": 200
      }
     ]
    }
@@ -24944,8 +24944,8 @@
     "map_locations": [
      {
       "map": "HideoutLeftA",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -24959,7 +24959,7 @@
     "map_locations": [
      {
       "map": "HideoutLeftA",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -24978,7 +24978,7 @@
      {
       "map": "HideoutLeftA",
       "x": 256,
-      "y": 104
+      "y": 168
      }
     ]
    }
@@ -25047,8 +25047,8 @@
     "map_locations": [
      {
       "map": "HideoutStairsRoom",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 200
      }
     ]
    },
@@ -25065,8 +25065,8 @@
     "map_locations": [
      {
       "map": "HideoutStairsRoom",
-      "x": 256,
-      "y": 104
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -25217,7 +25217,7 @@
      {
       "map": "StreamMountain3",
       "x": 64,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -25232,7 +25232,7 @@
      {
       "map": "StreamMountain3",
       "x": 96,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -25247,7 +25247,7 @@
      {
       "map": "StreamMountain3",
       "x": 128,
-      "y": 136
+      "y": 296
      }
     ]
    },
@@ -25262,7 +25262,7 @@
      {
       "map": "StreamMountain3",
       "x": 56,
-      "y": 72
+      "y": 232
      }
     ]
    },
@@ -25276,7 +25276,7 @@
     "map_locations": [
      {
       "map": "StreamMountain3",
-      "x": 320,
+      "x": 64,
       "y": 136
      }
     ]
@@ -25291,7 +25291,7 @@
     "map_locations": [
      {
       "map": "StreamMountain3",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -25309,8 +25309,8 @@
     "map_locations": [
      {
       "map": "StreamMountain3",
-      "x": 256,
-      "y": 120
+      "x": 128,
+      "y": 200
      }
     ]
    }
@@ -25329,7 +25329,7 @@
     "map_locations": [
      {
       "map": "StreamMountain1",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -25344,7 +25344,7 @@
     "map_locations": [
      {
       "map": "StreamMountain1",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -25359,8 +25359,8 @@
     "map_locations": [
      {
       "map": "StreamMountain1",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -25378,7 +25378,7 @@
      {
       "map": "StreamMountain1",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -25397,8 +25397,8 @@
     "map_locations": [
      {
       "map": "StreamMountain2",
-      "x": 64,
-      "y": 136
+      "x": 320,
+      "y": 264
      }
     ]
    },
@@ -25412,8 +25412,8 @@
     "map_locations": [
      {
       "map": "StreamMountain2",
-      "x": 96,
-      "y": 136
+      "x": 352,
+      "y": 264
      }
     ]
    },
@@ -25427,8 +25427,8 @@
     "map_locations": [
      {
       "map": "StreamMountain2",
-      "x": 56,
-      "y": 72
+      "x": 312,
+      "y": 200
      }
     ]
    },
@@ -25443,7 +25443,7 @@
      {
       "map": "StreamMountain2",
       "x": 312,
-      "y": 72
+      "y": 360
      }
     ]
    },
@@ -25458,7 +25458,7 @@
      {
       "map": "StreamMountain2",
       "x": 56,
-      "y": 232
+      "y": 72
      }
     ]
    },
@@ -25475,8 +25475,8 @@
     "map_locations": [
      {
       "map": "StreamMountain2",
-      "x": 256,
-      "y": 112
+      "x": 384,
+      "y": 328
      }
     ]
    },
@@ -25493,8 +25493,8 @@
     "map_locations": [
      {
       "map": "StreamMountain2",
-      "x": 128,
-      "y": 200
+      "x": 241,
+      "y": 168
      }
     ]
    }
@@ -25584,7 +25584,7 @@
      {
       "map": "ChomperCave1",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25599,7 +25599,7 @@
      {
       "map": "ChomperCave1",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25614,7 +25614,7 @@
      {
       "map": "ChomperCave1",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25629,7 +25629,7 @@
      {
       "map": "ChomperCave1",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -25644,7 +25644,7 @@
      {
       "map": "ChomperCave1",
       "x": 90,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -25658,7 +25658,7 @@
     "map_locations": [
      {
       "map": "ChomperCave1",
-      "x": 312,
+      "x": 56,
       "y": 72
      }
     ]
@@ -25673,7 +25673,7 @@
     "map_locations": [
      {
       "map": "ChomperCave1",
-      "x": 346,
+      "x": 90,
       "y": 72
      }
     ]
@@ -25691,8 +25691,8 @@
     "map_locations": [
      {
       "map": "ChomperCave1",
-      "x": 256,
-      "y": 112
+      "x": 128,
+      "y": 168
      }
     ]
    }
@@ -25712,7 +25712,7 @@
      {
       "map": "ChomperCaves2",
       "x": 64,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25727,7 +25727,7 @@
      {
       "map": "ChomperCaves2",
       "x": 96,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25742,7 +25742,7 @@
      {
       "map": "ChomperCaves2",
       "x": 128,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25757,7 +25757,7 @@
      {
       "map": "ChomperCaves2",
       "x": 160,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25772,7 +25772,7 @@
      {
       "map": "ChomperCaves2",
       "x": 192,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25787,7 +25787,7 @@
      {
       "map": "ChomperCaves2",
       "x": 224,
-      "y": 136
+      "y": 264
      }
     ]
    },
@@ -25802,7 +25802,7 @@
      {
       "map": "ChomperCaves2",
       "x": 56,
-      "y": 72
+      "y": 200
      }
     ]
    },
@@ -25816,7 +25816,7 @@
     "map_locations": [
      {
       "map": "ChomperCaves2",
-      "x": 344,
+      "x": 72,
       "y": 72
      }
     ]
@@ -25834,8 +25834,8 @@
     "map_locations": [
      {
       "map": "ChomperCaves2",
-      "x": 288,
-      "y": 111
+      "x": 144,
+      "y": 168
      }
     ]
    }
@@ -25904,8 +25904,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 64,
-      "y": 136
+      "x": 662,
+      "y": 392
      }
     ]
    },
@@ -25919,8 +25919,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 96,
-      "y": 136
+      "x": 694,
+      "y": 392
      }
     ]
    },
@@ -25934,8 +25934,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 128,
-      "y": 136
+      "x": 726,
+      "y": 392
      }
     ]
    },
@@ -25949,8 +25949,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 56,
-      "y": 72
+      "x": 654,
+      "y": 328
      }
     ]
    },
@@ -25964,8 +25964,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 380,
-      "y": 72
+      "x": 960,
+      "y": 344
      }
     ]
    },
@@ -25979,8 +25979,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 656,
-      "y": 72
+      "x": 384,
+      "y": 488
      }
     ]
    },
@@ -25994,8 +25994,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 56,
-      "y": 232
+      "x": 384,
+      "y": 344
      }
     ]
    },
@@ -26010,7 +26010,7 @@
      {
       "map": "UpperSnekMiddleRoom",
       "x": 380,
-      "y": 232
+      "y": 200
      }
     ]
    },
@@ -26025,7 +26025,7 @@
      {
       "map": "UpperSnekMiddleRoom",
       "x": 56,
-      "y": 360
+      "y": 72
      }
     ]
    },
@@ -26039,8 +26039,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 380,
-      "y": 424
+      "x": 644,
+      "y": 136
      }
     ]
    },
@@ -26054,8 +26054,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 656,
-      "y": 360
+      "x": 920,
+      "y": 72
      }
     ]
    },
@@ -26072,8 +26072,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 290,
-      "y": 112
+      "x": 879,
+      "y": 376
      }
     ]
    },
@@ -26090,8 +26090,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 428,
-      "y": 112
+      "x": 576,
+      "y": 456
      }
     ]
    },
@@ -26108,8 +26108,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 128,
-      "y": 200
+      "x": 591,
+      "y": 376
      }
     ]
    },
@@ -26126,8 +26126,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 303,
-      "y": 197
+      "x": 576,
+      "y": 296
      }
     ]
    },
@@ -26144,8 +26144,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 594,
-      "y": 264
+      "x": 456,
+      "y": 168
      }
     ]
    },
@@ -26162,8 +26162,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 462,
-      "y": 324
+      "x": 324,
+      "y": 104
      }
     ]
    },
@@ -26180,8 +26180,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 459,
-      "y": 328
+      "x": 591,
+      "y": 168
      }
     ]
    },
@@ -26198,8 +26198,8 @@
     "map_locations": [
      {
       "map": "UpperSnekMiddleRoom",
-      "x": 600,
-      "y": 392
+      "x": 864,
+      "y": 104
      }
     ]
    }
@@ -26218,7 +26218,7 @@
     "map_locations": [
      {
       "map": "UpperSnekBeforeBoss",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -26233,7 +26233,7 @@
     "map_locations": [
      {
       "map": "UpperSnekBeforeBoss",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -26248,7 +26248,7 @@
     "map_locations": [
      {
       "map": "UpperSnekBeforeBoss",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -26263,8 +26263,8 @@
     "map_locations": [
      {
       "map": "UpperSnekBeforeBoss",
-      "x": 312,
-      "y": 72
+      "x": 56,
+      "y": 88
      }
     ]
    },
@@ -26282,7 +26282,7 @@
      {
       "map": "UpperSnekBeforeBoss",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    }
@@ -26461,7 +26461,7 @@
     "map_locations": [
      {
       "map": "UpperSnekTransition",
-      "x": 64,
+      "x": 320,
       "y": 136
      }
     ]
@@ -26476,7 +26476,7 @@
     "map_locations": [
      {
       "map": "UpperSnekTransition",
-      "x": 96,
+      "x": 352,
       "y": 136
      }
     ]
@@ -26491,7 +26491,7 @@
     "map_locations": [
      {
       "map": "UpperSnekTransition",
-      "x": 56,
+      "x": 312,
       "y": 72
      }
     ]
@@ -26525,7 +26525,7 @@
      {
       "map": "UpperSnekTransition",
       "x": 256,
-      "y": 112
+      "y": 120
      }
     ]
    },
@@ -26542,8 +26542,8 @@
     "map_locations": [
      {
       "map": "UpperSnekTransition",
-      "x": 256,
-      "y": 184
+      "x": 128,
+      "y": 192
      }
     ]
    },

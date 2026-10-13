@@ -167,6 +167,89 @@ def grid(sizes: list[tuple[int, int]], columns: int) -> tuple[list[tuple[int, in
     return spots, sum(widths) + GAP * (len(widths) - 1), sum(heights) + GAP * (len(heights) - 1)
 
 
+# A box's place in its room, from the words of its name (as the logic names areas): a step left or right, up or down.
+HINTS = {'LEFT': (-1, 0), 'RIGHT': (1, 0), 'UPPER': (0, -1), 'TOP': (0, -1), 'LOWER': (0, 1), 'BOTTOM': (0, 1)}
+# The cells around a box, sides first; a room's grid at most this many columns wide.
+STEPS = [(1, 0), (0, 1), (-1, 0), (0, -1), (1, 1), (-1, 1), (1, -1), (-1, -1)]
+MAX_COLUMNS = 4
+
+
+def hint(label: str) -> tuple[int, int]:
+    steps = [HINTS.get(word, (0, 0)) for word in plain(label).replace('-', ' ').split()]
+    return sum(dx for dx, _ in steps), sum(dy for _, dy in steps)
+
+
+def embed(boxes: list[str], label: dict[str, str],
+          edges: list[tuple[str, str, list[str]]]) -> dict[str, tuple[int, int]]:
+    """Each box's grid cell: the first at the start, each other one in a free cell beside the box it joins (where
+    its name says, else a side before a corner), so every way between two boxes crosses one gap. A box joined to
+    none starts its own grid to the right."""
+    linked = {b: [x for x in boxes for a, c, _ in edges if {a, c} == {b, x} and x != b] for b in boxes}
+    cell: dict[str, tuple[int, int]] = {}
+    for start in boxes:
+        if start in cell:
+            continue
+        right = max((c for c, _ in cell.values()), default=-1) + 1
+        group = {start: (0, 0)}
+        joined: set[frozenset[tuple[int, int]]] = set()
+        queue = [start]
+        for node in queue:
+            for kid in linked[node]:
+                if kid in group:
+                    continue
+                pc, pr = group[node]
+                hx, hy = (a - b for a, b in zip(hint(label[kid]), hint(label[node]), strict=True))
+                used = set(group.values())
+                columns = {c for c, _ in used}
+
+                def fits(c: int, r: int) -> bool:
+                    return (c, r) not in used and max(*columns, c) - min(*columns, c) < MAX_COLUMNS
+
+                near = sorted(STEPS, key=lambda s: (-(hx * s[0] + hy * s[1]) / math.sqrt(s[0] ** 2 + s[1] ** 2),
+                                                    STEPS.index(s)))
+                # A corner step never crosses the other diagonal of its square.
+                spot = next(((pc + dc, pr + dr) for dc, dr in near if fits(pc + dc, pr + dr)
+                             and frozenset({(pc + dc, pr), (pc, pr + dr)}) not in joined), None)
+                ring = 2
+                while spot is None:
+                    around = sorted(((pc + dc, pr + dr) for dc in range(-ring, ring + 1)
+                                     for dr in range(-ring, ring + 1) if max(abs(dc), abs(dr)) == ring),
+                                    key=lambda xy: ((xy[0] - pc) ** 2 + (xy[1] - pr) ** 2, xy[1], xy[0]))
+                    spot = next((xy for xy in around if fits(*xy)), None)
+                    ring += 1
+                group[kid] = spot
+                joined.add(frozenset({(pc, pr), spot}))
+                queue.append(kid)
+        low = min(c for c, _ in group.values())
+        top = min(r for _, r in group.values())
+        cell.update({b: (c - low + right, r - top) for b, (c, r) in group.items()})
+    return cell
+
+
+def cells(boxes: list[str], sizes: list[tuple[int, int]],
+          cell: dict[str, tuple[int, int]]) -> tuple[list[tuple[int, int]], int, int]:
+    """Each box's top left, centred in its cell (a column as wide as its widest box, a row as high as its highest),
+    and the width and height they take."""
+    size = dict(zip(boxes, sizes, strict=True))
+    cols = sorted({c for c, _ in cell.values()})
+    rows = sorted({r for _, r in cell.values()})
+    widths = {c: max(size[b][0] for b in boxes if cell[b][0] == c) for c in cols}
+    heights = {r: max(size[b][1] for b in boxes if cell[b][1] == r) for r in rows}
+    xs = {c: sum(widths[k] for k in cols[:i]) + GAP * i for i, c in enumerate(cols)}
+    ys = {r: sum(heights[k] for k in rows[:i]) + GAP * i for i, r in enumerate(rows)}
+    places = [(xs[cell[b][0]] + (widths[cell[b][0]] - size[b][0]) // 2,
+               ys[cell[b][1]] + (heights[cell[b][1]] - size[b][1]) // 2) for b in boxes]
+    return places, xs[cols[-1]] + widths[cols[-1]], ys[rows[-1]] + heights[rows[-1]]
+
+
+def crosses(box: tuple[int, int, int, int], x0: int, y0: int, x1: int, y1: int) -> bool:
+    """Whether a line passes inside a box, its border aside."""
+    x, y, w, h = box
+    steps = max(abs(x1 - x0), abs(y1 - y0), 1)
+    return any(x + 2 < x0 + (x1 - x0) * i // steps < x + w - 2 and y + 2 < y0 + (y1 - y0) * i // steps < y + h - 2
+               for i in range(steps + 1))
+
+
 def edge_point(box: tuple[int, int, int, int], cx: float, cy: float, dx: float, dy: float) -> float:
     """How far along (dx, dy) from inside a box the ray leaves it."""
     x, y, w, h = box
@@ -204,8 +287,7 @@ def room_tab(room: str, title: str, boxes: list[str], label: dict[str, str], spo
         inner = max(text_width(label[region]), cols * PIN, (len(doors[region]) + 1) * 34,
                     (len(others[region]) + 1) * 34, 160)
         sizes.append((inner + 32, 48 + rows * PIN + 16))
-    columns = 1 if len(boxes) == 1 else 2 if len(boxes) <= 4 else 3
-    places, width, height = grid(sizes, columns)
+    places, width, height = cells(boxes, sizes, embed(boxes, label, edges))
     canvas = Canvas(max(MARGIN * 2 + width, MARGIN * 2 + text_width(title) + 48), TOP + height + MARGIN + 16)
     rect = {region: (MARGIN + px, TOP + py, w, h) for region, (px, py), (w, h) in zip(boxes, places, sizes,
                                                                                        strict=True)}
@@ -214,7 +296,11 @@ def room_tab(room: str, title: str, boxes: list[str], label: dict[str, str], spo
     for a, b, names in edges:
         (ax, ay, aw, ah), (bx, by, bw, bh) = rect[a], rect[b]
         cx, cy, ex, ey = ax + aw / 2, ay + ah / 2, bx + bw / 2, by + bh / 2
+        behind = [label[r] for r in boxes if r not in (a, b) and crosses(rect[r], int(cx), int(cy), int(ex), int(ey))]
+        if behind:
+            raise ValueError(f'{room}: the way {label[a]} - {label[b]} runs behind {", ".join(behind)}')
         canvas.line(int(cx), int(cy), int(ex), int(ey), LINE)
+        # Its pin halfway along the part between the two boxes.
         t_out = edge_point(rect[a], cx, cy, ex - cx, ey - cy)
         t_in = 1 - edge_point(rect[b], ex, ey, cx - ex, cy - ey)
         t = (t_out + t_in) / 2 if t_in > t_out else 0.5
