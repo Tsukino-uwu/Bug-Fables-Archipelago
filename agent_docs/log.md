@@ -4308,4 +4308,16 @@ said them.
   room does (it copies the game's door data), and every door the game makes only after a story flag is covered.
   "Through a door, you can always turn back" written into `room-logic.md`.
 - **Ideas recorded:** Next 77, a warning before a door whose far side won't let you walk back: a fixed mark, and a
-  Yes/No box ("If you proceed, you may not be able to get back", the cursor on No), each a panel setting.
+  Yes/No box ("If you proceed, you may not be able to get back", the cursor on No), each a panel setting. Next 78,
+  Map Shuffle: a door shuffle whose doors match sides (Archipelago's own direction groups), for later.
+- **A review before committing** (a workflow: two reviewers, a skeptic per find): seven finds held. The worst: the
+  spot count asked one stand-in progression item, so where that item was non-local every count was 0 and a random
+  start failed every generation; now a spot counts if it takes some progression item. Also early items crashing
+  after item links, never a non-local early item, a trapped-start test that never reached its check, and a deadlock
+  test whose seed had stopped deadlocking (now it asserts the retry).
+- **The yaml's texts:** the Entrance Randomizer's modes described from least to most scrambled, Room Swap's "anywhere"
+  corrected (within its part of the world), and the experimental reason made honest: every room is mapped, a few
+  doors are still to be gone through.
+- **Start Inventory from Pool and DeathLink in the yaml** (build steps 98 and 99, mod step 66), both decided
+  2026-09-29: the pool's items given before generation and their spots filled with filler, by Archipelago; DeathLink
+  set by the yaml once per seed, so a change in the panel afterwards stays.

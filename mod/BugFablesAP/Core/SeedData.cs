@@ -111,6 +111,8 @@ namespace BugFablesAP
         internal readonly List<ApConnection.FlagWith> FlagsWith;
         internal readonly List<DayNight.Camera> SceneCameras;
         internal readonly bool PointsOfNoReturn;
+        // The yaml's DeathLink (options "death_link"); null for a seed that doesn't send it.
+        internal readonly bool? DeathLink;
 
         internal SeedData(Dictionary<string, object> data, int ownSlot)
         {
@@ -341,6 +343,8 @@ namespace BugFablesAP
             JumpShuffled = SlotData.On(options, "shuffle_jump");
             PointsOfNoReturn = SlotData.On(options, "points_of_no_return");
             ArtifactsRequired = SlotData.Number(options, "artifacts_required", 0);
+            DeathLink = options?["death_link"] is JValue death && death.Type == JTokenType.Boolean
+                ? (bool)death : (bool?)null;
         }
 
         // Every location whose item a find shows, in the order they were scouted before.

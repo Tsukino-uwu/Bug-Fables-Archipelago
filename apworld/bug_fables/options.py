@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range, Toggle
+from Options import (Choice, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range,
+                     StartInventoryPool, Toggle)
 
 from .data_tables import (DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ONE_WAY_LANDINGS, ONE_WAY_NAMES, ROOM_STARTS,
                           SHUFFLED_CONNECTIONS)
@@ -384,6 +385,14 @@ class DoorPlando(PlandoConnections):
 
 
 @dataclass
+class BugFablesDeathLink(DeathLink):
+    """
+    When your party is defeated in a battle, everyone in the room with DeathLink on is too, and their deaths reach
+    you. This sets it for the seed when you first connect; the Archipelago panel on the main menu can still switch it
+    afterwards. A death DeathLink causes is never sent back.
+    """
+
+
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
     artifact_shuffle: ArtifactShuffle
@@ -411,6 +420,8 @@ class BugFablesOptions(PerGameCommonOptions):
     progressive_boat: ProgressiveBoat
     extra_roadblocks: ExtraRoadblocks
     music_shuffle: MusicShuffle
+    start_inventory_from_pool: StartInventoryPool
+    death_link: BugFablesDeathLink
 
 
 # Options not in a group show under "Game Options".

@@ -27,7 +27,7 @@ SLOT_OPTIONS: tuple[str, ...] = (
     "shuffle_medal_shops", "shuffle_item_shops", "shuffle_termacade", "shop_contents", "entrance_randomizer",
     "filler_starting_checks",
     "shuffle_field_moves", "shuffle_jump", "points_of_no_return", "progressive_boat", "extra_roadblocks",
-    "exclude_locations")
+    "exclude_locations", "death_link")
 # Every other option, and why it isn't sent.
 NOT_SENT: dict[str, str] = {
     "enemy_shuffle": "its result is enemy_swaps",
@@ -45,6 +45,7 @@ NOT_SENT: dict[str, str] = {
     "item_links": "fill only",
     "plando_items": "fill only",
     "start_inventory": "the server sends its items",
+    "start_inventory_from_pool": "the server sends its items; Archipelago takes them out of the pool",
     "start_hints": "the server's",
     "start_location_hints": "the server's",
 }

@@ -118,6 +118,7 @@ anyone curious about the process, or thinking of doing the same for another game
 63. [The Ancient Castle's story add and its artifact scene](#63-the-ancient-castles-story-add-and-its-artifact-scene)
 64. [The last fight held, and the goal at the credits](#64-the-last-fight-held-and-the-goal-at-the-credits)
 65. [A seed's start through its named door](#65-a-seeds-start-through-its-named-door)
+66. [DeathLink set by the seed's yaml, once](#66-deathlink-set-by-the-seeds-yaml-once)
 
 ## Where it stands
 
@@ -3650,21 +3651,21 @@ Decided 2026-10-12 (`apimplementation.md`, build step 91): an artifact's scene h
 sprite, as a crystal berry's model is. The scenes show their artifact in two ways (code read): Snakemouth's pedestal
 (`Event26`) holds up a model, the map's child 1, and shows its banner from the map's line 7; the Wasp Queen's gift
 (`Event194`) makes a sprite from `Sprites/Objects/artifacts` (index 5), its banner line 15. The Golden Hills' Summit
-(`Event73`, chapter 2, added the same day) drops a tablet model from the boss's flower (`mainmesh`, child 2's child 0 as the map loads: the scene destroys child 1
-before the fight, then reads the tablet's flower as child 1; seen swapped in the wrong flower first, 2026-10-12),
-its banner line 11. The Honey Factory Core (`Event99`, chapter 3, added the same day) clones the window's artifact (`mainmesh`
-child 2) and hands the copy to the game's `ArtifactGet`, banner line 24: the swap is on the original, so the copy and
-the window both show the item. The castle's treasure room (`Event118`, also `ArtifactGet`) joins when its artifact
-comes into seeds. Left for later: the Core's battle stage shows the artifact in its background too.
+(`Event73`, chapter 2, added the same day) drops a tablet model from the boss's flower (`mainmesh`, child 2's child 0
+as the map loads: the scene destroys child 1 before the fight, then reads the tablet's flower as child 1; seen swapped
+in the wrong flower first, 2026-10-12), its banner line 11. The Honey Factory Core (`Event99`, chapter 3, added the
+same day) clones the window's artifact (`mainmesh` child 2) and hands the copy to the game's `ArtifactGet`, banner line
+24: the swap is on the original, so the copy and the window both show the item. The castle's treasure room
+(`Event118`, also `ArtifactGet`) joins when its artifact comes into seeds. Left for later: the Core's battle stage shows
+the artifact in its background too.
 
 Built: as each scene's map is built (a postfix on `MapControl.CreateEntities`), its location comes from
 `location_artifacts`. A model scene's model keeps its place and its moves, its renderers switched off, the item's sprite
 a child drawn upright, at item size and on the model's layer (the hold-up draws it above the fade), its class colour
-behind it. A scene's artifact sprite read becomes its chapter's `ItemSwap.HeldArtifact` (a transpiler each: `Event194`, the
-Queen's gift; and `Event26`, whose artifact also lies outside the cave after the pedestal, a sprite there; seen
-unswapped there first, 2026-10-12). Unless the
-location holds its own artifact, the banner line becomes "You found <item>!". The log says `[artifact] <map>: location
-<id> shows '<item>'` and whether the banner names it.
+behind it. A scene's artifact sprite read becomes its chapter's `ItemSwap.HeldArtifact` (a transpiler each:
+`Event194`, the Queen's gift; and `Event26`, whose artifact also lies outside the cave after the pedestal, a sprite
+there; seen unswapped there first, 2026-10-12). Unless the location holds its own artifact, the banner line becomes
+`You found <item>!`. The log says `[artifact] <map>: location <id> shows '<item>'` and whether the banner names it.
 
 **Status:** built (2026-10-12); Snakemouth's pedestal seen in seed `AP_82664210019755048971`: a Crunchy Leaf's
 sprite on the pedestal and held up, the banner "You found a Crunchy Leaf!", the leaf again after the fight and, after
@@ -3698,22 +3699,24 @@ give-swap never sees it. A transpiler (`StoryAdds`) turns that one add into `Key
 of the bag`. The treasure room joins the artifact scenes (step 61): its model is the map's child 2 and its banner line
 2 (`ArtifactGet`'s message id in `Event118`, code read; line 3, the one after it, was first taken: found on screen,
 the game's banner shown and the next line rewritten). The Watcher's scene also lays the gem on the floor
-(`itemsprites[0, 116]`): that read becomes `AddedSprite`, the sprite of the item the fight's location holds (log: `the scene's key item 116 shows ...`).
+(`itemsprites[0, 116]`): that read becomes `AddedSprite`, the sprite of the item the fight's location holds (log:
+`the scene's key item 116 shows ...`).
 
 **Found:** the first try gave the gem anyway, with no `[adds]` line in the log: the build in the game predated the
 hook, since `copy-dev.ps1` copies what `stage-dev.ps1` staged, and the stage step was skipped. Staged, then copied,
 the install line showed and the hook worked.
 
 **Status:** works, seen 2026-10-13: after the Watcher, the fight's item (a Crunchy Leaf) on the floor and no gem in
-the key items (the fight reset by flag 38 from the Roof); the pedestal showing a Chomper Seed through its scene; after the line fix, its banner "You found a Chomper Seed!" (seen, the pedestal reset by
-flag 345 from the boss room).
+the key items (the fight reset by flag 38 from the Roof); the pedestal showing a Chomper Seed through its scene;
+after the line fix, its banner "You found a Chomper Seed!" (seen, the pedestal reset by flag 345 from the boss room).
 
 **The key's name (2026-10-13):** a received Small Ancient Key's box said "an Ancient Key", the game's name for key
 item 114 and chapter 3's artifact's in a seed. While Archipelago is enabled the game's English name becomes "Small
 Ancient Key" and its article (field 3) "a"; off, both go back (`CustomItems.RenameSmallKey`, each tick; another
 language's name is left alone). Read back with dev `articles 114`: `Small Ancient Key: 'a'`.
 
-*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row, `AddedSprite`); `Items/CustomItems.cs` (the key's name).*
+*Code: `Items/StoryAdds.cs`, wired in `Plugin.cs`; `Items/ItemSwap.Artifacts.cs` (the castle's row, `AddedSprite`);
+`Items/CustomItems.cs` (the key's name).*
 
 ## 64. The last fight held, and the goal at the credits
 
@@ -3760,3 +3763,20 @@ at the same door. The start's log lines name the door (`entering from <from>'s <
 
 *Code: `Core/SeedData.cs`, `Core/ApConnection.cs`, `Core/Plugin.cs`, `Gameplay/QualityOfLife.Opening.cs` (`DoorInto`,
 `SeedStartDoor`), `Gameplay/QualityOfLife.cs`, `World/DoorShuffle.cs` (`Split`), `Dev/SeedDump.cs`.*
+
+## 66. DeathLink set by the seed's yaml, once
+
+Decided 2026-09-29 (`archipelago-review.md`, item 26; `apimplementation.md`, build step 99): Archipelago's
+`death_link` yaml option sets DeathLink for the seed and turns the panel's row on or off at login; the row stays, to
+change it mid-seed. The row lives on the main menu, so setting it at every login would undo a change made there at the
+next one: the yaml's value is applied once per seed (its room, team and slot).
+
+**Built:** `SeedData.DeathLink` reads slot_data's `options.death_link` (null for a seed that doesn't send it). At
+login, `ApConnection` hands it over with the seed's identity (`SeedDeathLink`); `DeathLinkGame.FromSeed`, on the game
+thread in its tick, sets the row from it unless `DeathLinkSetBySeed` (a config entry) already names that seed, then
+records it. Changing the row fires its `SettingChanged`, which updates the connection's tag as the panel always has.
+Log: `[death] the seed's yaml sets DeathLink on; the panel can change it`.
+
+**Status:** built (2026-10-13); not yet seen in game.
+
+*Code: `Core/SeedData.cs`, `Core/ApConnection.cs` (`SeedDeathLink`), `Gameplay/DeathLinkGame.cs` (`FromSeed`).*

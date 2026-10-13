@@ -39,7 +39,8 @@ On the game's main menu, choose **Archipelago**. The panel has:
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **DeathLink**: Off (the default). On, when your party is defeated in a battle, everyone in the room with DeathLink
   on is too, and their deaths reach you: in a battle, the game's Game Over menu; on the map, a Game Over and back to
-  your last save. A death waits for a free moment, never striking in a cutscene or a text box.
+  your last save. A death waits for a free moment, never striking in a cutscene or a text box. From 0.4.0 the yaml's
+  `death_link` sets this row when you first connect to a seed; you can still switch it here afterwards.
 - **Achievements**: Off (the default) holds Steam achievements back while the Archipelago mod is enabled, as
   normal saves are kept apart. It only concerns Steam, never Archipelago.
 - **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life and Gameplay settings

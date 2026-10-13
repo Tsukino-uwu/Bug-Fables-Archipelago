@@ -28,10 +28,21 @@ class TestOptionsInSlotData(BugFablesTestBase):
         self.assertEqual(options["exclude_locations"],
                          ["Outskirts: Pier, Behind the Dock", "Outskirts: Pier, Ship's Wheel"])
 
+    def test_death_link_off_by_default(self) -> None:
+        # The mod sets the panel's DeathLink row from it once per seed (build step 99).
+        self.assertIs(self.world.fill_slot_data()["options"]["death_link"], False)
+
     def test_option_copies_are_gone(self) -> None:
         data = self.world.fill_slot_data()
         for key in ("artifacts_required", "shuffle_moves", "shuffle_jump", "points_of_no_return"):
             self.assertNotIn(key, data)
+
+
+class TestDeathLinkSent(BugFablesTestBase):
+    options = {"death_link": True}
+
+    def test_death_link_on(self) -> None:
+        self.assertIs(self.world.fill_slot_data()["options"]["death_link"], True)
 
 
 class TestSlotData(BugFablesTestBase):

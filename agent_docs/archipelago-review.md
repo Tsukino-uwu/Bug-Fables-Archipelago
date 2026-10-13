@@ -71,7 +71,8 @@ numbers in our own files are as of the review (2026-09-29); the files have moved
     (`apquest/world.py:83-86`; ours by hand at `slot_data.py:75-76`, and the mod checks bools, `SeedData.cs:126-129`).
     **`options.as_dict` done 2026-10-03** (build step 39): slot_data's `options`, toggles as booleans, nested as
     Universal Tracker's docs write it, read by the mod; `world_version` and `add_locations` still to do.
-12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`).
+12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`). **Done
+    2026-10-13** (build step 98).
 13. **The Rule Builder:** Jump's blanket rule as an `OptionFilter` (`rule builder.md:80, 92, 103-110`; ours an `if` in
     `rules.py:35-42`; **done 2026-10-03**, build step 42: `rules.py`'s `JUMP`, on the user's yes to the
     preflight); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so
@@ -195,7 +196,8 @@ After the slot_data decision, each kept item was checked again for a way Archipe
     work with the save's count: read the library before changing it.
 26. **DeathLink: Archipelago's yaml option too.** Decided (the user, 2026-09-29): both. Archipelago's `DeathLink`
     option (`DeathLinkMixin`, `Options.py:1495-1498, 1726-1728`) sets it for the seed and turns the panel switch on or
-    off at login; the panel switch stays, to change it mid-seed.
+    off at login; the panel switch stays, to change it mid-seed. **Done 2026-10-13** (build step 99; the yaml's value
+    applied once per seed, so a mid-seed change on the main menu stays).
 27. **The library's cache bug, reported upstream** (checked in its source, 6.7.1
     and `main`): `GetFileSystemSafeFileName` returns its input unchanged, and the read uses the checksum uncleaned. No
     issue or pull request mentions it (six searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124

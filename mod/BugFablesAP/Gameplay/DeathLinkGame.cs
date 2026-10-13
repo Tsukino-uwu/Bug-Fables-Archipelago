@@ -15,6 +15,7 @@ namespace BugFablesAP
     internal static class DeathLinkGame
     {
         internal static ConfigEntry<bool> Enabled;
+        private static ConfigEntry<string> setBySeed;
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
@@ -48,6 +49,8 @@ namespace BugFablesAP
                 + "reach you. Switch it in the Archipelago panel on the main menu.");
             Enabled.SettingChanged += (s, e) => connection.SetDeathLinkTag(Wanted());
             connection.DeathLinkWanted = Wanted;
+            setBySeed = config.Bind("Archipelago", "DeathLinkSetBySeed", "",
+                "The seed whose yaml last set DeathLink; after that, the panel's row is yours until another seed.");
             deadParty = AccessTools.Method(typeof(BattleControl), "DeadParty");
             FieldInfo over = AccessTools.Field(typeof(BattleControl), "gameover");
             MethodInfo gameOverMethod = AccessTools.Method(typeof(BattleControl), "GameOver");
@@ -71,6 +74,24 @@ namespace BugFablesAP
         }
 
         private static bool Wanted() => Enabled != null && Enabled.Value && randomizerOn != null && randomizerOn();
+
+        // The yaml's DeathLink sets the row once per seed (room, team and slot); a change in the panel afterwards stays.
+        private static void FromSeed()
+        {
+            Tuple<string, bool> seed = connection.SeedDeathLink;
+            if (seed == null || Enabled == null)
+            {
+                return;
+            }
+            connection.SeedDeathLink = null;
+            if (setBySeed.Value == seed.Item1)
+            {
+                return;
+            }
+            setBySeed.Value = seed.Item1;
+            Enabled.Value = seed.Item2;
+            log.LogInfo($"[death] the seed's yaml sets DeathLink {(seed.Item2 ? "on" : "off")}; the panel can change it");
+        }
 
         // The first step of a Game Over with its setup (the fade and the music), which only a party wipe starts; the
         // game's own re-shows of the menu skip the setup and are left alone.
@@ -124,6 +145,7 @@ namespace BugFablesAP
 
         internal static void Tick()
         {
+            FromSeed();
             DeathLinkReceive();
             bool atTitle = MainManager.player == null && MainManager.battle == null && MainManager.map == null;
             if (atTitle && Pending)

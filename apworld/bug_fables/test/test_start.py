@@ -121,6 +121,15 @@ class TestTightStart(TestCase):
                                         if item.player != world.player or not item.advancement]
         self.assertEqual(entrances.early_items(world), [])
 
+    def test_a_start_item_from_the_pool_counts(self) -> None:
+        # Archipelago gives Start Inventory from Pool's items before generation (Main.py, push_precollected): Jump in
+        # hand, Vi's start opens 11 spots (measured 2026-10-13), so nothing is placed early.
+        world = generate_like_main(self.HARD, seed=1, steps=("generate_early",))
+        world.multiworld.push_precollected(world.create_item("Jump"))
+        for step in BEFORE_FILL[1:]:
+            call_all(world.multiworld, step)
+        self.assertEqual(entrances.early_items(world), [])
+
     def test_never_a_non_local_item(self) -> None:
         # Jump is the one picked here (test_one_that_opens_the_way); kept out of the player's own world, it can't be.
         world = generate_like_main(self.HARD, seed=1, steps=BEFORE_FILL)

@@ -6936,6 +6936,8 @@ import list gains `StartInventoryPool`.
 `test_a_start_item_from_the_pool_counts` (Jump given before generation makes Vi's tight start open 11 spots, so
 nothing is placed early).
 
+**Status:** built (2026-10-13); not yet seen in a seed.
+
 *Code: `options.py`, `slot_data.py` (`NOT_SENT`).*
 
 ## Build step 99: DeathLink in the yaml too
@@ -6950,6 +6952,8 @@ a death is here and that the panel can still switch it), sent in slot_data's `op
 preflight's import list gains `DeathLink`.
 
 **Tests** (not yet run, at push time): `death_link` sent as a JSON boolean, off by default and on when asked.
+
+**Status:** built (2026-10-13); not yet seen in game.
 
 *Code: `options.py` (`BugFablesDeathLink`), `slot_data.py` (`SLOT_OPTIONS`); the mod's side `documentation.md`, step
 66.*

@@ -700,6 +700,11 @@ namespace BugFablesAP
                     slotName = slot;
                     deathLinkTagged = null;
                     SetDeathLinkTag(DeathLinkWanted != null && DeathLinkWanted());
+                    if (parsed.DeathLink.HasValue)
+                    {
+                        SeedDeathLink = Tuple.Create($"{ServerText.SeedOf(attempt)}|{ok.Team}|{ok.Slot}",
+                            parsed.DeathLink.Value);
+                    }
                     // Another room, team or slot starts with nothing stored, as CommonClient tells sessions apart; the same
                     // one sends everything again. The first login clears too: before it, the room isn't known.
                     lock (gate)
@@ -790,6 +795,8 @@ namespace BugFablesAP
 
         // DeathLink (the Archipelago panel's row): the tag follows the row, received deaths wait here for the game thread.
         internal Func<bool> DeathLinkWanted;
+        // The seed's yaml DeathLink and the seed it is for, for the game thread to set the row with once (DeathLinkGame).
+        internal volatile Tuple<string, bool> SeedDeathLink;
         private volatile DeathLinkService deathLinks;
         private string slotName;
         private readonly Queue<DeathLink> receivedDeaths = new Queue<DeathLink>();
