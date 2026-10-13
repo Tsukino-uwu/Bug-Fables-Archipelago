@@ -440,8 +440,8 @@ class TestDoorShuffleRetries(TestCase):
     doors a failure left waiting pinned where the game has them (build step 95)."""
 
     # A failing fuzzer yaml's options (2026-10-13, yaml 1905: its one draw ran out of spare doors, 52 dead ends, all
-    # real), the start off so a spawn picked again can't move the draws; seed 22 runs out on a draw (since the doors'
-    # names of build step 105).
+    # real), the start off so a spawn picked again can't move the draws; seed 2 runs out on a draw (since build step
+    # 109's rules; any change to the logic or the doors' names can move it).
     DEADLOCKED = {"progression_balancing": 13, "accessibility": "full", "artifacts_required": 6,
                   "artifact_shuffle": "vanilla", "shuffle_quests": False, "shuffle_crystal_berries": False,
                   "shuffle_discoveries": True, "shuffle_hidden_items": True, "shuffle_dig_spots": False,
@@ -454,7 +454,7 @@ class TestDoorShuffleRetries(TestCase):
 
     def test_a_deadlock_generates(self) -> None:
         with self.assertLogs(level="INFO") as logs:
-            world = generate_like_main(self.DEADLOCKED, seed=22, steps=THROUGH_DOORS)
+            world = generate_like_main(self.DEADLOCKED, seed=2, steps=THROUGH_DOORS)
         self.assertTrue(any("ran out of spare doors on a draw" in line for line in logs.output))
         _assert_whole(self, world)
 

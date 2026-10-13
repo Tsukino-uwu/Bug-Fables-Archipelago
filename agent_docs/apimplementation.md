@@ -7360,8 +7360,9 @@ deadlock test's seed, which no longer ran out after the rename reordered Archipe
 in the full suite's run, two tests still on the old `<map>: <door>` names (the pump room's door to Malbee, the Wasp
 Kingdom's shut front gate, which has no entrance name at all since it's out of the door graph).
 
-**Status:** built (2026-10-13), tests passing, the full suite and both fuzzers run before the push; not yet seen in
-game.
+**Status:** built (2026-10-13), tests passing, the full suite and both fuzzers run before the push. Seen 2026-10-14 on a
+new file with a random start: leaving right came in on a left edge, leaving down came in at a top. The deadlock test's
+seed moved again with build step 109's rules (seed 2 now).
 
 *Code: `dev-scripts/door-graph.py` (`side`), `data/doors.json`, `data_types.py` (`DoorEnd.side`), `options.py`
 (`option_map_shuffle`), `entrances.py` (`MAP_SHUFFLE_GROUPS`, `_split`, `_randomize`), `world.py`.*
