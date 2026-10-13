@@ -4252,7 +4252,11 @@ said them.
   of 10000, all the known deadlock; the tracker's fuzz 0. **Not pushed:** the push waits for the next release's other
   changes.
 - **The AI disclosure** (Archipelago's policy): `docs/reviewing.md` answers its five questions as a Q&A; the README's
-  line matches it and links there. Not on a dated page of its own.
+  line matches it and links there. Then reviewed against the record (a workflow: fact-check, a moderator's reading,
+  clarity): two claims contradicted the public record (everything unconfirmed treated as not working; the AI never
+  working out logic), so the answers now say how testing really goes (new features seen in game, repeats of proven
+  work trusted until seen broken) and what the AI does with a room's data (reads it; the logic is decided by playing).
+  Decided: a release ships only with every check passing (Next 8). The page's other stale facts wait in `SCRUB.md`.
 - **Planned for the cleanup chat** (local `SCRUB.md`): a Python linter, ruff with Archipelago's own `ruff.toml`
   (measured 255 findings; Next 76), alongside the attribution scrub.
 - **Handoff:** the server hosting `AP_61148440722678327578` on 38281 (generated with the Wasp gate open, before its
