@@ -919,6 +919,11 @@ be wrong.
 
 **Known issues:**
 
+- **A starburst cut by the ground at a ledge's back edge** (found 2026-10-13, the Lost Sands' badge alcove, the medal
+  at (-17.7, 7, -2.8)): dev `iteminfo` showed the item and its starburst both in the sprite queue (2450), depth-tested,
+  so the ground's edge, nearer the camera, hides the starburst's lower half; the game's smaller medal fits above it.
+  Options: lift it, draw it over the ground (it would show through walls), or pull it toward the camera. Logged until
+  it shows up elsewhere.
 - **No starburst at a crystal berry spot's pickup** (found 2026-10-13, Upper Snakemouth's Piano Puzzle): a key item
   on a berry spot showed its starburst on the ground but not while held up; an ordinary spot's pickup (the Peculiar
   Gem's) showed it. Not yet traced.
@@ -950,6 +955,13 @@ be wrong.
   "both retry & counting could be possible solutions"; "i don't want to keep trying to fix temporary issues"): a retry
   around Archipelago's shuffler, Crystal's way; spare doors reserved by counting, ALttP's way; and the door-by-door
   changes above, judged with the fully mapped game's numbers.
+  **Measured with every room mapped (2026-10-13):** 76 of 2000 over the seven failing yamls (3.8%); 61 dead-end doors
+  left waiting, 52 of them one-door rooms (501 of 604 waits); the other 9 are drop-only ledges, the Worker Rooms' two
+  halves and the lake's door south (the Wasp Kingdom's front gate shut). Opening that gate (both ends present, the
+  grate and near gate hidden; seen working) measured 73 of 2000, no real change, so it was closed again the same day.
+  The six drop-only ledges (the southern room's top door, the underground door room's two top doors, the Golden Path
+  tunnel's high door, the Lost Sands entrance's and the badge alcove's ledge doors) were each looked at in game: each
+  is a real drop from an isolated ledge, kept as the game has it (the user, 2026-10-13).
 - **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
   The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
   the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The
