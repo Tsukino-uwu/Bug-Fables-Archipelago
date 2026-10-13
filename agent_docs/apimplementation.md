@@ -5923,7 +5923,15 @@ with every ability may never have come up. The review found grass near the Horn 
 position only). The user is "pretty sure" none blocks a way; it is rechecked on screen once every room is mapped
 (their call, 2026-10-09), the rooms listed in the local TO-CHECK.
 
-**Status:** built (2026-10-09); not yet seen in game.
+**The buzzer, changed (2026-10-13):** a leader's press played the locked attack's buzzer even when it started their
+own learned move, so the Dash, Bee Fly and the Shield each buzzed first (seen). Now a leader's press is silent when
+they have learned that move (flags 699, 19 and 20, `FieldMoves.PressMoveFlags`), and buzzes only with neither it nor
+the attack: a short tap's refused attack then makes no sound either, a fair trade (the user, 2026-10-13). The Dash's
+first press still stops Kabbu for the game's own double-tap window (15 frames, then 0.15 s); left as the game has it.
+
+**Status:** works, seen in seeds `AP_29838564452193402645` and `AP_13327170896682920080` (2026-10-13): the Dash
+without the Horn Slash, and Bee Fly and the Shield without their attacks, none of them buzzing. The Horn Dash on a
+boulder without the Horn Slash not yet seen.
 
 *Code: the mod `World/FieldMoves.cs` (`HornLock`, `HornTag`, `SlashAnim`, `SlashSound`); `logic/forsaken_lands.py`,
 `options.py`; tests `test_moves.py` (`TestDashWithoutTheHorn`).*

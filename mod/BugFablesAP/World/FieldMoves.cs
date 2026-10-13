@@ -235,6 +235,9 @@ namespace BugFablesAP
             }
         }
 
+        // The game flag of the move each leader's press can start besides its attack: Bee Fly, the Dash, the Shield.
+        private static readonly int[] PressMoveFlags = { 19, 699, 20 };
+
         internal static void Tick()
         {
             MainManager mm = MainManager.instance;
@@ -246,7 +249,10 @@ namespace BugFablesAP
                 return;
             }
             int move = mm.playerdata[0].animid;
-            if (move >= 0 && move <= 2 && Locked(move) && MainManager.GetKey(5, hold: false))
+            // A press that may start the leader's own learned move (Vi's Bee Fly, Kabbu's Dash, Leif's Shield) isn't
+            // only a refused attack: silent.
+            bool ownMove = move >= 0 && move <= 2 && Abilities.Learned(mm.flags, PressMoveFlags[move]);
+            if (move >= 0 && move <= 2 && Locked(move) && !ownMove && MainManager.GetKey(5, hold: false))
             {
                 MainManager.PlayBuzzer();
             }
