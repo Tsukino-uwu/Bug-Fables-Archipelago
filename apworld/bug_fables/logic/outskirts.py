@@ -4,7 +4,17 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import ALL_ATTACKS, ANY_ATTACK, BOAT_TICKET, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY, CanUse, one_way
+from ..custom_rules import (
+                            ALL_ATTACKS,
+                            ANY_ATTACK,
+                            BOAT_TICKET,
+                            GLITCHED,
+                            SUBMARINE,
+                            SUBMARINE_KEY,
+                            WHOLE_PARTY,
+                            CanUse,
+                            one_way,
+)
 from ..data_types import (
                             Added,
                             Area,
@@ -31,8 +41,8 @@ EAST2_UP = EAST2_CROSS | one_way(CanUse("Beemerang Halt"), EAST2_CROSS)
 # its lever.
 TUNNEL2_UP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash") & CanUse("Bee Fly") & ANY_ATTACK
 # The Golden Path tunnel's way up: ice frozen, knocked into place with the horn, then jumped on (the vanilla way;
-# Freeze alone is a harder jump the logic doesn't count).
-ICE_CLIMB = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
+# Freeze and Jump alone is a harder jump the logic doesn't count, shown in Universal Tracker as glitched).
+ICE_CLIMB = CanUse("Freeze") & CanUse("Jump") & (CanUse("Horn Slash") | GLITCHED)
 LOCATIONS = (
     Location("Outskirts: Maki and Eetl's Gift", 1, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, give=Give(map="BugariaOutskirtsOutsideCity", type=1, item=27)), quiet=True,

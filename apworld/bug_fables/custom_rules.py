@@ -119,6 +119,10 @@ WHOLE_PARTY = Member("Vi") & Member("Kabbu") & Member("Leif")
 ALL_ATTACKS = MoveItem("Beemerang Toss") & MoveItem("Horn Slash") & MoveItem("Freeze")
 # A switch takes any of the three: the Beemerang, a hit tagged BeetleHorn or BeetleDash, or ice (NPCControl, Switch).
 ANY_ATTACK = CanUse("Beemerang Toss") | CanUse("Horn Slash") | CanUse("Freeze")
+# Universal Tracker's glitched logic (World.glitches_item_name): only its own copy of a seed holds this item, so a way
+# needing it never counts in a real seed; in the tracker it shows a harder way the logic leaves out, in yellow.
+GLITCHES_ITEM = "Glitched Logic"
+GLITCHED = Has(GLITCHES_ITEM)
 BOAT_TICKET = Boat(1)
 SUBMARINE = Boat(2)
 # The submarine's key item in the bag, the Subaquatic Maritime Neotransport (CustomItems.cs), whichever item gives it.

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import Has, Rule
 
-from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, Member, one_way
+from ..custom_rules import ANY_ATTACK, GLITCHED, LATER_CHAPTERS, CanUse, Member, one_way
 from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
 
 # Up a bounce pad onto a rock, Jump, then the rock knocked with the horn into the hand, which opens the next pad; the
@@ -13,8 +13,8 @@ _HAND_ROCK: Rule = CanUse("Jump") & CanUse("Horn Slash")
 # Crane Crossing's coin stacks from its left: the droplet by the flower frozen, the ice knocked with the horn to climb
 # the gold coins, then Bee Fly over to the silver ones.
 _COINS: Rule = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Bee Fly")
-# Its right: Bee Fly, and an attack on the switch that moves a platform across.
-_TO_THE_RIGHT: Rule = CanUse("Bee Fly") & ANY_ATTACK
+# Its right: Bee Fly, and an attack on the switch that moves a platform across; Bee Fly alone, harder, as glitched.
+_TO_THE_RIGHT: Rule = CanUse("Bee Fly") & (ANY_ATTACK | GLITCHED)
 _FRIDGE_FIGHT = "Outside the Fridge Fight Won"
 # Each floor's climb inside the fridge: droplets and geysers frozen, ice knocked into place with the horn, Jump onto it,
 # Bee Fly across to the next bounce pad (on the top floor, to the lift and into it).
@@ -90,7 +90,7 @@ MAP_AREAS = (
     # from it by the coins, a drop back; from the stack a drop to the middle right, back up with Jump. The middle right
     # to the right (the door to the fridge outside) with Bee Fly and the switch, which sends a toy crane's platform
     # across; back by the red bounce pad, free. Bee Fly alone also crosses, harder: left out, as the game expects the
-    # switch.
+    # switch, and shown in Universal Tracker as glitched.
     Area("GiantLairDeadLands2", "Silver Coins", (), _COINS, out=one_way(None, _COINS)),
     Area("GiantLairDeadLands2", "Middle Right", (), one_way(None, CanUse("Jump")), out=CanUse("Jump"),
          to="GiantLairDeadLands2 (Silver Coins)"),

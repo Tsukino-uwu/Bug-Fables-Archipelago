@@ -4,7 +4,7 @@ from BaseClasses import EntranceType
 from rule_builder.rules import Has
 
 from ..abilities import ABILITIES
-from ..custom_rules import CanUse, Member, MoveItem
+from ..custom_rules import GLITCHES_ITEM, CanUse, Member, MoveItem
 from ..data_tables import (
     DOOR_RULES,
     DOORS,
@@ -95,7 +95,8 @@ class TestAreas(BugFablesTestBase):
 
     def test_every_name_a_rule_uses_exists(self) -> None:
         # A misspelt name in a rule would make a spot unreachable, or quietly need nothing.
-        items = {item.name for item in ITEMS} | {event.item for event in STORY_EVENTS}
+        # Universal Tracker's glitched logic item too, which only its own copy of a seed holds.
+        items = {item.name for item in ITEMS} | {event.item for event in STORY_EVENTS} | {GLITCHES_ITEM}
         members = {item.name for item in ITEMS if item.member}
         for where, rule in logic_rules():
             for part in rule_parts(rule):

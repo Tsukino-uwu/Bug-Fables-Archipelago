@@ -19,6 +19,7 @@ from . import (
     universal_tracker,
     web_world,
 )
+from .custom_rules import GLITCHES_ITEM
 from .data_tables import (
     ARTIFACT_KIND,
     ARTIFACTS,
@@ -81,6 +82,8 @@ class BugFablesWorld(World):
     passthrough: Mapping[str, Any] | None = None
     # Universal Tracker's map tab: plain diagrams of each room, area and the world (universal_tracker.TRACKER_WORLD).
     tracker_world = universal_tracker.TRACKER_WORLD
+    # Universal Tracker's glitched logic: the item only its copy of a seed holds (custom_rules.GLITCHED).
+    glitches_item_name = GLITCHES_ITEM
     # Universal Tracker's deferred entrances: each shuffled door's region until the player goes through it, and with
     # coupled doors the door each leads back through (universal_tracker.defer_doors).
     deferred_doors: dict[str, Any]

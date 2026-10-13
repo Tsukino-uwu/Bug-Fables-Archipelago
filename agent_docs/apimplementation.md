@@ -176,6 +176,7 @@ this file and that doc disagree, that doc is right.
 101. [Build step 101: Universal Tracker's map tab, plain diagrams drawn by code](#build-step-101-universal-trackers-map-tab-plain-diagrams-drawn-by-code)
 102. [Build step 102: Universal Tracker's own refusal for a seed of another version](#build-step-102-universal-trackers-own-refusal-for-a-seed-of-another-version)
 103. [Build step 103: Enemysanity's real fight after its name in Universal Tracker](#build-step-103-enemysanitys-real-fight-after-its-name-in-universal-tracker)
+104. [Build step 104: harder ways shown in Universal Tracker as glitched logic](#build-step-104-harder-ways-shown-in-universal-tracker-as-glitched-logic)
 
 **How it works**
 
@@ -980,12 +981,14 @@ be wrong.
       own glyph table (no font file, no Pillow). A tab per room, per game area and the world; doors as diamonds whose
       colour and destination follow the rebuilt seed; the tab following the player (the mod's map key).
     - **Glitched logic:** supported; which harder ways count is the maintainer's pick, the logic's own "harder, left
-      out" notes the starting list. Universal Tracker's copy of the seed only, so real seeds never change.
+      out" notes the starting list. Universal Tracker's copy of the seed only, so real seeds never change. Built in
+      build step 104, with two ways.
     - **Story events on the map as deferred events:** their own step, a new mod key for the events done.
     - **`TrackerException`** for a seed of another version: used, for completeness, though Universal Tracker then
       also logs that the world asked to be disabled; its import allowed in the preflight.
     - **Readable door labels:** "Room: Door to" and the room the door leads to in the unshuffled game, generated
-      from the approved room names, the whole list reviewed before use; in the door list, the map's tooltips and `/get_logical_path`.
+      from the approved room names, the whole list reviewed before use; in the door list, the map's tooltips and
+      `/get_logical_path`.
     - **Enemysanity's alias under Enemy Shuffle:** the real fight shown after the location's name; the names never
       change.
     **The map tab built 2026-10-13** (build step 101); the rest above to come, each its own step.
@@ -5047,8 +5050,8 @@ left as a gap.
    under Enemy Shuffle, readable door labels and deferred events, each its own step):
    - `location_id_to_alias`, for "a generically named location": our names are fixed and never change meaning per
      seed (a shop's numbered copies are always the same copies), so there is nothing to alias.
-   - `glitches_item_name`, for spots reachable in the game though not in logic ("glitched" logic): our logic has no
-     such rules; adding some is a logic decision.
+   - `glitches_item_name`, for spots reachable in the game though not in logic ("glitched" logic): our logic had no
+     such rules; adding some is a logic decision. Since 2026-10-13, build step 104.
    - `explain_rule`, `get_logical_path`, `explain_path`, `explain_spot`, `explain_more` and their sub-commands: the
      defaults read right so far; an override waits for the tester's look at them.
    - Deferred entrances (`found_entrances_datastorage_key`, `reconnect_found_entrances`,
@@ -7177,6 +7180,39 @@ location's name, which itself never changes.
 `custom_ut_sort`), `data_tables.py` (`ENEMY_NAMES`), `data/enemy_names.json`, `dev-scripts/enemy-table.py`; tests
 `test_tracker.py`.*
 
+## Build step 104: harder ways shown in Universal Tracker as glitched logic
+
+**Why:** Next 79 (decided 2026-10-13): every feature Universal Tracker offers a world, its glitched logic among them: a
+spot the player can reach by a harder way the logic leaves out shows apart from the spots in logic, so the player
+knows it's there without the seed ever counting on it.
+
+**How it was built:**
+
+1. **How Universal Tracker does it** (its `apworld-integration.md` and `TrackerCore.py`, v0.3.4, read 2026-10-13): a
+   world names an item in `glitches_item_name`; Universal Tracker makes it with the world's `create_item`, collects it
+   into a copy of the state, sweeps, and lists what that copy reaches beyond the logic as glitched. The item exists
+   only in its own copy of the seed: a real generation never holds it, so a way needing it never counts.
+2. **The item:** "Glitched Logic" (`custom_rules.GLITCHES_ITEM`, the class's `glitches_item_name`), and `GLITCHED`, the
+   rule holding it. `items.create_item` makes it as an event item (progression, no id), so it is in no pool, no
+   `item_name_to_id` and no slot_data.
+3. **The ways, each an `Or` with `GLITCHED` on the need it skips** (picked 2026-10-13, from the logic's own "harder,
+   left out" notes):
+   - the Golden Path tunnel's climb to its top right door: Freeze and Jump, without the Horn Slash that knocks the ice
+     into place (`outskirts.ICE_CLIMB`);
+   - Crane Crossing's way to its right: Bee Fly alone, without the attack on the switch that moves the platform
+     (`giants_lair._TO_THE_RIGHT`).
+4. **Tests** (`test_glitched.py`): each way closed without its need and open with it or the item; the item made the
+   way Universal Tracker makes it, with no id; never in a real seed's pool, ids, start inventory or full state; in a
+   seed rebuilt from its slot_data, the reach with the item holds every spot in logic, and with the whole pool adds
+   nothing. `test_every_name_a_rule_uses_exists` accepts the item's name.
+5. **The PopTracker pack** exports the same rules (build step 100), so its exporter meets a rule naming an item the
+   server never sends: handled in the pack's own repo.
+
+**Status:** built (2026-10-13), its tests written, run with the next full suite. Not yet seen in Universal Tracker.
+
+*Code: `custom_rules.py` (`GLITCHES_ITEM`, `GLITCHED`), `items.py` (`create_item`), `world.py`
+(`glitches_item_name`), `logic/outskirts.py`, `logic/giants_lair.py`; tests `test_glitched.py`, `test_areas.py`.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -7571,7 +7607,8 @@ No yaml is needed: everything that shapes the world is in slot_data.
 - **What it can't recompute is sent as applied:** Shop Contents' Filler Only fallback runs in `pre_fill` and counts the
   whole room's items, which Universal Tracker never sees, so `options` sends No Progression when it fell back.
 - **Refused:** a seed from another world version, or with no `options` (no support for older versions, How it works
-  7). Universal Tracker then shows that the world couldn't be generated, the reason in its log.
+  7), with Universal Tracker's own `TrackerException`, so its page says the options are incompatible and its log
+  gives the reason (build step 102).
 - **Explaining:** `/explain` prints each rule's `explain_json`, which Archipelago's Rule Builder gives every resolved
   rule; our custom rules resolve to built-in rules, so they explain themselves as item lists (build step 41).
   `/get_logical_path` walks the doors from the origin to a spot. `custom_ut_sort` orders the list by area as the story
@@ -7582,8 +7619,14 @@ No yaml is needed: everything that shapes the world is in slot_data.
     items. With the passthrough ignored, every case fails.
   - Universal Tracker's own fuzzer hook, run by `test-apworld.ps1` and CI over 10000 random seeds, regenerates each one
     with its own code and compares every sphere with the real generation (`development.md`, "Fuzzing the apworld").
-- **Not built yet:** the map tab, which loads the PopTracker pack's maps (build step 41); the mod's keys it would
-  follow are written since build step 57.
+- **The map tab** (build step 101): plain diagrams drawn by `dev-scripts/ut-map.py` from the apworld's own data, kept
+  in the apworld (`ut_map/`) and named by `tracker_world`: a tab per room, per game area and the world. Pins and doors
+  take their colours from the rebuilt seed; the tab follows the player's map by the mod's key (build step 57).
+- **Glitched logic** (build step 104): `glitches_item_name` names an item only Universal Tracker's copy of the seed
+  holds; a harder way the logic leaves out is an `Or` on it, so Universal Tracker shows what it reaches apart from the
+  logic's spots, and a real seed never counts on it.
+- **Enemysanity's alias** (build step 103): under Enemy Shuffle, `location_id_to_alias` puts each enemy spot's real
+  fight after its name.
 
 ## 13. Changing the game's state: writing a flag, or changing its readers
 
