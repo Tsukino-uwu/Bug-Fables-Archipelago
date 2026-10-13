@@ -4365,5 +4365,8 @@ said them.
   tag (the installed game matches `built-from.txt`), so `reviewing.md` now lists it (`fc5e4e4`).
 - **Preflight's Attributions** (`6b72d33d`, build step 28): refuses any such tag outside the three exempt places,
   matched on the whole text; the negative test plants one split inside a code comment. 88 fixtures, 0 problems.
-- **Next:** the full suite and the fuzzer before the push (the ruff cleanup changed code: `zip(strict=True)` where both
-  sides are built from one another), and `reviewing.md`'s test count from that run.
+- **Before the push** (`test-apworld.ps1`, 2026-10-13): 1,395 tests passing (the apworld's and Archipelago's general
+  ones on it), the Logic Test check 90 of 90, the fuzzer and Universal Tracker's hook 0 failures in 10000 each. The
+  last push's red CI (4 of 10000 under Coupled, 2026-10-12) predates the door shuffle's retry and pins (build step
+  95, 2026-10-13); its tracker shards failed only on those same seeds, a failed generation counting as ignored there.
+  `reviewing.md`'s test count updated from this run.
