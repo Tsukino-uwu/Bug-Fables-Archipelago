@@ -167,6 +167,7 @@ this file and that doc disagree, that doc is right.
 92. [Build step 92: the Sand Castle Key whole, its halves' spots locations](#build-step-92-the-sand-castle-key-whole-its-halves-spots-locations)
 93. [Build step 93: the Ancient Castle's spots back, its keys and the Peculiar Gem as items](#build-step-93-the-ancient-castles-spots-back-its-keys-and-the-peculiar-gem-as-items)
 94. [Build step 94: the Final Boss goal](#build-step-94-the-final-boss-goal)
+95. [Build step 95: the door shuffle tried again, its start kept open, its stranded doors pinned](#build-step-95-the-door-shuffle-tried-again-its-start-kept-open-its-stranded-doors-pinned)
 
 **How it works**
 
@@ -287,7 +288,13 @@ be wrong.
     (lying there or dropped after a fight), never a check's reward from the server. Only while Archipelago is enabled,
     or with *Use on normal saves*.
 18. **Random start** (2026-09-26): `anywhere` built, experimental; *Save Points* and *Any Room* designed
-    2026-09-30 (replacing the planned `towns`), to build. See build step 15.
+    2026-09-30 (replacing the planned `towns`), to build. See build step 15. **The logic from the spawn** (decided
+    2026-10-13, every room now mapped; after build step 95, two steps of their own): today the logic always begins at
+    the game's start (`regions.py`, `Menu -> START_MAP`), so a seed started elsewhere is placed as if it began outside
+    Bugaria. First Menu joined to the spawn's area (`room-logic.md`, "Where the party can appear"), the start table
+    naming the exact door and slot_data `start` naming it for the mod (`DoorInto` takes a door name already), with
+    build step 95's start check re-picking a spawn that opens too few spots; then a named start (*Starting Location* as
+    Archipelago's `TextChoice`: Off, Anywhere or one room by name; which names, to decide then).
 19. **Traps, an idea for later** (2026-09-26; not planned yet). A trap sent to this game takes effect when
     the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
     starburst. One icon per trap, so the player knows what's coming. Examples: a Mistake (the item) poisons
@@ -928,6 +935,15 @@ be wrong.
     test pattern, to be ignored for tests). First a one-time cleanup (`--fix` for the safe ones, the rest by hand, the
     tests after), then ruff check-only in the pre-commit hook and CI, in a commit of its own (a gate change). The mod's
     C# side (.NET's code analyzers) a separate look.
+77. **A mark on a door whose far side won't let you walk back, an idea** (asked 2026-10-13; not decided): the logic
+    knows every way back (`one_way(rule, way_back)`, the door rules), but a player sees it only after going through:
+    with shuffled doors a boulder, a push past a lock or a drop can wait on the far side, and with Points of No Return
+    the logic may send you there on purpose. A fixed mark, like warning tape: always shown on those doors, whatever the
+    player holds, before and after crossing, only to say what to expect (not a live check of the items). The generator
+    lists, per seed, each door whose arrival needs something to leave (or has no way back) in slot_data, and the mod
+    marks them. With it, a
+    check: whether any one-way's way back needs something the default options don't give early, where the Warp isn't
+    forced (`QualityOfLife.WarpOn`: a random start, door shuffle, Shuffle Jump, ability items or Points of No Return).
 
 **Known issues:**
 
@@ -944,39 +960,6 @@ be wrong.
   the commits before build step 87 too, so a newly mapped room shifted it, as mapping did before (2026-10-10, the
   Pier). Not yet narrowed to a room. Options: raise the test's budget, improve the repair's moves, or wait until every
   room is mapped and tune it once (as decided for mapping-caused breakage).
-- **Coupled door shuffle sometimes runs out of spare doors** (found 2026-10-10 by the fuzzer, 1 seed in 10000 in two
-  runs): with Coupled doors every one-door dead end uses up a spare door already reached, and Archipelago's
-  `randomize_entrances` gives up when they run out, with no retry of its own (`entrance_rando.py`). Measured with the
-  failing yaml: 2 in 2000 seeds before the Pier was mapped, 17 after (its cut-off floors and shut right doors add dead
-  ends until the Office, the bridge and the rooms behind are mapped); 7 in 10000 on 2026-10-12, after the hive's and
-  the hideout's one-way areas (the tracker's fuzz shows the same 8 as ignored); Decoupled never fails. Decided (the user): after
-  every room is mapped, the doors that cause it are gone through one at a time, each opened, made two-way or whatever
-  it needs, "judged on a per door/entrance case by case" (Next 2's door pass). Until then the fuzzer may show it.
-  **What others do** (a research workflow, 2026-10-10): Archipelago never retries ("Unlike fill, there is no attempt
-  made to save a failed randomization", `docs/entrance randomization.md:423-424`; a comment leaves room for retries,
-  `entrance_rando.py:472-473`), and the error ends the whole room's generation. Pokémon Crystal, on the same generic
-  shuffler, restores every door and reruns up to 10 times, then pins the stuck doors to vanilla, 65 runs at most
-  (`worlds/pokemon_crystal/entrance_rando.py`); OoT and Pokémon Red/Blue retry their own shufflers 10 times; TUNIC
-  resets in rare layouts ("shouldn't be covering up for an actual solution"); Messenger doesn't retry; ALttP reserves
-  doors by counting. A retry would need Archipelago's `EntranceRandomizationError` in the preflight's import allowlist
-  (the user's call) and must retry only the ran-out case, since setup errors raise the same class. **Which doors** (the
-  user asked; the failing yaml over seeds 1-2000, 2026-10-10): 17 failures left 52 different dead-end doors waiting,
-  2 to 10 each, none in more than 4 (the most: `UpperSnekRiverPuzzle: loadzone` 4, `RubberPrisonGym: loadzone` and
-  `WaspKingdomQueen: loadzone` 3): no one door causes it, the total of dead ends against spare doors does. Those three
-  are one-door rooms, dead ends whether mapped or not. **The options, revisited once every room is mapped** (the user:
-  "both retry & counting could be possible solutions"; "i don't want to keep trying to fix temporary issues"): a retry
-  around Archipelago's shuffler, Crystal's way; spare doors reserved by counting, ALttP's way; and the door-by-door
-  changes above, judged with the fully mapped game's numbers.
-  **Measured with every room mapped (2026-10-13):** 76 of 2000 over the seven failing yamls (3.8%); 61 dead-end doors
-  left waiting, 52 of them one-door rooms (501 of 604 waits); the other 9 are drop-only ledges, the Worker Rooms' two
-  halves and the lake's door south (the Wasp Kingdom's front gate shut). Opening that gate (both ends present, the
-  grate and near gate hidden; seen working) measured 73 of 2000, no real change, so it was closed again the same day.
-  The six drop-only ledges (the southern room's top door, the underground door room's two top doors, the Golden Path
-  tunnel's high door, the Lost Sands entrance's and the badge alcove's ledge doors) were each looked at in game: each
-  is a real drop from an isolated ledge (seen), kept as the game has it. The Worker Rooms' halves too: two
-  areas with no way between them, kept (the same day). **Next (decided 2026-10-13):** a fallback around the
-  shuffler, built before v0.4.0 so the release ships with 0 fuzzer failures: retry, a start-area check, pinning
-  stranded doors to vanilla, and a hard cap on attempts (Pokémon Crystal's layers, read for their approach).
 - **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
   The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
   the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The
@@ -6729,6 +6712,79 @@ once the six arrived and the map was entered again, then won; the Wasp King's Cr
 and the world released as the credits started.
 
 *Code: `options.py` (`ArtifactsRequired`), `world.py` (the cap), `rules.py` (`FINAL_FIGHT`), `items.py`.*
+
+## Build step 95: the door shuffle tried again, its start kept open, its stranded doors pinned
+
+**Found** (2026-10-10 by the fuzzer, 1 seed in 10000; until now a known issue): with Coupled doors, Archipelago's
+`randomize_entrances` sometimes runs out of spare doors and gives up (`EntranceRandomizationError`, "None of the
+available entrances are valid targets"), with no retry of its own. It grew as rooms were mapped (with the failing yaml,
+2 in 2000 before the Pier, 17 after; 7 in 10000 on 2026-10-12) and, with every room mapped, measured 76 of 2000 over
+the seven failing yamls (3.8%, 2026-10-13); Decoupled never fails. The doors: 61 dead ends left waiting over those
+failures, 52 of them one-door rooms (501 of 604 waits), none in more than a few; the other 9 were each looked at in
+game and are real (six drop-only ledges, the Worker Rooms' two halves, and the lake's door south while the Wasp
+Kingdom's front gate is shut: opened, it measured 73 of 2000, so it was closed again). Every failure log shows the same:
+the randomizer is placing dead ends, every exit it still holds is a one-way (the fog maze's return zones,
+`WaspKingdomOutside: loadzoneinside#14`, `FarGrasslandsWizard: loadzonebasement`) and every target a two-way dead end,
+which a one-way can't take (`BaseClasses.py:1246`). No door change fixes it: the dead ends outnumber the two-way spare
+doors reached.
+
+**What Archipelago and others do** (2026-10-10; Archipelago re-read at 0.6.8 on 2026-10-13): Archipelago never retries
+("Unlike fill, there is no attempt made to save a failed randomization", `docs/entrance randomization.md:423-424`;
+"retries may be implemented if early deadlocking is a frequent issue", `entrance_rando.py:472-473`); its one rescue is
+for minimal accessibility (`:483-502`), and its extension points are `on_connect` and a custom `Entrance`
+(`:388-391`). Pokémon Crystal, on the same shuffler, restores every door and runs it again up to 10 times, then pins
+the stuck doors where the game has them, 65 runs at most (read for its approach, `references.md`); OoT and Pokémon
+Red/Blue retry their own shufflers; TUNIC resets in rare layouts; Messenger doesn't retry; ALttP reserves doors by
+counting.
+
+**Decided** (2026-10-13): a fallback around Archipelago's shuffler, before v0.4.0, so the release ships with 0 fuzzer
+failures: draw again, check the start, pin stranded doors where the game has them, cap the draws. The start check takes
+Room Swap's rule (build step 30), so no new number: a layout opens at least as many spots that can take progression
+from the start as the game's own layout does, up to 10. `EntranceRandomizationError` joins the preflight's import
+allowlist.
+
+**Built** (`entrances.py`: `_randomize`, called by `shuffle` for Coupled and Decoupled after the split and plando):
+
+1. **Drawn again:** up to `DOOR_TRIES` (10) draws. Only the ran-out failure is drawn again: its message starts with
+   Archipelago's own words (only `entrance_rando.py:510-511` says them) and the draw placed something (one that placed
+   nothing would fail the same way every time). Any other error, a setup mistake, is raised at once.
+2. **Put back as split** (`_FreeDoors`): the exits and targets nothing connects yet, kept after the split and plando;
+   after a draw, each exit it connected is disconnected and each target it used goes back into its region. That is all
+   a draw leaves: the randomizer connects exits, takes used targets off their regions and builds its own state anew
+   each call (read in `entrance_rando.py` and `BaseClasses.py`, 0.6.8). Lists, never sets, so every run has the same
+   order. A guard refuses a split whose one-way (or two-way) exits and targets differ in number.
+3. **The start check:** after a draw that worked, the spots open from the start with only the start's items
+   (`_Measure.start`, Room Swap's count) against the game's own layout's, measured before the split, up to
+   `_START_SPOTS`. Fewer: put back and drawn again, `START_RESHUFFLES` (5) times in all, then kept (logged). Not a
+   custom `Entrance`: the randomizer sweeps with every item (`entrance_rando.py:193-200`), so a hook can't see the
+   start's own sphere while placing.
+4. **Pins:** after 10 failures, each door the last failure left waiting is connected where the game has it (a two-way
+   both ways with its partner, a one-way to its own landing; a way plando took stays as it is), named in a warning,
+   and the rest drawn again: `PIN_ROUND_TRIES` (5) a round, `PIN_ROUNDS` (10) rounds, each pinning its last failure's
+   leftovers. A pin is the game's own pairing, so `door_targets` leaves it out, Universal Tracker and the PopTracker
+   pack read it as the game has it, and the spoiler lists it like any pair: nothing new in slot_data or the mod.
+5. **A cap:** 65 draws at most; past it, Archipelago's error naming every pinned door.
+
+**Measured** (2026-10-13; scratch scripts and the fuzzer's `--sample-from`, kept out of the repo):
+
+- **The seven failing yamls,** 200 draws each, the doors put back between draws: 7 to 15 ran out (3.5 to 7.5%), so 10
+  in a row is about 1 in 10^11 at worst. The graph matched its snapshot after all 2100 put-backs. A draw takes 0.04 s
+  (0.08 at most), so 65 stay far inside the fuzzer's 15 s. After one round of pins (13 to 37 ways), 1 to 4 in 100 ran
+  out (10 in one yaml): pins help a little, the draws do the work. Through the fuzzer, 2000 generations: **0
+  failures** (76 before).
+- **The start check:** it refuses 8 to 65% of those yamls' layouts. Coupled with one random starting member and the
+  field moves and Jump shuffled, 2000 generations each: with the check off, 4 `FillError`s, every one a start that
+  opened 7 spots (10 wanted), as Room Swap's did (build step 30); with it on, **0**.
+
+**Tests** (`test_doors.py`, `TestDoorShuffleRetries`; not yet run, at push time): Archipelago's randomizer is wrapped
+(`_Randomizer`) to count draws, keep the graph each starts from, and run out of spare doors through its own
+`on_connect`. A draw that ran out is drawn again from the same graph, and the result is whole (every exit connected
+once, no target left, every region reachable); two rounds of pins are the game's own pairs, with the goal reachable;
+pins read back from `door_targets`, and a seed gives the same doors twice; a setup error and a draw that placed nothing
+are raised at once; a split of mismatched kinds is refused; a start too small is drawn again 5 times, then kept; the
+fuzzer's seed 851669694 (yaml 1905), whose first draw runs out (checked the same day), generates.
+
+*Code: `entrances.py` (`_randomize`, `_FreeDoors`, `_pin`, `_Measure.start`), `dev-scripts/preflight-patterns.json`.*
 
 # How it works
 
