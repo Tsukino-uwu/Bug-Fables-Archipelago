@@ -15,9 +15,11 @@ import json
 import os
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
+import zlib
 
 sys.dont_write_bytecode = True
 
@@ -177,6 +179,20 @@ def patch_bytes(c, rel, old, new):
     c.write(rel, data.replace(old, new, 1))
 
 
+def png(color=3, depth=4, width=8, height=4, palette=b'\x00\x00\x00\xff\xff\xff', pixel=0x01, tail=b''):
+    """A small PNG built as the map generator writes one (a palette image, every row unfiltered), or bent off it."""
+    def chunk(kind, body):
+        return struct.pack('>I', len(body)) + kind + body + struct.pack('>I', zlib.crc32(kind + body))
+    row = (width * depth * (3 if color == 2 else 1) + 7) // 8
+    rows = b''.join(b'\x00' + bytes([pixel]) * row for _ in range(height))
+    header = struct.pack('>IIBBBBB', width, height, depth, color, 0, 0, 0)
+    return (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', header) + (chunk(b'PLTE', palette) if color == 3 else b'')
+            + chunk(b'IDAT', zlib.compress(rows)) + chunk(b'IEND', b'') + tail)
+
+
+DIAGRAM = 'apworld/bug_fables/ut_map/images/planted.png'
+
+
 def make_fresh(c):
     """Puts back the build inputs of the commit built-from.txt names, so the committed DLL is current: between releases
     the real tree is legitimately newer, which would hide what the staleness fixtures plant."""
@@ -252,6 +268,22 @@ def fixtures():
     @add('a release DLL that is not .NET', 'Binaries')
     def _(c):
         c.write(DLL, b'MZ' + b'\x00' * 200)
+
+    @add('a map diagram in another PNG format', 'Binaries', names=('planted.png', 'colour type 2'))
+    def _(c):
+        c.write(DIAGRAM, png(color=2, depth=8))
+
+    @add('a map diagram with bytes after its end', 'Binaries', names=('planted.png', 'after the image'))
+    def _(c):
+        c.write(DIAGRAM, png(tail=b'hidden payload'))
+
+    @add('a map diagram with a pixel outside its palette', 'Binaries', names=('planted.png', 'outside the palette'))
+    def _(c):
+        c.write(DIAGRAM, png(pixel=0x23))
+
+    @add('a map diagram in the generator\'s format', 'Binaries', expect='PASS')
+    def _(c):
+        c.write(DIAGRAM, png())
 
     @add('a bidi override in a doc', 'Hidden characters')
     def _(c):

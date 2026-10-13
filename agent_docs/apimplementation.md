@@ -3718,7 +3718,13 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
   file of any other kind fails. `.gitattributes` may set only `text`, `eol` and `binary`, nothing that changes what git
   stores or shows.
 - **Binaries:** the only binary files are the four release DLLs, each a .NET assembly, and the three libraries are
-  byte for byte the files NuGet ships.
+  byte for byte the files NuGet ships. Besides them, since 2026-10-13, Universal Tracker's map diagrams (Next 79),
+  only under `apworld/bug_fables/ut_map/images/` and only in the generator's own PNG format (`images` in the patterns
+  file): a palette of at most 16 colours, at most 2048 px a side and 64 KB, every chunk's CRC right and of the kinds the
+  generator writes, in order, nothing after the image's end, the pixels inflating to exactly the header's rows, each
+  row unfiltered and every pixel inside the palette. So no photo, no game art and nothing hidden fits; the negative
+  test plants a full-colour PNG, one with bytes after its end and one with a pixel outside its palette (each refused),
+  and one in the generator's format (passed).
 - **Hidden characters:** no invisible, bidirectional or control character anywhere. Those can make code read
   differently from what runs (the "Trojan Source" trick). In code, the only non-ASCII characters are `é`, `…` and `±`.
 - **Encoded blobs and long lines:** no long base64 or hex run, and no code line over 1000 characters, where a payload

@@ -596,5 +596,14 @@
     "rules": [
       ["\\bthe(?:\\s|#|//|\\*)+user\\b", "who said it: a decision is a fact with its date; evidence is seen, code read or a dump"]
     ]
+  },
+  "images": {
+    "about": "Universal Tracker's map diagrams, drawn by code from the project's own room data (Next 79): the only binary files besides the release DLLs, and only in the generator's own PNG format.",
+    "files": "apworld/bug_fables/ut_map/images/*.png",
+    "max_bytes": 65536,
+    "max_side": 2048,
+    "max_colors": 16,
+    "bit_depths": [1, 2, 4],
+    "chunks": ["IHDR", "PLTE", "tRNS", "IDAT", "IEND"]
   }
 }

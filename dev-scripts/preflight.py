@@ -25,6 +25,7 @@ import sys
 import tempfile
 import time
 import unicodedata
+import zlib
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -179,6 +180,76 @@ def is_pe_managed(data):
         return False
 
 
+PNG_SIGNATURE = b'\x89PNG\r\n\x1a\n'
+
+
+def png_problems(data, rules):
+    """Why a PNG is not the map generator's own format: one palette image, every chunk's CRC right, the chunks in
+    order and of the allowed kinds, nothing after the end, the pixels exactly the rows the header says, each row
+    unfiltered and every pixel inside the palette. Empty when it is."""
+    problems = [f'{len(data)} bytes, over {rules["max_bytes"]}'] if len(data) > rules['max_bytes'] else []
+    if not data.startswith(PNG_SIGNATURE):
+        return [*problems, 'not a PNG']
+    pos, chunks, idat = len(PNG_SIGNATURE), [], b''
+    header = palette = alpha = None
+    while pos < len(data):
+        if pos + 12 > len(data):
+            return [*problems, 'a chunk cut short']
+        length, kind = struct.unpack_from('>I4s', data, pos)
+        end = pos + 8 + length
+        if end + 4 > len(data):
+            return [*problems, 'a chunk cut short']
+        body = data[pos + 8:end]
+        if zlib.crc32(kind + body) != struct.unpack_from('>I', data, end)[0]:
+            return [*problems, f'chunk {kind!r}: its CRC is wrong']
+        name = kind.decode('latin-1')
+        if name not in rules['chunks']:
+            return [*problems, f'chunk {name!r}: not one the generator writes']
+        chunks.append(name)
+        header = body if name == 'IHDR' else header
+        palette = body if name == 'PLTE' else palette
+        alpha = body if name == 'tRNS' else alpha
+        idat += body if name == 'IDAT' else b''
+        pos = end + 4
+        if name == 'IEND':
+            break
+    if pos != len(data):
+        problems.append(f'{len(data) - pos} byte(s) after the image\'s end')
+    if header is None or len(header) != 13:
+        return [*problems, 'no header, or one of the wrong size']
+    width, height, depth, color, compression, filtering, interlace = struct.unpack('>IIBBBBB', header)
+    if color != 3 or depth not in rules['bit_depths'] or (compression, filtering, interlace) != (0, 0, 0):
+        return [*problems, f'colour type {color}, depth {depth}, methods {compression}/{filtering}/{interlace}: '
+                           f'not a plain palette image of depth {rules["bit_depths"]}']
+    order = ''.join({'IHDR': 'H', 'PLTE': 'P', 'tRNS': 'T', 'IDAT': 'D', 'IEND': 'E'}[c] for c in chunks)
+    if not re.fullmatch(r'HPT?D+E', order):
+        return [*problems, f'chunks out of order: {" ".join(chunks)}']
+    if not (0 < width <= rules['max_side'] and 0 < height <= rules['max_side']):
+        problems.append(f'{width}x{height}, a side over {rules["max_side"]}')
+    entries = len(palette) // 3
+    if len(palette) % 3 or not 0 < entries <= min(rules['max_colors'], 1 << depth):
+        return [*problems, f'a palette of {len(palette)} bytes: at most {rules["max_colors"]} colours']
+    if alpha is not None and len(alpha) > entries:
+        problems.append('transparency for more colours than the palette has')
+    row = (width * depth + 7) // 8
+    expected = height * (row + 1)
+    try:
+        raw = zlib.decompressobj().decompress(idat, expected + 1)
+    except zlib.error as e:
+        return [*problems, f'its pixel data doesn\'t inflate ({e})']
+    if len(raw) != expected:
+        return [*problems, f'{len(raw)} bytes of pixels where the header says {expected}']
+    if raw[::row + 1].count(0) != height:
+        problems.append('a row with a filter (the generator writes none)')
+    per_byte, mask = 8 // depth, (1 << depth) - 1
+    inside = bytes(b for b in range(256)
+                   if all((b >> (8 - depth * (k + 1)) & mask) < entries for k in range(per_byte)))
+    pixels = b''.join(raw[r * (row + 1) + 1:(r + 1) * (row + 1)] for r in range(height))
+    if pixels.translate(None, inside):
+        problems.append('a pixel outside the palette')
+    return problems
+
+
 def sha256(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -317,7 +388,12 @@ def known_kinds(ctx, out):
 def binaries(ctx, out):
     allowed = ctx.patterns['binaries']
     libraries = ctx.patterns['libraries']
-    found = [f for f in ctx.files if f.binary]
+    images = ctx.patterns['images']
+    drawn = glob_regex(images['files'])
+    # Universal Tracker's map diagrams: binary, but only in the generator's own PNG format.
+    diagrams = [f for f in ctx.files if f.binary and drawn.match(f.path)]
+    bad_png = [f'{f.path}: {why}' for f in diagrams for why in png_problems(f.data, images)]
+    found = [f for f in ctx.files if f.binary and not drawn.match(f.path)]
     stray = [f.path for f in found if f.path not in allowed]
     native = [f.path for f in found if f.path in allowed and not is_pe_managed(f.data)]
     changed = [] if ctx.history else [
@@ -329,13 +405,16 @@ def binaries(ctx, out):
         out.fail('a listed DLL is not a .NET assembly', native)
     if changed:
         out.fail('a library DLL is not the file NuGet ships', changed)
+    if bad_png:
+        out.fail('a map diagram that is not in the generator\'s own PNG format (patterns file, "images")', bad_png)
     if not ctx.history:
         missing = sorted(set(allowed) - {f.path for f in found})
         if missing:
             out.fail('listed release DLLs missing from the tree', missing)
-    if not (stray or native or changed) and (ctx.history or len(found) == len(allowed)):
+    if not (stray or native or changed or bad_png) and (ctx.history or len(found) == len(allowed)):
         out.ok(f'{len(found)} binary file(s), each a listed .NET assembly'
-               + ('' if ctx.history else f'; the {len(libraries)} libraries are byte-for-byte NuGet\'s'))
+               + ('' if ctx.history else f'; the {len(libraries)} libraries are byte-for-byte NuGet\'s')
+               + f'; {len(diagrams)} map diagram(s), each in the generator\'s own PNG format')
 
 
 @section('Hidden characters', modes=('tree', 'history', 'text'))
@@ -1873,7 +1952,8 @@ def load_patterns(files):
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
                 'workflows', 'workflow_capabilities', 'dependencies', 'capability_tables', 'mod_server_text',
-                'agent_settings', 'line_caps', 'durations', 'log_personal', 'ruff_version', 'attributions'}
+                'agent_settings', 'line_caps', 'durations', 'log_personal', 'ruff_version', 'attributions',
+                'images'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
