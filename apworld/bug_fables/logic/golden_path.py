@@ -88,14 +88,14 @@ MAP_AREAS = (
     Area("GoldenHillsPath3", "Left", ("loadzonesettlement",), CAVE_PATH_TO_LEFT,
          out=CAVE_PATH_TO_RIGHT, to="GoldenHillsPath3 (Right)"),
 )
-# The caravan's stall there for good, the snail's shop that takes its spot after the boss kept away (the user,
-# 2026-10-07: the snail's goods overlapped; the caravan's other stalls to be decided one at a time).
+# The caravan's stall there for good, the snail's shop that takes its spot after the boss kept away (the snail's
+# goods overlapped; the caravan's other stalls to be decided one at a time).
 KEPT_PRESENT = (
     EntityRef("GoldenSettlementEntrance", "Crickerly"),
     EntityRef("GoldenSettlementEntrance", "Husband"),
     EntityRef("GoldenSettlementEntrance", "CaravanBadge - Duplicate"),
     # The cave path's door to Chomper Cave, locked until the story teaches the Shield (flag 20): open, its wall hidden
-    # (below), the Shield the logic's need (the user, 2026-10-07).
+    # (below), the Shield the logic's need.
     EntityRef("GoldenHillsPath3", "loadzonechomper"),
 )
 KEPT_OPEN = (

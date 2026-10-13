@@ -50,7 +50,7 @@ LOCATIONS = (
 # around the table: kept away, so only the way across a room is logic (2026-10-11). The game swaps them itself at the
 # story's capture (flag 11) for regular enemies, made only from 11 on: those kept present instead.
 # The story's capture at the entrance's altar (eventcheck, Event109 until 18) takes every item into a saved string and
-# drops the party in the cell: skipped in a seed (2026-10-11, the user's pick); the door below and Astotheles' fight
+# drops the party in the cell: skipped in a seed; the door below and Astotheles' fight
 # trigger, made only from 18, made from the start instead (PRESENT_FROM: their limits still count, so the fight
 # ends at 301), and the wall over that door (Base/FakeWalls, a ConditionChecker
 # limited by 18) switched off: flag 18's whole change to the room (its altar is scenery, no flag's).

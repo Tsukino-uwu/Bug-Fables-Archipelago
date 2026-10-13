@@ -40,7 +40,7 @@ LOCATIONS = (
     Location("Bugaria City: Throne Room, Queen's Audience", 318, "AntPalace1", Source(event=142, flag=347, artifact=5),
              rule=CanReachRegion("WaspKingdomThrone (Top)")),
     # The Termacade greeter's first talk (lines 92-93): 15 tokens, its Game Tokens item adding them; the arcade's score
-    # rewards give the same item, so only hers. Always in, kept to filler (the user, 2026-10-06).
+    # rewards give the same item, so only hers. Always in, kept to filler.
     Location("Bugaria City: Termacade, Arcade Gift", 97, "BugariaCommercial",
              Source(flag=351, npc="termiteoutside", give=Give(map="BugariaCommercial", type=1, item=110), tokens=15),
              no_jump=True, filler=True),
@@ -108,7 +108,7 @@ LOCATIONS = (
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52)), no_jump=True),
     # Royal Calling on the war room's table, up by Jump; the game makes it only after the ending (flag 555), the seed
-    # from the start (the user, 2026-10-04).
+    # from the start.
     Location("Ant Palace: War Room, Table", 77, "AntPalaceWarRoom",
              Source(flag=717, pickup=Pickup(map="AntPalaceWarRoom", type=2, item=80)), rule=CanUse("Jump")),
     # Board quest 33's reward, from a cicada in a residential house once the old book (Quest Book) is delivered.
@@ -267,8 +267,7 @@ KEPT_OPEN = (
     EntityRef("BugariaMainPlaza", "MakiBlock"),
 )
 KEPT_PRESENT = (
-    # The arcade, its door, sign, games and helpers, made only from flag 350: there from the start (the user,
-    # 2026-10-06).
+    # The arcade, its door, sign, games and helpers, made only from flag 350: there from the start.
     EntityRef("BugariaCommercial", "arcadedoor"),
     EntityRef("BugariaCommercial", "arcadesign"),
     EntityRef("BugariaCommercial", "termiteoutside"),
@@ -278,12 +277,11 @@ KEPT_PRESENT = (
     EntityRef("BugariaCommercial", "kartgame"),
     EntityRef("BugariaCommercial", "score check"),
     EntityRef("BugariaCommercial", "beegame"),
-    # The way down to the ant tunnels, made only from chapter 2 (flag 67): the tunnels lead up here, so it stays open
-    # (the user, 2026-10-04).
+    # The way down to the ant tunnels, made only from chapter 2 (flag 67): the tunnels lead up here, so it stays open.
     EntityRef("AntPalace1", "MineLoadZone"),
-    # The library door, made only from chapter 2 (flag 67) (the user, 2026-10-04); its blocker is kept away.
+    # The library door, made only from chapter 2 (flag 67); its blocker is kept away.
     EntityRef("AntPalace1", "Loadzonelibrary"),
-    # The war room door, opposite, likewise (the user, 2026-10-04).
+    # The war room door, opposite, likewise.
     EntityRef("AntPalace1", "loadzonewarroom"),
     # The medal on the war room's table, made only after the ending (flag 555): location 77.
     EntityRef("AntPalaceWarRoom", "royal medal"),

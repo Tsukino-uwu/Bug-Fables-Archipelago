@@ -40,11 +40,11 @@ def set_all_rules(world: BugFablesWorld) -> None:
                 location = world.get_location(loc.name)
                 location.progress_type = LocationProgressType.EXCLUDED
                 add_item_rule(location, _no_trap)
-    # The Termacade's gift and prizes only ever hold filler (the user, 2026-10-06): excluded, as Archipelago keeps them.
+    # The Termacade's gift and prizes only ever hold filler: excluded, as Archipelago keeps them.
     for loc in world.included_locations:
         if loc.filler:
             world.get_location(loc.name).progress_type = LocationProgressType.EXCLUDED
-    # Minigame Prizes off (the default, the user, 2026-10-07): a high score's prize holds filler only.
+    # Minigame Prizes off (the default): a high score's prize holds filler only.
     if not world.options.minigame_prizes:
         for loc in world.included_locations:
             if loc.category == "minigame":

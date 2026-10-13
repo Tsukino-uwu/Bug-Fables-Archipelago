@@ -8,7 +8,7 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The Golden Settlement festival, as a seed says (the user, 2026-10-07): the eating contest (Event57) always won
+    // The Golden Settlement festival, as a seed says: the eating contest (Event57) always won
     // (contest_always_won), so its prize is the Moon Offering and Chubee's gift after it the Weak Stomach medal, both
     // locations, every time.
     internal static class Festival

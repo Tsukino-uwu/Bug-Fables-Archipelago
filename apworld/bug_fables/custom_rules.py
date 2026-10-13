@@ -48,8 +48,8 @@ class Member(Rule["BugFablesWorld"], game=GAME):
 
 @dataclass()
 class ItemOnHand(Rule["BugFablesWorld"], game=GAME):
-    """An ordinary item to hand over: any item shop reached, whose slots sell their own item without end once bought
-    (the user, 2026-10-07). By the shop's region, so it holds with item shops left out of the seed too."""
+    """An ordinary item to hand over: any item shop reached, whose slots sell their own item without end once bought.
+    By the shop's region, so it holds with item shops left out of the seed too."""
 
     def _ways(self) -> list[Rule]:
         from .logic import LOCATIONS

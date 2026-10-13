@@ -33,11 +33,11 @@ _LEVER_LEDGE = (CanUse("Horn Dash") & CanUse("Horn Slash") & CanUse("Jump")) | (
 
 LOCATIONS = (
     # Where the game teaches the Horn Dash (Event131, flag 39): the boulder at the bridge's bottom, talked to with
-    # nothing (it can't be broken otherwise), there until then (the user, 2026-10-09: with Kabbu out too, Leif in his
+    # nothing (it can't be broken otherwise), there until then (with Kabbu out too, Leif in his
     # place). Arriving through the bottom door pushes the party past it, so it never blocks the door.
     Location("Wild Swamplands: Bridge, Boulder", 72, "SwamplandsBridge", Source(event=131, flag=39), no_jump=True,
              area="Bottom"),
-    # The lily pad pond (Swamplands2; the user, 2026-10-08): a Poison Bomb dug up in its top part, Beetle Dig; a
+    # The lily pad pond (Swamplands2): a Poison Bomb dug up in its top part, Beetle Dig; a
     # respawning Honey Drop in grass by the bottom door (regional flag 6, which the dig spot shares), the horn.
     Location("Wild Swamplands: Lily Pad Pond, Dig Spot", 181, "Swamplands2",
              Source(flag=737, pickup=Pickup(map="Swamplands2", type=0, item=31)), rule=CanUse("Beetle Dig"),
@@ -45,19 +45,18 @@ LOCATIONS = (
     Location("Wild Swamplands: Lily Pad Pond, Grass in the Bottom Right", 182, "Swamplands2",
              Source(regional=6, pickup=Pickup(map="Swamplands2", type=0, item=1)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
-    # Crystal berry #27, dug up under a boulder on the right side (the user, 2026-10-09).
+    # Crystal berry #27, dug up under a boulder on the right side.
     Location("Wild Swamplands: Junction, Dig Spot", 183, "Swamplands5",
              Source(berry=27, pickup=Pickup(map="Swamplands5", type=3, item=0)),
              rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="crystal_berry"),
     # A Clear Bomb on a vine high above the center platform, coming back each visit (regional flag 34): from the right
     # side, the platform lowered by its lever, a Beemerang held behind it (Halt), Jump on, the Beemerang let go raises
     # it, and the Toss hits the vine. It falls on the left side: back on the right, the lever lowers the platform again,
-    # then Jump across and back (dropped to the left with the platform up, the way back is the long one; the user,
-    # 2026-10-09).
+    # then Jump across and back (dropped to the left with the platform up, the way back is the long one).
     Location("Wild Swamplands: Junction, Vine above the Platform", 184, "Swamplands5",
              Source(regional=34, pickup=Pickup(map="Swamplands5", type=0, item=36)),
              rule=CanUse("Jump") & CanUse("Beemerang Halt")),
-    # Crank Pond (Swamplands6; named by the user, 2026-10-09): a Burly Berry behind a tree near the right door, coming
+    # Crank Pond (Swamplands6): a Burly Berry behind a tree near the right door, coming
     # back each visit (regional flag 22; its other hiding flag, 281, is set by nothing), and a Crunchy Leaf in the grass
     # in the bottom left (regional flag 19), the horn.
     Location("Wild Swamplands: Crank Pond, Behind the Tree", 185, "Swamplands6",
@@ -66,7 +65,7 @@ LOCATIONS = (
     Location("Wild Swamplands: Crank Pond, Grass in the Bottom Left", 186, "Swamplands6",
              Source(regional=19, pickup=Pickup(map="Swamplands6", type=0, item=0)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
-    # Ice Block Climb's medal (Swamplands7; named by the user, 2026-10-09), Eternal Venom, on a stump in its upper left:
+    # Ice Block Climb's medal (Swamplands7), Eternal Venom, on a stump in its upper left:
     # nothing once there.
     Location("Wild Swamplands: Ice Block Climb, On Top of the Stump", 187, "Swamplands7",
              Source(flag=355, pickup=Pickup(map="Swamplands7", type=2, item=27)), no_jump=True, area="Upper Left"),
@@ -95,28 +94,28 @@ STORY_EVENTS = (
                rule=ANY_ATTACK, area="Upper Middle"),
 )
 MAP_AREAS = (
-    # The swamp boss's room (the user, 2026-10-08): its bottom (the door, the save crystal, the healing flower) the
+    # The swamp boss's room: its bottom (the door, the save crystal, the healing flower) the
     # map's own region; its top door across lily pads, Jump, past the boss in the middle (Event137, until 359), fought
     # from either side: Leif, as it burrows, and it summons nothing. Both ways.
     Area("SwamplandsBoss", "Top", ("loadzonenorth",), CanUse("Jump") & Member("Leif")),
-    # The swamp's second room (the user, 2026-10-08): its bottom door the map's own region; its top door up across lily
+    # The swamp's second room: its bottom door the map's own region; its top door up across lily
     # pads and grass-blocked ledges, Jump and the horn or Bee Fly; back down the horn or Bee Fly, no Jump. The Leafbug
     # ambush before the top door (Event128) for the enemy pass.
     Area("Swamplands2", "Top", ("loadzonenorth",), CanUse("Jump") & (CanUse("Horn Slash") | CanUse("Bee Fly")),
          out=CanUse("Horn Slash") | CanUse("Bee Fly")),
-    # Leafbug Crossing (the user, 2026-10-08): its middle, where the tree is knocked down for good (the story event
+    # Leafbug Crossing: its middle, where the tree is knocked down for good (the story event
     # above), the map's own region; the bottom (its left door) to and from it with Jump or Bee Fly; the upper right (its
     # door to the swamp bridge) to and from it over the fallen tree, Jump or Bee Fly. Before then, only a drop from the
     # upper right into the middle (below).
     Area("Swamplands3", "Bottom", ("loadzone back",), _UP),
     Area("Swamplands3", "Right", ("loadzoneright",), Has(_TREE_DOWN) & _UP),
-    # The swamp bridge (the user, 2026-10-08), kept up: the bridge the map's own region, its left and right doors free
+    # The swamp bridge, kept up: the bridge the map's own region, its left and right doors free
     # between them (in vanilla it falls, and the right side is reached from Swamplands7 only). The top right, a drop
     # down a path from the right side (the green bounce pad, the small bridge's switch), Jump back up (or Bee Fly to
     # the top door, then the red pad). The top door (to the boss) on a platform across the small bridge: from the top
     # right by Bee Fly, or over ledges with Jump once the small bridge is down, back the same way. Its red bounce pad, a
     # drop down a small ledge from the door and Jump back up: it sends the party up to the bridge's left end, whose
-    # boulder, broken by Horn Dash, opens another red pad back down beside it (the user's sketch, 2026-10-09). The
+    # boulder, broken by Horn Dash, opens another red pad back down beside it. The
     # bottom (its door to Swamplands4, the save crystal, the boulder that teaches the Horn Dash), where the collapse put
     # the party in vanilla: a drop from the bridge, its invisible walls taken away, and back up to the left end by its
     # bounce pad, both kept for a seed (below; seen 2026-10-09).
@@ -125,7 +124,7 @@ MAP_AREAS = (
          out=Has(_BRIDGE_DOWN) & CanUse("Jump"), to="SwamplandsBridge (Top Right)"),
     Area("SwamplandsBridge", "Red Bounce Pad", (), CanUse("Horn Dash"), out=True_()),
     Area("SwamplandsBridge", "Bottom", ("loadzonesouth",), True_()),
-    # The long swamp room (the user, 2026-10-09), its middle the map's own region. Its left door in a tiny part of its
+    # The long swamp room, its middle the map's own region. Its left door in a tiny part of its
     # own, past a boulder, Horn Dash both ways; from there to the middle, Jump and Freeze, or Bee Fly; back the other
     # way Freeze isn't needed, but without it there's no way back. The right side past grass and a boulder (the horn
     # and Horn Dash) and a jump (Jump), or Bee Fly for both, both ways; its door to Swamplands5 in a part of its own,
@@ -137,7 +136,7 @@ MAP_AREAS = (
          & (CanUse("Jump") | CanUse("Bee Fly"))),
     Area("Swamplands4", "Right Door", ("loadzoneright",), CanUse("Horn Dash") & CanUse("Beetle Dig"),
          to="Swamplands4 (Right)"),
-    # Swamplands5 (the user, 2026-10-09): its right side (the door to Swamplands6, the dig spot, a lever moving the
+    # Swamplands5: its right side (the door to Swamplands6, the dig spot, a lever moving the
     # center platform) the map's own region. Its left door's side, across the center: Bee Fly both ways; to the left,
     # the lever (any attack) and Jump, the platform then crossed back with Jump, or the Shield down onto the thorns,
     # one-way; to the right as _LEFT_TO_RIGHT says. Its top right (the doors to Swamplands7 and 8, the save crystal, the
@@ -147,7 +146,7 @@ MAP_AREAS = (
          out=_LEFT_TO_RIGHT),
     Area("Swamplands5", "Top Right", ("loadzone north", "loadzoneright"), Has(_LIFT) & CanUse("Jump"),
          out=one_way(None, Has(_LIFT) & CanUse("Jump"))),
-    # Crank Pond (the user, 2026-10-09): its door from the Junction and its left side the map's own region. The middle
+    # Crank Pond: its door from the Junction and its left side the map's own region. The middle
     # (a crank) by Jump or Bee Fly, both ways. The lower right from the middle by the crank (Beemerang Halt) and Jump,
     # or Bee Fly; back, the lily pad its grass (the horn) starts, or Bee Fly. The upper right (the door to Swamplands8,
     # the Burly Berry) a drop down; up, the lift: its crank behind a boulder (Horn Dash, Beemerang Halt), Jump on.
@@ -156,7 +155,7 @@ MAP_AREAS = (
          out=CanUse("Horn Slash") | CanUse("Bee Fly"), to="Swamplands6 (Middle)"),
     Area("Swamplands6", "Upper Right", ("loadzone right",), _CRANK_LIFT, out=one_way(None, _CRANK_LIFT),
          to="Swamplands6 (Lower Right)"),
-    # Swamplands7 (the user, 2026-10-09): its middle the map's own region. The bottom middle a drop down from it; back
+    # Swamplands7: its middle the map's own region. The bottom middle a drop down from it; back
     # up, an ice block brought up on the platform (_ICE_BLOCK_UP). The bottom right (the door to the Junction) to and
     # from the bottom middle by an ice block, or Bee Fly. The upper middle: that ice block pushed onto a plate below
     # and right of the middle lowers a platform, Freeze again melts the block and it rises with the party; a drop back
@@ -171,7 +170,7 @@ MAP_AREAS = (
          out=CanUse("Bee Fly"), to="Swamplands7 (Upper Middle)"),
     Area("Swamplands7", "Left", ("loadzone left",), CanUse("Bee Fly") | _ICE_BLOCK_UP,
          out=one_way(None, CanUse("Bee Fly") | _ICE_BLOCK_UP)),
-    # Fenced Pond (Swamplands8; the user, 2026-10-09): its middle the map's own region. The bottom (its door from Crank
+    # Fenced Pond (Swamplands8): its middle the map's own region. The bottom (its door from Crank
     # Pond, a healing flower) to and from it with Jump or Bee Fly. The upper middle (the lever) up from it
     # (_LEVER_LEDGE), a drop back down. The right side (the dig spot) across the double fence, once the lever has taken
     # it down, with Jump, or Bee Fly, both ways. The top (its door to the Junction) to and from the right side with Jump
@@ -202,24 +201,24 @@ TRANSFERS = (
              from_area="Left", to_area="Bottom Right"),
 )
 
-# The swamp bridge stays up (the user, 2026-10-04): its collapse's trigger (Event130, which also needs Maki following)
-# and the three leafbugs standing for it on the right kept away (the user, 2026-10-08).
+# The swamp bridge stays up: its collapse's trigger (Event130, which also needs Maki following)
+# and the three leafbugs standing for it on the right kept away.
 KEPT_OPEN = (
     EntityRef("SwamplandsBridge", "eventtrigger"),
     EntityRef("SwamplandsBridge", "leafbug"),
     EntityRef("SwamplandsBridge", "leafbug - Duplicate"),
 )
-# The bridge's invisible walls taken away (the user, 2026-10-09), as the collapse takes them (until 336): a drop from
+# The bridge's invisible walls taken away, as the collapse takes them (until 336): a drop from
 # the bridge down to the bottom.
 SCENERY_HIDDEN = (
     EntityRef("SwamplandsBridge", "Base/BridgeWalls"),
 )
 # Swamplands5's centipede scene (Event147, on the first entry by any door, until 383) leaves the party at the left
-# door, which would strand a first entry from the top right without its lift: never played (the user, 2026-10-09).
+# door, which would strand a first entry from the top right without its lift: never played.
 SCENES_KEPT_AWAY = (
     MapScene("Swamplands5", 147, 383),
 )
-# Bounce pads are always there (the user, 2026-10-08): the bridge's bottom one, made only after the swamp's boss (359),
+# Bounce pads are always there: the bridge's bottom one, made only after the swamp's boss (359),
 # keeps the bottom from being a dead end.
 KEPT_PRESENT = (
     EntityRef("SwamplandsBridge", "spring - Duplicate - Duplicate"),

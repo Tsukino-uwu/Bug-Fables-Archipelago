@@ -13,7 +13,7 @@ BIG_CRANK = LATER_CHAPTERS
 # in golden_settlement.py).
 SUN_OFFERING = Has("Sun Offering")
 MOON_OFFERING = Has("Moon Offering")
-# Across the right crank room, all of it (the user: assume every need for the room), or Bee Fly alone.
+# Across the right crank room, all of it (assume every need for the room), or Bee Fly alone.
 RIGHT_CRANK_ROOM = (CanUse("Shield") & CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
                     & CanUse("Beemerang Toss") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")
 
@@ -28,7 +28,7 @@ LOCATIONS = (
              Source(berry=9, pickup=Pickup(map="GoldenHillsDungeonLeftMain", type=3, item=0)), rule=CanUse("Jump"),
              category="crystal_berry"),
     # A Hustle Candy on a small stump behind a flower, in the thorns midway across the right crank room; the room's
-    # every need, as the user asked (the shield over the thorns, the Beemerang to grab it), or Bee Fly.
+    # every need (the shield over the thorns, the Beemerang to grab it), or Bee Fly.
     Location("Golden Hills: Right Crank Room, Stump behind the Flower", 128, "GoldenHillsDungeonRightCrank",
              Source(flag=727, pickup=Pickup(map="GoldenHillsDungeonRightCrank", type=0, item=178)),
              rule=RIGHT_CRANK_ROOM),
@@ -74,7 +74,7 @@ TRANSFERS = (
              two_way=False, way_back=BIG_CRANK & CanUse("Beemerang Halt")),
 )
 KEPT_OPEN = (
-    # The dungeon's arrival scene (Event62): it sets only its own flag, 111, read by nothing else (the user: skip it).
+    # The dungeon's arrival scene (Event62): it sets only its own flag, 111, read by nothing else, so it is skipped.
     EntityRef("GoldenHillsDungeonEntrance", "eventtrigger"),
     EntityRef("GoldenHillsDungeonEntrance", "eventtrigger - Duplicate"),
 )

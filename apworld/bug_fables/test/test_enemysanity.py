@@ -23,7 +23,7 @@ class TestEnemysanityOn(BugFablesTestBase):
         self.assertEqual(set(enemies.values()), {f"{e.map}:{e.entity}" for e in ENCOUNTERS} - held)
 
     def test_named_by_room_and_enemy(self) -> None:
-        # The room as the map's own spots call it; numbered per enemy within the room (the user's pattern).
+        # The room as the map's own spots call it; numbered per enemy within the room.
         names = {loc.name for loc in ENEMY_LOCATIONS}
         self.assertIn("Outskirts: Golden Path, Seedling 1", names)
         self.assertIn("Outskirts: Golden Path, Flying Seedling 2", names)

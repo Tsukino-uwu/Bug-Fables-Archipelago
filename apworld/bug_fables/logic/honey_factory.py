@@ -16,7 +16,7 @@ _UP = CanUse("Jump") | CanUse("Bee Fly")
 _PLATFORMS_RUNNING = "First Room Platforms Running"
 _ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
 _PROCESSING2_UP = _UP & ANY_ATTACK & CanUse("Shield") & (CanUse("Beemerang Halt") | CanUse("Bee Fly"))
-# Up onto the Storage Maze's box tops from its floor: Jump or Bee Fly (the user: its lever is only the berry's).
+# Up onto the Storage Maze's box tops from its floor: Jump or Bee Fly (its lever is only the berry's).
 _MAZE_UP = _UP
 # Malbee's fight in her room (Event98, flag 211), which starts the tram between the first room and hers.
 _MALBEE_FOUGHT = "Malbee's Fight Done"
@@ -32,17 +32,17 @@ LOCATIONS = (
     Location("Honey Factory: Core, Boss Fight", 315, "HoneyFactoryCore", Source(event=99, flag=299, artifact=3),
              rule=CanReachRegion("FactoryStorageOverseer")
              & ((CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Freeze")) | CanUse("Bee Fly"))),
-    # The First Room's switch (FactoryProcessingFirstRoom; the user, 2026-10-10), on its right side, hit with a basic
+    # The First Room's switch (FactoryProcessingFirstRoom), on its right side, hit with a basic
     # attack: the scene where the game teaches the Shield (Event95, flag 20).
     Location("Honey Factory: First Room, Switch", 70, "FactoryProcessingFirstRoom", Source(event=95, flag=20),
              rule=ANY_ATTACK, no_jump=True),
     # The Lobby's shop on its bottom floor, opened by talking to the bee outside it (Event80, flag 176), nothing needed
-    # (the user, 2026-10-10: "lets add the shop at the bottom as locations"): first purchase a check, then its own item.
+    # (each of its five slots a location): first purchase a check, then its own item.
     *(Location(f"Honey Factory: Lobby, Shop {slot}", 212 + slot - 1, "HoneyFactoryEntrance",
                Source(item_shop=ItemShop(map="HoneyFactoryEntrance", keeper="shopbee - Duplicate", item=item)),
                category="item_shop", no_jump=True, area="Bottom")
       for slot, item in enumerate((10, 9, 20, 49, 43), start=1)),
-    # The Worker Rooms' office (named by the user, 2026-10-10): a Shock Candy on the desk, Jump or Bee Fly.
+    # The Worker Rooms' office: a Shock Candy on the desk, Jump or Bee Fly.
     Location("Honey Factory: Worker Rooms, On the Desk", 229, "HoneyFactoryWorkerRooms",
              Source(flag=728, pickup=Pickup(map="HoneyFactoryWorkerRooms", type=0, item=75)), rule=_UP, no_jump=True),
     # The Pump Room's respawning Shell Ointment (regional flag 4), behind boxes in the
@@ -50,12 +50,12 @@ LOCATIONS = (
     Location("Honey Factory: Pump Room, Behind the Boxes", 230, "FactoryProcessingPump",
              Source(regional=4, pickup=Pickup(map="FactoryProcessingPump", type=0, item=97)),
              rule=CanUse("Shield") | CanUse("Bee Fly"), no_jump=True, area="Upper Right"),
-    # The Pressure Plate Room's (named by the user, 2026-10-10) crystal berry #16, behind a pipe up by its door, reached
+    # The Pressure Plate Room's crystal berry #16, behind a pipe up by its door, reached
     # by its puzzle: Jump, Freeze and the horn.
     Location("Honey Factory: Pressure Plate Room, Behind the Pipe", 231, "FactoryProcessingPuzzle3",
              Source(berry=16, pickup=Pickup(map="FactoryProcessingPuzzle3", type=3, item=0)),
              rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash"), category="crystal_berry", no_jump=True),
-    # The Storage Maze's (named by the user, 2026-10-10) box tops: the medal Shock Trooper down a hole among the boxes,
+    # The Storage Maze's box tops: the medal Shock Trooper down a hole among the boxes,
     # a green pad back up, nothing more; crystal berry #17 on a box, by a lever puzzle: a basic attack, Jump and
     # Beemerang Halt.
     Location("Honey Factory: Storage Maze, Hole in the Boxes", 232, "FactoryStorageMaze",
@@ -65,12 +65,12 @@ LOCATIONS = (
              Source(berry=17, pickup=Pickup(map="FactoryStorageMaze", type=3, item=0)),
              rule=ANY_ATTACK & CanUse("Jump") & CanUse("Beemerang Halt"), category="crystal_berry", no_jump=True,
              area="Upper Middle"),
-    # The Storage Mini-boss Room's (named by the user, 2026-10-10) respawning Magic Seed (regional flag 20) on top of
+    # The Storage Mini-boss Room's respawning Magic Seed (regional flag 20) on top of
     # the boxes by its door: Jump or Bee Fly.
     Location("Honey Factory: Storage Mini-boss Room, On Top of the Boxes", 234, "FactoryStorageMiniboss",
              Source(regional=20, pickup=Pickup(map="FactoryStorageMiniboss", type=0, item=11)), rule=_UP, no_jump=True),
     # The five Factory Passes (build step 79). The Worker Rooms' office, up high: Jump and the Beemerang Toss, or Bee
-    # Fly alone (the user, 2026-10-10).
+    # Fly alone.
     Location("Honey Factory: Worker Rooms, On Top of the Bookshelf", 235, "HoneyFactoryWorkerRooms",
              Source(flag=178, pickup=Pickup(map="HoneyFactoryWorkerRooms", type=1, item=95)),
              rule=(CanUse("Jump") & CanUse("Beemerang Toss")) | CanUse("Bee Fly"), no_jump=True),
@@ -97,7 +97,7 @@ LOCATIONS = (
 )
 
 STORY_EVENTS = (
-    # Malbee's Room (FactoryProcessingMalbee; named by the user, 2026-10-10): walking left from its door starts her
+    # Malbee's Room (FactoryProcessingMalbee): walking left from its door starts her
     # scene, a mini-boss fight with three Abomihoneys (on the ground, so any member), which sets 211 and starts the
     # tram.
     StoryEvent("Honey Factory: Malbee's Room, Malbee's Fight", _MALBEE_FOUGHT, "FactoryProcessingMalbee",
@@ -109,10 +109,10 @@ STORY_EVENTS = (
 
 KEPT_PRESENT = (
     # The door back out to Outside the Beehive, made in the game only from 299: kept present with its other half
-    # (bee_kingdom_hive.py) (the user, 2026-10-09).
+    # (bee_kingdom_hive.py).
     EntityRef("HoneyFactoryEntrance", "loadzoneoutside"),
-    # The Lobby's door to the storage, made in the game only from 211 (Event98): open from the start (the user,
-    # 2026-10-10: "we open the storage door"); the storage elevator's half has no flag.
+    # The Lobby's door to the storage, made in the game only from 211 (Event98): open from the start;
+    # the storage elevator's half has no flag.
     EntityRef("HoneyFactoryEntrance", "loadzonestorage"),
 )
 SCENERY_HIDDEN = (
@@ -127,31 +127,31 @@ ACTIVATION_FLAGS = (
     FlagSwap("FactoryProcessingPump", "platformcontrol", 41, ALWAYS_SET),
 )
 MAP_AREAS = (
-    # The Lobby (HoneyFactoryEntrance; named by the user, 2026-10-10): the upper area (the save crystal, the doors to
+    # The Lobby (HoneyFactoryEntrance): the upper area (the save crystal, the doors to
     # the outside, the core and the storage) the map's own region; the bottom (the office's and the sleeping quarters'
     # doors, the shop, opened by talking to the bee outside it) a drop down, Jump or Bee Fly back up.
     Area("HoneyFactoryEntrance", "Bottom", ("loadzoneoffice", "loadzonesleep"), one_way(None, _UP), out=_UP),
-    # Its processing door, behind the pass lock (`keything`, Event59 key index 4, then Event89, flag 179; kept locked,
-    # the user, 2026-10-10): arriving from the first room, the game pushes the party past the lock (seen), a one-way
+    # Its processing door, behind the pass lock (`keything`, Event59 key index 4, then Event89, flag 179; kept locked):
+    # arriving from the first room, the game pushes the party past the lock (seen), a one-way
     # without the pass.
     Area("HoneyFactoryEntrance", "Processing Door", ("loadzone processing",), FACTORY_PASS,
          out=one_way(None, FACTORY_PASS)),
-    # The Worker Rooms (HoneyFactoryWorkerRooms; named by the user, 2026-10-10), two parts with no way between them
+    # The Worker Rooms (HoneyFactoryWorkerRooms), two parts with no way between them
     # inside the room: the office (its door, the desk, the portrait, the PC) the map's own region, nothing needed to go
     # in, out or to the portrait; the sleeping quarters (the beds door and three workers), cut off.
     Area("HoneyFactoryWorkerRooms", "Sleeping Quarters", ("loadzonebeds",), False_()),
-    # The First Room (FactoryProcessingFirstRoom; the user, 2026-10-10): the right (the door to the Lobby, the switch)
+    # The First Room (FactoryProcessingFirstRoom): the right (the door to the Lobby, the switch)
     # the map's own region; the left (the door on) across a gap, on the moving platforms once the switch has started
     # them, the Shield, both ways. Bee Fly across works only before the switch, which stays hit, so it never counts
     # (room-logic.md, rule 3). The bottom below: a drop from either side, Jump or Bee Fly up to the right only.
     Area("FactoryProcessingFirstRoom", "Left", ("loadzoneforward",), _ON_THE_PLATFORMS),
     Area("FactoryProcessingFirstRoom", "Bottom", (), one_way(None, _UP), out=_UP),
-    # The Second Room (FactoryProcessing2; named by the user, 2026-10-10): the bottom right (the door back to the first
+    # The Second Room (FactoryProcessing2): the bottom right (the door back to the first
     # room) the map's own region; up to the top left (the door to the pump room) Jump or Bee Fly, a basic attack for a
     # switch, the Shield, and Beemerang Halt or Bee Fly; back down a drop, a one-way.
     Area("FactoryProcessing2", "Top Left", ("loadzone pump",), _PROCESSING2_UP,
          out=one_way(None, _PROCESSING2_UP)),
-    # The Pump Room (FactoryProcessingPump; named by the user, 2026-10-10): the floor (the doors to the second room and
+    # The Pump Room (FactoryProcessingPump): the floor (the doors to the second room and
     # to Malbee's room, the save crystal, the cranks) the map's own region; its top left corner (the door to puzzle 1)
     # across the Shield or Bee Fly, both ways; the upper left (the door to puzzle 3) and the upper right (the door to
     # puzzle 2), each reached on the loop, left by a drop: free from the upper left, Bee Fly from the upper right.
@@ -159,21 +159,21 @@ MAP_AREAS = (
     Area("FactoryProcessingPump", "Upper Left", ("loadzonepuzzle3",), _PUMP_UP, out=one_way(None, _PUMP_UP)),
     Area("FactoryProcessingPump", "Upper Right", ("loadzonepuzzle2",), _PUMP_UP,
          out=one_way(CanUse("Bee Fly"), _PUMP_UP)),
-    # Gen and Eri's Room (FactoryProcessingPuzzle1; named by the user, 2026-10-10): one region, its one door free; its
+    # Gen and Eri's Room (FactoryProcessingPuzzle1): one region, its one door free; its
     # only pickup, a Factory Pass, location 236.
-    # The Training Grounds (FactoryProcessingPuzzle2; named by the user, 2026-10-10, after its sign): the same; the drop
+    # The Training Grounds (FactoryProcessingPuzzle2; named after its sign): the same; the drop
     # right of its door a one-way without Jump, to the pass's side only. Its pass, location 237.
-    # The Pressure Plate Room (FactoryProcessingPuzzle3; named by the user, 2026-10-10): one region, its one door free;
+    # The Pressure Plate Room (FactoryProcessingPuzzle3): one region, its one door free;
     # down to the puzzle a one-way without Jump or Bee Fly back up, which only the puzzle's spots need, Jump included.
     # Its pass, location 238.
     # Malbee's Room: the floor (its door, her fight) the map's own region; the tram's platform above it, Jump or Bee Fly
-    # up, a drop down, a one-way (the user).
+    # up, a drop down, a one-way.
     Area("FactoryProcessingMalbee", "Tram", (), _UP, out=one_way(None, _UP)),
-    # The Storage Elevator (FactoryStorageElevator; named by the user, 2026-10-10): the top (the door to the Lobby) the
+    # The Storage Elevator (FactoryStorageElevator): the top (the door to the Lobby) the
     # map's own region; the bottom (the door to the maze) by the elevator (Event100), a switch on each level, a basic
     # attack, both ways.
     Area("FactoryStorageElevator", "Bottom", ("loadzonebottom",), ANY_ATTACK),
-    # The Storage Maze (FactoryStorageMaze; named by the user, 2026-10-10): its right side and floor (the elevator's
+    # The Storage Maze (FactoryStorageMaze): its right side and floor (the elevator's
     # door, the save crystal) the map's own region; the box tops in its middle up with Jump or Bee Fly, off them free (a
     # one-way); the bottom left pocket (the mini-boss room's door) a drop from the box tops with a green pad back up,
     # free both ways.
@@ -182,18 +182,18 @@ MAP_AREAS = (
     # Its door to the Overseer's room, behind its pass lock (`keycard`, Event59 key index 4, then Event96, flag 222):
     # arriving from her room, the game pushes the party past it (seen), a one-way without the pass.
     Area("FactoryStorageMaze", "Overseer Door", ("loadzoneos",), FACTORY_PASS, out=one_way(None, FACTORY_PASS)),
-    # The Storage Mini-boss Room (FactoryStorageMiniboss; named by the user, 2026-10-10): one region, its door and save
+    # The Storage Mini-boss Room (FactoryStorageMiniboss): one region, its door and save
     # crystal free; its left side, the Ahoneynation fight (Event101) and the Factory Pass it gives, location 239.
-    # The Storage Overseer Room (FactoryStorageOverseer; named by the user, 2026-10-10): one region, its one door free,
+    # The Storage Overseer Room (FactoryStorageOverseer): one region, its one door free,
     # nothing to collect. Its overseer's escort (Event102, flag 218), back to the door past the bees: Jump, Beemerang
-    # Halt and Freeze (the vanilla party has it, and without it is "pretty hard", the user), or Bee Fly alone; the
+    # Halt and Freeze (the vanilla party has it, and without it is pretty hard), or Bee Fly alone; the
     # Core's finale, location 315, needs it (left to the story, 2026-10-12).
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
-    # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
+    # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena.
 )
 TRANSFERS = (
     # The tram (Event68), between the first room's right side and Malbee's Room's platform, both ways, once her fight is
-    # done (its bots ride only from 211) (the user, 2026-10-10).
+    # done (its bots ride only from 211).
     Transfer("tram", "FactoryProcessingFirstRoom", "FactoryProcessingMalbee", Has(_MALBEE_FOUGHT), to_area="Tram"),
     # The pump room's platform loop between its upper left and upper right, both ways.
     Transfer("platforms", "FactoryProcessingPump", "FactoryProcessingPump", _PUMP_LOOP, from_area="Upper Left",

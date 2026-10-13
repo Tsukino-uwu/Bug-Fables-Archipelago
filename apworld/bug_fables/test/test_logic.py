@@ -673,7 +673,7 @@ class TestAntTunnels(BugFablesTestBase):
 
 
 class TestCheckpointCorridor(BugFablesTestBase):
-    # RubberPrisonCheckpointCorridor, the Checkpoint Corridor (the user, 2026-10-10): two alternating gates with a lever
+    # RubberPrisonCheckpointCorridor, the Checkpoint Corridor: two alternating gates with a lever
     # on each side of each (the right one kept present), so the left and the right are an attack apart, both ways; the
     # top left door behind the locked door, the party pushed past it on arrival.
     options = {"shuffle_field_moves": True}
@@ -727,7 +727,7 @@ class _PrisonRoom(BugFablesTestBase):
 
 
 class TestSpikeRoom(_PrisonRoom):
-    # RubberPrisonSpikeRoom, the Spike Room (the user, 2026-10-10): the spiked floor crossed with Bee Fly or the Shield;
+    # RubberPrisonSpikeRoom, the Spike Room: the spiked floor crossed with Bee Fly or the Shield;
     # the key in the cage, Bee Fly and an attack; the top door behind a Prison Key lock.
     MAP = "RubberPrisonSpikeRoom"
 
@@ -749,7 +749,7 @@ class TestSpikeRoom(_PrisonRoom):
 
 
 class TestCellBlockCrossroads(_PrisonRoom):
-    # RubberPrisonCells1, the Cell Block Crossroads (the user, 2026-10-10): up by the rock the bottom lever's cell holds
+    # RubberPrisonCells1, the Cell Block Crossroads: up by the rock the bottom lever's cell holds
     # (Beetle Dig, the horn, Jump or Bee Fly) or, once the right wood lever is hit, by the rock kept in place; down a
     # drop; the top door in its own barrier; the bottom left door behind a Prison Key lock, the right behind 540's gate.
     MAP = "RubberPrisonCells1"
@@ -787,7 +787,7 @@ class TestCellBlockCrossroads(_PrisonRoom):
 
 
 class TestElectricCells(_PrisonRoom):
-    # RubberPrisonCells2, Electric Cells (the user, 2026-10-10): its doors across the electric floor (the Shield or
+    # RubberPrisonCells2, Electric Cells: its doors across the electric floor (the Shield or
     # Bee Fly); up on the electric platforms, the Shield only; down a drop; the middle cells after a 535 lever.
     MAP = "RubberPrisonCells2"
 
@@ -825,7 +825,7 @@ class TestElectricCells(_PrisonRoom):
 
 
 class TestLibrary(_PrisonRoom):
-    # RubberPrisonLibrary, the Library (the user, 2026-10-10): up the stairs with Jump or Bee Fly; the right staircase
+    # RubberPrisonLibrary, the Library: up the stairs with Jump or Bee Fly; the right staircase
     # rail's two invisible walls hidden, so it's jumped over onto the shelves after the book puzzle moves its own.
     MAP = "RubberPrisonLibrary"
 
@@ -843,7 +843,7 @@ class TestLibrary(_PrisonRoom):
 
 
 class TestCafeteria(_PrisonRoom):
-    # RubberPrisonCafeteria, the Cafeteria (the user, 2026-10-10): its left a drop down, back up with Jump or Bee Fly;
+    # RubberPrisonCafeteria, the Cafeteria: its left a drop down, back up with Jump or Bee Fly;
     # the cannon lever there only turns the cannons off.
     MAP = "RubberPrisonCafeteria"
 
@@ -857,7 +857,7 @@ class TestCafeteria(_PrisonRoom):
 
 
 class TestGym(_PrisonRoom):
-    # RubberPrisonGym, the Gym (the user, 2026-10-10): up to the top left by its crank puzzle, Beemerang Halt (no Jump),
+    # RubberPrisonGym, the Gym: up to the top left by its crank puzzle, Beemerang Halt (no Jump),
     # its Prison Key there; back down a drop.
     MAP = "RubberPrisonGym"
     HALT = ("Progressive Beemerang", "Progressive Beemerang")
@@ -878,7 +878,7 @@ class TestGym(_PrisonRoom):
 
 
 class TestSecurityRoom(_PrisonRoom):
-    # RubberPrisonSecurity, the Security Room (the user, 2026-10-10): its left Beetle Dig away; the bottom right (the
+    # RubberPrisonSecurity, the Security Room: its left Beetle Dig away; the bottom right (the
     # save crystal, the door to the Guard Floor) a drop down a ledge, back up with Jump or Bee Fly.
     MAP = "RubberPrisonSecurity"
 
@@ -898,7 +898,7 @@ class TestSecurityRoom(_PrisonRoom):
 
 
 class TestThirdFloor(_PrisonRoom):
-    # RubberPrisonThirdFloor, the Guard Floor (the user, 2026-10-10): the pocket across spikes (the Shield), up to the
+    # RubberPrisonThirdFloor, the Guard Floor: the pocket across spikes (the Shield), up to the
     # middle left on its copied bounce pad and down a drop, both free; the stairs free; the Gym door and the upper
     # right's stairs behind gates the middle left's lever drops; the upper right a drop down, nothing back up its
     # stairs.
@@ -945,7 +945,7 @@ class TestThirdFloor(_PrisonRoom):
 
 
 class TestGiantLairBridge(_PrisonRoom):
-    # RubberPrisonGiantLairBridge (the user, 2026-10-10): the fight between its left and middle (the ULTIMAX Tank and
+    # RubberPrisonGiantLairBridge: the fight between its left and middle (the ULTIMAX Tank and
     # its flying summon, Vi) the only gate; its shortcut lock opened by the Prison Key or the fight; the ant tunnel's
     # end in its middle.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "starting_party_member": "kabbu"}
@@ -993,7 +993,7 @@ class TestGiantLairBridge(_PrisonRoom):
 
 
 class TestGiantsHand(_PrisonRoom):
-    # GiantLairDeadLands1, the Giant's Hand (the user, 2026-10-11): its left and lower right across platforms with Bee
+    # GiantLairDeadLands1, the Giant's Hand: its left and lower right across platforms with Bee
     # Fly; up to the right door's ledge only by the hand's rock (Jump and Horn Slash), a free drop down.
     MAP = "GiantLairDeadLands1"
 
@@ -1021,7 +1021,7 @@ class TestGiantsHand(_PrisonRoom):
 
 
 class TestCraneCrossing(_PrisonRoom):
-    # GiantLairDeadLands2, Crane Crossing (the user, 2026-10-11): up the coin stacks from the left (Freeze, the horn,
+    # GiantLairDeadLands2, Crane Crossing: up the coin stacks from the left (Freeze, the horn,
     # Bee Fly), a drop to the middle right, back up with Jump; on to the right with Bee Fly and the switch's crane, back
     # by the red bounce pad.
     MAP = "GiantLairDeadLands2"
@@ -1065,7 +1065,7 @@ class TestCraneCrossing(_PrisonRoom):
 
 
 class TestOutsideTheFridge(_PrisonRoom):
-    # GiantLairFridgeOutside, Outside the Fridge (the user, 2026-10-11): the explorers' fight (a Dead Lander that never
+    # GiantLairFridgeOutside, Outside the Fridge: the explorers' fight (a Dead Lander that never
     # lands, so Vi) between its halves, started from either side.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "starting_party_member": "kabbu"}
     MAP = "GiantLairFridgeOutside"
@@ -1127,7 +1127,7 @@ class TestWizardTower(BugFablesTestBase):
 
 
 class TestSwampBridge(BugFablesTestBase):
-    # Kept up in a seed (the user, 2026-10-04): the collapse and its leafbugs away, the bottom's bounce pad always
+    # Kept up in a seed: the collapse and its leafbugs away, the bottom's bounce pad always
     # there.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1197,7 +1197,7 @@ class TestLongSwampRoomNoReturn(BugFablesTestBase):
 
 
 class TestJunction(BugFablesTestBase):
-    # Swamplands5 (the user, 2026-10-09): its centipede scene never plays; up to its top right, the lift and Jump; its
+    # Swamplands5: its centipede scene never plays; up to its top right, the lift and Jump; its
     # left side to the right by Bee Fly or the long way round to the lever; the vine's Clear Bomb, Jump and the Halt.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1226,7 +1226,7 @@ class TestJunction(BugFablesTestBase):
 
 
 class TestCrankPond(BugFablesTestBase):
-    # Swamplands6 (the user, 2026-10-09): the lower right by the middle's crank and Jump, back by the lily pad (the
+    # Swamplands6: the lower right by the middle's crank and Jump, back by the lily pad (the
     # horn); its right door up the lift, Horn Dash, the Halt and Jump.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1246,7 +1246,7 @@ class TestCrankPond(BugFablesTestBase):
 
 
 class TestIceBlockClimb(BugFablesTestBase):
-    # Swamplands7 (the user, 2026-10-09): ice blocks frozen from droplets, knocked with the horn and jumped on; one
+    # Swamplands7: ice blocks frozen from droplets, knocked with the horn and jumped on; one
     # brought up past a boulder (Horn Dash) opens the middle's ways up and across; Bee Fly for some.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
     ICE = ("Progressive Freeze", "Horn Slash", "Jump")
@@ -1281,7 +1281,7 @@ class TestIceBlockClimb(BugFablesTestBase):
 
 
 class TestFencedPond(BugFablesTestBase):
-    # Swamplands8 (the user, 2026-10-09): a double fence splits the middle from the right side and the top door until
+    # Swamplands8: a double fence splits the middle from the right side and the top door until
     # the lever on the ledge takes it down; Bee Fly goes everywhere.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_dig_spots": True}
 
@@ -1307,7 +1307,7 @@ class TestFencedPond(BugFablesTestBase):
 
 
 class TestDefiantRootSquare(BugFablesTestBase):
-    # DefiantRoot1 (the user, 2026-10-09): the ground and its doors need nothing; the rooftops are up with Jump, the
+    # DefiantRoot1: the ground and its doors need nothing; the rooftops are up with Jump, the
     # mayor's storage behind them locked until the Desert Key.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
 
@@ -1345,7 +1345,7 @@ class TestDefiantRootSquare(BugFablesTestBase):
 
 
 class TestDefiantRootWell(BugFablesTestBase):
-    # DefiantRootWell (the user, 2026-10-09): the landing and its bounce pad up to the town on the left; the right side
+    # DefiantRootWell: the landing and its bounce pad up to the town on the left; the right side
     # (the hideout's door, a Leaf Croissant on boxes) by burrowing, both ways.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1363,7 +1363,7 @@ class TestDefiantRootWell(BugFablesTestBase):
 
 
 class TestBeehiveLift(BugFablesTestBase):
-    # DefiantRoot2 (the user, 2026-10-09): the ground free; the elevator's platform and the inn's upstairs each up with
+    # DefiantRoot2: the ground free; the elevator's platform and the inn's upstairs each up with
     # Jump or Bee Fly; the medal on the inn's roof flown around to from upstairs.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1395,7 +1395,7 @@ class TestBeehiveLift(BugFablesTestBase):
 
 
 class TestMarketShops(BugFablesTestBase):
-    # DefiantRoot3, the Market (the user, 2026-10-10): its three shops' slots, on the ground, nothing needed.
+    # DefiantRoot3, the Market: its three shops' slots, on the ground, nothing needed.
     def test_three_shops(self) -> None:
         shops = self.world.fill_slot_data()["location_item_shops"]
         for shop, keeper, stock in (("Item Shop", "shopkeeper", (72, 0, 12, 96, 162)),
@@ -1409,7 +1409,7 @@ class TestMarketShops(BugFablesTestBase):
 
 
 class TestCastleEntrance(BugFablesTestBase):
-    # SandCastleEntrance (the user, 2026-10-09): the middle's bridge shows only while the crystal is lit, which the
+    # SandCastleEntrance: the middle's bridge shows only while the crystal is lit, which the
     # Beemerang Toss does from either side; Bee Fly crosses without it.
     options = {"shuffle_field_moves": True}
 
@@ -1423,7 +1423,7 @@ class TestCastleEntrance(BugFablesTestBase):
 
 
 class TestSlidePuzzle(BugFablesTestBase):
-    # SandCastleSlidePuzzle (the user, 2026-10-09): the puzzle's floor is a drop from either upper side and from the
+    # SandCastleSlidePuzzle: the puzzle's floor is a drop from either upper side and from the
     # bottom right door, Jump back up to that door; the block knocked into place (the horn) fills the upper gap and
     # opens the upper left door; the medal burrowed to, Beetle Dig.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
@@ -1458,7 +1458,7 @@ class TestSlidePuzzle(BugFablesTestBase):
 
 
 class TestStatueRoom(BugFablesTestBase):
-    # SandCastleStatueRoom (the user, 2026-10-09): left to right over the middle's block, Icicle and Jump or Bee Fly;
+    # SandCastleStatueRoom: left to right over the middle's block, Icicle and Jump or Bee Fly;
     # back, Jump or Bee Fly.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1489,7 +1489,7 @@ class TestDashScene(BugFablesTestBase):
 
 
 class TestCastleBasement(BugFablesTestBase):
-    # SandCastleBasement (the user, 2026-10-09): its door on an isolated ledge, the middle across with Jump or Bee Fly;
+    # SandCastleBasement: its door on an isolated ledge, the middle across with Jump or Bee Fly;
     # its three spots locations (build step 93).
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
 
@@ -1508,7 +1508,7 @@ class TestCastleBasement(BugFablesTestBase):
 
 
 class TestCastleMainRoom(BugFablesTestBase):
-    # SandCastleMainRoom (the user, 2026-10-09): a hub of five parts; its two lifts each started by a switch at its top
+    # SandCastleMainRoom: a hub of five parts; its two lifts each started by a switch at its top
     # end (any attack), boarded from the bottom with Jump; its two locks each using up an Ancient Key.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1559,7 +1559,7 @@ class TestCastleMainRoom(BugFablesTestBase):
 
 
 class TestPressurePuzzle(BugFablesTestBase):
-    # SandCastlePressurePuzzle (the user, 2026-10-09): its plates (Freeze and the horn) open its door to the main room
+    # SandCastlePressurePuzzle: its plates (Freeze and the horn) open its door to the main room
     # for good, or raise platforms to its Ancient Key (then Jump or Bee Fly); that door is shut from inside until then.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1581,7 +1581,7 @@ class TestPressurePuzzle(BugFablesTestBase):
 
 
 class TestRockRoom(BugFablesTestBase):
-    # SandCastleRockRoom (the user, 2026-10-09): four parts; the bottom's platform from its switch, the top right past a
+    # SandCastleRockRoom: four parts; the bottom's platform from its switch, the top right past a
     # rolling rock and thorns, the top left across once the boulder is broken (Horn Dash, or the rolling rock).
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1634,7 +1634,7 @@ class TestRockRoom(BugFablesTestBase):
 
 
 class TestCastleRoof(BugFablesTestBase):
-    # SandCastleRoof (the user, 2026-10-09): both doors and the save crystal free; the boss door locked from the roof
+    # SandCastleRoof: both doors and the save crystal free; the boss door locked from the roof
     # until the Big Ancient Key (build step 93).
 
     def test_boss_door_needs_the_key(self) -> None:
@@ -1653,7 +1653,7 @@ class TestCastleRoof(BugFablesTestBase):
 
 
 class TestCastleBossRoom(BugFablesTestBase):
-    # SandCastleBossRoom (the user, 2026-10-09): one region, both doors free, the Watcher's fight needing nothing; the
+    # SandCastleBossRoom: one region, both doors free, the Watcher's fight needing nothing; the
     # wall before the treasure room's door, never solid from that side, hidden (build step 68).
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1687,7 +1687,7 @@ class TestCastleTreasureRoom(BugFablesTestBase):
 
 
 class TestOutsideTheBeehive(BugFablesTestBase):
-    # BeehiveOutside, Outside the Beehive (the user, 2026-10-09): the bottom (the elevator, the main door) and
+    # BeehiveOutside, Outside the Beehive: the bottom (the elevator, the main door) and
     # the left bridge (the side door, the factory's) with no way between; the elevator bee sends the party down to
     # Defiant Root's for nothing, while the way up keeps its stand-in.
 
@@ -1717,7 +1717,7 @@ class TestOutsideTheBeehive(BugFablesTestBase):
 
 
 class TestThroneRoom(BugFablesTestBase):
-    # BeehiveThroneRoom, the Throne Room (the user, 2026-10-09): one region, its door free; the main area's half of
+    # BeehiveThroneRoom, the Throne Room: one region, its door free; the main area's half of
     # that door, made in the game only from 169, kept present with its closed model hidden and its open one shown
     # (build step 70).
 
@@ -1736,7 +1736,7 @@ class TestThroneRoom(BugFablesTestBase):
 
 
 class TestJaunesGallery(BugFablesTestBase):
-    # JaunesGallery, Jaune's Gallery (the user, 2026-10-09): one region, its door free, the Bad Book behind the
+    # JaunesGallery, Jaune's Gallery: one region, its door free, the Bad Book behind the
     # paintings needing nothing; the main area's door to it, made in the game only from 299, open with its sign and
     # cube gone (build step 71).
 
@@ -1753,7 +1753,7 @@ class TestJaunesGallery(BugFablesTestBase):
 
 
 class TestMainArea(BugFablesTestBase):
-    # BeehiveMainArea, the Main Area (the user, 2026-10-09): one region, every door free; the clothing stall's two
+    # BeehiveMainArea, the Main Area: one region, every door free; the clothing stall's two
     # spots, the Bee Hat and then the Pretty Ribbon, behind Mothiva's scene (flag 173), which needs nothing.
 
     def test_one_region(self) -> None:
@@ -1771,7 +1771,7 @@ class TestMainArea(BugFablesTestBase):
 
 
 class TestHBsLab(BugFablesTestBase):
-    # HBsLab, HB's Lab (the user, 2026-10-10): one region, its door free; HB asks for a crystal from the start, and
+    # HBsLab, HB's Lab: one region, its door free; HB asks for a crystal from the start, and
     # the Explorer Permit shown unlocks B.O.S.S. (build step 75).
 
     def test_one_region(self) -> None:
@@ -1787,7 +1787,7 @@ class TestHBsLab(BugFablesTestBase):
 
 
 class TestBalcony(BugFablesTestBase):
-    # BeehiveBalcony, the Balcony (the user, 2026-10-10): one region, its door free; Beette's sale needs nothing in the
+    # BeehiveBalcony, the Balcony: one region, its door free; Beette's sale needs nothing in the
     # room, at her price (build step 76), its berries with Next 63.
 
     def test_one_region(self) -> None:
@@ -1801,7 +1801,7 @@ class TestBalcony(BugFablesTestBase):
 
 
 class TestHoneycombsLab(BugFablesTestBase):
-    # HoneycombsLab, Honeycomb's Lab (the user, 2026-10-10): one region, its door free; no spot yet.
+    # HoneycombsLab, Honeycomb's Lab: one region, its door free; no spot yet.
 
     def test_one_region(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("HoneycombsLab")}
@@ -1809,7 +1809,7 @@ class TestHoneycombsLab(BugFablesTestBase):
 
 
 class TestLobby(BugFablesTestBase):
-    # HoneyFactoryEntrance, the Lobby (the user, 2026-10-10): the bottom a drop from the upper area, Jump or Bee Fly
+    # HoneyFactoryEntrance, the Lobby: the bottom a drop from the upper area, Jump or Bee Fly
     # back up; the processing door behind the Factory Pass lock, the game pushing the party past it from the other
     # side (build step 79); the storage door open from the start (build step 77).
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
@@ -1850,7 +1850,7 @@ class TestLobby(BugFablesTestBase):
 
 
 class TestWorkerRooms(BugFablesTestBase):
-    # HoneyFactoryWorkerRooms, the Worker Rooms (the user, 2026-10-10): the office and the sleeping quarters cut off
+    # HoneyFactoryWorkerRooms, the Worker Rooms: the office and the sleeping quarters cut off
     # from each other; the Shock Candy on the office's desk, Jump or Bee Fly.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1879,7 +1879,7 @@ class TestWorkerRooms(BugFablesTestBase):
 
 
 class TestFirstRoom(BugFablesTestBase):
-    # FactoryProcessingFirstRoom (the user, 2026-10-10): the switch on the right hit with a basic attack starts the
+    # FactoryProcessingFirstRoom: the switch on the right hit with a basic attack starts the
     # platforms for good; across to the left only on them, the Shield (Bee Fly works only before the switch, so never
     # counts); the bottom a drop from either side, Jump or Bee Fly up to the right only.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
@@ -1910,7 +1910,7 @@ class TestFirstRoom(BugFablesTestBase):
 
 
 class TestProcessing2(BugFablesTestBase):
-    # FactoryProcessing2, the Second Room (the user, 2026-10-10): up from the bottom right to the top left, Jump or Bee
+    # FactoryProcessing2, the Second Room: up from the bottom right to the top left, Jump or Bee
     # Fly, a basic attack, the Shield, and Beemerang Halt or Bee Fly; down a drop, a one-way.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1929,7 +1929,7 @@ class TestProcessing2(BugFablesTestBase):
 
 
 class TestPumpRoom(BugFablesTestBase):
-    # FactoryProcessingPump, the Pump Room (the user, 2026-10-10): the top left corner across the Shield or Bee Fly; up
+    # FactoryProcessingPump, the Pump Room: the top left corner across the Shield or Bee Fly; up
     # to either upper side the cranks (Beemerang Halt), then the platform loop (Jump and the Shield), which joins the
     # two; down a drop, free from the upper left, Bee Fly from the upper right; Malbee's door behind the pass scanner.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
@@ -1978,7 +1978,7 @@ class TestPumpRoom(BugFablesTestBase):
 
 
 class TestPuzzle1(BugFablesTestBase):
-    # FactoryProcessingPuzzle1, Gen and Eri's Room (the user, 2026-10-10): one region, its door free; its Factory Pass
+    # FactoryProcessingPuzzle1, Gen and Eri's Room: one region, its door free; its Factory Pass
     # by the lever (Jump, Freeze, the Shield and a basic attack, past Gen and Eri's fight and the holler) held out.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -1994,7 +1994,7 @@ class TestPuzzle1(BugFablesTestBase):
 
 
 class TestPuzzle2(BugFablesTestBase):
-    # FactoryProcessingPuzzle2, the Training Grounds (the user, 2026-10-10): one region, its door free; its Factory
+    # FactoryProcessingPuzzle2, the Training Grounds: one region, its door free; its Factory
     # Pass behind the gate, Beemerang Halt, Jump, the Shield and a basic attack for a lever.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -2014,7 +2014,7 @@ class TestPuzzle2(BugFablesTestBase):
 
 
 class TestPressurePlateRoom(BugFablesTestBase):
-    # FactoryProcessingPuzzle3, the Pressure Plate Room (the user, 2026-10-10): its crystal berry behind the pipe, by
+    # FactoryProcessingPuzzle3, the Pressure Plate Room: its crystal berry behind the pipe, by
     # its puzzle, Jump, Freeze and the horn.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -2037,7 +2037,7 @@ class TestPressurePlateRoom(BugFablesTestBase):
 
 
 class TestMalbeesRoom(BugFablesTestBase):
-    # FactoryProcessingMalbee, Malbee's Room (the user, 2026-10-10): her fight needs nothing; the tram between the first
+    # FactoryProcessingMalbee, Malbee's Room: her fight needs nothing; the tram between the first
     # room and her platform, both ways, once it's done; the platform Jump or Bee Fly up from the floor, a drop down.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -2063,7 +2063,7 @@ class TestMalbeesRoom(BugFablesTestBase):
 
 
 class TestStorageElevator(BugFablesTestBase):
-    # FactoryStorageElevator, the Storage Elevator (the user, 2026-10-10): between the top and the bottom by the
+    # FactoryStorageElevator, the Storage Elevator: between the top and the bottom by the
     # elevator, a basic attack for its switch, both ways.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -2076,7 +2076,7 @@ class TestStorageElevator(BugFablesTestBase):
 
 
 class TestStorageMaze(BugFablesTestBase):
-    # FactoryStorageMaze, the Storage Maze (the user, 2026-10-10): up onto its box tops, Jump or Bee Fly, off them
+    # FactoryStorageMaze, the Storage Maze: up onto its box tops, Jump or Bee Fly, off them
     # free; the bottom left pocket and the medal's hole free from the box tops; the berry by a lever puzzle; the
     # Overseer's door behind its pass lock, the game pushing the party past it from the other side (build step 79).
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
@@ -2119,7 +2119,7 @@ class TestStorageMaze(BugFablesTestBase):
 
 
 class TestStorageMinibossRoom(BugFablesTestBase):
-    # FactoryStorageMiniboss, the Storage Mini-boss Room (the user, 2026-10-10): one region; the respawning Magic Seed
+    # FactoryStorageMiniboss, the Storage Mini-boss Room: one region; the respawning Magic Seed
     # on top of the boxes, Jump or Bee Fly; the Factory Pass the Ahoneynation fight gives, Jump and Beemerang Halt.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
@@ -2141,7 +2141,7 @@ class TestStorageMinibossRoom(BugFablesTestBase):
 
 
 class TestOverseerRoom(BugFablesTestBase):
-    # FactoryStorageOverseer, the Storage Overseer Room (the user, 2026-10-10): one region, its door free, no location.
+    # FactoryStorageOverseer, the Storage Overseer Room: one region, its door free, no location.
     def test_one_region_no_location(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player)
                  if r.name.startswith("FactoryStorageOverseer")}
@@ -2150,14 +2150,14 @@ class TestOverseerRoom(BugFablesTestBase):
 
 
 class TestCore(BugFablesTestBase):
-    # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
+    # HoneyFactoryCore: one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("HoneyFactoryCore")}
         self.assertEqual(parts, {"HoneyFactoryCore"})
 
 
 class TestPier(BugFablesTestBase):
-    # RubberPrisonPier, the Pier (the user, 2026-10-10): bridges above each other, each dropped from onto any below with
+    # RubberPrisonPier, the Pier: bridges above each other, each dropped from onto any below with
     # no way back up inside the room; on the ground floor, Jump or Bee Fly round the gates, up from the stairs, across
     # the lower part's platforms and onto the lift, which runs once its lever is hit.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
@@ -2260,7 +2260,7 @@ class TestPierPointsOfNoReturn(BugFablesTestBase):
 
 
 class TestScannerRoom(BugFablesTestBase):
-    # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
+    # BeehiveScannerRoom, the Scanner Room: one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).
 
     def test_scan_free(self) -> None:

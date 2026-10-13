@@ -113,7 +113,7 @@ DOOR_RULES = (
 )
 KEPT_PRESENT = (
     EntityRef("DesertFGBorder", "loadzonefg"),
-    # The oasis entrance's red bounce pad, gone from chapter 4 (flag 300) in the game, kept for good (the user).
+    # The oasis entrance's red bounce pad, gone from chapter 4 (flag 300) in the game, kept for good.
     EntityRef("DesertOasisEntrance", "mush"),
 )
 SCENERY_HIDDEN = (

@@ -186,7 +186,7 @@ This is what the mod does with what they send, what it checks, and what it doesn
    if that fails. On a network you don't trust, the room password (sent at login) could be read or the connection
    intercepted. The encrypted connection only keeps out someone passively listening.
 3. **MultiClient.Net's cache file path was the server's to decide (fixed 2026-09-29).** The library saves each game's
-   names to `Archipelago\Cache\datapackage\<game>\<checksum>.json` in the user's local application data, a folder
+   names to `Archipelago\Cache\datapackage\<game>\<checksum>.json` in your local application data, a folder
    shared with other Archipelago clients that use it. In the version the mod ships (6.7.1), its "safe file name"
    function returns the name unchanged, so the game name and checksum the server sent became part of that path
    unchecked. The mod now patches that function to do what it was meant to, and cleans the checksum the same way

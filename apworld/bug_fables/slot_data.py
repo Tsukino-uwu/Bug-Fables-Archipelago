@@ -190,15 +190,15 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # Key items never used up (the Factory Pass): the mod leaves each in the bag at its locks (Event59), so the pool
         # holds one.
         "kept_keys": sorted(item.game_id for item in ITEMS if item.kept),
-        # The ant tunnels' miners dig for free: each shortcut opens once its far end is reached (the user, 2026-10-04).
+        # The ant tunnels' miners dig for free: each shortcut opens once its far end is reached.
         "free_ant_tunnels": True,
         # The Termite gate opens from inside before it was ever opened from outside: the client marks it opened (flag
-        # 384) as its scene starts there (the user, 2026-10-04).
+        # 384) as its scene starts there.
         "termite_gate_from_inside": True,
-        # The festival's eating contest always won, its prize the Moon Offering (the user, 2026-10-07).
+        # The festival's eating contest always won, its prize the Moon Offering.
         "contest_always_won": True,
         # Riz at the Fishing Village's door offers his fight while Maki follows (Maki never leaves, the swamp bridge kept
-        # up), Maki helping and Riz given more HP (the user, 2026-10-08).
+        # up), Maki helping and Riz given more HP.
         "riz_fight_with_follower": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.

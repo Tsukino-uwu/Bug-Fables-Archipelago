@@ -32,12 +32,12 @@ _ROCK_PLATFORM = "Sand Castle Rock Room Platform Running"
 _ROCK_BOULDER = "Sand Castle Rock Room Boulder Broken"
 
 LOCATIONS = (
-    # The Slide Puzzle (SandCastleSlidePuzzle; named by the user, 2026-10-09): the medal Frostbite in a small space
+    # The Slide Puzzle (SandCastleSlidePuzzle): the medal Frostbite in a small space
     # behind its bottom's top left corner, below the upper left door, burrowed into and out of, Beetle Dig.
     Location("Ancient Castle: Slide Puzzle, Behind the Cracked Wall", 198, "SandCastleSlidePuzzle",
              Source(flag=285, pickup=Pickup(map="SandCastleSlidePuzzle", type=2, item=46)), rule=CanUse("Beetle Dig"),
              no_jump=True, area="Bottom"),
-    # The Basement (SandCastleBasement; named by the user, 2026-10-09), from its middle: crystal berry #23 on a
+    # The Basement (SandCastleBasement), from its middle: crystal berry #23 on a
     # platform off the moving ones and a Shaved Ice on a tiny platform, each reached on the small platforms (the big
     # crystal lit by the Beemerang Toss, then Jump, their switches hit by any attack) or by Bee Fly; the Ancient Key
     # behind a barrier on the north side, lowered by its crank (Beemerang Halt) and reached with Jump, or flown in and
@@ -52,10 +52,10 @@ LOCATIONS = (
              Source(flag=288, pickup=Pickup(map="SandCastleBasement", type=1, item=114)),
              rule=(CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"), no_jump=True,
              area="Middle"),
-    # The Roof (SandCastleRoof; named by the user, 2026-10-09): a Frost Bomb behind the left statue, nothing needed.
+    # The Roof (SandCastleRoof): a Frost Bomb behind the left statue, nothing needed.
     Location("Ancient Castle: Roof, Behind the Left Statue", 202, "SandCastleRoof",
              Source(flag=732, pickup=Pickup(map="SandCastleRoof", type=0, item=44)), no_jump=True),
-    # The Boss Key Room (SandCastleBossKeyRoom; named by the user, 2026-10-09): a Cold Salad behind a block, round the
+    # The Boss Key Room (SandCastleBossKeyRoom): a Cold Salad behind a block, round the
     # room's edge, nothing needed; the Big Ancient Key on its right side, by the three statues whose Wardens (flying)
     # fight the party as it's taken (Event115).
     Location("Ancient Castle: Boss Key Room, Behind the Block", 203, "SandCastleBossKeyRoom",
@@ -63,11 +63,11 @@ LOCATIONS = (
     Location("Ancient Castle: Boss Key Room, By the Three Statues", 204, "SandCastleBossKeyRoom",
              Source(flag=294, pickup=Pickup(map="SandCastleBossKeyRoom", type=1, item=115)), rule=Member("Vi"),
              no_jump=True, area="Right"),
-    # The Pressure Puzzle (SandCastlePressurePuzzle; named by the user, 2026-10-09): an Ancient Key on a ledge by a
+    # The Pressure Puzzle (SandCastlePressurePuzzle): an Ancient Key on a ledge by a
     # statue in its top right, reached only on the platforms its plates raise (too far to fly to without them).
     Location("Ancient Castle: Pressure Puzzle, By the Statue", 205, "SandCastlePressurePuzzle",
              Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE_KEY),
-    # The Rock Room (named by the user, 2026-10-09): crystal berry #24 in a hidden alcove off its top right, in and out
+    # The Rock Room: crystal berry #24 in a hidden alcove off its top right, in and out
     # with Shield, then Jump or Bee Fly up to it.
     # The boss room (SandCastleBossRoom): one region, both doors free; the Watcher's fight (Event117) starts a little
     # way in from either side and needs nothing, a ground enemy. The scene puts the Peculiar Gem straight in the bag.
@@ -86,7 +86,7 @@ STORY_EVENTS = (
     # good): it fills the upper gap and opens the upper left door.
     StoryEvent("Ancient Castle: Slide Puzzle, Block Knocked into Place", _SLIDE_SOLVED, "SandCastleSlidePuzzle",
                Source(flag=284), rule=CanUse("Horn Slash"), no_jump=True, area="Bottom"),
-    # The Main Room's (named by the user, 2026-10-09) two lift switches, any attack, each starting its lift for good:
+    # The Main Room's two lift switches, any attack, each starting its lift for good:
     # the lower one's on the middle right (`switch1`, 290), the upper one's on the top right (`switch2`, 291).
     StoryEvent("Ancient Castle: Main Room, Lower Lift Switch Hit", _LOWER_LIFT, "SandCastleMainRoom", Source(flag=290),
                rule=ANY_ATTACK, no_jump=True, area="Middle Right"),
@@ -96,10 +96,10 @@ STORY_EVENTS = (
     # door to the main room's top left open for good.
     StoryEvent("Ancient Castle: Pressure Puzzle, Door Puzzle Solved", _PRESSURE_SOLVED, "SandCastlePressurePuzzle",
                Source(flag=296), rule=_PRESSURE, no_jump=True),
-    # The Rock Room (named by the user, 2026-10-09): its bottom left's switch (`platformswitch - Duplicate`, any attack,
+    # The Rock Room: its bottom left's switch (`platformswitch - Duplicate`, any attack,
     # 283) starts the platform between its bottom's two sides; its boulder (`blocking rock`, 297), broken by Horn Dash
     # from the top left, or by the rolling rock the top right's crystals (the Toss) carry along on their platforms,
-    # followed with Jump (seen by the user).
+    # followed with Jump (seen).
     StoryEvent("Ancient Castle: Rock Room, Platform Switch Hit", _ROCK_PLATFORM, "SandCastleRockRoom",
                Source(flag=283), rule=ANY_ATTACK, no_jump=True),
     StoryEvent("Ancient Castle: Rock Room, Boulder Broken with Horn Dash", _ROCK_BOULDER, "SandCastleRockRoom",
@@ -109,11 +109,11 @@ STORY_EVENTS = (
 )
 
 MAP_AREAS = (
-    # The castle's entrance (SandCastleEntrance; the user, 2026-10-09): its left door the map's own region, its right
+    # The castle's entrance (SandCastleEntrance): its left door the map's own region, its right
     # door across the middle on a bridge that shows only while the crystal is lit (a StencilSwitch, reset each visit),
     # the Beemerang Toss from either side; or flown over, Bee Fly. Both ways.
     Area("SandCastleEntrance", "Right", ("loadzone right",), CanUse("Beemerang Toss") | CanUse("Bee Fly")),
-    # The Slide Puzzle (SandCastleSlidePuzzle; the user, 2026-10-09): its bottom right door the map's own region;
+    # The Slide Puzzle (SandCastleSlidePuzzle): its bottom right door the map's own region;
     # the puzzle's floor below it, a drop down a small ledge, Jump or Bee Fly back up. The upper right (its door from
     # the main room) and the upper left (the door to the pressure plate room) across a gap, filled once the puzzle is
     # solved, or Bee Fly; neither has a way down to the rest but the drop below, nor any way back up inside the room.
@@ -121,16 +121,16 @@ MAP_AREAS = (
     Area("SandCastleSlidePuzzle", "Upper Right", ("loadzoneleftup",), False_()),
     Area("SandCastleSlidePuzzle", "Upper Left", ("loadzonepressure",), _SLIDE_GAP,
          to="SandCastleSlidePuzzle (Upper Right)"),
-    # The statue room (SandCastleStatueRoom; the user, 2026-10-09): its left door the map's own region, its right door
+    # The statue room (SandCastleStatueRoom): its left door the map's own region, its right door
     # past a block in the middle, gone over on platforms: from the left the crystals' puzzle and the way across take
     # Icicle (its ice also lights the crystals) and Jump, or Bee Fly alone; from the right Jump or Bee Fly.
     Area("SandCastleStatueRoom", "Right", ("loadzonerock",), (CanUse("Jump") & CanUse("Icicle")) | CanUse("Bee Fly"),
          out=_UP),
-    # The Basement (SandCastleBasement; the user, 2026-10-09): its door on an isolated ledge, the map's own region; the
+    # The Basement (SandCastleBasement): its door on an isolated ledge, the map's own region; the
     # middle (a safe platform by the big crystal, the moving platforms around it) across the gap with Jump or Bee Fly,
     # both ways.
     Area("SandCastleBasement", "Middle", (), _UP),
-    # The main room (SandCastleMainRoom; the user, 2026-10-09), in five parts: its bottom (the entrance, the Slide
+    # The main room (SandCastleMainRoom), in five parts: its bottom (the entrance, the Slide
     # Puzzle's lower door, the basement's, the save crystal, the healing flower, and the statue room's door behind a
     # lock) the map's own region. The middle left (the Slide Puzzle's upper door), cut off: a drop to the bottom. The
     # middle right (the rock room's door, the lower lift's switch): a drop to the bottom; back up on a running lift,
@@ -144,13 +144,13 @@ MAP_AREAS = (
          out=one_way(None, _TO_TOP_RIGHT)),
     Area("SandCastleMainRoom", "Top Left", ("loadzone roof left", "loadzonepressure"), False_(),
          out=one_way(CanUse("Jump"), _TO_TOP_RIGHT)),
-    # The Boss Key Room (SandCastleBossKeyRoom; the user, 2026-10-09): its door and the room's edge the map's own
+    # The Boss Key Room (SandCastleBossKeyRoom): its door and the room's edge the map's own
     # region; its right side (the key) across a gap filled by a block pushed with the horn from the puzzle below, then
     # Jump, or Bee Fly; back, Jump or Bee Fly (the bounce pad alone falls short). The puzzle below is a drop, Jump or
     # Bee Fly back up, with nothing in it.
     Area("SandCastleBossKeyRoom", "Right", (), (CanUse("Jump") & CanUse("Horn Slash")) | CanUse("Bee Fly"),
          out=_UP),
-    # The Rock Room (SandCastleRockRoom; the user, 2026-10-09), in four parts: its bottom left (the door to the main
+    # The Rock Room (SandCastleRockRoom), in four parts: its bottom left (the door to the main
     # room, the platform's switch) the map's own region. Its bottom right (the door to the Statue Room) across on the
     # platform once it runs, both ways. Its top left (the boulder) up from the bottom left with Jump or Bee Fly, both
     # ways. Its top right (two big crystals) up from the bottom right past a rolling rock (Bee Fly, Beetle Dig or the
@@ -163,11 +163,11 @@ MAP_AREAS = (
 )
 TRANSFERS = (
     # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the room
-    # (the user, 2026-10-09, solved or not).
+    # (solved or not).
     *(Transfer("drop", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", two_way=False, way_back=False_(),
                from_area=side, to_area="Bottom") for side in ("Upper Left", "Upper Right")),
     # The main room's middle right and middle left, joined by a ledge outside behind its windows, up onto it with Jump,
-    # or Bee Fly across (the user, 2026-10-09): the way up to the castle's top, through the Slide Puzzle's upper part.
+    # or Bee Fly across: the way up to the castle's top, through the Slide Puzzle's upper part.
     Transfer("ledge outside", "SandCastleMainRoom", "SandCastleMainRoom", _UP, from_area="Middle Right",
              to_area="Middle Left"),
     # The main room's top right across to its top left, Jump, a drop; back round by the bottom and the upper lift. And
@@ -188,7 +188,7 @@ DOOR_RULES = (
     # The Slide Puzzle's door to the pressure plate room, shut from its side until the puzzle is solved; arriving
     # through it before then, the game pushes the party past it.
     DoorRule("SandCastleSlidePuzzle", "loadzonepressure", Has(_SLIDE_SOLVED)),
-    # The Roof's (SandCastleRoof; the user, 2026-10-09) boss door, locked from its side until the Big Ancient Key (115)
+    # The Roof's (SandCastleRoof) boss door, locked from its side until the Big Ancient Key (115)
     # is used; arriving from the boss room, the game pushes the party past the lock.
     DoorRule("SandCastleRoof", "loadzoneboss", Has("Big Ancient Key")),
     # The main room's two locks (`key1`, `key2`, Event59 key index 7): the statue room's door on its bottom, the boss
@@ -196,7 +196,7 @@ DOOR_RULES = (
     # pushes the party past the lock.
     DoorRule("SandCastleMainRoom", "loadzone statue", Has("Small Ancient Key")),
     DoorRule("SandCastleMainRoom", "loadzonebosskey", Has("Small Ancient Key")),
-    # The Pressure Puzzle (the user, 2026-10-09): its door to the main room shut from inside until its plates are
+    # The Pressure Puzzle: its door to the main room shut from inside until its plates are
     # played for it; arriving through it before then, the game pushes the party past it. Its other door is free.
     DoorRule("SandCastlePressurePuzzle", "loadzonemain", Has(_PRESSURE_SOLVED)),
 )

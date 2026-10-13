@@ -32,15 +32,15 @@ _CROSSROADS_UP = (CanUse("Beetle Dig") & CanUse("Horn Slash") & ANY_ATTACK | Has
 # Electric Cells' electric floor, between its bottom doors and the bottom row: the Shield or Bee Fly.
 _ACROSS_THE_FLOOR = CanUse("Shield") | CanUse("Bee Fly")
 
-# The Pier (RubberPrisonPier; named by the user, 2026-10-10): bridges stacked above each other, each a floor dropped
-# from onto any floor below, either side, with no way back up inside the room (the user).
+# The Pier (RubberPrisonPier): bridges stacked above each other, each a floor dropped
+# from onto any floor below, either side, with no way back up inside the room.
 LOCATIONS = (
     # The Pier's Second Floor Wasp Driller (`ShwKEY wasp`) drops a Prison Key on defeat, its pickup flag the enemy's
     # limit, 584 (EntityControl's Death). The fight: the Wasp Driller and a Wasp Bomber, which Kabbu flips.
     Location("Rubber Prison: Pier, Second Floor Fight", 240, "RubberPrisonPier",
              Source(flag=584, pickup=Pickup(map="RubberPrisonPier", type=1, item=161)), rule=Member("Kabbu"),
              no_jump=True, area="Second Floor"),
-    # The Spike Room's Prison Key, in the cage of three gates its lever drops: Bee Fly and an attack (the user).
+    # The Spike Room's Prison Key, in the cage of three gates its lever drops: Bee Fly and an attack.
     Location("Rubber Prison: Spike Room, In the Cage", 241, "RubberPrisonSpikeRoom",
              Source(flag=536, pickup=Pickup(map="RubberPrisonSpikeRoom", type=1, item=161)),
              rule=CanUse("Bee Fly") & ANY_ATTACK, no_jump=True),
@@ -57,13 +57,13 @@ LOCATIONS = (
              rule=ANY_ATTACK & (CanUse("Beetle Dig")
                                 | CanReachRegion("RubberPrisonCells2 (Upper)") & one_way(None, CanUse("Shield"))),
              no_jump=True),
-    # The Gym's Prison Key, on its top left, up the room's crank puzzle: Beemerang Halt, no Jump needed (the user).
+    # The Gym's Prison Key, on its top left, up the room's crank puzzle: Beemerang Halt, no Jump needed.
     Location("Rubber Prison: Gym, Crank Puzzle", 244, "RubberPrisonGym",
              Source(flag=551, pickup=Pickup(map="RubberPrisonGym", type=1, item=161)),
              rule=CanUse("Beemerang Halt"), no_jump=True, area="Top Left"),
     # The Giant's Lair Bridge's right side: after the fight, the Wasp Queen hands over the Flame Brooch, chapter 6's
     # artifact (Event194's first visit, flag 346), its scene held until the fight (79): a location, its artifact an item
-    # (build step 86; the user's name).
+    # (build step 86).
     Location("Rubber Prison: Giant's Lair Bridge, Queen's Gift", 246, "RubberPrisonGiantLairBridge",
              Source(event=194, flag=346, artifact=6), rule=Has(_BRIDGE_FIGHT), no_jump=True, area="Right"),
 )
@@ -72,20 +72,20 @@ STORY_EVENTS = (
     StoryEvent("Rubber Prison: Pier, Lift Lever Hit", _LIFT_RUNNING, "RubberPrisonPier", Source(flag=566),
                rule=ANY_ATTACK, no_jump=True),
     # The Cell Block Crossroads' wood levers, up on the left and right: the left one first, then the right, each Bee Fly
-    # and an attack (the user).
+    # and an attack.
     StoryEvent("Rubber Prison: Cell Block Crossroads, Right Wood Lever Hit", _CROSSROADS_RIGHT_GATE,
                "RubberPrisonCells1", Source(flag=540), rule=CanUse("Bee Fly") & ANY_ATTACK, no_jump=True,
                area="Upper"),
     StoryEvent("Rubber Prison: Cell Block Crossroads, Barrier Lever Hit", _CROSSROADS_BARRIER, "RubberPrisonCells1",
                Source(flag=541), rule=ANY_ATTACK, no_jump=True, area="Top Door"),
-    # The Warden's Office (RubberPrisonOffice; named by the user, 2026-10-10, after the Guard Floor's sign): one area.
-    # Its crank slot takes the Wooden Crank, then turned with Beemerang Halt (the user). Waiting for the Wooden Crank
+    # The Warden's Office (RubberPrisonOffice; named after the Guard Floor's sign): one area.
+    # Its crank slot takes the Wooden Crank, then turned with Beemerang Halt. Waiting for the Wooden Crank
     # (Next 62): "Empty Bookshelf" (the green History Book on top of it, 563: Freeze, the horn, Jump and Bee Fly).
     StoryEvent("Rubber Prison: Warden's Office, Crank Turned", _OFFICE_CRANK, "RubberPrisonOffice", Source(flag=583),
                rule=WOODEN_CRANK & CanUse("Beemerang Halt"), no_jump=True),
     # The Giant's Lair Bridge (RubberPrisonGiantLairBridge): walking from its left towards the middle starts the fight,
-    # the ULTIMAX Tank, which summons a Wasp Healer (flying, so Vi) or enemy 25; it can't be fled (the user, 2026-10-10:
-    # fought, seen). Its scene opens the shortcut lock too, and spares the kept Prison Key (build step 82, seen).
+    # the ULTIMAX Tank, which summons a Wasp Healer (flying, so Vi) or enemy 25; it can't be fled (fought, seen).
+    # Its scene opens the shortcut lock too, and spares the kept Prison Key (build step 82, seen).
     StoryEvent("Rubber Prison: Giant's Lair Bridge, Bridge Fight", _BRIDGE_FIGHT, "RubberPrisonGiantLairBridge",
                Source(flag=79), rule=Member("Vi"), no_jump=True),
     # The same fight started from the middle, walking left from the right side (seen: its scene plays the same, the
@@ -119,28 +119,28 @@ MAP_AREAS = (
     Area("RubberPrisonPier", "Second Floor", ("loadzonecell2",), False_()),
     # Two doors to the Giant's Lair Bridge, each shut until another room opens it, the party pushed past it when
     # arriving (seen): the second floor's right one by the Warden's Office's crank (Event193, flag 583: the Wooden Crank
-    # and Beemerang Halt, the user), the ground floor's right one by the bridge's shortcut lock (567: the Prison Key
+    # and Beemerang Halt), the ground floor's right one by the bridge's shortcut lock (567: the Prison Key
     # there, or the bridge's fight).
     Area("RubberPrisonPier", "Second Floor Right Door", ("loadzoneboss",), Has(_OFFICE_CRANK),
          out=one_way(None, Has(_OFFICE_CRANK)),
          to="RubberPrisonPier (Second Floor)"),
     Area("RubberPrisonPier", "Shortcut Door", ("bossshortcut",), Has(_BRIDGE_SHORTCUT),
          out=one_way(None, Has(_BRIDGE_SHORTCUT))),
-    # The Checkpoint Corridor (RubberPrisonCheckpointCorridor; named by the user, 2026-10-10): two gates that follow
+    # The Checkpoint Corridor (RubberPrisonCheckpointCorridor): two gates that follow
     # flag 535 opposite ways, one always up, with a lever on each side of each (the right one kept present), so the
-    # left (the map's own region) and the right (the door to the Pier) are an attack apart, both ways (the user).
+    # left (the map's own region) and the right (the door to the Pier) are an attack apart, both ways.
     Area("RubberPrisonCheckpointCorridor", "Right", ("loadzoneexit",), ANY_ATTACK),
     # The top left door to the spike room, behind a locked door (the Explorer Permit, open for good from 538): arriving
     # from the spike room, the game pushes the party past it (seen), a one-way without the permit.
     Area("RubberPrisonCheckpointCorridor", "Top Left Door", ("loadzoneforward",), Has("Explorer Permit"),
          out=one_way(None, Has("Explorer Permit"))),
-    # The Spike Room (RubberPrisonSpikeRoom; named by the user, 2026-10-10): its bottom (the door to the corridor, the
+    # The Spike Room (RubberPrisonSpikeRoom): its bottom (the door to the corridor, the
     # cage) the map's own region; the top across the spiked floor, Bee Fly or the Shield, both ways; the top door behind
     # a Prison Key lock (until 537), the party pushed past it on arrival (seen).
     Area("RubberPrisonSpikeRoom", "Top", (), CanUse("Bee Fly") | CanUse("Shield")),
     Area("RubberPrisonSpikeRoom", "Top Door", ("loadzonenorth",), PRISON_KEY, out=one_way(None, PRISON_KEY),
          to="RubberPrisonSpikeRoom (Top)"),
-    # The Cell Block Crossroads (RubberPrisonCells1; named by the user, 2026-10-10): its bottom (the door to the spike
+    # The Cell Block Crossroads (RubberPrisonCells1): its bottom (the door to the spike
     # room, the save crystal) the map's own region. The upper level (its two wood levers) a drop down, its way back the
     # way up. The top door in its own barrier, whose lever inside lowers it for good (541). The bottom left door behind
     # a Prison Key lock (until 539), the bottom right one behind the gate the right wood lever opens (540): the party
@@ -151,7 +151,7 @@ MAP_AREAS = (
     Area("RubberPrisonCells1", "Left Door", ("loadzoneleft",), PRISON_KEY, out=one_way(None, PRISON_KEY)),
     Area("RubberPrisonCells1", "Right Door", ("loadzoneright",), Has(_CROSSROADS_RIGHT_GATE),
          out=one_way(None, Has(_CROSSROADS_RIGHT_GATE))),
-    # Electric Cells (RubberPrisonCells2; named by the user, 2026-10-10): three rows of cells. The bottom row (the
+    # Electric Cells (RubberPrisonCells2): three rows of cells. The bottom row (the
     # bottom lever's cell, the Poison Cake's) the map's own region, each bottom door across the electric floor; the
     # electric moving platforms up to the middle row and the top, the Shield only; down from either, a drop. The top
     # door behind a Prison Key lock (until 542), the party pushed past it on arrival (seen).
@@ -161,34 +161,34 @@ MAP_AREAS = (
     Area("RubberPrisonCells2", "Upper", (), CanUse("Shield"), out=one_way(None, CanUse("Shield"))),
     Area("RubberPrisonCells2", "Top Door", ("loadzone3rdfloor",), PRISON_KEY, out=one_way(None, PRISON_KEY),
          to="RubberPrisonCells2 (Upper)"),
-    # The Library (RubberPrisonLibrary; named by the user, 2026-10-10): its bottom (the door, the book puzzle's shelf)
+    # The Library (RubberPrisonLibrary): its bottom (the door, the book puzzle's shelf)
     # the map's own region; up the stairs, Jump or Bee Fly. Waiting for the Wooden Crank (Next 62): "On Top of the
     # Bookshelf" (the yellow History Book, 564: Jump and the Beemerang Toss, or Bee Fly, from the upper level) and "Book
     # Puzzle" (the Wooden Crank behind the shelf, 561: the shelf moved, all four History Books placed in order, 554).
     Area("RubberPrisonLibrary", "Upper", (), _UP),
     # The Cafeteria (RubberPrisonCafeteria): its right (the door, raised) the map's own region; the left a drop down,
     # back up with Jump or Bee Fly. Its cannon lever (549) only turns the cannons' rolling rocks off. Waiting for the
-    # Wooden Crank (Next 62): "Behind the Cannons" (the blue History Book on the left, 548, the user's name), nothing
+    # Wooden Crank (Next 62): "Behind the Cannons" (the blue History Book on the left, 548), nothing
     # needed.
     Area("RubberPrisonCafeteria", "Left", (), one_way(None, _UP), out=_UP),
     # The Gym (RubberPrisonGym): its door free, the map's own region; up to the top left by the room's crank puzzle,
-    # Beemerang Halt (no Jump); back down a drop (the user, 2026-10-10). Loading it sets the prison's gate flag 535 off.
+    # Beemerang Halt (no Jump); back down a drop. Loading it sets the prison's gate flag 535 off.
     Area("RubberPrisonGym", "Top Left", (), CanUse("Beemerang Halt"), out=one_way(None, CanUse("Beemerang Halt"))),
-    # The Security Room (RubberPrisonSecurity; named by the user, 2026-10-10): its right (the door to the Pier, the 535
+    # The Security Room (RubberPrisonSecurity): its right (the door to the Pier, the 535
     # lever, the PC) the map's own region; the left (the crank, the trapped guards) Beetle Dig away, both ways; the
     # bottom right (the save crystal, the door to the Guard Floor) a drop down a ledge, back up with Jump or Bee Fly.
     # The crank (Beemerang Halt) powers the PC (552), which hit (553) toggles the Cafeteria's tables (550): never
     # needed.
     Area("RubberPrisonSecurity", "Left", (), CanUse("Beetle Dig")),
     Area("RubberPrisonSecurity", "Bottom Right", ("loadzone3rdfloor",), one_way(None, _UP), out=_UP),
-    # The Guard Floor (RubberPrisonThirdFloor; named by the user, 2026-10-10), five gates on 535. Its bottom right (the
+    # The Guard Floor (RubberPrisonThirdFloor), five gates on 535. Its bottom right (the
     # doors to Electric Cells and the Pier) the map's own region; its own lever behind a gate, never counted. The
     # pocket left of it across a spiked floor (the Shield); up from it to the middle left on the mod's own bounce pad
     # (ENTITIES_MOVED), down a drop, both free. The middle left: the kept upper lever; the stairs down to the bottom
     # left (its door to the Cell Block Crossroads), Jump or Bee Fly; the Gym door behind a gate (pushed past on
     # arrival, seen); the stairs to the upper right behind another, then Jump or Bee Fly. The upper right (the door to
     # the Security Room) a drop down to the bottom right, its way back round by the pocket; nothing back the stairs from
-    # it (the user, 2026-10-10).
+    # it.
     Area("RubberPrisonThirdFloor", "Pocket", (), CanUse("Shield")),
     Area("RubberPrisonThirdFloor", "Middle Left", (), True_(), to="RubberPrisonThirdFloor (Pocket)"),
     Area("RubberPrisonThirdFloor", "Bottom Left", ("loadzonecells1",), _UP, to="RubberPrisonThirdFloor (Middle Left)"),
@@ -228,8 +228,7 @@ TRANSFERS = (
              way_back=CanUse("Shield") & ANY_ATTACK & _UP, from_area="Upper Right"),
 )
 # A green bounce pad of the mod's own in the Guard Floor's pocket, a copy of the Gym's (a plain bounce, data[0] 0), up
-# to the middle left, so the pocket is never a trap (the user, 2026-10-10, standing on the spot; tried first as a copied
-# gate lever, which the pad made "a bit useless").
+# to the middle left, so the pocket is never a trap.
 ENTITIES_MOVED = (
     EntityMove("RubberPrisonThirdFloor", "jumpspring - Archipelago", (-35.8, 0.0, 7.5),
                copy=("RubberPrisonGym", "jumpspring")),
@@ -239,42 +238,41 @@ PRESENT_WITH_ITEM = (
     ItemEntity("RubberPrisonPier", "Fixedsub - Duplicate - Duplicate", SUBMARINE_KEY),
 )
 # The rock just inside the Pier's ground floor left door, broken only by Horn Dash (until flag 589): coming in that
-# way without it stranded the party (the user, 2026-10-04).
+# way without it stranded the party.
 KEPT_OPEN = (
     EntityRef("RubberPrisonPier", "rock"),
 )
 KEPT_PRESENT = (
-    # The Pier's third floor save crystal on its right, gone from flag 41 in the game: kept (the user, 2026-10-10).
+    # The Pier's third floor save crystal on its right, gone from flag 41 in the game: kept.
     EntityRef("RubberPrisonPier", "SavePoint  - Duplicate"),
     # The two gate levers the game adds only from flag 79 (the Giant's Lair Bridge's scene, Event193), shown from the
-    # start so each area the gates cut off has a lever of its own (the user, 2026-10-10): the Checkpoint Corridor's
+    # start so each area the gates cut off has a lever of its own: the Checkpoint Corridor's
     # right one (its name shared with the middle lever, always there) and the Guard Floor's upper one.
     EntityRef("RubberPrisonCheckpointCorridor", "switch - Duplicate - Duplicate"),
     EntityRef("RubberPrisonThirdFloor", "globalswitch - Duplicate - Duplicate"),
     # The Giant's Lair Bridge's right door, made only from 568 (the chapter scene's walk into the Giant's Lair): there
-    # from the start, so an arrival from the Giant's Lair can always go back (the user, 2026-10-10).
+    # from the start, so an arrival from the Giant's Lair can always go back.
     EntityRef("RubberPrisonGiantLairBridge", "loadzonegl"),
 )
 # The bridge's chapter scene (Event194, its trigger until 568) waits for the fight (79): its first visit talks to the
-# Wasp Queen, made only from 79, and froze an arrival from the right before it (Known issues; the user, 2026-10-10).
+# Wasp Queen, made only from 79, and froze an arrival from the right before it (Known issues).
 HELD_UNTIL = (
     FlagEntity("RubberPrisonGiantLairBridge", "eventgl", 79),
 )
 SCENERY_PRESENT = (
     # The Pier's third floor bridge, which the Warden's Office's crank breaks (Event193, flag 583, opening the second
-    # floor's right door): kept, so the floor's two sides stay joined (the user, 2026-10-10: "i don't want the bridge
-    # to collapse").
+    # floor's right door): kept, so the floor's two sides stay joined.
     EntityRef("RubberPrisonPier", "Base/BrokenBridge"),
 )
 SCENERY_OFF = (
     # The Library's right staircase rail: two invisible copies of its collider stacked above it, switched off so the
     # rail is jumped over onto the shelves (seen). Once the book puzzle slides its shelf away, that's the only landing
-    # left for "On Top of the Bookshelf"'s Jump and Beemerang Toss (the user, 2026-10-10).
+    # left for "On Top of the Bookshelf"'s Jump and Beemerang Toss.
     EntityRef("RubberPrisonLibrary", "Base/fence/fence (2)"),
     EntityRef("RubberPrisonLibrary", "Base/fence/fence (3)"),
     # The bridge's sealed wall to the Giant's Lair (no collider: walked through), which the Wasp King breaks as the
     # fight starts: gone from the start, so the open way looks open, as the Ancient Castle boss room's wall (build step
-    # 68; the user, 2026-10-10).
+    # 68).
     EntityRef("RubberPrisonGiantLairBridge", "Base/Gate"),
 )
 

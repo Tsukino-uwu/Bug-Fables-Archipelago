@@ -12,7 +12,7 @@ DESERT_KEY = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 
 LOCATIONS = (
-    # The Square (DefiantRoot1; named by the user, 2026-10-09): a Lore Book behind a box at the far left, and Morty's
+    # The Square (DefiantRoot1): a Lore Book behind a box at the far left, and Morty's
     # Bed Bug (his first lend, line 24, rents out Pibu, the sleeping pillbug; once it's used up he rents it again for 30
     # berries, line 28, the game's own after the check), both on the ground, nothing needed.
     Location("Defiant Root: Square, Behind the Box", 189, "DefiantRoot1",
@@ -33,11 +33,11 @@ LOCATIONS = (
     Location("Defiant Root: Square, Mayor's Storage 2", 194, "DefiantRoot1",
              Source(flag=490, pickup=Pickup(map="DefiantRoot1", type=0, item=121)), rule=DESERT_KEY, no_jump=True,
              pending=True, area="Rooftops"),
-    # The Well (DefiantRootWell; named by the user): a Leaf Croissant on top of boxes on its right side, Jump.
+    # The Well (DefiantRootWell): a Leaf Croissant on top of boxes on its right side, Jump.
     Location("Defiant Root: Well, By the Boxes", 195, "DefiantRootWell",
              Source(flag=734, pickup=Pickup(map="DefiantRootWell", type=0, item=148)), rule=CanUse("Jump"),
              area="Right"),
-    # The Beehive Lift (DefiantRoot2; named by the user, 2026-10-09), upstairs at the inn: a Lore Book up inside its
+    # The Beehive Lift (DefiantRoot2), upstairs at the inn: a Lore Book up inside its
     # high door (kept open, build step 65), Jump or Bee Fly; the medal Fortify on the inn's roof, flown around to, Bee
     # Fly.
     Location("Defiant Root: Beehive Lift, Above the Inn", 196, "DefiantRoot2",
@@ -46,7 +46,7 @@ LOCATIONS = (
     Location("Defiant Root: Beehive Lift, Inn Rooftop", 197, "DefiantRoot2",
              Source(flag=149, pickup=Pickup(map="DefiantRoot2", type=2, item=39)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Upstairs"),
-    # The Market's three shops, on the ground and free (the user, 2026-10-10: "lets do the 3 normal shops"; its
+    # The Market's three shops, on the ground and free (its
     # one-item sellers wait for a later sweep): first purchase a check, then its own item.
     *(Location(f"Defiant Root: Market, {shop} {slot}", first + slot - 1, "DefiantRoot3",
                Source(item_shop=ItemShop(map="DefiantRoot3", keeper=keeper, item=item)),
@@ -57,16 +57,16 @@ LOCATIONS = (
       for slot, item in enumerate(stock, start=1)),
 )
 MAP_AREAS = (
-    # The town (DefiantRoot1; the user, 2026-10-09): its ground the map's own region, with its four doors (the well's
+    # The town (DefiantRoot1): its ground the map's own region, with its four doors (the well's
     # down a hole, out again with nothing), the save crystal and every NPC. The rooftops (the mayor's front door, Berry
     # Juice, crystal berry #15 and the Spicy Berry seller, the storage's locked back door) up with Jump, a drop back
     # down.
     Area("DefiantRoot1", "Rooftops", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
-    # The well (DefiantRootWell; the user, 2026-10-09): its bottom left (the landing from the town, and a bounce pad
+    # The well (DefiantRootWell): its bottom left (the landing from the town, and a bounce pad
     # back up to its door) the map's own region; its right side (the door to the hideout's garden, a Leaf Croissant)
     # to and from it by burrowing, Beetle Dig.
     Area("DefiantRootWell", "Right", ("loadzonehideout",), CanUse("Beetle Dig")),
-    # The Beehive Lift (DefiantRoot2; the user, 2026-10-09): its ground the map's own region, with both doors, the inn
+    # The Beehive Lift (DefiantRoot2): its ground the map's own region, with both doors, the inn
     # and the ant tunnel's miner. The elevator bee's platform up with Jump or Bee Fly; a drop down, so arriving by the
     # elevator without either is a one-way.
     Area("DefiantRoot2", "Elevator", (), _UP, out=one_way(None, _UP)),
@@ -79,7 +79,7 @@ TRANSFERS = (
     Transfer("elevator", "DefiantRoot2", "BeehiveOutside", LATER_CHAPTERS, two_way=False, from_area="Elevator"),
 )
 # The inn's upstairs door (DefiantRoot2), locked until flag 408, set only when its innkeeper's daughter is talked to in
-# TermiteIndustrial: open in a seed (the user, 2026-10-09; build step 65).
+# TermiteIndustrial: open in a seed (build step 65).
 SCENERY_HIDDEN = (
     EntityRef("DefiantRoot2", "Base/DoorLock"),
 )

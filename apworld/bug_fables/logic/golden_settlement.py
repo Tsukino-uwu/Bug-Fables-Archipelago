@@ -17,11 +17,11 @@ LOCATIONS = (
     Location("Golden Settlement: Farm, Wacka Worm Prize (Night)", 152, "GoldenSettlement2",
              Source(flag=96, give=Give(map="GoldenSettlement2", type=1, item=55)), rule=CanUse("Beemerang Toss")),
     # The eating contest at night, entered by talking to Zasp in the square (flag 93): always won (the mod), its prize
-    # the Moon Offering (line 67, flag 101) (the user, 2026-10-07).
+    # the Moon Offering (line 67, flag 101).
     Location("Golden Settlement: Farm, Eating Contest (Night)", 153, "GoldenSettlement2",
              Source(flag=101, give=Give(map="GoldenSettlement2", type=1, item=56)), rule=Has("Eating Contest Entered")),
     # Chubee after losing the contest to Leif: the Weak Stomach medal (lines 79-80, flag 102), every time as the contest
-    # is always won (the user, 2026-10-07).
+    # is always won.
     Location("Golden Settlement: Chubee's Gift (Night)", 156, "GoldenSettlement2",
              Source(flag=102, npc="chubee", give=Give(map="GoldenSettlement2", type=2, item=24)),
              rule=Has("Eating Contest Entered")),
@@ -29,7 +29,7 @@ LOCATIONS = (
     Location("Golden Settlement: Farm, Windmill", 154, "GoldenSettlement2",
              Source(berry=4, pickup=Pickup(map="GoldenSettlement2", type=3, item=0)), rule=CanUse("Beemerang Halt"),
              category="crystal_berry", no_jump=True),
-    # Crystal berry #7 dug up on the farm, by day only (the user, 2026-10-07): Beetle Dig to reach it and to dig.
+    # Crystal berry #7 dug up on the farm, by day only: Beetle Dig to reach it and to dig.
     Location("Golden Settlement: Farm, Dig Spot (Day)", 157, "GoldenSettlement2",
              Source(berry=7, pickup=Pickup(map="GoldenSettlement2", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
@@ -52,7 +52,7 @@ LOCATIONS = (
                category="item_shop", no_jump=True)
       for slot, item in enumerate((17, 48, 1, 12, 23), start=1)),
     # The farm's night scene (Event56, flag 98): the party meets Smugbee, and Kabbu learns Pep Talk, which stays the
-    # game's (the user, 2026-10-07: a location, battle skills not items); its trigger only at night.
+    # game's (a location, battle skills not items); its trigger only at night.
     Location("Golden Settlement: Farm, Smugbee (Night)", 151, "GoldenSettlement2", Source(event=56, flag=98)),
     # The Energy Converter in the power plant's top area: discovery 23, "The Power Plant" (line 8).
     Location("Golden Settlement: Power Plant, Energy Converter", 158, "PowerPlant", Source(discovery=23),
@@ -72,14 +72,14 @@ MAP_AREAS = (
     Area("PowerPlant", "Top", ("loadzonebroodmother",), Has("Power Plant Door Open")),
 )
 # The invisible wall behind the gate to the desert, which stands until the desert side has been reached (flag 170),
-# gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07).
+# gone. The gate itself stays the game's: shut until its lever is hit from the desert side.
 SCENERY_HIDDEN = (
     EntityRef("GoldenSettlementEntrance", "Base/Cube"),
     # The square's altar statue over the path to the Golden Hills dungeon, there until the festival's fight (flag 103,
     # Event58), swapped from the start for the moved one (below): the world open, the festival left as it is.
     EntityRef("GoldenSettlement1", "Base/Altar"),
     # The farm's gate to the power plant, there until the Power Plant board quest is taken (flag 226): open from the
-    # start, by day and by night, with its door below (the user, 2026-10-07).
+    # start, by day and by night, with its door below.
     EntityRef("GoldenSettlement2", "Base/WoodenGate2"),
 )
 SCENERY_PRESENT = (
@@ -89,28 +89,28 @@ SCENERY_PRESENT = (
 SCENERY_OFF = (
     EntityRef("GoldenSettlement2Night", "Base/WoodenGate2"),
 )
-# The festival night (flag 85 until the fight's 86) any time (the user, 2026-10-07): the mod's own night on these maps,
+# The festival night (flag 85 until the fight's 86) any time: the mod's own night on these maps,
 # switched by an NPC in each; the first nightfall is the story's own scene (Event52: its speech, discovery 13, flag 85).
 # The square's arrival scene (Event51, flag 84) is skipped if the night comes first; from the farm or the houses the
-# first nightfall stays in the room, with the scene's flag and discovery 13 but not its speech (the user, 2026-10-07).
+# first nightfall stays in the room, with the scene's flag and discovery 13 but not its speech.
 DAY_NIGHT = tuple(DayNight(room, room + "Night", 85, 86, 52, skips=(84,), first_map="GoldenSettlement1",
                            first_discovery=13)
                   for room in ("GoldenSettlement1", "GoldenSettlement2", "GoldenSettlement3"))
-# What every switch says (the user, 2026-10-07): by day Aria's own nightfall prompt (GoldenSettlement1 line 19), word
-# for word; at night the user's.
+# What every switch says: by day Aria's own nightfall prompt (GoldenSettlement1 line 19), word
+# for word; at night the mod's own.
 _DAY = ("Oh? Are you here for the festival? It should start as soon as the sun sets.", "Keep exploring.",
         "Wait for nightfall.")
 _NIGHT = ("Oh? Are you enjoying the festival? It should end at daybreak.", "Keep exploring.", "Wait for dawn.")
 # The square's switch: Aria before the festival (her talk the nightfall prompt), moved off the arena (Jump) to the
-# ground in front of it, as far from Leif and Celia as on the arena (the user, 2026-10-07).
+# ground in front of it, as far from Leif and Celia as on the arena.
 TIME_SWITCHES = (
     TimeSwitch("GoldenSettlement1", "Aria", (-1.8, 0.0, -1.8), _DAY, _NIGHT),
-    # The farm and the houses have no Aria: hers is copied in, where the user chose.
+    # The farm and the houses have no Aria: hers is copied in.
     TimeSwitch("GoldenSettlement2", "Aria", (7.2, 0.0, 5.6), _DAY, _NIGHT, copy=("GoldenSettlement1", "Aria")),
     TimeSwitch("GoldenSettlement3", "Aria", (1.2, 0.0, 4.7), _DAY, _NIGHT, copy=("GoldenSettlement1", "Aria")),
 )
 # Leif and Celia before the festival, on the arena with Aria for the arrival scene (Event51, which talks from where they
-# stand): moved down below the arena's right side, as far apart as they stood up there (the user, 2026-10-07).
+# stand): moved down below the arena's right side, as far apart as they stood up there.
 ENTITIES_MOVED = (
     EntityMove("GoldenSettlement1", "leif", (2.0, 0.0, -3.0)),
     EntityMove("GoldenSettlement1", "celia", (3.8, 0.0, -1.7)),
@@ -129,7 +129,7 @@ SCENERY_MOVED = (
 # Each exit between the three rooms is one door entity per festival state, on one spot: the one before the festival kept
 # in every state and the night and after-festival copies kept away, so an exit is always the same door (the night
 # picks the version of the room it lands in); the square's south door, gone on the night, so open then too, and the
-# trigger that turns the party back away (the user, 2026-10-07). The switch Aria, gone from the night on, kept. A night
+# trigger that turns the party back away. The switch Aria, gone from the night on, kept. A night
 # map has its day map's entities, so these hold for both (the client reads a night map's under its day map's name).
 _DAY_DOORS = {"GoldenSettlement1": ("Loadzonesouth", "loadzonefarm", "loadzonehouses1"),
               "GoldenSettlement2": ("loadzoneplaza",), "GoldenSettlement3": ("loadzone outside",)}

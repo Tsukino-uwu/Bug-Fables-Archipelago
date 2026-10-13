@@ -1,7 +1,7 @@
 """Enemysanity: every map enemy's won fight is a location, its check dropped as a pickup (the mod guide, step 44).
 
 Built from data/enemies.json (each enemy's area, first enemy's game name and fixed location id). Named "Area: Room,
-Enemy N" (the user, 2026-10-04): the room as the map's own named spots call it, else the map's name until the room is
+Enemy N": the room as the map's own named spots call it, else the map's name until the room is
 named; N counts that enemy within the room. Every one is kept present whatever the story's flags (the client), so none
 is missable; until each room is mapped they wait for the later chapters, the cautious stand-in.
 """

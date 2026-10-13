@@ -48,7 +48,7 @@ def _story_doors_fixed(doors: Doors) -> Doors:
                  fixed=(*doors.fixed, *links), gated=doors.gated)
 
 
-# Doors the logic shuts for good (a door rule of False_: the game makes them only after the story, and the user keeps them
+# Doors the logic shuts for good (a door rule of False_: the game makes them only after the story, and they are kept
 # shut): left out of the door graph, so neither the logic nor the entrance randomizer counts them as a way anywhere.
 SHUT_DOORS: frozenset[tuple[str, str]] = frozenset((r.map, r.door) for r in DOOR_RULES if isinstance(r.rule, False_))
 

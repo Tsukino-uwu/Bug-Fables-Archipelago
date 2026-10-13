@@ -21,7 +21,7 @@ EAST2_UP = EAST2_CROSS | one_way(CanUse("Beemerang Halt"), EAST2_CROSS)
 # its lever.
 TUNNEL2_UP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash") & CanUse("Bee Fly") & ANY_ATTACK
 # The Golden Path tunnel's way up: ice frozen, knocked into place with the horn, then jumped on (the vanilla way;
-# Freeze alone is a harder jump the logic doesn't count, the user, 2026-10-05).
+# Freeze alone is a harder jump the logic doesn't count).
 ICE_CLIMB = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
 LOCATIONS = (
     Location("Outskirts: Maki and Eetl's Gift", 1, "BugariaOutskirtsOutsideCity",
@@ -61,8 +61,7 @@ LOCATIONS = (
     Location("Outskirts: East Road, Dig Spot", 88, "BugariaOutskirtsEast1",
              Source(flag=633, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=121)),
              rule=CanUse("Icicle") & CanUse("Jump") & CanUse("Beetle Dig"), category="dig_spot"),
-    # The HP Plus medal, hidden inside the waterfall on the lower ground: the Beemerang grabs it (no ice needed, the
-    # user, 2026-10-07).
+    # The HP Plus medal, hidden inside the waterfall on the lower ground: the Beemerang grabs it (no ice needed).
     Location("Outskirts: East Road, Inside the Waterfall", 89, "BugariaOutskirtsEast1",
              Source(flag=137, pickup=Pickup(map="BugariaOutskirtsEast1", type=2, item=0)),
              rule=CanUse("Beemerang Toss"), category="hidden_item", no_jump=True, area="Lower"),
@@ -205,7 +204,7 @@ KEPT_PRESENT = (
     EntityRef("BugariaOutskirtsOutsideCity", "DoorBugaria"),
     # The Golden Path door, made only after the first boss (flag 41); past it the tunnel waits for chapter 2 (67).
     EntityRef("BugariaOutskirtsOutsideCity", "LoadZoneGoldenPath"),
-    # The Golden Path's tunnel onward, made only from chapter 2 (flag 67) (the user, 2026-10-04: open from the start).
+    # The Golden Path's tunnel onward, made only from chapter 2 (flag 67): open from the start.
     EntityRef("BOGoldenPath", "Loadzonetunnel"),
     # The way into Chuck's Abode, made only after the first boss.
     EntityRef("NearSnakemouth", "loadingzonechuck"),
@@ -230,7 +229,7 @@ SCENERY_HIDDEN = (
     # (until flag 28) stays.
     EntityRef("BugariaOutskirtsOutsideCity", "Base/Gate/SnekGate (1)"),
     # The gate before the cave that the game puts up from chapter 2 (flag 67) for good. Never up in a seed: the horn
-    # tutorial's scene moves the party past it (the user, 2026-10-05).
+    # tutorial's scene moves the party past it.
     EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate"),
     EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate/Gate"),
     # The closed gate to the Lost Sands (hidden from flag 130).

@@ -14,11 +14,11 @@ LOCATIONS = (
              Source(event=150, flag=19),
              rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
              & CanUse("Horn Dash"), reach=LATER_CHAPTERS, area="Left"),
-    # A Plumpling Pie behind the mine cart in the ant tunnel's room by the Termite gate: nothing needed (the user).
+    # A Plumpling Pie behind the mine cart in the ant tunnel's room by the Termite gate: nothing needed.
     Location("Forsaken Lands: Ant Tunnel, Behind the Mine Cart", 159, "BarrenLandsAntTunnel",
              Source(flag=739, pickup=Pickup(map="BarrenLandsAntTunnel", type=0, item=180)), no_jump=True),
     # Crystal berry #38, dropped with the berries the first time an item is left at the pink spider's hole (Event167),
-    # up on the ledge by the sign: Jump, and an item to trade (the user, 2026-10-07).
+    # up on the ledge by the sign: Jump, and an item to trade.
     Location("Forsaken Lands: Pink Spider, First Trade", 160, "BarrenLandsPinkSpider",
              Source(berry=38, pickup=Pickup(map="BarrenLandsPinkSpider", type=3, item=0)),
              rule=CanUse("Jump") & ItemOnHand(), category="crystal_berry", area="Ledge"),
@@ -28,27 +28,27 @@ LOCATIONS = (
              Source(flag=499, pickup=Pickup(map="AbandonedCity", type=1, item=52)), rule=CanUse("Beetle Dig"),
              category="dig_spot", no_jump=True),
     # A respawning Magic Seed in grass by the fountain, midway up the room (regional flag 10): Bee Fly to reach it, the
-    # horn to cut it (the user, 2026-10-07).
+    # horn to cut it.
     Location("Forsaken Lands: Abandoned City, Grass by the Fountain", 162, "AbandonedCity",
              Source(regional=10, pickup=Pickup(map="AbandonedCity", type=0, item=11)),
              rule=CanUse("Bee Fly") & CanUse("Horn Slash"), category="hidden_item", no_jump=True),
-    # A respawning Squash in grass in the pumpkin room's top right (regional flag 7): the horn (the user, 2026-10-07).
+    # A respawning Squash in grass in the pumpkin room's top right (regional flag 7): the horn.
     Location("Forsaken Lands: Pumpkin Patch, Grass in the Top Right", 163, "BarrenLandsPumpkins",
              Source(regional=7, pickup=Pickup(map="BarrenLandsPumpkins", type=0, item=125)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True, area="Top Right"),
-    # A Lore Book on an isolated platform by the wind pipes' bottom (the ring's bottom part): Bee Fly (the user).
+    # A Lore Book on an isolated platform by the wind pipes' bottom (the ring's bottom part): Bee Fly.
     Location("Forsaken Lands: Wind Pipes, Isolated Platform", 164, "BarrenLandsCloud",
              Source(flag=455, pickup=Pickup(map="BarrenLandsCloud", type=1, item=52)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Bottom"),
     # The dome overlook's vista, up its springs: discovery 41, "Termite Kingdom", with or without the queen (line 1 or 2,
-    # flag 470); nothing needed (the user, 2026-10-07).
+    # flag 470); nothing needed.
     Location("Forsaken Lands: Dome Overlook, Vista", 165, "BarrenLandsRock", Source(discovery=41),
              category="discovery", no_jump=True),
-    # A respawning Squash in grass by the log (regional flag 11): the horn (the user).
+    # A respawning Squash in grass by the log (regional flag 11): the horn.
     Location("Forsaken Lands: Dome Overlook, Grass by the Log", 166, "BarrenLandsRock",
              Source(regional=11, pickup=Pickup(map="BarrenLandsRock", type=0, item=125)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
-    # The tunnel side's three, on its bottom (the user, 2026-10-07): a Lore Book lying in the tall
+    # The tunnel side's three, on its bottom: a Lore Book lying in the tall
     # grass (scenery, not a bush), nothing needed; a Squash dropped once by each of two grass patches, the horn.
     Location("Forsaken Lands: Tunnel Side, In the Tall Grass", 167, "BarrenLandsSideGPT",
              Source(flag=463, pickup=Pickup(map="BarrenLandsSideGPT", type=1, item=52)), no_jump=True),
@@ -66,18 +66,18 @@ STORY_EVENTS = (
     StoryEvent("Forsaken Lands: Broken Bridge, Ruler Knocked Down", "Broken Bridge Ruler Down", "BarrenLandsBeefly",
                Source(flag=382), rule=CanUse("Horn Slash"), area="Upper Right"),
 )
-# The cloud room, a one-way ring of four parts, each with one door (the user, 2026-10-07): the right door (the map's
+# The cloud room, a one-way ring of four parts, each with one door: the right door (the map's
 # own region) up to the top door with Jump, Horn Dash and Bee Fly; the top on to the left door, and the left on to the
 # bottom edge's wrong turn, each with Horn Dash and Bee Fly; the bottom back to the right with Bee Fly. Back to any
 # part only round the ring.
 _CLOUD_RING = CanUse("Jump") & CanUse("Horn Dash") & CanUse("Bee Fly")
 _CLOUD_STEP = CanUse("Horn Dash") & CanUse("Bee Fly")
 TRANSFERS = (
-    # Both ways, needing nothing (the user, 2026-10-07): from outside its first scene (Event149) runs without the queen,
+    # Both ways, needing nothing: from outside its first scene (Event149) runs without the queen,
     # the leader standing in; from inside the mod opens it as if from outside (termite_gate_from_inside).
     Transfer("gate", "TermiteOutside", "TermiteMainPlaza"),
     # The broken bridge room's upper right (its door to the miniboss room) down onto its right side's ledge, a drop (on
-    # down to the bottom door too): back up only by the left side and the ruler (the user, 2026-10-07).
+    # down to the bottom door too): back up only by the left side and the ruler.
     # The cloud room's bottom back round to its right door (the map's own region), with Bee Fly.
     Transfer("wind", "BarrenLandsCloud", "BarrenLandsCloud", one_way(CanUse("Bee Fly"), _CLOUD_RING), two_way=False,
              from_area="Bottom"),
@@ -94,7 +94,7 @@ MAP_AREAS = (
          out=one_way(None, CanUse("Jump")), landings=(("BarrenLandsSideGPT", "returnzone left"),)),
     # The Termite gate's left door (to the ant tunnel), behind two rocks broken with Horn Dash, both ways.
     Area("TermiteOutside", "Left", ("loadzonecave",), CanUse("Horn Dash")),
-    # The broken bridge room (the user, 2026-10-07): its right side's ledge (the wrong turn up top) is the map's own
+    # The broken bridge room: its right side's ledge (the wrong turn up top) is the map's own
     # region, a drop down to its bottom door, Jump back up the small ledge; the left door across the gap from the
     # bottom with Bee Fly, both ways; the upper right (the door to the miniboss room) joined to the left only by the
     # knocked-down ruler, both ways.
@@ -102,14 +102,14 @@ MAP_AREAS = (
     Area("BarrenLandsBeefly", "Left", ("loadzonecd",), CanUse("Bee Fly"), to="BarrenLandsBeefly (Bottom)"),
     Area("BarrenLandsBeefly", "Upper Right", ("loadzoneminiboss",), Has("Broken Bridge Ruler Down"),
          to="BarrenLandsBeefly (Left)"),
-    # The pink spider's room: the ledge with her sign and hole, Jump up, a drop down (the user, 2026-10-07).
+    # The pink spider's room: the ledge with her sign and hole, Jump up, a drop down.
     Area("BarrenLandsPinkSpider", "Ledge", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # The mushroom maze: from its right door to its left (to the pink spider's room) along the path, burrowing under a
-    # plank with Beetle Dig (the user, 2026-10-07).
+    # plank with Beetle Dig.
     Area("BarrenLandsMushrooms", "Left", ("loadzonepinkspider",), CanUse("Beetle Dig")),
-    # The Abandoned City's top (its door to the tent): Jump up from the bottom, a drop down (the user, 2026-10-07).
+    # The Abandoned City's top (its door to the tent): Jump up from the bottom, a drop down.
     Area("AbandonedCity", "Top", ("loadzonetent",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
-    # The pumpkin room (the user, 2026-10-07): its bottom and left doors the map's own region; its top right (the wrong
+    # The pumpkin room: its bottom and left doors the map's own region; its top right (the wrong
     # turn up top, by the boulders) up with Jump, the horn and Bee Fly, down with Bee Fly; its high right door (to the
     # rock room) from there: Horn Dash through the boulders, the horn to knock a stone over, Jump onto it, Bee Fly over
     # the gap. From that door, a drop to the top right's near side needs nothing; one behind the boulders is a trap
@@ -124,11 +124,10 @@ MAP_AREAS = (
          to="BarrenLandsCloud (Top)"),
     Area("BarrenLandsCloud", "Bottom", ("returnzone",), one_way(_CLOUD_STEP, _CLOUD_RING), out=False_(),
          to="BarrenLandsCloud (Left)", landings=(("BarrenLandsPumpkins", "returnloadzone"),)),
-    # The side room's high door (to the Golden Path tunnel): Jump, Horn Dash and Bee Fly up, a drop down (the user,
-    # 2026-10-07).
+    # The side room's high door (to the Golden Path tunnel): Jump, Horn Dash and Bee Fly up, a drop down.
     Area("BarrenLandsSideGPT", "Top", ("loadzone cave",), _SIDE_ROOM_UP, out=one_way(None, _SIDE_ROOM_UP)),
 )
-# Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
+# Patton's lab, opened by the escort to the termites (flag 376): open from the start, its door
 # entity there and its slab gone, as the game has them from 376.
 KEPT_PRESENT = (
     EntityRef("BarrenLandsEntrance", "doorpatton"),
@@ -137,7 +136,7 @@ SCENERY_HIDDEN = (
     EntityRef("BarrenLandsEntrance", "PattonsHouse/PopCan (1)"),
 )
 # The trigger in front of the Termite gate that runs its first opening as the party walks up (until flag 384): kept
-# away, so the gate opens only when talked to, as every later time (the user, 2026-10-07).
+# away, so the gate opens only when talked to, as every later time.
 KEPT_OPEN = (
     EntityRef("TermiteOutside", "event"),
 )
