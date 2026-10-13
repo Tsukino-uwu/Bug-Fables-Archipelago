@@ -2,6 +2,7 @@ name: Preflight
 
 # Every push and pull request, and every release (release.yml calls this): dev-scripts/preflight.py on the commit and
 # on everything ever pushed, its own test (every section made to fail), and the three libraries against NuGet's package.
+# Its Lint section runs ruff on the apworld, installed from PyPI at the pinned version.
 on:
   push:
   pull_request:
@@ -27,6 +28,10 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python }}
+
+      # The ruff that preflight's Lint runs: the version its patterns file pins (ruff_version), or Lint fails.
+      - name: Ruff, for the Lint section
+        run: python -m pip install ruff==0.17.0
 
       - name: Every section, on this commit
         run: python dev-scripts/preflight.py

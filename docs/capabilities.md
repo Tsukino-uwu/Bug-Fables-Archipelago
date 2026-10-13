@@ -96,7 +96,8 @@ files is left out; everything else they do is listed.
 | `.githooks/pre-push` | runs programs | `git`, to list what each push carries, then Python: preflight on each pushed tip and on its new history, and the gate's own test when the push changes the gate |
 | `.githooks/python.sh` | runs programs | `git config`, for a Python this clone names, then each Python it tries, once, to see that it runs and is 3.11 or newer |
 | `.githooks/doc-coverage.py` | runs programs | `git ls-files`, to list the sources every guide must name, the Markdown files whose links it checks, and the files and folders a link may lead to |
-| `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds |
+| `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds; ruff, at the version the patterns file pins, check only, for the Lint section (this clone's `git config preflight.ruff`, else the running Python's, else the one on `PATH`, each asked its version first) |
+| `dev-scripts/preflight.py` | writes files | For the Lint section, a copy of the apworld's staged Python files and `ruff.toml`, in a folder in the system's temp folder, removed afterwards |
 | `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, preflight itself, and the agent guard: directly, and through the settings' hook command under `sh -c` |
 | `dev-scripts/negative-test-preflight.py` | writes files | The throwaway clone, in the system's temp folder, removed afterwards |
 | `dev-scripts/verify-release.py` | runs programs | `git`, to read what a commit holds, and preflight itself, on the release's DLL and on the yaml's text |
@@ -135,8 +136,8 @@ to a commit, each repository to a tag or a commit.
 | `.github/workflows/ci.yml` | runs programs | Archipelago's own install, its tests (`pytest`), its generator and its apworld builder, and `dev-scripts/test-apworld.ps1` (the Logic Test check, the fuzzer, and Universal Tracker's fuzzer hook) |
 | `.github/workflows/ci.yml` | downloads packages | Archipelago's requirements from PyPI (`pip install`, `ModuleUpdate.py`), the way Archipelago's own CI installs them |
 | `.github/workflows/preflight.yml` | uses actions | `actions/checkout` and `actions/setup-python` |
-| `.github/workflows/preflight.yml` | runs programs | Preflight on the commit and on all history, its negative test, and `dev-scripts/verify-release.py` |
-| `.github/workflows/preflight.yml` | downloads packages | Archipelago.MultiClient.Net 6.7.1's package from NuGet (`curl`), to compare the three shipped library DLLs with it byte for byte |
+| `.github/workflows/preflight.yml` | runs programs | Preflight on the commit and on all history, its negative test, `dev-scripts/verify-release.py`, and `pip`, to install the ruff preflight runs |
+| `.github/workflows/preflight.yml` | downloads packages | Archipelago.MultiClient.Net 6.7.1's package from NuGet (`curl`), to compare the three shipped library DLLs with it byte for byte; ruff 0.17.0 from PyPI (`pip install`), which preflight's Lint section runs on the apworld |
 | `.github/workflows/release.yml` | uses actions | `actions/checkout`, `actions/download-artifact` (the apworld and yaml CI built), `actions/attest-build-provenance` and `softprops/action-gh-release` |
 | `.github/workflows/release.yml` | runs programs | The version and text checks (preflight on the highlights and the commit subjects), `dev-scripts/build-release.ps1 -Check` (the DLL's stale gate), `zip`, and `dev-scripts/verify-release.py` before and after publishing |
 | `.github/workflows/release.yml` | downloads packages | The same NuGet package, to check the published files against it |

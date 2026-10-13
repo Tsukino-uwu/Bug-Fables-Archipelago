@@ -933,7 +933,8 @@ be wrong.
     0.17.0): 255 findings in `apworld/bug_fables`, 138 of them RUF012 on the tests' `options` dicts (Archipelago's own
     test pattern, to be ignored for tests). First a one-time cleanup (`--fix` for the safe ones, the rest by hand, the
     tests after), then ruff check-only in the pre-commit hook and CI, in a commit of its own (a gate change). The mod's
-    C# side (.NET's code analyzers) a separate look.
+    C# side (.NET's code analyzers) a separate look. **Built 2026-10-13:** the cleanup (259 findings to 0) and
+    preflight's Lint section, so the hooks and CI run it (build step 28); the C# side still to look at.
 77. **A mark on a door whose far side won't let you walk back, an idea** (asked 2026-10-13; not decided): the logic
     knows every way back (`one_way(rule, way_back)`, the door rules), but a player sees it only after going through:
     with shuffled doors a boulder, a push past a lock or a drop can wait on the far side, and with Points of No Return
@@ -3715,8 +3716,8 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 **The apworld's rules (2026-09-29).** The apworld is Python that runs on whichever machine generates a seed, the
 archipelago.gg website's included, and Archipelago imports it on every start, even when nobody plays Bug Fables.
 So it gets the strictest rules, read from its syntax tree, not by searching text:
-- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (38 names
-  from 14 modules today; 30 from 12 when it was switched on), and a plain `import` only for `json`, `logging`
+- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (53 names
+  from 17 modules on 2026-10-13; 30 from 12 when it was switched on), and a plain `import` only for `json`, `logging`
   and `pkgutil`, each with the few functions it may use (`json.loads`, `pkgutil.get_data`). Listing names matters
   because a module hands on everything it imported: Archipelago's `BaseClasses` can pass along a helper that runs
   programs.
@@ -3733,6 +3734,18 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
 - **Apworld data and docs:** the data files are strict JSON (no repeated key, no `NaN`) with no hidden attribute
   name inside, the manifest has exactly its four keys, and the player docs, which the website renders, hold no
   raw HTML or script link.
+- **Lint** (2026-10-13): Archipelago's own ruff rules on the apworld's Python as staged, by a pinned ruff
+  (`ruff_version` in the patterns file, 0.17.0), check only, never a fix. The rules are Archipelago's `ruff.toml` at
+  0.6.8, copied as ours (`licensing.md`) with one addition: RUF012 off for the tests, whose class-level `options` are
+  Archipelago's own test pattern (`WorldTestBase.options`). Archipelago ships that file but runs it nowhere, and
+  `style.md` asks for PEP 8. Ruff runs on a copy of the staged files in a temporary folder, so an edit in progress in
+  the working tree is no part of the commit. Which ruff: this clone's `git config preflight.ruff <path>`, else the
+  running Python's, else the one on `PATH`, each asked its version first (installing it: `development.md`). The
+  one-time cleanup before it (2026-10-13): 259 findings to 0. Imports sorted by ruff's own fix; the rest by hand: 30
+  long lines, each `zip()` given `strict=` (True where both sides are built from one another, False written out where
+  a test pairs a list's halves), a name ruff read as undefined (`entrances.py`'s `left`, now bound before the pin
+  rounds), loop variables no longer overwritten, and the room logic's tables `data_tables.py` passes on marked
+  `noqa: F401`.
 
 **The mod's and the scripts' rules (2026-09-29):**
 - **Mod source:** the C# is read with its comments blanked but its strings kept, since a name in a string can
@@ -3878,7 +3891,8 @@ failed on it). A zip with one byte changed in a library, and an apworld with a f
 
 **CI and the release (2026-09-29):**
 - **Every push and pull request** (`.github/workflows/preflight.yml`), on Python 3.11 and 3.13: preflight on the
-  commit, `--history` over everything ever pushed, and the gate's own test. A second job downloads the
+  commit, `--history` over everything ever pushed, and the gate's own test, with ruff 0.17.0 installed from PyPI for
+  the Lint section (2026-10-13). A second job downloads the
   Archipelago.MultiClient.Net package from nuget.org and checks the three libraries against it.
 - **The release** waits for that workflow too. Before uploading, it checks the files against the commit: the
   apworld is built in a job that also installs Archipelago's own dependencies from PyPI, so it is checked, not

@@ -398,6 +398,10 @@ def fixtures():
         c.replace('apworld/bug_fables/archipelago.json', b'"game"', b'"extra": 1, "game"')
         c.append('apworld/bug_fables/docs/setup_en.md', 'see <img src=x> and [this](java' + 'script:alert)')
 
+    @add('a line over 120 characters in the apworld', 'Lint', names=('apworld/bug_fables/rules.py', 'E501'))
+    def _(c):
+        c.append('apworld/bug_fables/rules.py', '# ' + 'word ' * 30)
+
     @add('every denied kind of call in the mod', 'Mod source',
          names=tuple(f'({k})' for k in MOD_SAMPLES) + ('a \\u escape outside a string',))
     def _(c):

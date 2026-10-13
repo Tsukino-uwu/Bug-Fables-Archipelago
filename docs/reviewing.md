@@ -112,12 +112,15 @@ Every release passes: v0.1.0 and v0.2.0 (checked 2026-09-29 and 2026-10-13), v0.
 
 **The apworld** runs on whichever machine generates with it in `custom_worlds` (the archipelago.gg website doesn't
 have it), and Archipelago imports it on every start.
-- It imports only the names the preflight lists: 38 from Archipelago and Python's standard library, plus
-  `json.loads`, `logging` and `pkgutil.get_data`.
+- It imports only the names the preflight lists: 53 from Archipelago and Python's standard library (2026-10-13),
+  plus `json.loads`, `logging` and `pkgutil.get_data`.
 - It reads its own data files, which ship inside it, and nothing else.
 - It writes no file, opens no connection, runs no program and evaluates no text as code.
 - The preflight checks all of this from the syntax tree, not by searching text. Four places look an attribute up by
   a name held in a variable; [capabilities.md](capabilities.md) lists them and where each name comes from.
+- Its Python passes Archipelago's own lint rules (ruff with Archipelago's `ruff.toml`, copied as the repo's), checked
+  by the preflight on every commit and in CI since 2026-10-13: slips such as unused imports, or a `zip()` that doesn't
+  say whether its two sides must be the same length.
 
 **The mod** runs inside the game. Beyond the game itself, it:
 - **Connects to one server:** the Archipelago server address the player types into the in-game menu, through

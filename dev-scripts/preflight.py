@@ -18,9 +18,11 @@ import ipaddress
 import json
 import os
 import re
+import shutil
 import struct
 import subprocess
 import sys
+import tempfile
 import time
 import unicodedata
 
@@ -848,6 +850,60 @@ def apworld_data(ctx, out):
     else:
         out.ok(f'{data} data files are strict JSON with no hidden attribute names; the manifest has exactly its keys; '
                'the player docs hold no raw HTML or script links')
+
+
+def find_ruff(ctx, version):
+    """The command of a ruff at exactly this version: this clone's own (git config preflight.ruff <path>), this
+    Python's, then the one on PATH; each is asked its version, since PATH may hold another."""
+    tried = []
+    configured = ctx.repo.git('config', '--get', 'preflight.ruff', ok=(0, 1)).decode().strip()
+    on_path = shutil.which('ruff')
+    for command in ([configured] if configured else [], [sys.executable, '-m', 'ruff'], [on_path] if on_path else []):
+        if not command:
+            continue
+        try:
+            r = subprocess.run([*command, '--version'], capture_output=True, timeout=60)
+        except OSError:
+            continue
+        found = r.stdout.decode(errors='replace').strip() if r.returncode == 0 else ''
+        if found == f'ruff {version}':
+            return command, tried
+        tried.append(f'{" ".join(command)}: {found or "not installed"}')
+    return None, tried
+
+
+# Archipelago's ruff rules (ruff.toml) on the apworld as committed: a pinned ruff, check only, never a fix.
+@section('Lint')
+def lint(ctx, out):
+    version = ctx.patterns['ruff_version']
+    config = ctx.file('ruff.toml')
+    sources = [f for f in ctx.files if f.path.startswith(APWORLD) and f.path.endswith('.py') and not f.binary]
+    if config is None or len(sources) < 10:
+        out.fail(f'ruff.toml or the apworld\'s Python files ({len(sources)}) are missing: the listing is wrong')
+        return
+    ruff, tried = find_ruff(ctx, version)
+    if ruff is None:
+        out.fail(f'no ruff {version} here: install it into the Python that runs the hooks ("python -m pip install '
+                 f'ruff=={version}") or name one with "git config preflight.ruff <path>"', tried)
+        return
+    # The staged files, not the working tree's: another edit in progress there is no part of this commit.
+    with tempfile.TemporaryDirectory() as copy:
+        for f in [config, *sources]:
+            path = os.path.join(copy, *f.path.split('/'))
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, 'wb') as w:
+                w.write(f.data)
+        r = subprocess.run([*ruff, 'check', '--no-cache', '--config', 'ruff.toml', '--output-format', 'concise',
+                            APWORLD], cwd=copy, capture_output=True, timeout=600)
+    lines = r.stdout.decode(errors='replace').replace('\\', '/').splitlines()
+    found = [line for line in lines if line.startswith(APWORLD)]
+    if r.returncode == 0:
+        out.ok(f'{len(sources)} apworld Python files pass ruff {version} with ruff.toml (Archipelago\'s rules)')
+    elif found:
+        out.fail('ruff finds these in the apworld: fix the code (ruff check --fix only for import order), never by '
+                 'widening ruff.toml', found)
+    else:
+        out.fail(f'ruff {version} did not run: {r.stderr.decode(errors="replace").strip()[:300]}')
 
 
 CS_TOKENS = re.compile(r'@"(?:""|[^"])*"|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])+\'|//[^\n]*|/\*.*?\*/', re.S)
@@ -1790,7 +1846,7 @@ def load_patterns(files):
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
                 'workflows', 'workflow_capabilities', 'dependencies', 'capability_tables', 'mod_server_text',
-                'agent_settings', 'line_caps', 'durations', 'log_personal'}
+                'agent_settings', 'line_caps', 'durations', 'log_personal', 'ruff_version'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [

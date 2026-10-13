@@ -10,6 +10,7 @@
     [".gitattributes", "line endings"],
     [".editorconfig", "code style"],
     [".markdownlint.json", "the Markdown style editors check"],
+    ["ruff.toml", "the apworld's Python lint rules (Archipelago's own), which preflight's Lint runs"],
     ["nuget.config", "the package feeds, and which packages each may serve"],
     ["global.json", "the .NET SDK every build uses"],
     ["Directory.Build.props", "keeps build files from outside the repo out of the build"],
@@ -588,5 +589,6 @@
       ["\\bVPN\\b|\\bcredential manager\\b", "the maintainer's network or login setup"],
       ["\\busage (?:cap|limit)s?\\b|\\bweekly usage\\b|\\b5-?hour\\b|\\bmillion tokens\\b", "the maintainer's account usage or budget"]
     ]
-  }
+  },
+  "ruff_version": "0.17.0"
 }
