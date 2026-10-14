@@ -10,6 +10,7 @@ images. See the [AI disclosure](docs/reviewing.md#how-ai-is-used).
 
 - [Download](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases)
 - [Setup guide](apworld/bug_fables/docs/setup_en.md)
+- [PopTracker](https://github.com/Tsukino-uwu/Bug-Fables-tracker/releases)
 - [Game page: options and goal](apworld/bug_fables/docs/en_Bug%20Fables.md)
 
 ## Reviewing
